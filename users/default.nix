@@ -10,13 +10,7 @@ in {
   ];
   home-manager.users.patrick.imports = [./patrick.nix];
   home-manager.users.root = {
-	imports = [ ./common ];
-    programs.neovim.enable = true;
-    programs.git.enable = true;
-    xdg.configFile.nvim = {
-      recursive = true;
-      source = ../data/nvim;
-    };
+    imports = [./common];
     home.stateVersion = "23.05";
   };
 }

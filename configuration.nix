@@ -21,7 +21,7 @@
   networking.hostId = "68438432";
   # Pick only one of the below networking options.
   networking.wireless.iwd.enable = true;
-	# I would advise against pushing your secrets
+  # I would advise against pushing your secrets
   #system.activationScripts.getIWD.text = ''
   #  cp -r /etc/nixos/iwd /var/lib/
   #'';
