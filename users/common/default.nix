@@ -5,6 +5,7 @@
 }: {
 	imports = [
 		./zsh.nix
+		./htop.nix
 		];
 
   home.packages = with pkgs; [
