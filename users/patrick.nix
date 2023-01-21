@@ -6,9 +6,9 @@
   home = {
     stateVersion = "23.05";
     packages = with pkgs; [
-      firefox
       thunderbird
       discord
+	  bitwarden
     ];
   };
   imports = [
@@ -17,6 +17,27 @@
     common/desktop.nix
     ./common
   ];
+
+  programs.firefox = {
+	enable = true;
+	profiles.patrick = {
+		userChrome = ''
+#TabsToolbar {
+visibility: collapse;
+}
+
+#titlebar {
+    margin-bottom: !important;
+}
+
+#titlebar-buttonbox {
+    height: 32px !important;
+}
+'';
+		search.default = "DuckDuckGo";
+		search.force = true;
+	};
+  };
 
   nixpkgs.config.allowUnfree = true;
   xsession.enable = true;

@@ -9,6 +9,7 @@
     sqlite
     bat
     ripgrep
+	killall
   ];
 
   programs.gpg = {
@@ -16,11 +17,11 @@
     scdaemonSettings.disable-ccid = true;
     publicKeys = [
       {
-        source = ../../data/pubkey.gpg;
+        source = ../../data/gpg/pubkey.gpg;
         trust = 5;
       }
       {
-        source = ../../data/newpubkey.gpg;
+        source = ../../data/gpg/newpubkey.gpg;
         trust = 5;
       }
     ];
@@ -61,7 +62,7 @@
 
   programs.zsh = {
     enable = true;
-    initExtra = builtins.readFile ../../data/zshrc;
+    initExtra = builtins.readFile ../../data/zsh/zshrc;
     plugins = [
       {
         name = "powerlevel10k";

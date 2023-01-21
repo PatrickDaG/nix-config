@@ -8,5 +8,6 @@
     pinentry
     arandr
     feh
+	xclip
   ];
 }
