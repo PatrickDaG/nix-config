@@ -55,6 +55,14 @@
     layout = "de";
     xkbVariant = "bone";
     videoDrivers = ["modesetting" "nvidia"];
+	libinput = {
+		enable = true;
+		mouse.accelProfile = "flat";
+		touchpad = {
+			accelProfile = "flat";
+			naturalScrolling = true;
+		};
+	};
   };
 
   #TODO sollte nur bestimmte packages sein nicht alle
@@ -70,9 +78,6 @@
   # Enable sound.
   # sound.enable = true;
   # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {
