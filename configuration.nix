@@ -109,6 +109,7 @@
     wget
     htop
     gcc
+	tree
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
