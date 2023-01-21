@@ -54,6 +54,8 @@
     displayManager.startx.enable = true;
     layout = "de";
     xkbVariant = "bone";
+	autoRepeatDelay = 235;
+	autoRepeatInterval = 60;
     videoDrivers = ["modesetting" "nvidia"];
 	libinput = {
 		enable = true;
