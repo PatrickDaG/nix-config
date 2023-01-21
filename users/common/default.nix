@@ -44,9 +44,19 @@
     enableSshSupport = true;
   };
 
-  programs.git.signing = {
-    key = null;
-    signByDefault = true;
+  programs.git = {
+	aliases = {
+		cs = "commit -v -S";
+		s = "status";
+		a = "add";
+		p = "push";
+	};
+	extraConfig.init.defaultBranch = "main";
+	extraConfig.pull.ff = "only";
+	signing = {
+		key = null;
+		signByDefault = true;
+	};
   };
 
   programs.zsh = {
