@@ -76,7 +76,6 @@ MOD: TAGS:
   "${MOD}-b 	" = "spawn firefox";
   "${MOD}-m 	" = "spawn thunderbird";
   "${MOD}-Shift-l 	" = "spawn systemctl suspend";
-  "${MOD}-Shift-f 	" = "spawn /home/patrick/scripts/fix_shit.sh";
 }
 // builtins.listToAttrs (map (x: {
     name = "${MOD}-${x}";
