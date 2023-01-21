@@ -48,6 +48,8 @@ MOD: TAGS:
   "${MOD}-r" = "  focus down";
   "${MOD}-l" = "    focus up";
   "${MOD}-s" = " focus right";
+  "Alt-Tab" = "           cycle_all +1";
+  "Alt-Shift-Tab" = "     cycle_all -1";
 
   "${MOD}-BackSpace" = "   cycle_monitor";
   "${MOD}-c" = "   cycle";
