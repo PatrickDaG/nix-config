@@ -65,6 +65,9 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ
 		"*.lel.lol" = {
 			inherit identityFile;
 		};
+		"localhost" = {
+			inherit identityFile;
+		};
 		"*" = {
 			identitiesOnly = true;
 		};
