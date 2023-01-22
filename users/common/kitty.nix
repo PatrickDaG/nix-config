@@ -70,6 +70,7 @@
       "shift+page_up" = "scroll_page_up";
       "shift+page_down" = "scroll_page_down";
       "ctrl+shift+." = "change_font_size all -2.0";
+      "ctrl+shift+," = "change_font_size all +2.0";
     };
     extraConfig = ''
       # Use nvim as scrollback pager

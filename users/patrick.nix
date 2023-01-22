@@ -3,6 +3,15 @@
   pkgs,
   ...
 }: {
+  imports = [
+    common/kitty.nix
+	common/herbstluftwm.nix
+	common/autorandr.nix
+	common/desktop.nix
+    ./common
+
+  ];
+
   home = {
     stateVersion = "23.05";
     packages = with pkgs; [
@@ -14,12 +23,6 @@
 	  spotify
     ];
   };
-  imports = [
-    common/kitty.nix
-    common/herbstluftwm.nix
-    common/desktop.nix
-    ./common
-  ];
 
   programs.firefox = {
 	enable = true;
