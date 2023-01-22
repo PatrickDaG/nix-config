@@ -9,6 +9,7 @@
       thunderbird
       discord
 	  bitwarden
+	  nextcloud-client
     ];
   };
   imports = [

@@ -13,8 +13,10 @@
     bat
     ripgrep
 	killall
-	fzf
   ];
+
+  # has to be enabled to support zsh reverse search
+  programs.fzf.enable = true;
 
   programs.gpg = {
     enable = true;
@@ -74,11 +76,11 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ
     defaultEditor = true;
     withNodeJs = true;
   };
-
   xdg.configFile.nvim = {
     recursive = true;
     source = ../../data/nvim;
   };
+
   programs.git.enable = true;
   services.gpg-agent = {
     enable = true;

@@ -11,6 +11,8 @@
     ./hardware-configuration.nix
     #user home configuration
     ./users
+	#
+	./modules/pipewire.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -96,7 +98,7 @@
     initialPassword = "ctie";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJSXqbGLOeTVFRgeafkCJ1IRMyxl3/VcpLRdAJ7Br3CW"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
     ];
     shell = pkgs.zsh;
   };
