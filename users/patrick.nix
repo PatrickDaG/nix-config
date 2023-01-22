@@ -10,6 +10,8 @@
       discord
 	  bitwarden
 	  nextcloud-client
+	  signal-desktop
+	  spotify
     ];
   };
   imports = [
