@@ -44,7 +44,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ
 	enable = true;
 	matchBlocks =
 	let
-		identityFile = [ "~/.ssh/1" "~/.ssh/2" ];
+		identityFile = [ "~/.ssh/1.pub" "~/.ssh/2.pub" ];
 	in
 	{
 		"elisabeth" = {
@@ -60,6 +60,9 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ
 		"elisabethprivate" = {
 			hostname = "lel.lol";
 			user = "patrick";
+			inherit identityFile;
+		};
+		"*.lel.lol" = {
 			inherit identityFile;
 		};
 		"*" = {
