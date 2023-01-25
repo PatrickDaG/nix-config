@@ -49,6 +49,8 @@
     packages = with pkgs; [terminus_font];
     useXkbConfig = true; # use xkbOptions in tty.
   };
+  # fix for Editor = nano
+  programs.zsh.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
