@@ -5,8 +5,10 @@
 	# should use system nixpkgs instead of their own
 	inputs.nixpkgs.follows = "nixpkgs";
   };
+  inputs.agenix.url = "github:oddlama/agenix";
+  inputs.agenix.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, home-manager, ... }: let
+  outputs = { self, nixpkgs, home-manager, agenix, ... }: let
       system = "x86_64-linux";
     in {nixosConfigurations.patricknix =
 		nixpkgs.lib.nixosSystem {
@@ -18,10 +20,8 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 		  }
+		  agenix.nixosModule
 	  ];
     };
-	pkgs = import nixpkgs {
-		inherit system;
-	};
   };
 }

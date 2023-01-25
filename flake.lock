@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "agenix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1674681075,
+        "narHash": "sha256-hXbIv9WHHEQvoXtK4hWKx4EzmTLUzMdjV8e/x/R9nP8=",
+        "owner": "oddlama",
+        "repo": "agenix",
+        "rev": "12d1b138188dda50704c2816be73d6e183f45797",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oddlama",
+        "repo": "agenix",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -39,6 +59,7 @@
     },
     "root": {
       "inputs": {
+        "agenix": "agenix",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }

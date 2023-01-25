@@ -4,6 +4,7 @@
 {
   config,
   pkgs,
+  age,
   ...
 }: {
   imports = [
@@ -23,10 +24,17 @@
   networking.hostId = "68438432";
   # Pick only one of the below networking options.
   networking.wireless.iwd.enable = true;
-  # I would advise against pushing your secrets
-  #system.activationScripts.getIWD.text = ''
-  #  cp -r /etc/nixos/iwd /var/lib/
-  #'';
+  age.identityPaths = [ ./secrets/NIXOSc.key ./secrets/NIXOSa.key ];
+  age.plugins = [ pkgs.age-plugin-yubikey ];
+  age.secrets.eduroam = {
+	file = ./secrets/iwd/eduroam.8021x.age;
+	path = "/etc/iwd/eduroam.8021x";
+  };
+  age.secrets.devoloog = {
+	file = ./secrets/iwd/devolo-og.psk.age;
+	path = "/etc/iwd/devolo-og.psk";
+  };
+
 
   networking.useNetworkd = true;
   networking.dhcpcd.enable = false;
@@ -111,20 +119,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     xterm
     wget
     gcc
 	tree
+	age-plugin-yubikey
+	rage
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # List services that you want to enable:
 
@@ -168,6 +169,7 @@
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
+  # breaks flake based building
   # system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
