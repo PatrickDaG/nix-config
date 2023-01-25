@@ -73,7 +73,7 @@
 				};
 				DP-1 = {
 					enable = true;
-					mode = "1920x1080";
+					mode = "2560x1440";
 					position = "0x0";
 					rate = "144";
 					gamma = "1";

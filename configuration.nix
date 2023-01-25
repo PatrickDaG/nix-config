@@ -70,6 +70,7 @@
 		};
 	};
   };
+  services.autorandr.enable = true;
 
   #TODO sollte nur bestimmte packages sein nicht alle
   nixpkgs.config.allowUnfree = true;
@@ -167,7 +168,7 @@
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
