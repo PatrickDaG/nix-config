@@ -8,17 +8,20 @@
 }: {
   config = with lib; let
     secretFiles = mapAttrsToList (_: x: x.file) config.rekey.secrets;
-    drv = import ./rekey-drv.nix pkgs secretFiles;
+    drv = import ./rekey-drv.nix pkgs config;
   in
     mkIf (config.rekey.secrets != {}) {
       age = {
         secrets = let
-          hostName = config.networking.hostName;
-          secretPath = "${drv}/${hostName}/";
+          secretPath = "${drv}/";
           newPath = x: "${secretPath}/${x}.age";
         in
           mapAttrs (name: value: value // {file = newPath name;}) config.rekey.secrets;
       };
+	  warnings = optional (! pathExists (removeSuffix ".drv" drv.drvPath)) ''
+	    Rekeyed secrets not available.
+		Maybe you forgot to run "nix run '.#rekey'" to rekey them?
+	  '';
     };
 
   options = with lib; {

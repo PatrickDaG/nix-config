@@ -39,6 +39,9 @@
     file = ./secrets/iwd/devolo-og.psk.age;
     path = "/etc/iwd/devolo-og.psk";
   };
+  rekey.secrets.test = {
+    file = ./secrets/test.age;
+  };
 
   networking.useNetworkd = true;
   networking.dhcpcd.enable = false;
