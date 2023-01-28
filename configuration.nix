@@ -28,7 +28,6 @@
   rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
 
   rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
-  rekey.privKey = "/etc/ssh/ssh_host_ed25519_key";
   rekey.plugins = [pkgs.age-plugin-yubikey];
 
   networking.wireless.iwd.enable = true;
@@ -87,17 +86,8 @@
 
   #TODO sollte nur bestimmte packages sein nicht alle
   nixpkgs.config.allowUnfree = true;
-  # services.xserver.xkbOptions = {
-  #   "eurosign:e";
-  #   "caps:escape" # map caps to escape.
-  # };
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  powerManagement.powertop.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {

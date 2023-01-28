@@ -10,6 +10,8 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
@@ -17,28 +19,33 @@
     nixpkgs,
     home-manager,
     agenix,
+    flake-utils,
     ...
-  }: let
+  } @ inputs: let
     system = "x86_64-linux";
-  in {
-    nixosConfigurations.patricknix = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-        }
-        agenix.nixosModule
-        {
-          nix.registry = {
-            nixpkgs.flake = nixpkgs;
-            p.flake = nixpkgs;
-            pkgs.flake = nixpkgs;
-          };
-        }
-      ];
-    };
-  };
+  in
+    {
+      nixosConfigurations.patricknix = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+          }
+          agenix.nixosModule
+          {
+            nix.registry = {
+              nixpkgs.flake = nixpkgs;
+              p.flake = nixpkgs;
+              pkgs.flake = nixpkgs;
+            };
+          }
+        ];
+      };
+    }
+    // flake-utils.lib.eachSystem [system] (localSystem: {
+      apps = import ./apps/rekey.nix inputs localSystem;
+    });
 }
