@@ -5,11 +5,10 @@
 }: {
   imports = [
     common/kitty.nix
-	common/herbstluftwm.nix
-	common/autorandr.nix
-	common/desktop.nix
+    common/herbstluftwm.nix
+    common/autorandr.nix
+    common/desktop.nix
     ./common
-
   ];
 
   home = {
@@ -17,32 +16,32 @@
     packages = with pkgs; [
       thunderbird
       discord
-	  bitwarden
-	  nextcloud-client
-	  signal-desktop
-	  spotify
+      bitwarden
+      nextcloud-client
+      signal-desktop
+      spotify
     ];
   };
 
   programs.firefox = {
-	enable = true;
-	profiles.patrick = {
-		userChrome = ''
-#TabsToolbar {
-visibility: collapse;
-}
+    enable = true;
+    profiles.patrick = {
+      userChrome = ''
+        #TabsToolbar {
+        visibility: collapse;
+        }
 
-#titlebar {
-    margin-bottom: !important;
-}
+        #titlebar {
+            margin-bottom: !important;
+        }
 
-#titlebar-buttonbox {
-    height: 32px !important;
-}
-'';
-		search.default = "DuckDuckGo";
-		search.force = true;
-	};
+        #titlebar-buttonbox {
+            height: 32px !important;
+        }
+      '';
+      search.default = "DuckDuckGo";
+      search.force = true;
+    };
   };
 
   nixpkgs.config.allowUnfree = true;

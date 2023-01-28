@@ -4,7 +4,7 @@
 {
   config,
   pkgs,
-  age,
+  lib,
   ...
 }: {
   imports = [
@@ -12,8 +12,9 @@
     ./hardware-configuration.nix
     #user home configuration
     ./users
-	#
-	./modules/pipewire.nix
+    #
+    ./modules/pipewire.nix
+    ./modules/rekey.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -22,19 +23,23 @@
 
   networking.hostName = "patricknix"; # Define your hostname.
   networking.hostId = "68438432";
-  # Pick only one of the below networking options.
-  networking.wireless.iwd.enable = true;
-  age.identityPaths = [ ./secrets/NIXOSc.key ./secrets/NIXOSa.key ];
-  age.plugins = [ pkgs.age-plugin-yubikey ];
-  age.secrets.eduroam = {
-	file = ./secrets/iwd/eduroam.8021x.age;
-	path = "/etc/iwd/eduroam.8021x";
-  };
-  age.secrets.devoloog = {
-	file = ./secrets/iwd/devolo-og.psk.age;
-	path = "/etc/iwd/devolo-og.psk";
-  };
 
+  # Identities with which all secrets are encrypted
+  rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
+
+  rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
+  rekey.privKey = "/etc/ssh/ssh_host_ed25519_key";
+  rekey.plugins = [pkgs.age-plugin-yubikey];
+
+  networking.wireless.iwd.enable = true;
+  rekey.secrets.eduroam = {
+    file = ./secrets/iwd/eduroam.8021x.age;
+    path = "/etc/iwd/eduroam.8021x";
+  };
+  rekey.secrets.devoloog = {
+    file = ./secrets/iwd/devolo-og.psk.age;
+    path = "/etc/iwd/devolo-og.psk";
+  };
 
   networking.useNetworkd = true;
   networking.dhcpcd.enable = false;
@@ -66,17 +71,17 @@
     displayManager.startx.enable = true;
     layout = "de";
     xkbVariant = "bone";
-	autoRepeatDelay = 235;
-	autoRepeatInterval = 60;
+    autoRepeatDelay = 235;
+    autoRepeatInterval = 60;
     videoDrivers = ["modesetting" "nvidia"];
-	libinput = {
-		enable = true;
-		mouse.accelProfile = "flat";
-		touchpad = {
-			accelProfile = "flat";
-			naturalScrolling = true;
-		};
-	};
+    libinput = {
+      enable = true;
+      mouse.accelProfile = "flat";
+      touchpad = {
+        accelProfile = "flat";
+        naturalScrolling = true;
+      };
+    };
   };
   services.autorandr.enable = true;
 
@@ -122,9 +127,9 @@
     xterm
     wget
     gcc
-	tree
-	age-plugin-yubikey
-	rage
+    tree
+    age-plugin-yubikey
+    rage
   ];
 
   # List services that you want to enable:
@@ -139,6 +144,9 @@
     };
     hostKeys = [
       {
+        # never set this to an actual nix type path
+        # or else .....
+        # it will end up in the nix store
         path = "/etc/ssh/ssh_host_ed25519_key";
         type = "ed25519";
       }
@@ -196,6 +204,10 @@
       ];
       cores = 0;
       max-jobs = "auto";
+
+      # If the yubikey is needed for rekeying my secrets the sandbox need acces to the pcscd daemon socket
+      # TODO only give the one derivation access to this path
+      extra-sandbox-paths = lib.mkIf (lib.elem pkgs.age-plugin-yubikey config.rekey.plugins) ["/run/pcscd/"];
     };
     daemonCPUSchedPolicy = "batch";
     daemonIOSchedPriority = 5;

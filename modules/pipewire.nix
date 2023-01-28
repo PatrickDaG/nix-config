@@ -8,9 +8,9 @@
   hardware.pulseaudio.enable = lib.mkForce false;
   hardware.bluetooth.enable = true;
   hardware.bluetooth.settings = {
-  General = {
-    Enable = "Source,Sink,Media,Socket";
-	};
+    General = {
+      Enable = "Source,Sink,Media,Socket";
+    };
   };
 
   security.rtkit.enable = true;
