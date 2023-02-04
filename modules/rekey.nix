@@ -18,10 +18,10 @@
         in
           mapAttrs (name: value: value // {file = newPath name;}) config.rekey.secrets;
       };
-	  warnings = optional (! pathExists (removeSuffix ".drv" drv.drvPath)) ''
-	    Rekeyed secrets not available.
-		Maybe you forgot to run "nix run '.#rekey'" to rekey them?
-	  '';
+      warnings = optional (! pathExists (removeSuffix ".drv" drv.drvPath)) ''
+           Rekeyed secrets not available.
+        Maybe you forgot to run "nix run '.#rekey'" to rekey them?
+      '';
     };
 
   options = with lib; {
