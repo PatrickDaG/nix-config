@@ -8,6 +8,7 @@
     common/herbstluftwm.nix
     common/autorandr.nix
     common/desktop.nix
+   # common/polybar.nix
     ./common
   ];
 

@@ -66,6 +66,9 @@
       "localhost" = {
         inherit identityFile;
       };
+	  "gitlab.lrz.de" = {
+		inherit identityFile;
+	  };
       "*" = {
         identitiesOnly = true;
       };

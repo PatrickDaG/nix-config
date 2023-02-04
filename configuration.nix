@@ -39,9 +39,6 @@
     file = ./secrets/iwd/devolo-og.psk.age;
     path = "/etc/iwd/devolo-og.psk";
   };
-  rekey.secrets.test = {
-    file = ./secrets/test.age;
-  };
 
   networking.useNetworkd = true;
   networking.dhcpcd.enable = false;
@@ -87,7 +84,6 @@
   };
   services.autorandr.enable = true;
 
-  #TODO sollte nur bestimmte packages sein nicht alle
   nixpkgs.config.allowUnfree = true;
 
   powerManagement.powertop.enable = true;
@@ -197,10 +193,6 @@
       ];
       cores = 0;
       max-jobs = "auto";
-
-      # If the yubikey is needed for rekeying my secrets the sandbox need acces to the pcscd daemon socket
-      # TODO only give the one derivation access to this path
-      extra-sandbox-paths = lib.mkIf (lib.elem pkgs.age-plugin-yubikey config.rekey.plugins) ["/run/pcscd/"];
     };
     daemonCPUSchedPolicy = "batch";
     daemonIOSchedPriority = 5;

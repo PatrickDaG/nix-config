@@ -34,7 +34,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
           }
-          agenix.nixosModule
+          agenix.nixosModules.default
           {
             nix.registry = {
               nixpkgs.flake = nixpkgs;
