@@ -4,8 +4,10 @@
   ...
 }: {
   imports = [
-    ./zsh.nix
+    #./zsh.nix
+    ./fish.nix
     ./htop.nix
+    ./alias.nix
   ];
 
   home.packages = with pkgs; [

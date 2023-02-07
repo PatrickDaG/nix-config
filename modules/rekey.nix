@@ -11,7 +11,7 @@
     drv = import ./rekey-drv.nix pkgs config;
   in
     mkIf (config.rekey.secrets != {}) {
-	  # export all secrets to agenix with rewritten path from rekey
+      # export all secrets to agenix with rewritten path from rekey
       age = {
         secrets = let
           secretPath = "${drv}/";
@@ -21,11 +21,11 @@
       };
 
       # Warn if rekey has to been executed
-	  # use the drvPath to prevent nix from building the derivation in this step
-	  # drvPath is not outPath so this warning does not work
-	  # to fix it you would need some kind of way to access the outPath without evaluating the derivation
+      # use the drvPath to prevent nix from building the derivation in this step
+      # drvPath is not outPath so this warning does not work
+      # to fix it you would need some kind of way to access the outPath without evaluating the derivation
       #warnings = optional ( ! pathExists (removeSuffix ".drv" drv.drvPath)) ''
-	  #  Path ${drv.drvPath}
+      #  Path ${drv.drvPath}
       #  Rekeyed secrets not available.
       #  Maybe you forgot to run "nix run '.#rekey'" to rekey them?
       #'';
@@ -52,6 +52,5 @@
         Only use yubikeys or password encrypted age keys
       '';
     };
-
   };
 }

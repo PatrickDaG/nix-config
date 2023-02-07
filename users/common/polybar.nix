@@ -8,9 +8,11 @@
 # a = "lel"
 # a-b = "lul"
 # 2. polybar allows integer keys. In nix these have to be quoted
-
-
-{lib, pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   color = {
     shade1 = "#311B92";
     shade2 = "#4527A0";
@@ -59,13 +61,13 @@ in {
   services.polybar = {
     enable = true;
 
-	package = pkgs.polybar.override{
-		pulseSupport = true;
-		alsaSupport = true;
-		iwSupport = true;
-	};
+    package = pkgs.polybar.override {
+      pulseSupport = true;
+      alsaSupport = true;
+      iwSupport = true;
+    };
 
-	script = "polybar main @";
+    script = "polybar main @";
     settings = {
       "bar/main" = {
         monitor = "DP-1";
@@ -74,8 +76,8 @@ in {
 
         dpi = 96;
         height = 22;
-		offset.x = "0%";
-		offset.y = "0%";
+        offset.x = "0%";
+        offset.y = "0%";
 
         background = color.bground;
         foreground = color.fground;
@@ -118,7 +120,6 @@ in {
         label-empty = "NixOS";
         label-empty-foreground = "#707880";
       };
-
 
       "module/workspaces" = {
         type = "internal/xworkspaces";
@@ -265,7 +266,6 @@ in {
         format.disconnected-background = color.shade3;
         format.disconnected-foreground = color.modulefg;
         format.disconnected-padding = "1";
-
       };
 
       "module/keyboardswitcher" = {

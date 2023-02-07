@@ -15,8 +15,8 @@ pkgs: config: (
     dontBuild = true;
 
     installPhase = ''
-      cp -r /tmp/nix-rekey.d/${builtins.hashString "sha1" pubKeyStr}/. $out \
-	  || { echo "Warning Secrets not available. Maybe you forgot to run 'nix run .#rekey' to rekey them?"; exit 1; }
+         cp -r /tmp/nix-rekey.d/${builtins.hashString "sha1" pubKeyStr}/. $out \
+      || { echo "Warning Secrets not available. Maybe you forgot to run 'nix run .#rekey' to rekey them?"; exit 1; }
     '';
   }
 )

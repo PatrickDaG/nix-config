@@ -40,8 +40,8 @@
       color12 = "#61afef";
       color5 = " #9378de";
       color13 = "#c678dd";
-      color6 = " #cc9c66";
-      color14 = "#e5ab69";
+      color6 = " #56b6c2";
+      color14 = "#56b6c2";
       color7 = " #979eab";
       color15 = "#abb2bf";
 

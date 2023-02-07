@@ -41,6 +41,8 @@
 
   networking.useNetworkd = true;
   networking.dhcpcd.enable = false;
+  # Should remain enabled since nscd from glibc is kinda ass
+  services.nscd.enableNsncd = true;
   systemd.network.wait-online.anyInterface = true;
   services.resolved = {
     enable = true;
@@ -60,8 +62,6 @@
     packages = with pkgs; [terminus_font];
     useXkbConfig = true; # use xkbOptions in tty.
   };
-  # fix for Editor = nano
-  programs.zsh.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -98,8 +98,8 @@
     createHome = true;
     extraGroups = ["wheel" "audio" "video" "input"];
     group = "patrick";
-    shell = pkgs.zsh;
-	passwordFile = config.rekey.secrets.patrick.path;
+    shell = pkgs.fish;
+    passwordFile = config.rekey.secrets.patrick.path;
   };
   users.groups.patrick.gid = 1000;
 
@@ -109,8 +109,8 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
     ];
-    shell = pkgs.zsh;
-	passwordFile = config.rekey.secrets.root.path;
+    shell = pkgs.fish;
+    passwordFile = config.rekey.secrets.root.path;
   };
 
   security.sudo.enable = false;
@@ -124,6 +124,7 @@
     tree
     age-plugin-yubikey
     rage
+    file
   ];
 
   # List services that you want to enable:
