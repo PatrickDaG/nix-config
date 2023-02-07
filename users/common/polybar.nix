@@ -10,7 +10,7 @@
 # 2. polybar allows integer keys. In nix these have to be quoted
 
 
-{config, ...}: let
+{lib, pkgs, ...}: let
   color = {
     shade1 = "#311B92";
     shade2 = "#4527A0";
@@ -53,34 +53,46 @@
     grey = "#757575";
     blue-gray = "#546e7a";
   };
+
+  fontsize = "9";
 in {
   services.polybar = {
     enable = true;
+
+	package = pkgs.polybar.override{
+		pulseSupport = true;
+		alsaSupport = true;
+		iwSupport = true;
+	};
+
+	script = "polybar main @";
     settings = {
       "bar/main" = {
         monitor = "DP-1";
-        monitro.fallback = "eDP-1";
+        monitor-fallback = "eDP-1";
         bottom = true;
 
         dpi = 96;
         height = 22;
+		offset.x = "0%";
+		offset.y = "0%";
 
         background = color.bground;
         foreground = color.fground;
 
         font = {
-          "0" = "FiraCode Nerd Font Mono:style=Medium:size=13";
+          "0" = "FiraCode Nerd Font Mono:style=Medium:size=${fontsize};2";
           "1" = "";
-          "2" = "Iosevka Nerd Font:style=Medium:size=16";
-          "3" = "Font Awesome 5 Pro:style=Solid:size=13";
-          "4" = "Font Awesome 5 Pro:style=Regular:size=13";
-          "5" = "Font Awesome 5 Pro:style=Light:size=13";
+          "2" = "Iosevka Nerd Font:style=Medium:size=12;2";
+          "3" = "Font Awesome 5 Pro:style=Solid:size=${fontsize}";
+          "4" = "FontAwesome:style=Regular:size=${fontsize};2";
+          "5" = "Font Awesome 5 Pro:style=Light:size=${fontsize}";
         };
 
-        modules = {
-          left = ["icon" "left1" "title" "left2"];
-          center = ["workspaces"];
-          right = ["right5" "alsa" "right4" "battery" "right3" "network" "date" "right1" "keyboardswitcher"];
+        modules = with lib; {
+          left = concatStringsSep " " ["left1" "title" "left2"];
+          center = concatStringsSep " " ["workspaces"];
+          right = concatStringsSep " " ["right5" "alsa" "right4" "battery" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
         };
 
         tray = {
@@ -90,9 +102,7 @@ in {
 
         enable.ipc = true;
       };
-      # _._._._._._._._._._._._._._._._._._._._._._
       # Functional MODULES
-      # _._._._._._._._._._._._._._._._._._._._._._
 
       "module/title" = {
         type = "internal/xwindow";
@@ -109,25 +119,26 @@ in {
         label-empty-foreground = "#707880";
       };
 
+
       "module/workspaces" = {
         type = "internal/xworkspaces";
 
-        pin.workspaces = "true";
+        pin.workspaces = "false";
         enable.click = "true";
-        enable.scroll = "true";
+        enable.scroll = "false";
 
-        label.active = "  %{T1}%{T-}";
+        label.active = "%{T1}%{T-}";
         label.occupied = "%{T1}%{T-}";
-        label.urgent = "  %{T1}%{T-}";
-        label.empty = "   %{T1}%{T-}";
+        label.urgent = "%{T1}%{T-}";
+        label.empty = "%{T1}%{T-}";
 
-        format = "<label.state>";
+        format = "<label-state>";
 
         label.monitor = "%name%";
         label.active-foreground = color.accent;
         label.occupied-foreground = color.yellow;
         label.urgent-foreground = color.red;
-        label.empty-foreground = color.modulefg.alt;
+        label.empty-foreground = color.modulefg-alt;
 
         label.active-padding = "1";
         label.urgent-padding = "1";
@@ -138,7 +149,7 @@ in {
       "module/alsa" = {
         type = "internal/pulseaudio";
 
-        format.volume = "<ramp.volume> <label.volume>";
+        format.volume = "<ramp-volume> <label-volume>";
         format.volume-background = color.shade5;
         format.volume-foreground = color.modulefg;
         format.volume-padding = "1";
@@ -155,24 +166,7 @@ in {
         ramp.volume."1" = "%{T1}奔%{T-}";
         ramp.volume."2" = "%{T1}墳%{T-}";
       };
-      "module/backlight" = {
-        type = "internal/xbacklight";
 
-        card = "intel_backlight";
-
-        format = "<ramp> <label>";
-        format-background = color.shade4;
-        format-foreground = color.modulefg;
-        format-padding = "1";
-
-        label = "%percentage%%";
-
-        ramp."0" = "";
-        ramp."1" = "";
-        ramp."2" = "";
-        ramp."3" = "";
-        ramp."4" = "";
-      };
       "module/battery" = {
         type = "internal/battery";
 
@@ -184,12 +178,12 @@ in {
         poll.interval = "2";
         time.format = "%H:%M";
 
-        format.charging = "<animation.charging> <label.charging>";
+        format.charging = "<animation-charging> <label-charging>";
         format.charging-background = color.shade4;
         format.charging-foreground = color.modulefg;
         format.charging-padding = "1";
 
-        format.discharging = "<ramp.capacity> <label.discharging>";
+        format.discharging = "<ramp-capacity> <label-discharging>";
         format.discharging-background = color.shade4;
         format.discharging-foreground = color.modulefg;
         format.discharging-padding = "1";
@@ -249,25 +243,8 @@ in {
         #time.alt = "%%{T5}%%{T-} %H:%M";
 
         # Alternative date and time format
-        date = "%%{T5}%%{T-} %a, %d %{F#808080}%b %Y%{F.}";
-        time = "%%{T5}%%{T-} %H:%M:%S";
-      };
-
-      "module/powermenu" = {
-        type = "custom/text";
-        content = "%{T1}%{T-}";
-
-        expand.right = "false";
-
-        click.left = "/home/patrick/.config/rofi/powermenu/powermenu.sh";
-
-        content-background = color.shade1;
-        content-foreground = color.modulefg;
-        content-padding = "1";
-
-        label.open = "%{T1}%{T-}";
-        label.close = "%{T1}%{T-}";
-        label.separator = "|";
+        date = "%{T5}%{T-} %a, %d %{F#808080}%b %Y%{F-}";
+        time = "%{T5}%{T-} %H:%M:%S";
       };
 
       "module/network" = {
@@ -278,24 +255,19 @@ in {
         accumulate.stats = "true";
         unknown.as.up = "true";
 
-        format-connected = "<ramp.signal> <label.connected>";
+        format-connected = "<label-connected>";
         format-connected-background = color.shade3;
         format-connected-foreground = color.modulefg;
         format-connected-padding = "1";
-        label.connected = "%{F#808080}%ifname%%{F.} %{F#808080}%upspeed:8%   %downspeed:8% %{F.}";
+        label.connected = "%{F#808080}%ifname%%{F-} %{F#808080}%upspeed:8%   %downspeed:8% %{F-}";
 
-        format.disconnected = "<label.disconnected>";
+        format.disconnected = "<label-disconnected>";
         format.disconnected-background = color.shade3;
         format.disconnected-foreground = color.modulefg;
         format.disconnected-padding = "1";
 
-        ramp.signal.font = "4";
-        ramp.signal."0" = "%{F#333}%{F. O.22}";
-        ramp.signal."1" = "%{F#333}%{F. O.22}";
-        ramp.signal."2" = "%{F#333}%{F. O.22}";
-        ramp.signal."3" = "%{F#333}%{F. O.22}";
-        ramp.signal."4" = "%{F#333}%{F. O.22}";
       };
+
       "module/keyboardswitcher" = {
         type = "custom/menu";
 
@@ -316,9 +288,7 @@ in {
         menu."0"."2-exec" = "/usr/bin/setxkbmap de";
       };
 
-      # _._._._._._._._._._._._._._._._._._._._._._
       # AESTHETIC MODULES
-      # _._._._._._._._._._._._._._._._._._._._._._
 
       "module/left1" = {
         type = "custom/text";
@@ -342,7 +312,7 @@ in {
       };
 
       "module/right2" = {
-        type = custom/text;
+        type = "custom/text";
         "content-background" = color.shade3;
         "content-foreground" = color.shade2;
         content = "%{T3}%{T-}";
