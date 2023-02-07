@@ -9,12 +9,7 @@ with nixpkgs.lib; let
   rekeyCommandForHost = hostName: hostAttrs: let
     masterIdentities = strings.concatMapStrings (x: "-i ${x} ") hostAttrs.config.rekey.masterIdentityPaths;
 
-    pubKeyStr = let
-      pubKey = hostAttrs.config.rekey.pubKey;
-    in
-      if isPath pubKey
-      then readFile pubKey
-      else pubKey;
+    pubKeyStr = hostAttrs.config.rekey.pubKey;
     secretPath = "/tmp/nix-rekey.d/${builtins.hashString "sha1" pubKeyStr}/";
 
     rekeyCommand = secretName: secretAttrs: let

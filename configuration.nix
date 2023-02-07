@@ -28,7 +28,6 @@
   rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
 
   rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
-  rekey.plugins = [pkgs.age-plugin-yubikey];
 
   networking.wireless.iwd.enable = true;
   rekey.secrets.eduroam = {
@@ -88,24 +87,30 @@
 
   powerManagement.powertop.enable = true;
 
+  # Disable mutable Users, any option can only be set by the nix config
+  users.mutableUsers = false;
+
+  rekey.secrets.patrick.file = ./secrets/patrick.passwd.age;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {
     isNormalUser = true;
     uid = 1000;
     createHome = true;
-    extraGroups = ["wheel" "audio" "video" "input"]; # Enable ‘sudo’ for the user.
+    extraGroups = ["wheel" "audio" "video" "input"];
     group = "patrick";
     shell = pkgs.zsh;
+	passwordFile = config.rekey.secrets.patrick.path;
   };
   users.groups.patrick.gid = 1000;
 
+  rekey.secrets.root.file = ./secrets/root.passwd.age;
   users.users.root = {
-    initialPassword = "ctie";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
     ];
     shell = pkgs.zsh;
+	passwordFile = config.rekey.secrets.root.path;
   };
 
   security.sudo.enable = false;
