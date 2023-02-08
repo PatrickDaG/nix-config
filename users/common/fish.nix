@@ -21,15 +21,15 @@
         "$git_commit"
         "$git_state"
         "$git_status"
-        "$nix_shell"
         "$character"
       ];
 
       right_format = lib.concatStrings [
-        "$cmd_duration"
+        "$nix_shell"
+        "( $cmd_duration)"
         "$status"
         "$jobs"
-        "$time"
+        " $time"
       ];
 
       username = {
@@ -79,6 +79,7 @@
 
       nix_shell = {
         heuristic = true;
+        format = "[$symbol$state( \($name\))]($style)";
       };
 
       cmd_duration = {
@@ -114,12 +115,12 @@
         set -g FZF_COMPLETE 2
       '')
       (lib.mkAfter ''
-        bind \cr _atuin_search
-		# prefix search for up and down arrow
-		bind -k up history-prefix-search-backward
-		bind -k down history-prefix-search-forward
-		#Include atuin auto completions
-		atuin gen-completions --shell fish | source
+              bind \cr _atuin_search
+        # prefix search for up and down arrow
+        bind \e\[A history-prefix-search-backward
+        bind \e\[B history-prefix-search-forward
+        #Include atuin auto completions
+        atuin gen-completions --shell fish | source
       '')
     ];
     plugins = [

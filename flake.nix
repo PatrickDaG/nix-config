@@ -45,7 +45,19 @@
         ];
       };
     }
-    // flake-utils.lib.eachSystem [system] (localSystem: {
+    // flake-utils.lib.eachSystem [system] (localSystem: rec {
+      pkgs = import nixpkgs {
+        inherit localSystem;
+      };
       apps = import ./apps/rekey.nix inputs localSystem;
+      devShells.default = pkgs.mkShell {
+        name = "patricks tolle nix config";
+
+        packages = with pkgs; [
+          alejandra
+          statix
+          update-nix-fetchgit
+        ];
+      };
     });
 }

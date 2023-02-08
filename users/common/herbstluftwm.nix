@@ -17,25 +17,24 @@ in {
       doCheck = false;
     });
     extraConfig = ''
-      herbstclient set auto_detect_monitors 1
-      autorandr -c
-      herbstclient detect_monitors
-      herbstclient merge_tag default
+             herbstclient set auto_detect_monitors 1
+      killall polybar
+      polybar &
 
-      herbstclient attr theme.tiling.reset 1
-      herbstclient attr theme.floating.reset 1
-      herbstclient attr theme.active.color "#9fbc00"
-      herbstclient attr theme.normal.color "#454545"
-      herbstclient attr theme.urgent.color orange
-      herbstclient attr theme.inner_width 1
-      herbstclient attr theme.inner_color black
-      herbstclient attr theme.border_width 3
-      herbstclient attr theme.floating.border_width 4
-      herbstclient attr theme.floating.outer_width 1
-      herbstclient attr theme.floating.outer_color black
-      herbstclient attr theme.active.inner_color "#3E4A00"
-      herbstclient attr theme.active.outer_color "#3E4A00"
-      herbstclient attr theme.background_color "#141414"
+             herbstclient attr theme.tiling.reset 1
+             herbstclient attr theme.floating.reset 1
+             herbstclient attr theme.active.color "#9fbc00"
+             herbstclient attr theme.normal.color "#454545"
+             herbstclient attr theme.urgent.color orange
+             herbstclient attr theme.inner_width 1
+             herbstclient attr theme.inner_color black
+             herbstclient attr theme.border_width 3
+             herbstclient attr theme.floating.border_width 4
+             herbstclient attr theme.floating.outer_width 1
+             herbstclient attr theme.floating.outer_color black
+             herbstclient attr theme.active.inner_color "#3E4A00"
+             herbstclient attr theme.active.outer_color "#3E4A00"
+             herbstclient attr theme.background_color "#141414"
     '';
 
     tags = TAGS;

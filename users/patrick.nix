@@ -9,6 +9,7 @@
     common/autorandr.nix
     common/desktop.nix
     common/polybar.nix
+	common/rofi.nix
   ];
 
   home = {
@@ -20,6 +21,7 @@
       nextcloud-client
       signal-desktop
       spotify
+      xdragon
     ];
   };
 
