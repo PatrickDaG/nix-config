@@ -12,4 +12,5 @@ xsetroot -solid '#000000'
 #
 #touchegg &
 #dunst &
+polybar &
 exec dbus-launch --sh-syntax --exit-with-session -- herbstluftwm --locked

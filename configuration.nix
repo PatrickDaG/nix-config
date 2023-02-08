@@ -82,6 +82,7 @@
     };
   };
   services.autorandr.enable = true;
+  services.physlock.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 

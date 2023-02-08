@@ -108,13 +108,18 @@
     enable = true;
     interactiveShellInit = lib.mkMerge [
       (lib.mkBefore ''
-                set -g ATUIN_NOBIND true
-                set -g fish_greeting
+        set -g ATUIN_NOBIND true
+        set -g fish_greeting
         set -g fish_autosuggestion_enabled 0
-        set -U FZF_COMPLETE 2
+        set -g FZF_COMPLETE 2
       '')
       (lib.mkAfter ''
         bind \cr _atuin_search
+		# prefix search for up and down arrow
+		bind -k up history-prefix-search-backward
+		bind -k down history-prefix-search-forward
+		#Include atuin auto completions
+		atuin gen-completions --shell fish | source
       '')
     ];
     plugins = [
