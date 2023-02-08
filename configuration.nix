@@ -160,10 +160,6 @@
   networking.firewall.enable = false;
 
   services.udev.packages = with pkgs; [yubikey-personalization libu2f-host];
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
 
   environment.shellInit = ''
     gpg-connect-agent /bye

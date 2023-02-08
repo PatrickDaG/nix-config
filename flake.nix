@@ -12,6 +12,12 @@
     };
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = {
@@ -50,6 +56,7 @@
         inherit localSystem;
       };
       apps = import ./apps/rekey.nix inputs localSystem;
+
       devShells.default = pkgs.mkShell {
         name = "patricks tolle nix config";
 
@@ -58,6 +65,12 @@
           statix
           update-nix-fetchgit
         ];
+
+        shellHook = ''
+          ${self.checks.${system}.pre-commit-check.shellHook}
+        '';
       };
+
+      checks = import ./modules/checks.nix inputs localSystem;
     });
 }

@@ -12,8 +12,7 @@ with nixpkgs.lib; let
     pubKeyStr = hostAttrs.config.rekey.pubKey;
     secretPath = "/tmp/nix-rekey.d/${builtins.hashString "sha1" pubKeyStr}/";
 
-    rekeyCommand = secretName: secretAttrs: let
-    in ''
+    rekeyCommand = secretName: secretAttrs: ''
       echo "Rekeying secret ${secretName} for host ${hostName}"
       echo "${secretAttrs.file}"
       ${pkgs.rage}/bin/rage ${masterIdentities} -d ${secretAttrs.file} \
@@ -39,7 +38,7 @@ with nixpkgs.lib; let
     ''
     else ''
       mkdir -p ${secretPath}
-      ${concatStringsSep "\n" (mapAttrsToList rekeyCommand (hostAttrs.config.rekey.secrets))}
+      ${concatStringsSep "\n" (mapAttrsToList rekeyCommand hostAttrs.config.rekey.secrets)}
     '';
 
   rekeyScript = ''
