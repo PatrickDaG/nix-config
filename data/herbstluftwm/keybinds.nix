@@ -4,7 +4,6 @@ MOD: TAGS:
 
   # General
   "${MOD}-q" = " close";
-  #"${MOD}-Shift-Escape"  = " spawn ${HOME}/.config/rofi/powermenu/powermenu.sh";
 
   # Moving
   "${MOD}-Shift-Left" = " shift left";
@@ -78,6 +77,7 @@ MOD: TAGS:
   "${MOD}-b 	" = "spawn firefox";
   "${MOD}-m 	" = "spawn thunderbird";
   "${MOD}-Shift-l 	" = "spawn systemctl suspend";
+  "Menu" = "spawn rofi -show run";
 }
 // builtins.listToAttrs (map (x: {
     name = "${MOD}-${x}";

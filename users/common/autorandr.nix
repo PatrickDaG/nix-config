@@ -46,7 +46,7 @@
 
     hooks.postswitch = {
       "reload_wm" = "herbstclient reload";
-	};
+    };
 
     profiles.AStA_links = asta_conf {
       # AStA linker arbeitsplatz linker Monitor
