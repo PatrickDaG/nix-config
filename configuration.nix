@@ -15,6 +15,7 @@
     #
     ./modules/pipewire.nix
     ./modules/rekey.nix
+    ./modules/nvidia.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -71,7 +72,7 @@
     xkbVariant = "bone";
     autoRepeatDelay = 235;
     autoRepeatInterval = 60;
-    videoDrivers = ["modesetting" "nvidia"];
+    videoDrivers = ["modesetting"];
     libinput = {
       enable = true;
       mouse.accelProfile = "flat";

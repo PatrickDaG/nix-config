@@ -10,6 +10,7 @@
     common/desktop.nix
     common/polybar.nix
     common/rofi.nix
+    #common/touchegg.nix
   ];
 
   home = {
