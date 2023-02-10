@@ -10,6 +10,7 @@
     common/desktop.nix
     common/polybar.nix
     common/rofi.nix
+    common/touchscreen.nix
     #common/touchegg.nix
   ];
 
@@ -23,6 +24,7 @@
       signal-desktop
       spotify
       xdragon
+      xournalpp
     ];
   };
 
