@@ -127,6 +127,8 @@
     age-plugin-yubikey
     rage
     file
+    # xournalpp needs this or else it will crash
+    gnome3.adwaita-icon-theme
   ];
 
   programs.steam.enable = true;
