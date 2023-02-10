@@ -4,12 +4,11 @@
   ...
 }: {
   imports = [
-    common/kitty.nix
-    common/herbstluftwm.nix
-    common/autorandr.nix
-    common/desktop.nix
-    common/polybar.nix
-    common/rofi.nix
+    common/programs/kitty.nix
+    common/graphical/herbstluftwm.nix
+    common/graphical/autorandr.nix
+    common/programs/polybar.nix
+    common/programs/rofi.nix
     common/touchscreen.nix
     #common/touchegg.nix
   ];
@@ -25,7 +24,18 @@
       spotify
       xdragon
       xournalpp
+      zathura
+      pinentry
+      arandr
+      feh
+      xclip
     ];
+    sessionVariables = {
+      # Firefox touch support
+      "MOZ_USE_XINPUT2" = 1;
+      # Firefox Hardware render
+      "MOZ_WEBRENDER" = 1;
+    };
   };
 
   programs.firefox = {

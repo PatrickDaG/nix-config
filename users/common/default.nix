@@ -5,9 +5,9 @@
 }: {
   imports = [
     #./zsh.nix
-    ./fish.nix
-    ./htop.nix
-    ./alias.nix
+    ./shells/fish.nix
+    ./programs/htop.nix
+    ./shells/alias.nix
   ];
 
   home.packages = with pkgs; [

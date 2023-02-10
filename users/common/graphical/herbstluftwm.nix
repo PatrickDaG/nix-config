@@ -9,8 +9,9 @@
   #set the default resize step for herbstluft
   RESIZE_STEP = 0.05;
   TAGS = map toString (lib.lists.range 1 9);
+  data_dir = ../../../data/herbstluftwm;
 in {
-  home.file.".xinitrc".source = ../../data/herbstluftwm/xinitrc;
+  home.file.".xinitrc".source = data_dir + /xinitrc;
   xsession.windowManager.herbstluftwm = {
     enable = true;
     package = pkgs.herbstluftwm.overrideAttrs (finalAttrs: previousAttrs: {
@@ -45,7 +46,7 @@ in {
       "${MOD}-Button3" = "resize";
     };
 
-    keybinds = import ../../data/herbstluftwm/keybinds.nix MOD TAGS;
+    keybinds = import (data_dir + /keybinds.nix) MOD TAGS;
     settings = {
       "default_frame_layout" = 3;
 
