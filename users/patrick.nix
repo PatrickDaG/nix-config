@@ -10,6 +10,7 @@
     common/programs/polybar.nix
     common/programs/rofi.nix
     common/touchscreen.nix
+    #common/programs/thunderbird.nix
     #common/touchegg.nix
   ];
 

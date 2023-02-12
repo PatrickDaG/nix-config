@@ -16,6 +16,7 @@
     ./modules/pipewire.nix
     ./modules/rekey.nix
     ./modules/nvidia.nix
+    ./modules/wireguard.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
