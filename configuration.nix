@@ -27,6 +27,10 @@
   networking.hostName = "patricknix"; # Define your hostname.
   networking.hostId = "68438432";
 
+  networking.extraHosts = ''
+    10.0.0.1 paperless.lel.lol
+  '';
+
   # Identities with which all secrets are encrypted
   rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
 
