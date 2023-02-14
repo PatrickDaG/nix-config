@@ -15,6 +15,7 @@
     bat
     ripgrep
     killall
+    fd
   ];
 
   # has to be enabled to support zsh reverse search

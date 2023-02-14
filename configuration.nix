@@ -17,6 +17,7 @@
     ./modules/rekey.nix
     ./modules/nvidia.nix
     ./modules/wireguard.nix
+    ./modules/smb-mounts.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
