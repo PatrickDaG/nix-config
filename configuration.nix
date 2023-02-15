@@ -6,7 +6,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  shell = pkgs.zsh;
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -91,6 +93,8 @@
   services.autorandr.enable = true;
   services.physlock.enable = true;
 
+  hardware.opengl.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 
   powerManagement.powertop.enable = true;
@@ -101,23 +105,23 @@
   rekey.secrets.patrick.file = ./secrets/patrick.passwd.age;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {
+    inherit shell;
     isNormalUser = true;
     uid = 1000;
     createHome = true;
     extraGroups = ["wheel" "audio" "video" "input"];
     group = "patrick";
-    shell = pkgs.fish;
     passwordFile = config.rekey.secrets.patrick.path;
   };
   users.groups.patrick.gid = 1000;
 
   rekey.secrets.root.file = ./secrets/root.passwd.age;
   users.users.root = {
+    inherit shell;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
     ];
-    shell = pkgs.fish;
     passwordFile = config.rekey.secrets.root.path;
   };
 
@@ -137,7 +141,16 @@
     gnome3.adwaita-icon-theme
   ];
 
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    package = pkgs.steam.override {
+      extraPkgs = pkgs:
+        with pkgs; [
+          libgdiplus
+          cups
+        ];
+    };
+  };
 
   # List services that you want to enable:
 
@@ -173,8 +186,9 @@
   services.udev.packages = with pkgs; [yubikey-personalization libu2f-host];
 
   environment.shellInit = ''
-    gpg-connect-agent /bye
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+       gpg-connect-agent /bye
+       export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    umask 077
   '';
 
   # Copy the NixOS configuration file and link it from the resulting system

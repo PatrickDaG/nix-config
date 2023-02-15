@@ -3,43 +3,33 @@
   pkgs,
   ...
 }: {
+  imports = [
+    ./starfish.nix
+  ];
+  programs.atuin = {
+    enable = true;
+    settings.auto_sync = false;
+  };
   programs.zsh = {
     enable = true;
-    initExtra = builtins.readFile ../../data/zsh/zshrc;
+    #initExtra = builtins.readFile ../../../data/zsh/zshrc;
     plugins = [
       {
-        name = "powerlevel10k";
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-        src = pkgs.zsh-powerlevel10k;
-      }
-      {
         name = "fzf-tab";
-        file = "share/fzf-tab/fzf-tab.plugin.zsh";
-        src = pkgs.zsh-fzf-tab;
-      }
-      {
-        name = "fast-syntax-highlighting";
-        file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
-        src = pkgs.zsh-fast-syntax-highlighting;
-      }
-      {
-        name = "zsh-histdb";
-        file = "sqlite-history.zsh";
         src = pkgs.fetchFromGitHub {
-          owner = "larkery";
-          repo = "zsh-histdb";
-          rev = "30797f0";
-          sha256 = "PQIFF8kz+baqmZWiSr+wc4EleZ/KD8Y+lxW2NT35/bg=";
+          owner = "aloxaf";
+          repo = "fzf-tab";
+          rev = "69024c27738138d6767ea7246841fdfc6ce0d0eb";
+          sha256 = "07wwcplyb2mw10ia9y510iwfhaijnsdcb8yv2y3ladhnxjd6mpf8";
         };
       }
       {
-        name = "sd";
-        file = "sd.plugin.zsh";
+        name = "fast-syntax-highlighting";
         src = pkgs.fetchFromGitHub {
-          owner = "ianthehenry";
-          repo = "sd";
-          rev = "v1.1.0";
-          sha256 = "X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
+          owner = "zdharma-continuum";
+          repo = "fast-syntax-highlighting";
+          rev = "7c390ee3bfa8069b8519582399e0a67444e6ea61";
+          sha256 = "0gh4is2yzwiky79bs8b5zhjq9khksrmwlaf13hk3mhvpgs8n1fn0";
         };
       }
     ];

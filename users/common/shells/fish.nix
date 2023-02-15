@@ -4,124 +4,30 @@
   lib,
   ...
 }: {
+  imports = [
+    ./starfish.nix
+  ];
   programs.atuin = {
     enable = true;
     settings.auto_sync = false;
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = {
-      add_newline = false;
-      format = lib.concatStrings [
-        "$username"
-        "$hostname"
-        " $directory"
-        "$git_branch"
-        "$git_commit"
-        "$git_state"
-        "$git_status"
-        "$character"
-      ];
-
-      right_format = lib.concatStrings [
-        "$nix_shell"
-        "( $cmd_duration)"
-        "$status"
-        "$jobs"
-        " $time"
-      ];
-
-      username = {
-        style_user = "yellow";
-        style_root = "bold red";
-        show_always = true;
-        format = "[$user]($style)";
-      };
-
-      hostname = {
-        style = "red";
-        format = "@[$hostname]($style)";
-      };
-
-      directory = {
-        format = "[$path]($style)[$read_only]($read_only_style) ";
-        fish_style_pwd_dir_length = 1;
-        truncate_to_repo = false;
-      };
-
-      git_branch = {
-        format = "[$symbol$branch(:$remote_branch)]($style)";
-      };
-
-      git_status = {
-        conflicted = "$count";
-        ahead = "⇡$count";
-        behind = "⇣$count";
-        diverged = "⇡$ahead_count⇣$behind_count";
-        untracked = "?$count";
-        stashed = "\\$$count";
-        modified = "!$count";
-        staged = "+$count";
-        renamed = "→$count";
-        deleted = "-$count";
-        format = lib.concatStrings [
-          "[( $conflicted)](red)"
-          "[( $stashed)](magenta)"
-          "[( $staged)](green)"
-          "[( $deleted)](red)"
-          "[( $renamed)](blue)"
-          "[( $modified)](yellow)"
-          "[( $untracked)](blue)"
-          "[( $ahead_behind)](green)"
-        ];
-      };
-
-      nix_shell = {
-        heuristic = true;
-        format = "[$symbol$state( \($name\))]($style)";
-      };
-
-      cmd_duration = {
-        format = "[ $duration]($style) ";
-        style = "yellow";
-      };
-
-      status = {
-        disabled = false;
-        pipestatus = true;
-        style = "red";
-        pipestatus_format = "$pipestatus -> [$int( $signal_name)]($style)";
-        pipestatus_separator = "[ | ]($style)";
-        pipestatus_segment_format = "[$status]($style)";
-        format = "[$status( $signal_name)]($style) ";
-      };
-
-      time = {
-        disabled = false;
-        format = "[ $time]($style)";
-        style = "yellow";
-      };
-    };
   };
 
   programs.fish = with lib; {
     enable = true;
     interactiveShellInit = lib.mkMerge [
       (lib.mkBefore ''
-              set -g ATUIN_NOBIND true
-              set -g fish_greeting
-              set -g fish_autosuggestion_enabled 0
-              set -g FZF_COMPLETE 2
-        set -g FZF_COMPLETE_OPTS "--bind=ctrl-space:select --multi"
+        set -g ATUIN_NOBIND true
+        set -g fish_greeting
+        set -g fish_autosuggestion_enabled 0
       '')
       (lib.mkAfter ''
-              bind \cr _atuin_search
-        # prefix search for up and down arrow
-        bind \e\[A history-prefix-search-backward
-        bind \e\[B history-prefix-search-forward
-        #Include atuin auto completions
-        atuin gen-completions --shell fish | source
+                    bind \cr _atuin_search
+              # prefix search for up and down arrow
+              bind \e\[A history-prefix-search-backward
+              bind \e\[B history-prefix-search-forward
+              #Include atuin auto completions
+              atuin gen-completions --shell fish | source
+        set -g fzf_complete_opts --cycle --reverse --height=20%
       '')
     ];
     plugins = [
@@ -130,8 +36,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "oddlama";
           repo = "fzf.fish";
-          rev = "63c8f8e65761295da51029c5b6c9e601571837a1";
-          sha256 = "036n50zr9kyg6ad408zn7wq2vpfwhmnfwab465km4dk60ywmrlcb";
+          rev = "8c8b21ae52306cab5cece0095802ae15d0b8e3f4";
+          sha256 = "07yhiqv2ag4k7fxrmqg8x66adr3gy5j1w2cs07pm0f1552jsz5jr";
         };
       }
     ];
