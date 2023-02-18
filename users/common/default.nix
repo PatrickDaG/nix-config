@@ -86,6 +86,7 @@
     defaultEditor = true;
     withNodeJs = true;
   };
+
   xdg.configFile.nvim = {
     recursive = true;
     source = ../../data/nvim;

@@ -261,3 +261,4 @@ unfunction setup_keybinds
 # Set umask
 umask 077
 
+export EDITOR="nvim"
