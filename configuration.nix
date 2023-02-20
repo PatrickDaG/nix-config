@@ -140,6 +140,7 @@ in {
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
+  programs.zsh.enable = true;
 
   programs.steam = {
     enable = true;

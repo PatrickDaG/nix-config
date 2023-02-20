@@ -34,6 +34,13 @@ function atuin-prefix-search-any-end() {
 
 }; zle -N atuin-prefix-search-any-end
 
+function atuin-reset-search() {
+	unset _atuin_search_prev_buffer
+}
+
+autoload -U add-zle-hook-widget
+add-zle-hook-widget line-init atuin-reset-search
+
 function atuin-prefix-search-backward-end() {
 	direction=1 atuin-prefix-search-any-end
 }; zle -N atuin-prefix-search-backward-end
@@ -260,5 +267,3 @@ unfunction setup_keybinds
 
 # Set umask
 umask 077
-
-export EDITOR="nvim"
