@@ -1,6 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   config,
   pkgs,
@@ -20,6 +17,9 @@ in {
     ./modules/nvidia.nix
     ./modules/wireguard.nix
     ./modules/smb-mounts.nix
+    ./modules/networking.nix
+    ./modules/nix.nix
+    ./modules/xserver.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -29,40 +29,8 @@ in {
   networking.hostName = "patricknix"; # Define your hostname.
   networking.hostId = "68438432";
 
-  networking.extraHosts = ''
-    10.0.0.1 paperless.lel.lol
-  '';
-
-  # Identities with which all secrets are encrypted
-  rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
-
-  rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
-
-  networking.wireless.iwd.enable = true;
-  rekey.secrets.eduroam = {
-    file = ./secrets/iwd/eduroam.8021x.age;
-    path = "/etc/iwd/eduroam.8021x";
-  };
-  rekey.secrets.devoloog = {
-    file = ./secrets/iwd/devolo-og.psk.age;
-    path = "/etc/iwd/devolo-og.psk";
-  };
-
-  networking.useNetworkd = true;
-  networking.dhcpcd.enable = false;
-  # Should remain enabled since nscd from glibc is kinda ass
-  services.nscd.enableNsncd = true;
-  systemd.network.wait-online.anyInterface = true;
-  services.resolved = {
-    enable = true;
-  };
-
   # Set your time zone.
-  time.timeZone = "Europe/Berlin";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  time.timeZone = "Asia/Seoul";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "C.UTF-8";
@@ -71,27 +39,10 @@ in {
     packages = with pkgs; [terminus_font];
     useXkbConfig = true; # use xkbOptions in tty.
   };
+  # Identities with which all secrets are encrypted
+  rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
 
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    displayManager.startx.enable = true;
-    layout = "de";
-    xkbVariant = "bone";
-    autoRepeatDelay = 235;
-    autoRepeatInterval = 60;
-    videoDrivers = ["modesetting"];
-    libinput = {
-      enable = true;
-      mouse.accelProfile = "flat";
-      touchpad = {
-        accelProfile = "flat";
-        naturalScrolling = true;
-      };
-    };
-  };
-  services.autorandr.enable = true;
-  services.physlock.enable = true;
+  rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
 
   hardware.opengl.enable = true;
 
@@ -178,11 +129,6 @@ in {
   services.pcscd.enable = true;
   services.fstrim.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = false;
 
   services.udev.packages = with pkgs; [yubikey-personalization libu2f-host];
 
@@ -191,47 +137,4 @@ in {
        export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
   '';
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # breaks flake based building
-  # system.copySystemConfiguration = true;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
-
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      allowed-users = ["@wheel"];
-      trusted-users = ["root" "@wheel"];
-      system-features = ["recursive-nix"];
-      substituters = [
-        "https://nix-config.cachix.org"
-        "https://nix-community.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-config.cachix.org-1:Vd6raEuldeIZpttVQfrUbLvXJHzzzkS0pezXCVVjDG4="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
-      cores = 0;
-      max-jobs = "auto";
-    };
-    daemonCPUSchedPolicy = "batch";
-    daemonIOSchedPriority = 5;
-    distributedBuilds = true;
-    extraOptions = ''
-      builders-use-substitutes = true
-      experimental-features = nix-command flakes recursive-nix
-      flake-registry = /etc/nix/registry.json
-    '';
-    optimise.automatic = true;
-    gc.automatic = true;
-  };
 }
