@@ -1,4 +1,4 @@
-MOD: TAGS:
+MOD: TAGS: pkgs:
 {
   # ${MOD} will be set to the main modifier key
 
@@ -74,10 +74,11 @@ MOD: TAGS:
   "${MOD}-Shift-space" = "   cycle_layout -1";
 
   "${MOD}-t 	" = "spawn kitty";
-  "${MOD}-b 	" = "spawn firefox";
-  "${MOD}-m 	" = "spawn thunderbird";
+  "${MOD}-b 	" = "spawn ${pkgs.firefox}/bin/firefox";
+  "${MOD}-m 	" = "spawn ${pkgs.thunderbird}/bin/thunderbird";
   "${MOD}-Shift-l 	" = "spawn systemctl suspend";
   "Menu" = "spawn rofi -show run";
+  "${MOD}-F12" = "spawn ${(import ../../modules/touchscreen.nix) pkgs}";
 }
 // builtins.listToAttrs (map (x: {
     name = "${MOD}-${x}";

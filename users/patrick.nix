@@ -9,7 +9,6 @@
     common/graphical/autorandr.nix
     common/programs/polybar.nix
     common/programs/rofi.nix
-    common/touchscreen.nix
     #common/touchegg.nix
   ];
 

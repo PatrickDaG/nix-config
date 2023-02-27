@@ -46,7 +46,7 @@ in {
       "${MOD}-Button3" = "resize";
     };
 
-    keybinds = import (data_dir + /keybinds.nix) MOD TAGS;
+    keybinds = import (data_dir + /keybinds.nix) MOD TAGS pkgs;
     settings = {
       "default_frame_layout" = 3;
 

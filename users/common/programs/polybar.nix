@@ -74,8 +74,12 @@ in {
         monitor-fallback = "eDP-1";
         bottom = true;
 
-        dpi = 96;
-        height = 22;
+        # for UHD Polybar
+        dpi = 144;
+        height = 33;
+        # for HD Polybar
+        #dpi = 96;
+        #height = 22;
         offset.x = "0%";
         offset.y = "0%";
 

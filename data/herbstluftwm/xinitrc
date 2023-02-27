@@ -12,4 +12,6 @@ xsetroot -solid '#000000'
 #
 #touchegg &
 #dunst &
+autorandr -c
+xset r rate 235 60
 exec dbus-launch --sh-syntax --exit-with-session -- herbstluftwm --locked
