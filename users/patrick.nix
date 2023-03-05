@@ -9,7 +9,8 @@
     common/graphical/autorandr.nix
     common/programs/polybar.nix
     common/programs/rofi.nix
-    #common/touchegg.nix
+    common/touchegg-module.nix
+    common/touchegg-settings.nix
   ];
 
   home = {

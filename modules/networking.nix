@@ -19,7 +19,8 @@
   # So to not dox myself this config file is hardcoded
   rekey.secrets.enp0s20f0u2u4 = {
     file = ../secrets/koreaIP.age;
-    path = "/etc/systemd/network/enp0s20f0u2u4.network";
+    path = "/etc/systemd/network/10-enp0s20f0u2u4.network";
+    mode = "444";
   };
   services.resolved = {
     enable = true;

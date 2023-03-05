@@ -1,11 +1,15 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }:
 with lib; let
-  cfg = config.programs.touchegg;
-
+  #
+  # GESTURES
+  #
+  # each on has a member type as a single entry enum
+  # to be able to definitely distinguish them
   # common options
   fingers = mkOption {
     type = types.ints.between 2 5;
@@ -20,6 +24,13 @@ with lib; let
   # Submodules for the different gestures
   swipe_gesture = types.submodule {
     inherit fingers;
+    type = mkOption {
+      type = types.enum ["swipe"];
+      description = ''
+        Type of gesture to perform
+      '';
+      default = "";
+    };
 
     direction = mkOption {
       type = types.enum ["UP" "DOWN" "LEFT" "RIGHT"];
@@ -32,6 +43,13 @@ with lib; let
 
   pinch_gesture = types.submodule {
     inherit fingers;
+    type = mkOption {
+      type = types.enum ["pinch"];
+      description = ''
+        Type of gesture to perform
+      '';
+      default = "";
+    };
 
     direction = mkOption {
       type = types.enum ["IN" "OUT"];
@@ -44,7 +62,18 @@ with lib; let
 
   tap_gesture = types.submodule {
     inherit fingers;
+    type = mkOption {
+      type = types.enum ["tap"];
+      description = ''
+        Type of gesture to perform
+      '';
+      default = "";
+    };
   };
+
+  #
+  # ACTIONS
+  #
 
   # common options
   animate = mkOption {
@@ -56,7 +85,7 @@ with lib; let
   };
 
   color = mkOption {
-    type = type.str;
+    type = types.str;
     description = ''
       hex value of the animation color
     '';
@@ -65,7 +94,7 @@ with lib; let
   };
 
   borderColor = mkOption {
-    type = type.str;
+    type = types.str;
     description = ''
       hex value of the color of the
       animation border
@@ -78,8 +107,6 @@ with lib; let
     inherit animate color borderColor;
   };
 
-  # Submodules for the actions performed
-  # by gestures
   maximize_restore_window = {
     inherit animation_common_options;
   };
@@ -121,7 +148,11 @@ with lib; let
         "auto"
       ];
       description = ''
-        The desktop/workspace to switch to. It is recommended to use previous/next for better compatibility. However, some desktop environments, like KDE, allow to configure a grid of desktops and up/down/left/right come in handy. With SWIPE gestures, auto will use your natural scroll preferences to figure out the direction.
+              The desktop/workspace to switch to.
+        It is recommended to use previous/next for better compatibility.
+        However, some desktop environments, like KDE,
+        allow to configure a grid of desktops and up/down/left/right come in handy.
+        With SWIPE gestures, auto will use your natural scroll preferences to figure out the direction.
       '';
       default = "auto";
       example = "next";
@@ -255,21 +286,13 @@ with lib; let
   };
 
   mouse_click = {
+    inherit on;
     button = mkOption {
       type = types.enum ["left" "right" "middle"];
       description = ''
         Which button to press
       '';
       example = "left";
-    };
-
-    on = mkOption {
-      type = types.enum ["begin" "end"];
-      description = ''
-        If the command should be executed on the beginning or on the end of the gesture.
-      '';
-      default = "end";
-      example = "begin";
     };
   };
 
@@ -281,32 +304,11 @@ with lib; let
     '';
   in
     types.submodule {
-      options = {
+      gestures = mkOption {
         # hopefully this works it not
         # because of submodule weirdness
-
-        swipe_gesture = mkOption {
-          type = types.listOf swipe_gesture;
-          description = helpStr;
-          default = [];
-        };
-
-        pinch_gesture = mkOption {
-          type = types.listOf pinch_gesture;
-          description = helpStr;
-          default = [];
-        };
-
-        tap_gesture = mkOption {
-          type = types.listOf tap_gesture;
-          description = helpStr;
-          default = [];
-        };
-
-        description = ''
-          the type of gesture
-        '';
-
+        type = types.enum [swipe_gesture pinch_gesture tap_gesture];
+        description = helpStr;
         example = ""; # TODO
       };
 
@@ -321,6 +323,7 @@ with lib; let
     };
 in {
   options.programs.touchegg = {
+    inherit color borderColor;
     enable = mkEnableOption "Touch gesture daemon";
 
     animation_delay = mkOption {
@@ -347,41 +350,181 @@ in {
       example = "";
     };
 
-    color = mkOption {
-      type = types.str;
-      description = ''
-        Color of the animation
-      '';
-      default = "39E9FED";
-      example = "";
-    };
-
-    borderColor = mkOption {
-      type = types.str;
-      description = ''
-        Color of the animation
-      '';
-      default = "9E9FED";
-      example = "";
-    };
-
     gestures = mkOption {
-      type = types.attrOf gestureModule;
+      type = types.attrsOf gestureModule;
       description = "touchegg gestures";
       default = {};
     };
   };
 
-  config = mkIf cfg.enable {
-    #assertions =
-    # TODO
-    home.packages = [pkgs.touchegg];
+  config = let
+    cfg = config.programs.touchegg;
+  in
+    mkIf cfg.enable {
+      # TODO
+      home.packages = [pkgs.touchegg];
 
-    xdg.configFile.touchegg = {
-      target = "touchegg/touchegg.conf";
-      text = builtins.toXML {};
+      xdg.configFile.touchegg = {
+        target = "touchegg/touchegg.conf";
+        text = ''
+          <touchégg>
+
+          	<settings>
+          		<!--
+          		Delay, in milliseconds, since the gesture starts before the animation is displayed.
+          		Default: 150ms if this property is not set.
+          		Example: Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that no animation is
+          		displayed if you complete the action quick enough. This property configures that time.
+          		-->
+          		<property name="animation_delay">150</property>
+
+          		<!--
+          		Percentage of the gesture to be completed to apply the action. Set to 0 to execute actions unconditionally.
+          		Default: 20% if this property is not set.
+          		Example: Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that, even if the
+          		animation is displayed, the action is not executed if you did not move your fingers far
+          		enough. This property configures the percentage of the gesture that must be reached to
+          		execute the action.
+          		-->
+          		<property name="action_execute_threshold">20</property>
+
+          		<!--
+          		Global animation colors can be configured to match your system colors using HEX notation:
+
+          			<color>909090</color>
+          			<borderColor>FFFFFF</borderColor>
+
+          		You can also use auto:
+
+          			<property name="color">auto</property>
+          			<property name="borderColor">auto</property>
+
+          		Notice that you can override an specific animation color.
+          		-->
+          		<property name="color">auto</property>
+          		<property name="borderColor">auto</property>
+          	</settings>
+
+          	<!--
+          		Configuration for every application.
+          	-->
+          	<application name="All">
+          		<gesture type="SWIPE" fingers="3" direction="UP">
+          		<action type="MAXIMIZE_RESTORE_WINDOW">
+          			<animate>true</animate>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="3" direction="DOWN">
+          		<action type="MINIMIZE_WINDOW">
+          			<animate>true</animate>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="3" direction="LEFT">
+          		<action type="TILE_WINDOW">
+          			<direction>left</direction>
+          			<animate>true</animate>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="3" direction="RIGHT">
+          		<action type="TILE_WINDOW">
+          			<direction>right</direction>
+          			<animate>true</animate>
+          		</action>
+          		</gesture>
+
+          		<gesture type="PINCH" fingers="3" direction="IN">
+          		<action type="CLOSE_WINDOW">
+          			<animate>true</animate>
+          			<color>F84A53</color>
+          			<borderColor>F84A53</borderColor>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="4" direction="UP">
+          		<action type="CHANGE_DESKTOP">
+          			<direction>auto</direction>
+          			<animate>true</animate>
+          			<animationPosition>auto</animationPosition>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="4" direction="DOWN">
+          		<action type="CHANGE_DESKTOP">
+          			<direction>auto</direction>
+          			<animate>true</animate>
+          			<animationPosition>auto</animationPosition>
+          		</action>
+          		</gesture>
+
+          		<gesture type="SWIPE" fingers="4" direction="RIGHT">
+          		<action type="SEND_KEYS">
+          			<repeat>false</repeat>
+          			<modifiers>Super_L</modifiers>
+          			<keys>S</keys>
+          			<on>begin</on>
+          		</action>
+          		</gesture>
+
+          		<gesture type="PINCH" fingers="4" direction="OUT">
+          		<action type="SHOW_DESKTOP">
+          			<animate>true</animate>
+          		</action>
+          		</gesture>
+
+          		<gesture type="PINCH" fingers="4" direction="IN">
+          		<action type="SEND_KEYS">
+          			<repeat>false</repeat>
+          			<modifiers>Super_L</modifiers>
+          			<keys>A</keys>
+          			<on>begin</on>
+          		</action>
+          		</gesture>
+
+          		<gesture type="TAP" fingers="2">
+          		<action type="MOUSE_CLICK">
+          			<button>3</button>
+          			<on>begin</on>
+          		</action>
+          		</gesture>
+
+          		<gesture type="TAP" fingers="3">
+          		<action type="MOUSE_CLICK">
+          			<button>2</button>
+          			<on>begin</on>
+          		</action>
+          		</gesture>
+          	</application>
+
+          	<!--
+          		Configuration for specific applications.
+          	-->
+
+          	<application name="Google-chrome,Chromium-browser">
+          		<gesture type="PINCH" fingers="2" direction="IN">
+          		<action type="SEND_KEYS">
+          			<repeat>true</repeat>
+          			<modifiers>Control_L</modifiers>
+          			<keys>KP_Subtract</keys>
+          			<decreaseKeys>KP_Add</decreaseKeys>
+          		</action>
+          		</gesture>
+
+          		<gesture type="PINCH" fingers="2" direction="OUT">
+          		<action type="SEND_KEYS">
+          			<repeat>true</repeat>
+          			<modifiers>Control_L</modifiers>
+          			<keys>KP_Add</keys>
+          			<decreaseKeys>KP_Subtract</decreaseKeys>
+          		</action>
+          		</gesture>
+          	</application>
+
+          	</touchégg>
+
+        '';
+      };
     };
-
-    #systemd.user.services.touchegg =
-  };
 }
