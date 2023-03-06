@@ -15,11 +15,11 @@
       ];
 
       right_format = lib.concatStrings [
-        "$nix_shell"
+        #"$nix_shell"
         "( $cmd_duration)"
-        "$status"
-        "$jobs"
-        " $time"
+        "( $status)"
+        "( $jobs)"
+        "$time"
       ];
 
       username = {
@@ -69,7 +69,7 @@
 
       nix_shell = {
         heuristic = true;
-        format = "[$symbol$state( \($name\))]($style)";
+        format = "[$symbol( \($name\))]($style)";
       };
 
       cmd_duration = {
