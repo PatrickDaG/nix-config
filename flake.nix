@@ -18,6 +18,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+
+    templates = {
+      url = "./templates";
+    };
   };
 
   outputs = {
@@ -26,6 +30,7 @@
     home-manager,
     agenix,
     flake-utils,
+    templates,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -46,6 +51,7 @@
               nixpkgs.flake = nixpkgs;
               p.flake = nixpkgs;
               pkgs.flake = nixpkgs;
+              templates.flake = templates;
             };
           }
         ];
@@ -58,7 +64,7 @@
       apps = import ./apps/rekey.nix inputs localSystem;
 
       devShells.default = pkgs.mkShell {
-        name = "patricks tolle nix config";
+        name = "nixos config";
 
         packages = with pkgs; [
           alejandra

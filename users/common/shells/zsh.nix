@@ -14,18 +14,20 @@
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
+    # Atuin makes completion and this really _really_ slows zsh startup time down
+    enableCompletion = false;
     initExtra = lib.mkAfter (''
-           function atuin-prefix-search() {
-           	if out=$(${pkgs.sqlite}/bin/sqlite3 -readonly ~/.local/share/atuin/history.db \
-           	  'SELECT command FROM history WHERE command LIKE cast('"x'$(str_to_hex "$_atuin_search_prefix")'"' as text) ||\
+              function atuin-prefix-search() {
+              	if out=$(${pkgs.sqlite}/bin/sqlite3 -readonly ~/.local/share/atuin/history.db \
+              	  'SELECT command FROM history WHERE command LIKE cast('"x'$(str_to_hex "$_atuin_search_prefix")'"' as text) ||
         "%" ORDER BY timestamp DESC LIMIT 1 OFFSET '"$_atuin_search_offset"); then
-           	  [[ -z "$out" ]] && return 1
-           	  BUFFER=$out
-           	else
-           	  return 1
-           	fi
+              	    [[ -z "$out" ]] && return 1
+          BUFFER=$out
+              	else
+              	  return 1
+              	fi
 
-           }; zle -N atuin-prefix-search
+              }; zle -N atuin-prefix-search
       ''
       + (builtins.readFile ../../../data/zsh/zshrc));
     plugins = [
