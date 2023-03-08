@@ -320,6 +320,16 @@ with lib; let
           The actions to perform
         '';
       };
+
+      application = mkOption {
+        type = types.string;
+        description = ''
+          The name of the application
+          in which this gestures should trigger
+        '';
+        default = "ALL";
+        example = "Google-chrome,Chromium-browser";
+      };
     };
 in {
   options.programs.touchegg = {
@@ -376,7 +386,7 @@ in {
           		Example: Use the MAXIMIZE_RESTORE_WINDOW action. You will notice that no animation is
           		displayed if you complete the action quick enough. This property configures that time.
           		-->
-          		<property name="animation_delay">150</property>
+          		<property name="animation_delay">${cfg.animation_delay}</property>
 
           		<!--
           		Percentage of the gesture to be completed to apply the action. Set to 0 to execute actions unconditionally.
@@ -386,7 +396,7 @@ in {
           		enough. This property configures the percentage of the gesture that must be reached to
           		execute the action.
           		-->
-          		<property name="action_execute_threshold">20</property>
+          		<property name="action_execute_threshold">${cfg.action_execute_threshold}</property>
 
           		<!--
           		Global animation colors can be configured to match your system colors using HEX notation:
@@ -401,8 +411,8 @@ in {
 
           		Notice that you can override an specific animation color.
           		-->
-          		<property name="color">auto</property>
-          		<property name="borderColor">auto</property>
+          		<property name="color">${cfg.color}</property>
+          		<property name="borderColor">${cfg.borderColor}</property>
           	</settings>
 
           	<!--
