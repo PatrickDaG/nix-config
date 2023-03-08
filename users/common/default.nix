@@ -53,6 +53,13 @@
         user = "root";
         inherit identityFile;
       };
+
+      "WSALVM" = {
+        hostname = "172.10.8.156";
+        user = "root";
+        inherit identityFile;
+      };
+
       "valhalla" = {
         hostname = "valhalla.fs.tum.de";
         user = "grossmann";
