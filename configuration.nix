@@ -20,6 +20,7 @@ in {
     ./modules/networking.nix
     ./modules/nix.nix
     ./modules/xserver.nix
+    ./modules/hyprland.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -95,6 +96,8 @@ in {
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
+  # HM zsh needs this or else the startup order is fucked
+  # and env variables will be loaded incorrectly
   programs.zsh.enable = true;
 
   programs.steam = {
@@ -107,8 +110,6 @@ in {
         ];
     };
   };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -137,8 +138,8 @@ in {
   services.udev.packages = with pkgs; [yubikey-personalization libu2f-host];
 
   environment.shellInit = ''
-       gpg-connect-agent /bye
-       export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpg-connect-agent /bye
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
   '';
 }

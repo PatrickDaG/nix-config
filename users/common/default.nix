@@ -9,6 +9,7 @@
     ./programs/htop.nix
     ./shells/alias.nix
   ];
+  home.stateVersion = "23.05";
 
   home.packages = with pkgs; [
     sqlite

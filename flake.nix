@@ -22,6 +22,8 @@
     templates = {
       url = "./templates";
     };
+
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = {
@@ -31,6 +33,7 @@
     agenix,
     flake-utils,
     templates,
+    hyprland,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -45,6 +48,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
           }
+          {home-manager.users.patrick.imports = [hyprland.homeManagerModules.default];}
           agenix.nixosModules.default
           {
             nix.registry = {
@@ -54,6 +58,7 @@
               templates.flake = templates;
             };
           }
+          hyprland.nixosModules.default
         ];
       };
     }

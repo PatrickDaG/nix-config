@@ -10,6 +10,5 @@
 
   home-manager.users.root = {
     imports = [./common];
-    home.stateVersion = "23.05";
   };
 }

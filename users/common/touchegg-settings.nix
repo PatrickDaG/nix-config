@@ -2,5 +2,5 @@
   #
   # MY Config
   #
-  programs.touchegg.enable = true;
+  programs.touchegg.enable = false;
 }

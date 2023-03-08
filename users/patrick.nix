@@ -6,6 +6,7 @@
   imports = [
     common/programs/kitty.nix
     common/graphical/herbstluftwm.nix
+    common/graphical/hyprland.nix
     common/graphical/autorandr.nix
     common/programs/polybar.nix
     common/programs/rofi.nix
@@ -14,7 +15,6 @@
   ];
 
   home = {
-    stateVersion = "23.05";
     packages = with pkgs; [
       thunderbird
       discord
