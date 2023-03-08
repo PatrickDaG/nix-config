@@ -77,7 +77,7 @@ MOD: TAGS: pkgs:
   "${MOD}-b 	" = "spawn ${pkgs.firefox}/bin/firefox";
   "${MOD}-m 	" = "spawn ${pkgs.thunderbird}/bin/thunderbird";
   "${MOD}-Shift-l 	" = "spawn systemctl suspend";
-  "Menu" = "spawn rofi -show run";
+  "Menu" = "spawn rofi -show drun";
   "${MOD}-F12" = "spawn ${(import ../../modules/touchscreen.nix) pkgs}";
 }
 // builtins.listToAttrs (map (x: {

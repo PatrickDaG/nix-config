@@ -4,6 +4,7 @@ _: {
     theme = "DarkBlue";
     extraConfig = {
       matching = "fuzzy";
+      dpi = 1;
     };
   };
 }
