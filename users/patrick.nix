@@ -29,6 +29,7 @@
       arandr
       feh
       xclip
+      acpibacklight
     ];
     sessionVariables = {
       # Firefox touch support

@@ -188,11 +188,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-b3t2blYgmHf/HXc152Fa7+YKJSS05vRnrs8i+H6SWA8=",
-        "path": "/nix/store/drv756dnldki89ms1swdc2f5q5b5286n-source/templates",
+        "path": "/nix/store/30zk66ak2dn422krhrz28igsqz03idia-source/templates",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/drv756dnldki89ms1swdc2f5q5b5286n-source/templates",
+        "path": "/nix/store/30zk66ak2dn422krhrz28igsqz03idia-source/templates",
         "type": "path"
       }
     },

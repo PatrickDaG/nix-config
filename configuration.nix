@@ -65,6 +65,10 @@ in {
     passwordFile = config.rekey.secrets.patrick.path;
   };
   users.groups.patrick.gid = 1000;
+  # Allow users in group video to edit backlight setting
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
+  '';
 
   rekey.secrets.root.file = ./secrets/root.passwd.age;
   users.users.root = {
