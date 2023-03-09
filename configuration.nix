@@ -55,6 +55,10 @@ in {
   users.mutableUsers = false;
 
   rekey.secrets.patrick.file = ./secrets/patrick.passwd.age;
+
+  environment.etc.issue.text = "<<< Welcome to NixOS 23.05.20230304.3c5319a (\m) - \l >>>";
+
+  users.motd = "Guten Tach";
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {
     inherit shell;
