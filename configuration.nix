@@ -56,7 +56,9 @@ in {
 
   rekey.secrets.patrick.file = ./secrets/patrick.passwd.age;
 
-  environment.etc.issue.text = "<<< Welcome to NixOS 23.05.20230304.3c5319a (\m) - \l >>>";
+  environment.etc.issue.text = ''
+    <<< Welcome to NixOS 23.05.20230304.3c5319a (\m) - \l >>>
+  '';
 
   users.motd = "Guten Tach";
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -97,6 +99,9 @@ in {
     age-plugin-yubikey
     rage
     file
+    ripgrep
+    killall
+    fd
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];

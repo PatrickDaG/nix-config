@@ -55,7 +55,7 @@
             height: 32px !important;
         }
       '';
-      search.default = "DuckDuckGo";
+      search.default = "Kagi";
       search.force = true;
     };
   };

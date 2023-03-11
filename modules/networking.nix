@@ -2,11 +2,15 @@
   networking.wireless.iwd.enable = true;
   rekey.secrets.eduroam = {
     file = ../secrets/iwd/eduroam.8021x.age;
-    path = "/etc/iwd/eduroam.8021x";
+    path = "/var/lib/iwd/eduroam.8021x";
   };
   rekey.secrets.devoloog = {
     file = ../secrets/iwd/devolo-og.psk.age;
-    path = "/etc/iwd/devolo-og.psk";
+    path = "/var/lib/iwd/devolo-og.psk";
+  };
+  rekey.secrets.kaist = {
+    file = ../secrets/iwd/kaist.8021x.age;
+    path = "/var/lib/iwd/Welcome_KAIST.8021x";
   };
 
   networking.useNetworkd = true;
