@@ -19,7 +19,7 @@ in {
     ./modules/smb-mounts.nix
     ./modules/networking.nix
     ./modules/nix.nix
-    ./modules/xserver.nix
+    #./modules/xserver.nix
     ./modules/hyprland.nix
   ];
 
@@ -35,6 +35,10 @@ in {
 
   # Select internationalisation properties.
   i18n.defaultLocale = "C.UTF-8";
+  services.xserver = {
+    layout = "de";
+    xkbVariant = "bone";
+  };
   console = {
     font = "ter-v28n";
     packages = with pkgs; [terminus_font];
@@ -108,6 +112,8 @@ in {
   # HM zsh needs this or else the startup order is fucked
   # and env variables will be loaded incorrectly
   programs.zsh.enable = true;
+
+  services.physlock.enable = true;
 
   programs.steam = {
     enable = true;

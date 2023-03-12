@@ -4,7 +4,7 @@
   ...
 }: let
   MOD = "SUPER";
-  TAGS = map toString (lib.lists.range 1 9);
+  TAGS = map toString (lib.lists.range 42 50);
 in {
   wayland.windowManager.hyprland = {
     enable = true;

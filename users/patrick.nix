@@ -5,13 +5,13 @@
 }: {
   imports = [
     common/programs/kitty.nix
-    common/graphical/herbstluftwm.nix
+    #common/graphical/herbstluftwm.nix
     common/graphical/hyprland.nix
-    common/graphical/autorandr.nix
+    #common/graphical/autorandr.nix
     common/programs/polybar.nix
     common/programs/rofi.nix
-    common/touchegg-module.nix
-    common/touchegg-settings.nix
+    #common/touchegg-module.nix
+    #common/touchegg-settings.nix
   ];
 
   home = {
@@ -21,7 +21,7 @@
       bitwarden
       nextcloud-client
       signal-desktop
-      spotify
+      spotify-tui
       xdragon
       xournalpp
       zathura
@@ -55,8 +55,6 @@
             height: 32px !important;
         }
       '';
-      search.default = "Kagi";
-      search.force = true;
     };
   };
 
