@@ -36,8 +36,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "aloxaf";
           repo = "fzf-tab";
-          rev = "69024c27738138d6767ea7246841fdfc6ce0d0eb";
-          sha256 = "07wwcplyb2mw10ia9y510iwfhaijnsdcb8yv2y3ladhnxjd6mpf8";
+          rev = "5a81e13792a1eed4a03d2083771ee6e5b616b9ab";
+          sha256 = "0lfl4r44ci0wflfzlzzxncrb3frnwzghll8p365ypfl0n04bkxvl";
         };
       }
       {
@@ -45,8 +45,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "zdharma-continuum";
           repo = "fast-syntax-highlighting";
-          rev = "7c390ee3bfa8069b8519582399e0a67444e6ea61";
-          sha256 = "0gh4is2yzwiky79bs8b5zhjq9khksrmwlaf13hk3mhvpgs8n1fn0";
+          rev = "5521b083f8979ad40be2137d7a46bfa51c8d666a";
+          sha256 = "0ki5dl3gvmcl1kr9smx0949303dxzwadz7r4abj7ivj3284xxk44";
         };
       }
     ];

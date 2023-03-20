@@ -58,6 +58,9 @@
     };
   };
 
+  # notification are nice to have
+  services.dunst.enable = true;
+
   nixpkgs.config.allowUnfree = true;
   xsession.enable = true;
 }

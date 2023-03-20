@@ -58,6 +58,13 @@
         inherit identityFile;
       };
 
+      "CompConst" = {
+        hostname = "cp-service.kaist.ac.kr";
+        user = "s20236085";
+        port = 13001;
+        inherit identityFile;
+      };
+
       "valhalla" = {
         hostname = "valhalla.fs.tum.de";
         user = "grossmann";
