@@ -20,7 +20,7 @@
     };
 
     templates = {
-      url = "./templates";
+      url = "git+ssh://gitea@git.lel.lol/patrick/nix-templates.git";
     };
 
     hyprland.url = "github:hyprwm/Hyprland";

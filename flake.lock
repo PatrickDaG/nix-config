@@ -245,14 +245,17 @@
     },
     "templates": {
       "locked": {
-        "lastModified": 1,
+        "lastModified": 1679299625,
         "narHash": "sha256-b3t2blYgmHf/HXc152Fa7+YKJSS05vRnrs8i+H6SWA8=",
-        "path": "/nix/store/prychaf8a2rz70ix83z9knjhgv5ajviw-source/templates",
-        "type": "path"
+        "ref": "refs/heads/main",
+        "rev": "c659b85f238d5554b98c2653cea4fd86f5ad8f4e",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://gitea@git.lel.lol/patrick/nix-templates.git"
       },
       "original": {
-        "path": "/nix/store/prychaf8a2rz70ix83z9knjhgv5ajviw-source/templates",
-        "type": "path"
+        "type": "git",
+        "url": "ssh://gitea@git.lel.lol/patrick/nix-templates.git"
       }
     },
     "utils": {
