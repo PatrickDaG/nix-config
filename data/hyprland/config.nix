@@ -65,7 +65,7 @@ MOD: TAGS: pkgs:
       bind=${MOD},t,exec,kitty
       bind=${MOD} + SHIFT,Escape,exit
 
-   exec-once="${pkgs.waybar}/bin/waybar main"
+   exec-once=${pkgs.waybar}/bin/waybar
 ''
 + builtins.concatStringsSep "\n" (map (
     x: ''
