@@ -17,8 +17,9 @@ in {
         layer = "top";
         position = "bottom";
         modules-left = ["hyprland/window"];
-        modules-center = ["workspaces"];
-        modules-right = ["network" "backlight" "wireplumber" "battery" "clock" "tray"];
+        modules-center = ["wlr/workspaces"];
+        # wireplumber module seems to be currently broken
+        modules-right = ["network" "backlight" "battery" "clock" "tray"];
 
         battery = {
           format = "{icon} {capacity}%";
