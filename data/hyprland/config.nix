@@ -71,6 +71,7 @@ MOD: TAGS: pkgs:
     x: ''
       bind=${MOD},${x.fst},workspace,${x.snd}
       bind=${MOD} + SHIFT,${x.fst},movetoworkspace,${x.snd}
+      bind=${MOD} + CTRL + SHIFT,${x.fst},movetoworkspacesilent,${x.snd}
     ''
   )
   (pkgs.lib.lists.zipLists (map toString (pkgs.lib.lists.range 1 9)) TAGS))
