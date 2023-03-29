@@ -4,7 +4,7 @@
   ...
 }: let
   MOD = "SUPER";
-  TAGS = map toString (lib.lists.range 42 50);
+  TAGS = map toString (lib.lists.range 41 49);
 in {
   home.packages = with pkgs; [
     qt6.qtwayland
@@ -12,6 +12,10 @@ in {
 
   programs.waybar = {
     enable = true;
+    # enable workspaces
+    package = pkgs.waybar.overrideAttrs (prevAttrs: {
+      mesonFlags = prevAttrs.mesonFlags ++ ["-Dexperimental=true"];
+    });
     settings = {
       main = {
         layer = "top";
@@ -47,6 +51,11 @@ in {
         };
       };
     };
+    style = ''
+      #workspaces button.active {
+         background-color: #9c27b0;
+      }
+    '';
   };
 
   wayland.windowManager.hyprland = {

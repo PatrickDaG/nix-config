@@ -15,7 +15,7 @@
       ];
 
       right_format = lib.concatStrings [
-        #"$nix_shell"
+        #"( $nix_shell)"
         "( $cmd_duration)"
         "( $status)"
         "( $jobs)"
