@@ -65,7 +65,7 @@ MOD: TAGS: pkgs:
       bind=${MOD},t,exec,kitty
       bind=${MOD} + SHIFT,Escape,exit
 
-   exec-once=bash -c "${pkgs.waybar}/bin/waybar >/tmp/waybar_error.log"
+   exec-once=bash -c "waybar >/tmp/waybar_error.log"
 ''
 + builtins.concatStringsSep "\n" (map (
     x: ''

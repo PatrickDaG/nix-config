@@ -53,7 +53,7 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  powerManagement.powertop.enable = true;
+  services.tlp.enable = true;
 
   # Disable mutable Users, any option can only be set by the nix config
   users.mutableUsers = false;

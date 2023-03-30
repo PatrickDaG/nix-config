@@ -51,11 +51,7 @@ in {
         };
       };
     };
-    style = ''
-      #workspaces button.active {
-         background-color: #9c27b0;
-      }
-    '';
+    style = ../../../data/waybar/style.css;
   };
 
   wayland.windowManager.hyprland = {
