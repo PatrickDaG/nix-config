@@ -7,8 +7,8 @@ MOD: TAGS: pkgs:
 
       input {
       	sensitivity = 0
-      	kb_layout = de
-      	kb_variant = bone
+      	kb_layout = de,de
+      	kb_variant = bone,
       	repeat_rate = 60
       	repeat_delay = 235
       	# Only change focus on mouse click
@@ -64,6 +64,8 @@ MOD: TAGS: pkgs:
       bind=${MOD},b,exec,firefox
       bind=${MOD},t,exec,kitty
       bind=${MOD} + SHIFT,Escape,exit
+
+   workspace = eDP-1, 42
 
    exec-once=bash -c "waybar >/tmp/waybar_error.log"
 ''
