@@ -1,11 +1,15 @@
 {
+  description = "patricks tolle nix config";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       # should use system nixpkgs instead of their own
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -75,6 +79,9 @@
           alejandra
           statix
           update-nix-fetchgit
+          # lua and nix language servers
+          lua-language-server
+          nil
         ];
 
         shellHook = ''

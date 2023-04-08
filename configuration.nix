@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }: let
   shell = pkgs.zsh;
@@ -158,7 +157,7 @@ in {
     umask 077
   '';
   # XDG base spec
-  environment.sessionVariables = rec {
+  environment.sessionVariables = {
     XDG_CACHE_HOME = "\${HOME}/.cache";
     XDG_CONFIG_HOME = "\${HOME}/.config";
     XDG_STATE_HOME = "\${HOME}/.local/state";

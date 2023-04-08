@@ -97,6 +97,10 @@
     vimdiffAlias = true;
     defaultEditor = true;
     withNodeJs = true;
+    extraPackages = with pkgs; [
+      # tabnine complition braucht unzip
+      unzip
+    ];
   };
 
   xdg.configFile.nvim = {
