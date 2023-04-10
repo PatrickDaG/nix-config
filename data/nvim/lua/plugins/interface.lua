@@ -34,7 +34,7 @@ return {
 	{
 		"ntpeters/vim-better-whitespace",
 		init = function()
-			local map = vim.api.nvim_set_keymap
+			local map = vim.keymap.set
 			local opts = {noremap = true, silent = true}
 
 			function _G.whitespace_visibility()
@@ -57,6 +57,7 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim"
 		},
+		config = true,
 	},
 	-- bischen vim salat
 	-- macht refactoring popups schöner

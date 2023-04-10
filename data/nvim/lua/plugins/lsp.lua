@@ -42,31 +42,6 @@ return {
 		},
 		main = "nvim-treesitter.configs",
 	},
-	-- manage and install lsp servers, linters and formatters
-	-- This sadly does not work correctly with nix
-	-- the installed lsp servers would need to be patchelf'd
-	-- in most cases
-	-- This might be fixable. but that's for another day
-	--{
-	--	"williamboman/mason.nvim",
-	--	build = ":MasonUpdate", -- :MasonUpdate updates registry contents
-	--	config = true,
-	--},
-	---- bridge the gap between mason and lspconfig
-	--{
-	--	"williamboman/mason-lspconfig.nvim",
-	--	opts = {
-	--		ensure_installed = { "nil_ls", },
-	--	},
-	--	init = function()
-	--		require("mason-lspconfig").setup_handlers {
-	--			function (server_name)
-	--				require("lspconfig")[server_name].setup {}
-	--			end,
-	--		}
-	--	end,
-	--},
-	-- lsp
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
@@ -83,7 +58,23 @@ return {
 			lspconfig.pyright.setup { capabilities = capabilities, }
 			lspconfig.rust_analyzer.setup { capabilities = capabilities, }
 			lspconfig.zls.setup { capabilities = capabilities, }
+
+			local map = vim.keymap.set
+			local opts = {noremap = true, silent = true}
+
+			map('n', "<leader>l", vim.diagnostic.open_float, opts)
+			map('n', 'gd', vim.lsp.buf.definition, opts)
+			map('n', '<leader>r', vim.lsp.buf.rename, opts)
+			map('n', '<leader>f', vim.lsp.buf.format, opts)
+			map('n', '<leader>a', vim.lsp.buf.code_action, opts)
+
+
 		end,
+	},
+	{
+		'kosayoda/nvim-lightbulb',
+		dependencies = 'antoinemadec/FixCursorHold.nvim',
+		opts = {autocmd = {enabled = true}},
 	},
 	{
 		"hrsh7th/nvim-cmp",

@@ -100,6 +100,11 @@
     extraPackages = with pkgs; [
       # tabnine complition braucht unzip
       unzip
+      # telescope fzf native braucht make
+      gnumake
+      # telescope braucht die
+      ripgrep
+      fd
     ];
   };
 
