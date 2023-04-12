@@ -92,6 +92,8 @@ in {
 
   security.sudo.enable = false;
 
+  documentation.dev.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -105,6 +107,8 @@ in {
     ripgrep
     killall
     fd
+    man-pages
+    man-pages-posix
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
