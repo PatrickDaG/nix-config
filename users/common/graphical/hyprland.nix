@@ -56,6 +56,7 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
+    xwayland.hidpi = true;
     nvidiaPatches = true;
     extraConfig = import ../../../data/hyprland/config.nix MOD TAGS pkgs;
   };

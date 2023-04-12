@@ -19,7 +19,6 @@ in {
     ./modules/networking.nix
     ./modules/nix.nix
     #./modules/xserver.nix
-    ./modules/hyprland.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -38,6 +37,7 @@ in {
     layout = "de";
     xkbVariant = "bone";
   };
+  programs.hyprland.enable = true;
   console = {
     font = "ter-v28n";
     packages = with pkgs; [terminus_font];

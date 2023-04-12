@@ -62,7 +62,6 @@
               templates.flake = templates;
             };
           }
-          hyprland.nixosModules.default
         ];
       };
     }

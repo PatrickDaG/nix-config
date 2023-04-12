@@ -45,8 +45,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "zdharma-continuum";
           repo = "fast-syntax-highlighting";
-          rev = "371591a7b6f0f3c9501c52a7b566addbfd804d09";
-          sha256 = "125kp7rzq9yf565h6crkr8fyvrz867jjwlx0w2dbhas9p1id978l";
+          rev = "13d7b4e63468307b6dcb2dadf6150818f242cbff";
+          sha256 = "0ghzqg1xfvqh9z23aga7aafrpxbp9bpy1r8vk4avi6b80p3iwsq2";
         };
       }
     ];
