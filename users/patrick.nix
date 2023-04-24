@@ -22,6 +22,7 @@
       bitwarden
       nextcloud-client
       signal-desktop
+      chromium
       xdragon
       xournalpp
       zathura

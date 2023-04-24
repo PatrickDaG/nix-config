@@ -27,7 +27,10 @@
       flake-registry = /etc/nix/registry.json
     '';
     optimise.automatic = true;
-    gc.automatic = true;
+    gc = {
+      automatic = true;
+      dates = "weekly";
+    };
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
