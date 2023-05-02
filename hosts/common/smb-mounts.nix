@@ -15,7 +15,7 @@
   ];
 in {
   environment.systemPackages = [pkgs.cifs-utils];
-  rekey.secrets.smb-creds.file = ../secrets/smb.cred.age;
+  rekey.secrets.smb-creds.file = ../../secrets/smb.cred.age;
   fileSystems = {
     "/mnt/smb/patri-data" = {
       device = "//10.0.0.1/patri-data";

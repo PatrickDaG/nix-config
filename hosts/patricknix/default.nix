@@ -1,6 +1,9 @@
 {
   config,
+  inputs,
   pkgs,
+  nodeName,
+  lib,
   ...
 }: let
   shell = pkgs.zsh;
@@ -9,16 +12,14 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     #user home configuration
-    ./users
+    ../../users/patrick
     #
-    ./modules/pipewire.nix
-    ./modules/rekey.nix
-    ./modules/nvidia.nix
-    ./modules/wireguard.nix
-    ./modules/smb-mounts.nix
-    ./modules/networking.nix
-    ./modules/nix.nix
-    #./modules/xserver.nix
+    ../common/pipewire.nix
+    ../common/nvidia.nix
+    ../common/wireguard.nix
+    ../common/smb-mounts.nix
+    ../common/networking.nix
+    ../common/nix.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -43,10 +44,21 @@ in {
     packages = with pkgs; [terminus_font];
     useXkbConfig = true; # use xkbOptions in tty.
   };
-  # Identities with which all secrets are encrypted
-  rekey.masterIdentityPaths = [./secrets/NIXOSc.key ./secrets/NIXOSa.key];
 
-  rekey.pubKey = ./keys + "/${config.networking.hostName}.pub";
+  rekey = {
+    inherit
+      (inputs.self.secrets)
+      masterIdentities
+      extraEncryptionPubkeys
+      ;
+
+    #forceRekeyOnSystem = builtins.extraBuiltins.unsafeCurrentSystem;
+    hostPubkey = let
+      pubkeyPath = ../. + "/${nodeName}/secrets/host.pub";
+    in
+      lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${nodeName}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
+      pubkeyPath;
+  };
 
   hardware.opengl.enable = true;
 
@@ -57,7 +69,7 @@ in {
   # Disable mutable Users, any option can only be set by the nix config
   users.mutableUsers = false;
 
-  rekey.secrets.patrick.file = ./secrets/patrick.passwd.age;
+  rekey.secrets.patrick.file = ../../secrets/patrick.passwd.age;
 
   environment.etc.issue.text = ''
     <<< Welcome to NixOS 23.05.20230304.3c5319a (\m) - \l >>>
@@ -80,7 +92,7 @@ in {
     ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video $sys$devpath/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w $sys$devpath/brightness"
   '';
 
-  rekey.secrets.root.file = ./secrets/root.passwd.age;
+  rekey.secrets.root.file = ../../secrets/root.passwd.age;
   users.users.root = {
     inherit shell;
     openssh.authorizedKeys.keys = [

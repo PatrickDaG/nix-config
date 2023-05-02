@@ -1,15 +1,15 @@
 {
   networking.wireless.iwd.enable = true;
   rekey.secrets.eduroam = {
-    file = ../secrets/iwd/eduroam.8021x.age;
+    file = ../../secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
   rekey.secrets.devoloog = {
-    file = ../secrets/iwd/devolo-og.psk.age;
+    file = ../../secrets/iwd/devolo-og.psk.age;
     path = "/var/lib/iwd/devolo-og.psk";
   };
   rekey.secrets.kaist = {
-    file = ../secrets/iwd/kaist.8021x.age;
+    file = ../../secrets/iwd/kaist.8021x.age;
     path = "/var/lib/iwd/Welcome_KAIST.8021x";
   };
 
@@ -22,7 +22,7 @@
   # I need a static global IP address for my dorm LAN
   # So to not dox myself this config file is hardcoded
   rekey.secrets.enp0s20f0u2u4 = {
-    file = ../secrets/koreaIP.age;
+    file = ../../secrets/koreaIP.age;
     path = "/etc/systemd/network/10-enp0s20f0u2u4.network";
     mode = "444";
   };

@@ -51,6 +51,11 @@
         user = "root";
         inherit identityFile;
       };
+      "patricknix" = {
+        hostname = "localhost";
+        user = "root";
+        inherit identityFile;
+      };
 
       "WSALVM" = {
         hostname = "172.10.8.156";

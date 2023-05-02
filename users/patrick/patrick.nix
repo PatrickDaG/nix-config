@@ -4,10 +4,10 @@
   ...
 }: {
   imports = [
-    common/programs/kitty.nix
-    common/graphical/hyprland.nix
+    ../common/programs/kitty.nix
+    ../common/graphical/hyprland.nix
     #common/programs/polybar.nix
-    common/programs/rofi.nix
+    ../common/programs/rofi.nix
     #common/programs/spotify.nix
     #common/graphical/herbstluftwm.nix
     #common/graphical/autorandr.nix

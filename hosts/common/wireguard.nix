@@ -10,8 +10,8 @@
   privateKeyFile = config.rekey.secrets.wireguard-priv.path;
 in {
   rekey.secrets = {
-    wireguard-pre.file = ../secrets/wireguard/elisabeth-pre.wg.age;
-    wireguard-priv.file = ../secrets/wireguard/elisabeth-priv.wg.age;
+    wireguard-pre.file = ../../secrets/wireguard/elisabeth-pre.wg.age;
+    wireguard-priv.file = ../../secrets/wireguard/elisabeth-priv.wg.age;
   };
 
   networking.wg-quick.interfaces = {

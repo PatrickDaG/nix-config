@@ -1,14 +1,16 @@
 {
   config,
   home-manager,
+  hyprland,
   ...
 }: {
   home-manager.users.patrick.imports = [
+    hyprland.homeManagerModules.default
     ./patrick.nix
-    ./common
+    ../common
   ];
 
   home-manager.users.root = {
-    imports = [./common];
+    imports = [../common];
   };
 }
