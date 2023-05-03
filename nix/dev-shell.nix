@@ -1,11 +1,15 @@
-{self, ...}: system:
+{
+  self,
+  colmena,
+  ...
+}: system:
 with self.pkgs.${system};
   mkShell {
     name = "nix-config";
     packages = [
       # Nix
       cachix
-      colmena
+      colmena.packages.${system}.colmena
       alejandra
       statix
       update-nix-fetchgit
