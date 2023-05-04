@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -33,6 +37,13 @@
     gc = {
       automatic = true;
       dates = "weekly";
+    };
+
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      p.flake = inputs.nixpkgs;
+      pkgs.flake = inputs.nixpkgs;
+      templates.flake = inputs.templates;
     };
   };
 
