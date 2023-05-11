@@ -29,7 +29,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    templates.url = "github:nixos/templates";
+    templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
     colmena = {
       url = "github:zhaofengli/colmena";

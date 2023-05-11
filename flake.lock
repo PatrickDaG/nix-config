@@ -357,17 +357,17 @@
     },
     "templates": {
       "locked": {
-        "lastModified": 1678524284,
-        "narHash": "sha256-3tk4RHKrIbz2tNVyW2WOrgZBe26jhfBiz7bzb7b8p5I=",
-        "owner": "nixos",
-        "repo": "templates",
-        "rev": "0edaa0637331e9d8acca5c8ec67936a2c8b8749b",
-        "type": "github"
+        "lastModified": 1679299625,
+        "narHash": "sha256-b3t2blYgmHf/HXc152Fa7+YKJSS05vRnrs8i+H6SWA8=",
+        "ref": "refs/heads/main",
+        "rev": "c659b85f238d5554b98c2653cea4fd86f5ad8f4e",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://git.lel.lol/patrick/nix-templates.git"
       },
       "original": {
-        "owner": "nixos",
-        "repo": "templates",
-        "type": "github"
+        "type": "git",
+        "url": "https://git.lel.lol/patrick/nix-templates.git"
       }
     },
     "wlroots": {
