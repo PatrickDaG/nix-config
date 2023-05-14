@@ -25,7 +25,5 @@ _: {
 
     zf = "zathura --fork";
     hypr = "Hyprland";
-    chromium = "chromium -ozone-platform-hint=auto";
-    signal-desktop = "signal-desktop -ozone-platform-hint=auto";
   };
 }

@@ -10,6 +10,8 @@ in {
     qt6.qtwayland
   ];
 
+  home.sessionVariables.NIXOS_OZONE_WL = 1;
+
   programs.waybar = {
     enable = true;
     # enable workspaces
