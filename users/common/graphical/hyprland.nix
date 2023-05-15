@@ -8,6 +8,7 @@
 in {
   home.packages = with pkgs; [
     qt6.qtwayland
+    wl-clipboard
   ];
 
   home.sessionVariables.NIXOS_OZONE_WL = 1;
