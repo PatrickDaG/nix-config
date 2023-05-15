@@ -64,7 +64,13 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  services.tlp.enable = true;
+  services.tlp = {
+    enable = true;
+    # currently broken. Issue open at https://github.com/linrunner/TLP/issues/692
+    settings = {
+      USB_EXLUDE_PHONE = 1;
+    };
+  };
 
   # Disable mutable Users, any option can only be set by the nix config
   users.mutableUsers = false;
