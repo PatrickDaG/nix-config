@@ -2,6 +2,7 @@
   fileSystems."/" = {
     device = "rpool/ROOT/nixos";
     fsType = "zfs";
+    options = ["zfsutil" "X-mount.mkdir"];
   };
 
   fileSystems."/boot" = {
