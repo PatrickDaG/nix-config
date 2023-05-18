@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   programs.hyprland.enable = true;
   services.dbus.enable = true;
   xdg.portal = {

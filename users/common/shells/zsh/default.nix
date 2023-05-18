@@ -1,12 +1,15 @@
 {
-  config,
   pkgs,
   lib,
   ...
 }: {
   imports = [
-    ./starfish.nix
+    ../starfish.nix
   ];
+
+  # has to be enabled to support zsh reverse search
+  programs.fzf.enable = true;
+
   programs.atuin = {
     enable = true;
     settings.auto_sync = false;
@@ -29,7 +32,7 @@
 
               }; zle -N atuin-prefix-search
       ''
-      + (builtins.readFile ../../../data/zsh/zshrc));
+      + (builtins.readFile ./zshrc));
     plugins = [
       {
         name = "fzf-tab";

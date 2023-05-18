@@ -1,6 +1,6 @@
 local opt = vim.opt
 
-require "core.keybinds"
+require("core.keybinds")
 
 -- Set maximum undo levels
 opt.undolevels = 1000000
@@ -15,7 +15,7 @@ opt.updatetime = 300
 opt.wildignore = "*.o,*~"
 -- Only complete the longest common prefix and list all results.
 -- You can use the cursor keys to select an item in this list
-opt.wildmode = {"list", "full"}
+opt.wildmode = { "list", "full" }
 
 -- set case handling
 opt.ignorecase = true
@@ -48,8 +48,7 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.softtabstop = 4
 --round indentation to shifwidth
-opt.shiftround  =  true
-
+opt.shiftround = true
 
 -- ╓────────────────────╖
 -- ║  Editing behavior  ║
@@ -80,4 +79,3 @@ opt.ttimeout = true
 
 -- replace grep with ripgrep
 opt.grepprg = "rg --vimgrep --smartcase --follow"
-

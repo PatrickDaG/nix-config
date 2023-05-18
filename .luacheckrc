@@ -1,4 +1,4 @@
-files["data/nvim/**/*.lua"] = {
+files["**/*.lua"] = {
 	read_globals = {
 	vim = {
 		fields = {
@@ -59,6 +59,10 @@ files["data/nvim/**/*.lua"] = {
 			read_only = false,
 		},
 		v = {
+			other_fields = true,
+			read_only = true,
+		},
+		F = {
 			other_fields = true,
 			read_only = true,
 		},

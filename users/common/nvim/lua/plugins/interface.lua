@@ -8,13 +8,13 @@ return {
 	},
 	-- statusline
 	{
-		'nvim-lualine/lualine.nvim',
+		"nvim-lualine/lualine.nvim",
 		dependencies = {
 			"kyazdani42/nvim-web-devicons",
 		},
 		opts = {
 			options = {
-				theme = "auto"
+				theme = "auto",
 			},
 			extensions = {
 				"nvim-tree",
@@ -26,8 +26,8 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		opts = {
-			buftype_exclude = { "help", "terminal", "nofile"},
-			filetype_exclude = { "terminal", "lsp-info"},
+			buftype_exclude = { "help", "terminal", "nofile" },
+			filetype_exclude = { "terminal", "lsp-info" },
 		},
 	},
 	-- show trailing whitspaces
@@ -35,7 +35,7 @@ return {
 		"ntpeters/vim-better-whitespace",
 		init = function()
 			local map = vim.keymap.set
-			local opts = {noremap = true, silent = true}
+			local opts = { noremap = true, silent = true }
 
 			function _G.whitespace_visibility()
 				if vim.api.nvim_eval("&buftype") == "nofile" then
@@ -48,20 +48,20 @@ return {
 			vim.cmd("autocmd BufEnter * lua whitespace_visibility()")
 
 			-- Strip whitespace
-			map('n', '<leader>$', ':StripWhitespace<CR>', opts)
+			map("n", "<leader>$", ":StripWhitespace<CR>", opts)
 		end,
 	},
 	-- signale für git
 	{
 		"lewis6991/gitsigns.nvim",
 		dependencies = {
-			"nvim-lua/plenary.nvim"
+			"nvim-lua/plenary.nvim",
 		},
 		config = true,
 	},
 	-- bischen vim salat
 	-- macht refactoring popups schöner
 	{
-		"stevearc/dressing.nvim"
+		"stevearc/dressing.nvim",
 	},
 }

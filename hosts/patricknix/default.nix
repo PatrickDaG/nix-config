@@ -1,11 +1,4 @@
-{
-  config,
-  pkgs,
-  nixos-hardware,
-  ...
-}: let
-  shell = pkgs.zsh;
-in {
+{nixos-hardware, ...}: {
   imports = [
     nixos-hardware.common-cpu-intel
     nixos-hardware.common-gpu-intel
@@ -32,38 +25,12 @@ in {
     ./fs.nix
     ./smb-mounts.nix
     ./wireguard.nix
+
+    ../../users/patrick
+    ../../users/root
   ];
   # Set your time zone.
   time.timeZone = "Asia/Seoul";
-  rekey.secrets.patrick.file = ../../secrets/patrick.passwd.age;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.patrick = {
-    inherit shell;
-    isNormalUser = true;
-    uid = 1000;
-    createHome = true;
-    extraGroups = ["wheel" "audio" "video" "input"];
-    group = "patrick";
-    passwordFile = config.rekey.secrets.patrick.path;
-  };
-  users.groups.patrick.gid = 1000;
-  # Allow users in group video to edit backlight setting
-
-  rekey.secrets.root.file = ../../secrets/root.passwd.age;
-  users.users.root = {
-    inherit shell;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
-    ];
-    passwordFile = config.rekey.secrets.root.path;
-  };
-
-  environment.systemPackages = with pkgs; [
-    # xournalpp needs this or else it will crash
-    gnome3.adwaita-icon-theme
-  ];
   environment.shellInit = ''
     gpg-connect-agent /bye
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)

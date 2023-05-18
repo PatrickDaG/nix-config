@@ -1,5 +1,9 @@
 {pkgs, ...}: {
   services = {
+    logind.extraConfig = ''
+      IdleAction=suspend
+      IdleActionSec=300
+    '';
     physlock.enable = true;
     tlp = {
       enable = true;

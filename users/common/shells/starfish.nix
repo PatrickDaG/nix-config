@@ -6,19 +6,19 @@
       format = lib.concatStrings [
         "$username"
         "$hostname"
-        " $directory"
-        "$git_branch"
-        "$git_commit"
+        " $directory "
+        "($git_branch )"
+        "($git_commit )"
         "$git_state"
-        "($git_status )"
+        "$git_status"
         "$character"
       ];
 
       right_format = lib.concatStrings [
-        #"( $nix_shell)"
-        "( $cmd_duration)"
-        "( $status)"
-        "( $jobs)"
+        #"($nix_shell )"
+        "($cmd_duration )"
+        "($status )"
+        "($jobs)"
         "$time"
       ];
 
@@ -35,7 +35,7 @@
       };
 
       directory = {
-        format = "[$path]($style)[$read_only]($read_only_style) ";
+        format = "[$path]($style)[$read_only]($read_only_style)";
         fish_style_pwd_dir_length = 1;
         truncate_to_repo = false;
       };
@@ -56,24 +56,24 @@
         renamed = "→$count";
         deleted = "-$count";
         format = lib.concatStrings [
-          "[( $conflicted)](red)"
-          "[( $stashed)](magenta)"
-          "[( $staged)](green)"
-          "[( $deleted)](red)"
-          "[( $renamed)](blue)"
-          "[( $modified)](yellow)"
-          "[( $untracked)](blue)"
-          "[( $ahead_behind)](green)"
+          "[($conflicted )](red)"
+          "[($stashed )](magenta)"
+          "[($staged )](green)"
+          "[($deleted )](red)"
+          "[($renamed )](blue)"
+          "[($modified )](yellow)"
+          "[($untracked )](blue)"
+          "[($ahead_behind )](green)"
         ];
       };
 
       nix_shell = {
         heuristic = true;
-        format = "[$symbol( \($name\))]($style)";
+        format = "[$symbol$state( \($name\))]($style)";
       };
 
       cmd_duration = {
-        format = "[ $duration]($style) ";
+        format = "[ $duration]($style)";
         style = "yellow";
       };
 
@@ -84,7 +84,7 @@
         pipestatus_format = "$pipestatus -> [$int( $signal_name)]($style)";
         pipestatus_separator = "[ | ]($style)";
         pipestatus_segment_format = "[$status]($style)";
-        format = "[$status( $signal_name)]($style) ";
+        format = "[$status( $signal_name)]($style)";
       };
 
       time = {

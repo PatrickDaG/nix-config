@@ -1,18 +1,9 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ../common/programs/kitty.nix
     ../common/graphical/hyprland.nix
-    #common/programs/polybar.nix
     ../common/programs/rofi.nix
-    #common/programs/spotify.nix
-    #common/graphical/herbstluftwm.nix
-    #common/graphical/autorandr.nix
-    #common/touchegg-module.nix
-    #common/touchegg-settings.nix
+    ./ssh.nix
   ];
 
   home = {
@@ -27,9 +18,7 @@
       xournalpp
       zathura
       pinentry
-      arandr
       feh
-      xclip
       acpilight
     ];
     sessionVariables = {
@@ -61,7 +50,4 @@
 
   # notification are nice to have
   services.dunst.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
-  xsession.enable = true;
 }
