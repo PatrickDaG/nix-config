@@ -55,7 +55,7 @@
   } @ inputs:
     {
       secrets = {
-        masterIdentities = [./secrets/NIXOSc.key.pub ./secrets/NIXOSa.key.pub];
+        masterIdentities = [./secrets/NIXOSc.key.pub];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
         content = import ./nix/secrets.nix inputs;
       };

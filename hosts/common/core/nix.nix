@@ -31,12 +31,13 @@
          builders-use-substitutes = true
          experimental-features = nix-command flakes recursive-nix
          flake-registry = /etc/nix/registry.json
-      plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+         plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+      extra-builtins-file = ${../../../nix/extra-builtins.nix}
     '';
     optimise.automatic = true;
     gc = {
       automatic = true;
-      dates = "weekly";
+      dates = "monthly";
     };
 
     registry = {
@@ -46,18 +47,6 @@
       templates.flake = inputs.templates;
     };
   };
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # breaks flake based building
-  # system.copySystemConfiguration = true;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  # TODO unify the stateversions here and of homemanager
+  system.stateVersion = "23.05";
 }

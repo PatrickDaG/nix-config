@@ -6,13 +6,6 @@
   environment.systemPackages = with pkgs; [pulseaudio pulsemixer];
 
   hardware.pulseaudio.enable = lib.mkForce false;
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.settings = {
-    General = {
-      Enable = "Source,Sink,Media,Socket";
-    };
-  };
-
   security.rtkit.enable = true;
 
   services.pipewire = {
@@ -22,5 +15,5 @@
     pulse.enable = true;
   };
 
-  sound.enable = true;
+  sound.enable = false;
 }

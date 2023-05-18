@@ -22,6 +22,7 @@ in
       inherit nodeName;
       inherit nodeMeta;
       inherit hyprland;
+      nodePath = ../hosts + "/${nodeName}/";
       secrets = self.secrets.content;
       nodeSecrets = self.secrets.content.nodes.${nodeName};
       nixos-hardware = nixos-hardware.nixosModules;
