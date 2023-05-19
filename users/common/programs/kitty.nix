@@ -27,6 +27,7 @@
       foreground = "#c9d3e5";
       background = "#090a0c";
       cursor = "#cccccc";
+      shell_integration = "disabled";
 
       color0 = " #090a0c";
       color8 = " #393e48";
