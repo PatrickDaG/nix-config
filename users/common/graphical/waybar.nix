@@ -12,17 +12,17 @@
         modules-left = ["hyprland/window"];
         modules-center = ["wlr/workspaces"];
         # wireplumber module seems to be currently broken
-        modules-right = ["network" "backlight" "battery" "clock" "tray"];
+        modules-right = ["network" "wireplumber" "backlight" "battery" "clock" "tray"];
 
         battery = {
-          format = "{icon} {capacity}%";
+          format = "{icon}  {capacity}%";
           format-icons = ["" "" "" "" "" "" "" "" ""];
         };
 
         backlight = {
           device = "intel_backlight";
           format = "{icon} {percent}%";
-          format-icons = ["" ""];
+          format-icons = ["󱩎" "󱩏" "󱩐" "󱩑" "󱩒" "󱩓" "󱩔" "󱩕" "󱩖" "󰛨"];
           on-scroll-up = "${pkgs.acpilight}/bin/xbacklight +5";
           on-scroll-down = "${pkgs.acpilight}/bin/xbacklight -5";
         };
@@ -31,12 +31,14 @@
 
         wireplumber = {
           format = "{icon} {volume}%";
-          format-muted = "";
-          format-icons = ["奄" "奔" "墳"];
+          on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+          format-muted = "󰖁";
+          format-icons = ["󰕿" "󰖀" "󰕾"];
         };
 
         network = {
           format = "{ifname}  {bandwidthUpBits}  {bandwidthDownBits}";
+          interval = 1;
         };
       };
     };
