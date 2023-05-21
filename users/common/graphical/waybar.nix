@@ -12,7 +12,7 @@
         modules-left = ["hyprland/window"];
         modules-center = ["wlr/workspaces"];
         # wireplumber module seems to be currently broken
-        modules-right = ["network" "wireplumber" "backlight" "battery" "clock" "tray"];
+        modules-right = ["network" "backlight" "battery" "clock" "tray"];
 
         battery = {
           format = "{icon}  {capacity}%";
