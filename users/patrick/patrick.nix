@@ -21,6 +21,7 @@
       pinentry
       feh
       acpilight
+      galaxy-buds-client
     ];
     sessionVariables = {
       # Firefox touch support
