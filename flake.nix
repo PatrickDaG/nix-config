@@ -58,7 +58,6 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
-      inputs.flake-utils.follows = "flake-utils";
     };
   };
 
