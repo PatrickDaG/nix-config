@@ -1,12 +1,18 @@
 {
   self,
+  nixpkgs,
   colmena,
+  devshell,
   ...
-}: system:
-with self.pkgs.${system};
-  mkShell {
+}: system: let
+  pkgs = import nixpkgs {
+    inherit system;
+    overlays = [devshell.overlays.default];
+  };
+in
+  pkgs.devshell.mkShell {
     name = "nix-config";
-    packages = [
+    packages = with pkgs; [
       # Nix
       cachix
       colmena.packages.${system}.colmena
@@ -26,7 +32,5 @@ with self.pkgs.${system};
       rage
     ];
 
-    shellHook = ''
-      ${self.checks.${system}.pre-commit-check.shellHook}
-    '';
+    devshell.startup.pre-commit.text = self.checks.${system}.pre-commit-check.shellHook;
   }

@@ -91,6 +91,29 @@
         "type": "github"
       }
     },
+    "devshell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1683635384,
+        "narHash": "sha256-9goJTd05yOyD/McaMqZ4BUB8JW+mZMnZQJZ7VQ6C/Lw=",
+        "owner": "numtide",
+        "repo": "devshell",
+        "rev": "5143ea68647c4cf5227e4ad2100db6671fc4c369",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "devshell",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -125,7 +148,9 @@
     },
     "flake-utils": {
       "inputs": {
-        "systems": "systems"
+        "systems": [
+          "systems"
+        ]
       },
       "locked": {
         "lastModified": 1681202837,
@@ -304,12 +329,14 @@
         "agenix": "agenix",
         "agenix-rekey": "agenix-rekey",
         "colmena": "colmena",
+        "devshell": "devshell",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "pre-commit-hooks": "pre-commit-hooks",
+        "systems": "systems",
         "templates": "templates"
       }
     },

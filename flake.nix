@@ -4,6 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # to prevent multiple instances of systems
+    systems.url = "github:nix-systems/default";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       # should use system nixpkgs instead of their own
@@ -22,7 +25,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -47,6 +53,13 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = {
@@ -55,6 +68,7 @@
     flake-utils,
     colmena,
     agenix-rekey,
+    devshell,
     ...
   } @ inputs:
     {
@@ -86,7 +100,7 @@
       };
       apps = agenix-rekey.defineApps self pkgs self.nodes;
       checks = import ./nix/checks.nix inputs system;
-      devShells.default = import ./nix/dev-shell.nix inputs system;
+      devShell = import ./nix/dev-shell.nix inputs system;
       formatter = pkgs.alejandra;
     });
 }
