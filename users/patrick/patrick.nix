@@ -3,6 +3,7 @@
     ../common/programs/kitty.nix
     ../common/graphical/hyprland.nix
     ../common/programs/rofi.nix
+    ../common/devshell.nix
     ./ssh.nix
   ];
 

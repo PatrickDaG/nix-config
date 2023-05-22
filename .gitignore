@@ -1,2 +1,2 @@
 .pre-commit-config.yaml
-templates
+.direnv
