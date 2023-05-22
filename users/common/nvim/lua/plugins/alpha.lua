@@ -75,7 +75,7 @@ return {
 				buttons({
 					button("u", "  Check Plugins", ":Lazy<CR>"),
 					button("c", "  Check health", ":checkhealth<CR>"),
-					button("q", "  Quit", ":qa<CR>"),
+					button("q", "󰗼  Quit", ":qa<CR>"),
 				}),
 				text(separator, "Number"),
 			},
