@@ -14,11 +14,6 @@ in
     name = "nix-config";
     packages = with pkgs; [
       # Nix
-      cachix
-      colmena.packages.${system}.colmena
-      alejandra
-      statix
-      update-nix-fetchgit
       nil
 
       # Lua
@@ -30,6 +25,26 @@ in
       shellcheck
       pre-commit
       rage
+    ];
+    commands = with pkgs; [
+      {
+        package =
+          colmena.packages.${system}.colmena;
+        help = "Apply nix configurations";
+      }
+      {
+        package =
+          alejandra;
+        help = "Format nix code";
+      }
+      {
+        package = statix;
+        help = "Linter for nix";
+      }
+      {
+        package = update-nix-fetchgit;
+        help = "Update fetcher inside nix files";
+      }
     ];
 
     devshell.startup.pre-commit.text = self.checks.${system}.pre-commit-check.shellHook;

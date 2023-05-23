@@ -8,7 +8,7 @@
       auto-optimise-store = true;
       allowed-users = ["@wheel"];
       trusted-users = ["root" "@wheel"];
-      system-features = ["recursive-nix"];
+      system-features = ["recursive-nix" "repl-flake" "big-parallel"];
       substituters = [
         "https://nix-config.cachix.org"
         "https://nix-community.cachix.org"
@@ -37,7 +37,7 @@
     optimise.automatic = true;
     gc = {
       automatic = true;
-      dates = "monthly";
+      dates = "daily";
     };
 
     registry = {
