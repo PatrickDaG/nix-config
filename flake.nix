@@ -44,8 +44,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    # someday
-    #impermanence.url = "github:nix-community/impermanence";
+    impermanence.url = "github:nix-community/impermanence";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 

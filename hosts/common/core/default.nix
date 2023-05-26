@@ -7,6 +7,7 @@
     ./ssh.nix
     ./system.nix
     ./xdg.nix
+    ./impermanence.nix
   ];
 
   home-manager = {

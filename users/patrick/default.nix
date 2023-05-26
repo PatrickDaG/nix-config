@@ -1,5 +1,6 @@
 {
   hyprland,
+  impermanence,
   pkgs,
   config,
   ...
@@ -10,7 +11,6 @@
   ];
   rekey.secrets.patrick.file = ../../secrets/patrick.passwd.age;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.patrick = {
     shell = pkgs.zsh;
     isNormalUser = true;
@@ -28,6 +28,8 @@
   ];
   home-manager.users.patrick.imports = [
     hyprland.homeManagerModules.default
+    impermanence.home-manager.impermanence
+    ../common/impermanence.nix
     ./patrick.nix
     ../common
   ];

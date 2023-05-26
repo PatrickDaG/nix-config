@@ -17,7 +17,7 @@
   # I need a static global IP address for my dorm LAN
   # So to not dox myself this config file is hardcoded
   systemd.network.networks = {
-    "lan1" = {
+    "01-lan1" = {
       DHCP = "yes";
       matchConfig.MACAddress = nodeSecrets.networking.lan1.mac;
       networkConfig.IPv6PrivacyExtensions = "yes";
@@ -25,7 +25,7 @@
       address = [nodeSecrets.networking.fuckKoreanDorm.address];
       dns = ["9.9.9.9"];
     };
-    "wlan1" = {
+    "01-wlan1" = {
       DHCP = "yes";
       matchConfig.MACAddress = nodeSecrets.networking.wlan1.mac;
       networkConfig.IPv6PrivacyExtensions = "yes";
