@@ -40,6 +40,9 @@
           format = "{ifname}  {bandwidthUpBits}  {bandwidthDownBits}";
           interval = 1;
         };
+        "wlr/workspaces" = {
+          on-click = "activate";
+        };
       };
     };
     style = ./waybar.css;

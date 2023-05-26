@@ -12,6 +12,22 @@
 
   environment.systemPackages = with pkgs; [zfs];
 
+  # Might help with hangs mainly atuin
+  #boot.kernelPatches = [
+  #  {
+  #    name = "enable RT_FULL";
+  #    patch = null;
+  #    extraConfig = ''
+  #      PREEMPT y
+  #      PREEMPT_BUILD y
+  #      PREEMPT_VOLUNTARY n
+  #      PREEMPT_COUNT y
+  #      PREEMPTION y
+  #  	DEBUG_INFO_BTF n
+  #    '';
+  #  }
+  #];
+
   services.zfs = {
     autoScrub = {
       enable = true;

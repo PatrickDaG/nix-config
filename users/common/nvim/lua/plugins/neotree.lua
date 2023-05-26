@@ -54,7 +54,7 @@ return {
 						renamed = "➜",
 						untracked = "?",
 						ignored = "",
-						unstaged = "",
+						unstaged = "󰄱",
 						staged = "",
 						conflict = "",
 					},

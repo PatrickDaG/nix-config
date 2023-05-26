@@ -51,6 +51,7 @@
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
+      #url = "/home/patrick/Downloads/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

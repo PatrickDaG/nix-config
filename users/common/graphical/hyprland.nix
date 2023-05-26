@@ -12,7 +12,8 @@ in {
       name = x;
       value = [];
     })
-    TAGS);
+    ["42" "43" "44"]);
+
   home.packages = with pkgs; [
     qt6.qtwayland
     wl-clipboard
@@ -24,6 +25,6 @@ in {
     enable = true;
     xwayland.hidpi = true;
     nvidiaPatches = true;
-    extraConfig = import ./hyprland.conf MOD TAGS pkgs;
+    extraConfig = import ./hyprland.conf.nix MOD TAGS pkgs;
   };
 }

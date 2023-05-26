@@ -7,6 +7,9 @@
     defaultEditor = true;
     withNodeJs = true;
     extraPackages = with pkgs; [
+      # treesitter
+      clang_15
+      clang-tools_15
       # tabnine complition braucht unzip
       unzip
       # telescope fzf native braucht make
