@@ -17,6 +17,11 @@
       ".cache/nvim"
 
       ".local/share/direnv"
+
+      ".local/share/Steam"
+      ".steam"
+
+      "./Nextcloud"
     ];
   };
 }
