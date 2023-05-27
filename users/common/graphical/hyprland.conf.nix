@@ -50,6 +50,8 @@ MOD: TAGS: pkgs:
         bind=${MOD} + SHIFT,up,movewindow,u
         bind=${MOD} + SHIFT,down,movewindow,d
 
+  bindm=${MOD},mouse:272,movewindow
+
         bind=${MOD} + SHIFT,n,movewindow,l
         bind=${MOD} + SHIFT,s,movewindow,r
         bind=${MOD} + SHIFT,l,movewindow,u
