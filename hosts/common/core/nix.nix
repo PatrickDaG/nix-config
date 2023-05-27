@@ -28,11 +28,9 @@
     daemonIOSchedPriority = 5;
     distributedBuilds = true;
     extraOptions = ''
-            builders-use-substitutes = true
-            experimental-features = nix-command flakes recursive-nix
-            flake-registry = /etc/nix/registry.json
-            plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-      extra-builtins-file = ${../../..}/nix/extra-builtins.nix
+      builders-use-substitutes = true
+      experimental-features = nix-command flakes recursive-nix
+      flake-registry = /etc/nix/registry.json
     '';
     optimise.automatic = true;
     gc = {

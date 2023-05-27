@@ -1,10 +1,10 @@
 {
-  nodeSecrets,
   nodePath,
+  config,
   ...
 }: {
   networking = {
-    inherit (nodeSecrets.networking) hostId;
+    inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd.enable = true;
     # Add the VPN based route to my paperless instance to
     # etc/hosts
@@ -19,15 +19,15 @@
   systemd.network.networks = {
     "01-lan1" = {
       DHCP = "yes";
-      matchConfig.MACAddress = nodeSecrets.networking.lan1.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       networkConfig.IPv6PrivacyExtensions = "yes";
-      gateway = [nodeSecrets.networking.fuckKoreanDorm.gateway];
-      address = [nodeSecrets.networking.fuckKoreanDorm.address];
+      gateway = [config.secrets.secrets.local.networking.fuckKoreanDorm.gateway];
+      address = [config.secrets.secrets.local.networking.fuckKoreanDorm.address];
       dns = ["9.9.9.9"];
     };
     "01-wlan1" = {
       DHCP = "yes";
-      matchConfig.MACAddress = nodeSecrets.networking.wlan1.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.wlan1.mac;
       networkConfig.IPv6PrivacyExtensions = "yes";
       # TODO: change dns to own when at hom
       dns = ["9.9.9.9"];

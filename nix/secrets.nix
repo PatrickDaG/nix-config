@@ -1,24 +1,19 @@
-# This file manages access to repository-secrets. Anything that is technically
-# not a secret on your hosts, but something you want to keep secret from the public.
-# Anything you don't want people to see on GitHub that isn't a password or encrypted
-# using agenix.
-#
-# All of these secrets may (and probably will be) put into the world-readable nix-store
-# on the build and target hosts. You'll most likely want to store personally identifiable
-# information here, such as:
-#   - MAC Addreses
-#   - Static IP addresses
-#   - Your full name (when configuring e.g. users)
-#   - Your postal address (when configuring e.g. home-assistant)
-#   - ...
 {
-  self,
-  nixpkgs,
+  lib,
+  pkgs,
+  inputs,
+  config,
   ...
-} @ inputs: let
+}: let
   inherit
-    (nixpkgs.lib)
+    (lib)
     mapAttrs
+    assertMsg
+    types
+    mkOption
+    mdDoc
+    mkIf
+    literalExpression
     ;
   # If the given expression is a bare set, it will be wrapped in a function,
   # so that the imported file can always be applied to the inputs, similar to
@@ -27,17 +22,53 @@
     if builtins.isAttrs x
     then (_: x)
     else x;
+
+  rageImportEncrypted = assert assertMsg (builtins ? extraBuiltins.rageImportEncrypted) "The rageImportEncrypted extra plugin is not loaded";
+    builtins.extraBuiltins.rageImportEncrypted;
   # This "imports" an encrypted .nix.age file
   importEncrypted = path:
     constSet (
       if builtins.pathExists path
-      then builtins.extraBuiltins.rageImportEncrypted self.secrets.masterIdentities path
+      then builtins.extraBuiltins.rageImportEncrypted inputs.self.secretsConfig.masterIdentities path
       else {}
     );
-in
-  # this exposes all secrets in the repository secert file to the flake output
-  (importEncrypted ../secrets/secrets.nix.age inputs)
-  // {
-    # this exposes host specific secrets
-    nodes = mapAttrs (hostName: _: importEncrypted ../hosts/${hostName}/secrets/secrets.nix.age inputs) self.hosts;
-  }
+  cfg = config.secrets;
+in {
+  options.secrets = {
+    defineRageBuiltins = mkOption {
+      default = true;
+      type = types.bool;
+      description = mdDoc ''
+        Add nix plugins and the extra builtins file to the nix config
+        Enabling this host to decrypt secret when deploying
+      '';
+    };
+
+    secretFiles = mkOption {
+      default = {};
+      type = types.attrsOf types.path;
+      example = literalExpression "{ local = ./secrets.nix.age; }";
+      description = mdDoc ''
+        Files containg secrets for this host.
+        As these will end up in the nix store of the host use this for
+        secrets that can be publicly known on the host but should be private
+        in the repository
+      '';
+    };
+
+    secrets = mkOption {
+      readOnly = true;
+      default =
+        mapAttrs (_: x: importEncrypted x inputs) cfg.secretFiles;
+      description = mdDoc ''
+        the secrets decrypted from the secretFiles
+      '';
+    };
+  };
+  config = {
+    nix.extraOptions = mkIf cfg.defineRageBuiltins ''
+            plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+      extra-builtins-file = ${./.}/extra-builtins.nix
+    '';
+  };
+}

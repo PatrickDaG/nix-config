@@ -8,6 +8,8 @@
     ./system.nix
     ./xdg.nix
     ./impermanence.nix
+
+    ../../../nix/secrets.nix
   ];
 
   home-manager = {

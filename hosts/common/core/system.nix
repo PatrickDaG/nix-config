@@ -8,7 +8,7 @@
 }: {
   rekey = {
     inherit
-      (inputs.self.secrets)
+      (inputs.self.secretsConfig)
       masterIdentities
       extraEncryptionPubkeys
       ;
@@ -57,4 +57,12 @@
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  secrets.secretFiles = let
+    local = nodePath + "/secrets/secrets.nix.age";
+  in
+    {
+      global = ../../../secrets/secrets.nix.age;
+    }
+    // lib.optionalAttrs (nodePath != null && lib.pathExists local) {inherit local;};
 }

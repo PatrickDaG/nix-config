@@ -71,10 +71,9 @@
     ...
   } @ inputs:
     {
-      secrets = {
+      secretsConfig = {
         masterIdentities = [./secrets/NIXOSc.key.pub];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
-        content = import ./nix/secrets.nix inputs;
       };
 
       hosts = {
