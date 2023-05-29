@@ -1,7 +1,7 @@
 {config, ...}: {
   home.persistence."/persist/home/${config.home.username}" = {
     files = [
-      ".ssh/know_hosts"
+      ".ssh/known_hosts"
     ];
     directories = [
       "repos"
