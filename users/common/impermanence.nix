@@ -1,5 +1,6 @@
 {config, ...}: {
   home.persistence."/persist/home/${config.home.username}" = {
+    allowOther = true;
     files = [
       ".ssh/known_hosts"
     ];
@@ -18,10 +19,17 @@
 
       ".local/share/direnv"
 
-      ".local/share/Steam"
-      ".steam"
+      {
+        directory = ".local/share/Steam";
+        method = "symlink";
+      }
+      {
+        directory = ".steam";
+        method = "symlink";
+      }
 
       "./Nextcloud"
+      ".config/Nextcloud"
     ];
   };
 }

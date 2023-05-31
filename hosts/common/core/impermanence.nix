@@ -4,6 +4,8 @@
   ...
 }: {
   age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
+  # to allow all users to access hm managed persistent folders
+  programs.fuse.userAllowOther = true;
   environment.persistence."/persist" = {
     hideMounts = true;
 
