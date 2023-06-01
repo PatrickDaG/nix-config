@@ -7,6 +7,7 @@
     ./git.nix
     ./gpg
     ./util.nix
+    ./impermanence.nix
   ];
   # TODO unify stateversions
   home.stateVersion = "23.05";

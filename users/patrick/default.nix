@@ -29,7 +29,6 @@
   home-manager.users.patrick.imports = [
     hyprland.homeManagerModules.default
     impermanence.home-manager.impermanence
-    ../common/impermanence.nix
     ./patrick.nix
     ../common
   ];

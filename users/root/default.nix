@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  impermanence,
   ...
 }: {
   rekey.secrets.root.file = ../../secrets/root.passwd.age;
@@ -13,6 +14,9 @@
     passwordFile = config.rekey.secrets.root.path;
   };
   home-manager.users.root = {
-    imports = [../common];
+    imports = [
+      ../common
+      impermanence.home-manager.impermanence
+    ];
   };
 }

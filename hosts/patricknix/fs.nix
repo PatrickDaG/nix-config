@@ -20,6 +20,13 @@
     options = ["zfsutil" "X-mount.mkdir"];
   };
 
+  fileSystems."/state" = {
+    device = "rpool/local/state";
+    neededForBoot = true;
+    fsType = "zfs";
+    options = ["zfsutil" "X-mount.mkdir"];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/BC47-8FB9";
     fsType = "vfat";
