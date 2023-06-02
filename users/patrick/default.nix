@@ -3,7 +3,7 @@
   config,
   ...
 }: {
-  # TODO: only import this if the current host is a nixos host
+  # enable nixos wide hyprland config
   imports = [
     ../../hosts/common/graphical/hyprland.nix
   ];
@@ -23,10 +23,13 @@
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
+
   home-manager.users.patrick = {
     imports = [
       ./patrick.nix
       ../common
+      ../common/interactive.nix
+      ../common/graphical.nix
     ];
   };
 }

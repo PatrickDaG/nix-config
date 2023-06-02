@@ -1,15 +1,12 @@
 {
   imports = [
-    ./shells/zsh
-    ./programs/htop.nix
-    ./nvim
     ./shells/alias.nix
-    ./git.nix
-    ./gpg
-    ./util.nix
+    ./shells/zsh
+
+    ./programs/gpg
+
     ./impermanence.nix
   ];
-
   nixpkgs.config = {
     allowUnfree = true;
   };

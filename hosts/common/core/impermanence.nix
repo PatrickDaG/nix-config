@@ -1,9 +1,9 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: {
-  age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
   # to allow all users to access hm managed persistent folders
   programs.fuse.userAllowOther = true;
   environment.persistence."/state" = {
@@ -14,13 +14,17 @@
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_ed25519_key.pub"
     ];
-    directories = [
-      {
-        directory = "/var/lib/nixos";
-        user = "root";
-        group = "root";
-        mode = "0775";
-      }
-    ];
+    directories =
+      [
+        {
+          directory = "/var/lib/nixos";
+          user = "root";
+          group = "root";
+          mode = "0775";
+        }
+      ]
+      ++ lib.lists.optionals config.hardware.acpilight.enable [
+        "/var/lib/systemd/backlight"
+      ];
   };
 }

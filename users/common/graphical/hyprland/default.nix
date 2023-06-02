@@ -6,7 +6,7 @@
   MOD = "SUPER";
   TAGS = map toString (lib.lists.range 41 49);
 in {
-  imports = [./waybar.nix];
+  imports = [../waybar];
   # This does not work currently no idea why
   programs.waybar.settings.main."wlr/workspaces".persistent_workspaces = builtins.listToAttrs (map (x: {
       name = x;

@@ -1,9 +1,4 @@
 {
-  impermanence,
-  hyprland,
-  stateVersion,
-  ...
-}: {
   imports = [
     ./inputrc.nix
     ./issue.nix
@@ -13,25 +8,11 @@
     ./system.nix
     ./xdg.nix
     ./impermanence.nix
+    ./home-manager.nix
 
     ../../../users/root
 
     ../../../nix/secrets.nix
   ];
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    verbose = true;
-    sharedModules = [
-      {
-        home.stateVersion = stateVersion;
-      }
-      impermanence.home-manager.impermanence
-      hyprland.homeManagerModules.default
-    ];
-  };
-  # HM zsh needs this or else the startup order is fucked
-  # and env variables will be loaded incorrectly
-  programs.zsh.enable = true;
+  age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

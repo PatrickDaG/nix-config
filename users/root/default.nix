@@ -11,6 +11,7 @@
     ];
     hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
   };
-  # the user needs to exists
-  home-manager.users.root.imports = [../common];
+  home-manager.users.root.imports = [
+    ../common
+  ];
 }
