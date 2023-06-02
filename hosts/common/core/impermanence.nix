@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: {
   # to allow all users to access hm managed persistent folders
@@ -25,6 +24,9 @@
       ]
       ++ lib.lists.optionals config.hardware.acpilight.enable [
         "/var/lib/systemd/backlight"
+      ]
+      ++ lib.lists.optionals config.hardware.bluetooth.enable [
+        "/var/lib/bluetooth"
       ];
   };
 }
