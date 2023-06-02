@@ -3,6 +3,7 @@
   impermanence,
   pkgs,
   config,
+  stateVersion,
   ...
 }: {
   # TODO: only import this if the current host is a nixos host
@@ -25,10 +26,13 @@
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
-  home-manager.users.patrick.imports = [
-    hyprland.homeManagerModules.default
-    impermanence.home-manager.impermanence
-    ./patrick.nix
-    ../common
-  ];
+  home-manager.users.patrick = {
+    home.stateVersion = stateVersion;
+    imports = [
+      hyprland.homeManagerModules.default
+      impermanence.home-manager.impermanence
+      ./patrick.nix
+      ../common
+    ];
+  };
 }

@@ -76,6 +76,8 @@
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
 
+      stateVersion = "23.05";
+
       hosts = {
         patricknix = {
           type = "nixos";

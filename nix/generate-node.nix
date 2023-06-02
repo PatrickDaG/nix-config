@@ -22,7 +22,7 @@ in {
   pkgs = self.pkgs.${nodeMeta.system};
   specialArgs = {
     inherit (nixpkgs) lib;
-    inherit (self) nodes;
+    inherit (self) nodes stateVersion;
     inherit inputs;
     inherit nodeName;
     inherit nodeMeta;

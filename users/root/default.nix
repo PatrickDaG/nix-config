@@ -2,6 +2,7 @@
   pkgs,
   config,
   impermanence,
+  stateVersion,
   ...
 }: {
   users.users.root = {
@@ -13,6 +14,7 @@
     hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
   };
   home-manager.users.root = {
+    home.stateVersion = stateVersion;
     imports = [
       ../common
       impermanence.home-manager.impermanence
