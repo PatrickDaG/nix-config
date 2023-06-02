@@ -27,7 +27,6 @@
     ./wireguard.nix
 
     ../../users/patrick
-    ../../users/root
   ];
   # Set your time zone.
   time.timeZone = "Asia/Seoul";

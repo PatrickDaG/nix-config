@@ -1,5 +1,6 @@
 {
   impermanence,
+  hyprland,
   stateVersion,
   ...
 }: {
@@ -13,6 +14,8 @@
     ./xdg.nix
     ./impermanence.nix
 
+    ../../../users/root
+
     ../../../nix/secrets.nix
   ];
 
@@ -25,6 +28,7 @@
         home.stateVersion = stateVersion;
       }
       impermanence.home-manager.impermanence
+      hyprland.homeManagerModules.default
     ];
   };
   # HM zsh needs this or else the startup order is fucked
