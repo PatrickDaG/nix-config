@@ -9,7 +9,6 @@
   imports = [
     ../../hosts/common/graphical/hyprland.nix
   ];
-  rekey.secrets.patrick.file = ../../secrets/patrick.passwd.age;
 
   users.users.patrick = {
     shell = pkgs.zsh;
@@ -18,7 +17,7 @@
     createHome = true;
     extraGroups = ["wheel" "audio" "video" "input"];
     group = "patrick";
-    passwordFile = config.rekey.secrets.patrick.path;
+    hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
   };
   users.groups.patrick.gid = config.users.users.patrick.uid;
 
