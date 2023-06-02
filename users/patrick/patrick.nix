@@ -50,6 +50,9 @@
         [
           "repos"
           "Downloads"
+
+          # persist sound config
+          ".local/state/wireplumber"
         ]
         ++ makeSymLinks [
           ".local/share/Steam"
