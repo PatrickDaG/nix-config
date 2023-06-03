@@ -78,6 +78,8 @@
 
       stateVersion = "23.05";
 
+      extraLib = import ./nix/lib.nix inputs;
+
       hosts = {
         patricknix = {
           type = "nixos";

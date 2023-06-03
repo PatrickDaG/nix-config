@@ -22,12 +22,15 @@ in {
   pkgs = self.pkgs.${nodeMeta.system};
   specialArgs = {
     inherit (nixpkgs) lib;
-    inherit (self) nodes stateVersion;
-    inherit inputs;
-    inherit nodeName;
-    inherit nodeMeta;
+    inherit (self) nodes stateVersion extraLib;
+    inherit
+      inputs
+      nodeName
+      nodePath
+      ;
+
     inherit hyprland;
-    inherit nodePath;
+
     nixos-hardware = nixos-hardware.nixosModules;
     impermanence = impermanence.nixosModules;
   };

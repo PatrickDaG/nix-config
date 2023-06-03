@@ -12,7 +12,7 @@
 
     ../../../users/root
 
-    ../../../nix/secrets.nix
+    ../../../modules/secrets.nix
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

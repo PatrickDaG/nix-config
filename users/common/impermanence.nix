@@ -2,6 +2,7 @@
   config,
   lib,
   nixosConfig,
+  extraLib,
   ...
 }: {
   home.persistence."/state/${config.home.homeDirectory}" = with lib.lists; {
@@ -9,22 +10,12 @@
     files = [
       ".ssh/known_hosts"
     ];
-    directories = let
-      # some programs( such as steam do not work with bindmounts
-      # additionally symlinks are a lot faster than bindmounts
-      # ~ 2x faster in my tests
-      makeSymLinks = x:
-        builtins.map (x: {
-          directory = x;
-          method = "symlink";
-        })
-        x;
-    in
+    directories =
       # firefox cannot be a symlink as home manager refuses put files outside your $HOME
       optionals config.programs.firefox.enable [
         ".mozilla"
       ]
-      ++ makeSymLinks (
+      ++ extraLib.impermanence.makeSymlinks (
         optionals config.programs.atuin.enable [
           ".local/share/atuin"
         ]
