@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  extraLib,
   ...
 }: {
   imports = [
@@ -13,7 +14,7 @@
     ];
     persistence."/state/${config.home.homeDirectory}" = {
       allowOther = true;
-      directories = [
+      directories = extraLib.impermanence.makeSymlinks [
         "repos"
         "Downloads"
 
