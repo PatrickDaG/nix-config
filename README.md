@@ -48,7 +48,23 @@
 - `patrick` my normal everyday unprivileged user
 - `root` root user imported by every host
 
-## Flake structure
+## Flake output structure
+- `apps` executables used for editing this configuration
+    - `edit-secret` edit an age encrypted secret
+    - `rekey` rekey all secret files for the host's secret key, enabling agenix
+    - `rekey-save-output` only internal use
+- `checks` linting and other checks for this repository
+    - `pre-commit-check` automatic checks executed as pre-commit hooks
+- `colmena` outputs used by colmena
+- `colmenaNodes` per node configuration
+- `nodes` alias to `colmenaNodes`
+- `devshell` development shell using devshell
+- `extraLib` additional library function defined in `nix/lib.nix`
+- `formatter` nix code formatter
+- `hosts` host meta declaration
+- `pkgs` nixpkgs
+- `secretsConfig` meta configuration for secrets
+- `stateVersion` global stateversion used by nixos and home-manager to determine default config
 
 ## How-To
 
