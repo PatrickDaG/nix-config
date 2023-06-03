@@ -11,7 +11,8 @@
     packages = [
       pkgs.nextcloud-client
     ];
-    persistence."/state/home/${config.home.username}" = {
+    persistence."/state/${config.home.homeDirectory}" = {
+      allowOther = true;
       directories = [
         "repos"
         "Downloads"
