@@ -68,7 +68,7 @@ in {
   config = {
     nix.extraOptions = mkIf cfg.defineRageBuiltins ''
             plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-      extra-builtins-file = ${./.}/extra-builtins.nix
+      extra-builtins-file = ${../nix}/extra-builtins.nix
     '';
   };
 }

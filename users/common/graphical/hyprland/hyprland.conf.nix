@@ -72,6 +72,7 @@ MOD: TAGS: pkgs:
 
          bind=${MOD},b,exec,firefox
          bind=${MOD},t,exec,kitty
+         bind=${MOD} + SHIFT,l,exec,systemctl suspend -i
          bind=${MOD} + SHIFT,Escape,exit
    #fix xwayland hidpi
    exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
