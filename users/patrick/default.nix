@@ -27,6 +27,8 @@
   home-manager.users.patrick = {
     imports = [
       ./patrick.nix
+      ./ssh.nix
+      ./impermanence.nix
       ../common
       ../common/interactive.nix
       ../common/graphical.nix

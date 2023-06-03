@@ -7,19 +7,20 @@
 
     ../common/core
     ../common/dev
-    ../common/graphical
+
+    ../common/graphical/fonts.nix
+    ../common/graphical/steam.nix
+
     ../common/hardware/bluetooth.nix
     ../common/hardware/intel.nix
+    ../common/hardware/laptop.nix
     ../common/hardware/physical.nix
-    ../common/efi.nix
-    ../common/laptop.nix
-    ../common/pipewire.nix
-    ../common/steam.nix
-    ../common/yubikey.nix
-    ../common/zfs.nix
+    ../common/hardware/pipewire.nix
+    ../common/hardware/yubikey.nix
+    ../common/hardware/zfs.nix
 
     ../common/hardware/nvidia.nix
-    ./prime-offload.nix
+    ../common/hardware/prime-offload.nix
 
     ./net.nix
     ./fs.nix

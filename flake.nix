@@ -102,7 +102,7 @@
       };
       apps = agenix-rekey.defineApps self pkgs self.nodes;
       checks = import ./nix/checks.nix inputs system;
-      devShell = import ./nix/dev-shell.nix inputs system;
+      devShell = import ./nix/devshell.nix inputs system;
       formatter = pkgs.alejandra;
     });
 }

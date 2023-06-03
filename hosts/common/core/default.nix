@@ -1,5 +1,8 @@
 {
   imports = [
+    ./efi.nix
+    ./home-manager.nix
+    ./impermanence.nix
     ./inputrc.nix
     ./issue.nix
     ./net.nix
@@ -7,8 +10,6 @@
     ./ssh.nix
     ./system.nix
     ./xdg.nix
-    ./impermanence.nix
-    ./home-manager.nix
 
     ../../../users/root
 
