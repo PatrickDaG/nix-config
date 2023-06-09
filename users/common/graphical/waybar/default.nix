@@ -9,7 +9,7 @@
       main = {
         layer = "top";
         position = "bottom";
-        modules-left = ["hyprland/window"];
+        modules-left = ["custom/timer" "hyprland/window"];
         modules-center = ["wlr/workspaces"];
         # wireplumber module seems to be currently broken
         modules-right = ["network" "backlight" "battery" "clock" "tray"];
@@ -42,6 +42,15 @@
         };
         "wlr/workspaces" = {
           on-click = "activate";
+        };
+
+        "custom/timer" = {
+          exec = "${pkgs.python3}/bin/python ${./timer.py}";
+          on-click = "${pkgs.python3}/bin/python ${./timer.py} -s";
+          on-click-right = "${pkgs.python3}/bin/python ${./timer.py} -x";
+          on-scroll-up = "${pkgs.python3}/bin/python ${./timer.py} -i";
+          on-scroll-down = "${pkgs.python3}/bin/python ${./timer.py} -d";
+          interval = 1;
         };
       };
     };
