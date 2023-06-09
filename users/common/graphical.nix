@@ -8,7 +8,6 @@
   home = {
     packages = with pkgs; [
       thunderbird
-      bitwarden
       signal-desktop
       chromium
       xdragon

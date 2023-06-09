@@ -75,7 +75,7 @@ MOD: TAGS: pkgs:
          bind=${MOD} + SHIFT,l,exec,systemctl suspend -i
          bind=${MOD} + SHIFT,Escape,exit
    #fix xwayland hidpi
-   exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
+   exec-once = ${pkgs.xorg.xprop}/bin/xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
    env = GDK_SCALE,2
    env = XCURSOR_SIZE,48
 

@@ -12,7 +12,7 @@ in {
       name = x;
       value = [];
     })
-    ["42" "43" "44"]);
+    TAGS);
 
   home.packages = with pkgs; [
     qt6.qtwayland

@@ -1,7 +1,8 @@
 {pkgs, ...}: {
   home = {
-    packages = [
-      pkgs.nextcloud-client
+    packages = with pkgs; [
+      nextcloud-client
+      heroic
     ];
   };
 }

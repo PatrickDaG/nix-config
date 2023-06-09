@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   nixosConfig,
@@ -27,12 +28,17 @@
           ".local/state/nvim"
           ".cache/nvim"
         ]
+        ++ optionals (builtins.elem pkgs.heroic config.home.packages) [
+          ".config/heroic"
+          "Games/Heroic"
+        ]
         # root should never use interactive programs
         ++ optionals nixosConfig.users.users.${config.home.username}.isNormalUser (
           optionals nixosConfig.services.pipewire.enable [
             # persist sound config
             ".local/state/wireplumber"
           ]
+          # Folders for steam
           ++ optionals nixosConfig.programs.steam.enable
           [
             ".local/share/Steam"
