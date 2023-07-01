@@ -23,6 +23,7 @@ MOD: TAGS: pkgs:
 
       gestures {
       	workspace_swipe = true
+      	workspace_swipe_numbered = true
       }
 
       misc {
