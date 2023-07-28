@@ -33,16 +33,16 @@
       dns = ["9.9.9.9"];
     };
   };
-  rekey.secrets.eduroam = {
-    file = nodePath + "/secrets/iwd/eduroam.8021x.age";
+  age.secrets.eduroam = {
+    rekeyFile = nodePath + "/secrets/iwd/eduroam.8021x.age";
     path = "/var/lib/iwd/eduroam.8021x";
   };
-  rekey.secrets.devoloog = {
-    file = nodePath + "/secrets/iwd/devolo-og.psk.age";
+  age.secrets.devoloog = {
+    rekeyFile = nodePath + "/secrets/iwd/devolo-og.psk.age";
     path = "/var/lib/iwd/devolo-og.psk";
   };
-  rekey.secrets.kaist = {
-    file = nodePath + "/secrets/iwd/kaist.8021x.age";
+  age.secrets.kaist = {
+    rekeyFile = nodePath + "/secrets/iwd/kaist.8021x.age";
     path = "/var/lib/iwd/Welcome_KAIST.8021x";
   };
 }

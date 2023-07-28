@@ -45,6 +45,21 @@ in
         package = update-nix-fetchgit;
         help = "Update fetcher inside nix files";
       }
+      {
+        # nix plugins is currently build against nix version 2.16
+        # official nix version is 2.15 but if we try to load plugins
+        # it throws linking errors
+        package = nixVersions.nix_2_16;
+      }
+    ];
+    env = [
+      {
+        name = "NIX_CONFIG";
+        value = ''
+          plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+          extra-builtins-file = ${../nix}/extra-builtins.nix
+        '';
+      }
     ];
 
     devshell.startup.pre-commit.text = self.checks.${system}.pre-commit-check.shellHook;

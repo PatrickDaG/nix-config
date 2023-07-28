@@ -73,6 +73,7 @@
     {
       secretsConfig = {
         masterIdentities = [./secrets/NIXOSc.key.pub];
+        #masterIdentities = [./secrets/NIXOSa.key.pub];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
 

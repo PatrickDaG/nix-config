@@ -8,6 +8,8 @@
   inherit
     (lib)
     mapAttrs
+    # Not really unused LSP is confuse
+    
     assertMsg
     types
     mkOption
@@ -64,11 +66,5 @@ in {
         the secrets decrypted from the secretFiles
       '';
     };
-  };
-  config = {
-    nix.extraOptions = mkIf cfg.defineRageBuiltins ''
-            plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-      extra-builtins-file = ${../nix}/extra-builtins.nix
-    '';
   };
 }

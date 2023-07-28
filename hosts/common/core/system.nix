@@ -6,7 +6,7 @@
   nodeName,
   ...
 }: {
-  rekey = {
+  age.rekey = {
     inherit
       (inputs.self.secretsConfig)
       masterIdentities
