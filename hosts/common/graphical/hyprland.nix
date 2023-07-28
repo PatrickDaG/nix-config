@@ -3,7 +3,8 @@
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
+    # we just use the hyprland desktop portal
+    wlr.enable = false;
     extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
   };
 }
