@@ -15,11 +15,6 @@
         user = "root";
         inherit identityFile;
       };
-      "github" = {
-        hostname = "github.com";
-        user = "git";
-        inherit identityFile;
-      };
       "patricknix" = {
         hostname = "localhost";
         user = "root";
@@ -56,6 +51,9 @@
         inherit identityFile;
       };
       "gitlab.lrz.de" = {
+        inherit identityFile;
+      };
+      "github.com" = {
         inherit identityFile;
       };
       "*" = {

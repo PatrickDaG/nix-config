@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   fonts = {
-    enableDefaultFonts = false;
     enableGhostscriptFonts = false;
     fontDir.enable = false;
     fontconfig = {
