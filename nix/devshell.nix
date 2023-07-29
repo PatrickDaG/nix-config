@@ -45,18 +45,25 @@ in
         package = update-nix-fetchgit;
         help = "Update fetcher inside nix files";
       }
-      {
-        # nix plugins is currently build against nix version 2.16
-        # official nix version is 2.15 but if we try to load plugins
-        # it throws linking errors
-        package = nixVersions.nix_2_16;
-      }
     ];
     env = [
       {
         name = "NIX_CONFIG";
+        # Nix plugins braucht nix version 2.16
+        # Nixpkgs hat aber aktuell 2.15 also main version
+        # Daher der folgenda hack um zu verhindern das mein NixOS mit einer anderen nix version gebaut wird
+        # als der intendeten
         value = ''
-          plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+          plugin-files = ${(pkgs.nix-plugins.override {inherit (pkgs) nix;}).overrideAttrs rec {
+            version = "10.0.0";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "shlevy";
+              repo = "nix-plugins";
+              rev = version;
+              hash = "sha256-7Lo+YxpiRz0+ZLFDvYMJWWK2j0CyPDRoP1wAc+OaPJY=";
+            };
+          }}/lib/nix/plugins
           extra-builtins-file = ${../nix}/extra-builtins.nix
         '';
       }
