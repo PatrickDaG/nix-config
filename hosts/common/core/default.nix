@@ -1,4 +1,4 @@
-{
+{inputs, ...}: {
   imports = [
     ./efi.nix
     ./home-manager.nix
@@ -14,6 +14,12 @@
     ../../../users/root
 
     ../../../modules/secrets.nix
+    ../../../modules/meta.nix
+
+    inputs.home-manager.nixosModules.default
+    inputs.impermanence.nixosModules.impermanence
+    inputs.agenix.nixosModules.default
+    inputs.agenix-rekey.nixosModules.default
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

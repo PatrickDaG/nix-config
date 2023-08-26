@@ -1,8 +1,7 @@
 {
-  impermanence,
-  hyprland,
   stateVersion,
   config,
+  inputs,
   pkgs,
   ...
 }: {
@@ -14,8 +13,8 @@
       {
         home.stateVersion = stateVersion;
       }
-      impermanence.home-manager.impermanence
-      hyprland.homeManagerModules.default
+      inputs.impermanence.nixosModules.home-manager.impermanence
+      inputs.hyprland.homeManagerModules.default
     ];
     extraSpecialArgs = {
       nixosConfig = config;

@@ -1,8 +1,4 @@
-{
-  nodePath,
-  config,
-  ...
-}: {
+{config, ...}: {
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd.enable = true;
@@ -29,11 +25,11 @@
     };
   };
   age.secrets.eduroam = {
-    rekeyFile = nodePath + "/secrets/iwd/eduroam.8021x.age";
+    rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
   age.secrets.devoloog = {
-    rekeyFile = nodePath + "/secrets/iwd/devolo-og.psk.age";
+    rekeyFile = ./secrets/iwd/devolo-og.psk.age;
     path = "/var/lib/iwd/devolo-og.psk";
   };
 }

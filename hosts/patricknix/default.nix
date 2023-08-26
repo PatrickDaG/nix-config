@@ -1,9 +1,9 @@
-{nixos-hardware, ...}: {
+{inputs, ...}: {
   imports = [
-    nixos-hardware.common-cpu-intel
-    nixos-hardware.common-gpu-intel
-    nixos-hardware.common-pc-laptop
-    nixos-hardware.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.nixos-hardware.nixosModules.common-gpu-intel
+    inputs.nixos-hardware.nixosModules.common-pc-laptop
+    inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
 
     ../common/core
     ../common/dev

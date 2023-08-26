@@ -59,7 +59,6 @@
 - `colmenaNodes` per node configuration
 - `nodes` alias to `colmenaNodes`
 - `devshell` development shell using devshell
-- `extraLib` additional library function defined in `nix/lib.nix`
 - `formatter` nix code formatter
 - `hosts` host meta declaration
 - `pkgs` nixpkgs
@@ -68,7 +67,9 @@
 
 ## How-To
 
-...TODO
+### Add additional hosts
+
+1. Add host definition to `hosts.toml`
 
 ## Deploy
 

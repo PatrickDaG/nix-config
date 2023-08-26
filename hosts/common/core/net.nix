@@ -1,8 +1,7 @@
-{nodeName, ...}: {
+{
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;
-    hostName = nodeName;
   };
   # Should remain enabled since nscd from glibc is kinda ass
   services.nscd.enableNsncd = true;

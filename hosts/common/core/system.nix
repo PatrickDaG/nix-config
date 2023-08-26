@@ -1,9 +1,8 @@
 {
   inputs,
   lib,
-  nodePath,
   pkgs,
-  nodeName,
+  config,
   ...
 }: {
   age.rekey = {
@@ -15,9 +14,9 @@
 
     forceRekeyOnSystem = builtins.extraBuiltins.unsafeCurrentSystem;
     hostPubkey = let
-      pubkeyPath = nodePath + "/secrets/host.pub";
+      pubkeyPath = config.node.secretsDir + "/host.pub";
     in
-      lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${nodeName}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
+      lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
       pubkeyPath;
   };
   boot = {
@@ -59,10 +58,10 @@
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   secrets.secretFiles = let
-    local = nodePath + "/secrets/secrets.nix.age";
+    local = config.node.secretsDir + "/secrets.nix.age";
   in
     {
       global = ../../../secrets/secrets.nix.age;
     }
-    // lib.optionalAttrs (nodePath != null && lib.pathExists local) {inherit local;};
+    // lib.optionalAttrs (config.node.name != null && lib.pathExists local) {inherit local;};
 }

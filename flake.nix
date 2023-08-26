@@ -79,12 +79,7 @@
 
       stateVersion = "23.05";
 
-      hosts = {
-        patricknix = {
-          type = "nixos";
-          system = "x86_64-linux";
-        };
-      };
+      hosts = builtins.fromTOML (builtins.readFile ./hosts.toml);
 
       colmena = import ./nix/colmena.nix inputs;
       # all bare metal nodes
