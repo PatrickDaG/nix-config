@@ -3,7 +3,6 @@
   config,
   lib,
   nixosConfig,
-  extraLib,
   ...
 }: {
   home.persistence."/state/${config.home.homeDirectory}" = with lib.lists; {
@@ -16,7 +15,7 @@
       optionals config.programs.firefox.enable [
         ".mozilla"
       ]
-      ++ extraLib.impermanence.makeSymlinks (
+      ++ pkgs.lib.impermanence.makeSymlinks (
         optionals config.programs.atuin.enable [
           ".local/share/atuin"
         ]

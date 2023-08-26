@@ -3,7 +3,7 @@
   hyprland,
   stateVersion,
   config,
-  extraLib,
+  pkgs,
   ...
 }: {
   home-manager = {
@@ -18,7 +18,6 @@
       hyprland.homeManagerModules.default
     ];
     extraSpecialArgs = {
-      inherit extraLib;
       nixosConfig = config;
     };
   };

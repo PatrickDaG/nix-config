@@ -21,8 +21,8 @@ in {
   inherit (nodeMeta) system;
   pkgs = self.pkgs.${nodeMeta.system};
   specialArgs = {
-    inherit (nixpkgs) lib;
-    inherit (self) nodes stateVersion extraLib;
+    inherit (self.pkgs.${nodeMeta.system}) lib;
+    inherit (self) nodes stateVersion;
     inherit
       inputs
       nodeName

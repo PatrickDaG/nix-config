@@ -79,8 +79,6 @@
 
       stateVersion = "23.05";
 
-      extraLib = import ./nix/lib.nix inputs;
-
       hosts = {
         patricknix = {
           type = "nixos";
@@ -97,6 +95,7 @@
     }
     // flake-utils.lib.eachDefaultSystem (system: rec {
       pkgs = import nixpkgs {
+        overlays = [(import nix/lib.nix inputs)];
         inherit system;
         # TODO fix this to only allow specific unfree packages
         config.allowUnfree = true;
