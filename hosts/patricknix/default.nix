@@ -30,10 +30,5 @@
     ../../users/patrick
   ];
   # Set your time zone.
-  time.timeZone = "Asia/Seoul";
-  environment.shellInit = ''
-    gpg-connect-agent /bye
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    umask 077
-  '';
+  time.timeZone = "Europe/Berlin";
 }

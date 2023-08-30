@@ -20,6 +20,7 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
+    inputs.disko.nixosModules.disko
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

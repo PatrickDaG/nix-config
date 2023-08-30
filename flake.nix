@@ -7,6 +7,11 @@
     # to prevent multiple instances of systems
     systems.url = "github:nix-systems/default";
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       # should use system nixpkgs instead of their own
@@ -90,7 +95,7 @@
     }
     // flake-utils.lib.eachDefaultSystem (system: rec {
       pkgs = import nixpkgs {
-        overlays = [(import nix/lib.nix inputs)];
+        overlays = import ./lib inputs;
         inherit system;
         # TODO fix this to only allow specific unfree packages
         config.allowUnfree = true;
