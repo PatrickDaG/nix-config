@@ -1,4 +1,5 @@
 {
+  # yubikey public key parts
   home.file.".ssh/1.pub".text = ''
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM cardno:15 489 049
   '';
@@ -16,7 +17,7 @@
         inherit identityFile;
       };
       "patricknix" = {
-        hostname = "localhost";
+        hostname = "patricknix.local";
         user = "root";
         inherit identityFile;
       };

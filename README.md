@@ -75,6 +75,10 @@
     1. Create and fill `default.nix`
     1. Fill `net.nix`
     1. Fill `fs.nix`
+    2. Don't forget to add necesarry config for filesystems, etc.
+3. Generate ISO image with `nix build --print-out-paths --no-link .#images.<target-system>.live-iso`
+3. Copy ISO to usb and boot
+5. Copy installer from local machine to live systemd
 
 
 ## Deploy

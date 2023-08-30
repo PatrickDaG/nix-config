@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}: {
+{lib, ...}: {
   services.xserver.videoDrivers = lib.mkForce ["nvidia"];
 
   hardware = {

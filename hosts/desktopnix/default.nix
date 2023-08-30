@@ -8,7 +8,21 @@
     ../common/core
     ../common/dev
 
+    ../common/graphical/fonts.nix
+    ../common/graphical/steam.nix
+
+    ../common/hardware/bluetooth.nix
+    ../common/hardware/intel.nix
+    ../common/hardware/physical.nix
+    ../common/hardware/pipewire.nix
+    ../common/hardware/yubikey.nix
+    ../common/hardware/zfs.nix
+
+    ./smb-mounts.nix
+
     ./net.nix
     ./fs.nix
+
+    ../../users/patrick
   ];
 }

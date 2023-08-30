@@ -12,6 +12,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       # should use system nixpkgs instead of their own
@@ -73,8 +78,12 @@
     colmena,
     agenix-rekey,
     devshell,
+    nixos-generators,
     ...
-  } @ inputs:
+  } @ inputs: let
+    inherit (nixpkgs) lib;
+    stateVersion = "23.05";
+  in
     {
       secretsConfig = {
         masterIdentities = [./secrets/NIXOSc.key.pub];
@@ -82,7 +91,7 @@
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
 
-      stateVersion = "23.05";
+      inherit stateVersion;
 
       hosts = builtins.fromTOML (builtins.readFile ./hosts.toml);
 
@@ -92,6 +101,14 @@
       # todo add microvmNodes
 
       nodes = self.colmenaNodes;
+
+      inherit
+        (lib.foldl' lib.recursiveUpdate {}
+          (lib.mapAttrsToList
+            (import ./nix/generate-installer-package.nix inputs)
+            self.colmenaNodes))
+        packages
+        ;
     }
     // flake-utils.lib.eachDefaultSystem (system: rec {
       pkgs = import nixpkgs {
@@ -100,6 +117,22 @@
         # TODO fix this to only allow specific unfree packages
         config.allowUnfree = true;
       };
+
+      images.live-iso = nixos-generators.nixosGenerate {
+        inherit pkgs;
+        modules = [
+          ./nix/installer-configuration.nix
+          ./hosts/common/core/ssh.nix
+          {system.stateVersion = stateVersion;}
+        ];
+        format =
+          {
+            x86_64-linux = "install-iso";
+            aarch64-linux = "sd-aarch64-installer";
+          }
+          .${system};
+      };
+
       apps = agenix-rekey.defineApps self pkgs self.nodes;
       checks = import ./nix/checks.nix inputs system;
       devShell = import ./nix/devshell.nix inputs system;
