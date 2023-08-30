@@ -29,6 +29,4 @@
 
     ../../users/patrick
   ];
-  # Set your time zone.
-  time.timeZone = "Europe/Berlin";
 }

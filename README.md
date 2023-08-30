@@ -63,6 +63,7 @@
 - `formatter` nix code formatter
 - `hosts` host meta declaration
 - `pkgs` nixpkgs
+- `packages` additional packages
 - `secretsConfig` meta configuration for secrets
 - `stateVersion` global stateversion used by nixos and home-manager to determine default config
 
@@ -77,8 +78,8 @@
     1. Fill `fs.nix`
     2. Don't forget to add necesarry config for filesystems, etc.
 3. Generate ISO image with `nix build --print-out-paths --no-link .#images.<target-system>.live-iso`
+    - This might take multiple minutes(~10)
 3. Copy ISO to usb and boot
-5. Copy installer from local machine to live systemd
 
 
 ## Deploy

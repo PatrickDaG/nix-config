@@ -34,7 +34,7 @@
         </fontconfig>
       '';
     };
-    fonts = with pkgs; [
+    packages = with pkgs; [
       (nerdfonts.override {fonts = ["FiraCode"];})
       ibm-plex
       dejavu_fonts

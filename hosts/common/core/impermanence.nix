@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: {
   # to allow all users to access hm managed persistent folders
@@ -38,5 +39,17 @@
       ++ lib.lists.optionals config.hardware.bluetooth.enable [
         "/var/lib/bluetooth"
       ];
+  };
+
+  # After importing the rpool, rollback the root system to be empty.
+  boot.initrd.systemd.services.impermanence-root = {
+    wantedBy = ["initrd.target"];
+    after = ["zfs-import-rpool.service"];
+    before = ["sysroot.mount"];
+    unitConfig.DefaultDependencies = "no";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.zfs}/bin/zfs rollback -r rpool/local/root@blank";
+    };
   };
 }

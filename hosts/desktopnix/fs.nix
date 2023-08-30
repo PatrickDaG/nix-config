@@ -7,7 +7,7 @@
     disk = {
       m2-ssd = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disk.m2-ssd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.m2-ssd}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
@@ -20,7 +20,7 @@
       };
       sata-ssd = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disk.sata-ssd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.sata-ssd}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
@@ -31,7 +31,7 @@
       };
       sata-hdd = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disk.sata-hdd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.sata-hdd}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";

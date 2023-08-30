@@ -18,8 +18,6 @@
     ../common/hardware/yubikey.nix
     ../common/hardware/zfs.nix
 
-    ./smb-mounts.nix
-
     ./net.nix
     ./fs.nix
 
