@@ -5,3 +5,7 @@ system = "x86_64-linux"
 [desktopnix]
 type = "nixos"
 system = "x86_64-linux"
+
+[testienix]
+type = "nixos"
+system = "x86_64-linux"

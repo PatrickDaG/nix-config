@@ -44,6 +44,7 @@
 ## Hosts
 - `patricknix` my main laptop
 - `desktopnix` my main desktop
+- `testienix` old laptop for testing
 
 ## Users
 - `patrick` my normal everyday unprivileged user
@@ -79,7 +80,9 @@
     2. Don't forget to add necesarry config for filesystems, etc.
 3. Generate ISO image with `nix build --print-out-paths --no-link .#images.<target-system>.live-iso`
     - This might take multiple minutes(~10)
-3. Copy ISO to usb and boot
+    - Alternatively boot an official nixos image connect with password
+3. Copy ISO to usb using dd
+3. After booting copy the installer to the live system using `nix copy --to <target> .#packages.<target-system>.installer-package.<target>`
 
 
 ## Deploy

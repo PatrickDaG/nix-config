@@ -14,7 +14,7 @@
           partitions = [
             (partEfiBoot "boot" "0%" "512MiB")
             #(partSwap "swap" "1GiB" "17GiB")
-            (partLuksZfs "rpool" "512MiB" "100%")
+            (partLuksZfs "rpool" "rpool" "512MiB" "100%")
           ];
         };
       };

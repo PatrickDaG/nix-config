@@ -5,9 +5,9 @@
 }: {
   disko.devices = {
     disk = {
-      m2-ssd = {
+      internal-hdd = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.m2-ssd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.internal-hdd}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
@@ -18,33 +18,40 @@
           ];
         };
       };
-      sata-ssd = {
+      external-hdd-1 = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.sata-ssd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.external-hdd-1}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
           partitions = [
-            (partLuksZfs "infantry-fighting-vehicle" "infantry-fighting-vehicle" "0%" "100%")
+            (partLuksZfs "panzer-1" "panzer" "0%" "100%")
           ];
         };
       };
-      sata-hdd = {
+      external-hdd-2 = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.sata-hdd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.external-hdd-2}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
           partitions = [
-            (partLuksZfs "panzer" "panzer" "0%" "100%")
+            (partLuksZfs "panzer-2" "panzer" "0%" "100%")
           ];
         };
       };
     };
+
     zpool = with lib.disko.zfs; {
       rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
-      infantry-fighting-vehicle = defaultZpoolOptions // {datasets = {};};
-      panzer = defaultZpoolOptions // {datasets = {};};
+      panzer =
+        defaultZpoolOptions
+        // {
+          datasets = {
+            "save" = unmountable;
+            "safe/data" = filesystem "/data";
+          };
+        };
     };
   };
 }

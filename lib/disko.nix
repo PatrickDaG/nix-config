@@ -22,7 +22,7 @@ inputs: self: super: {
               randomEncryption = true;
             };
           };
-          partLuksZfs = name: start: end: {
+          partLuksZfs = name: pool: start: end: {
             inherit start end;
             name = "enc-${name}";
             content = {
@@ -31,7 +31,7 @@ inputs: self: super: {
               extraOpenArgs = ["--allow-discard"];
               content = {
                 type = "zfs";
-                pool = name;
+                inherit pool;
               };
             };
           };
