@@ -10,6 +10,8 @@
   programs.firefox = {
     enable = true;
     profiles.patrick = {
+      # For this to work you need to enable about:config
+      # toolkit.legacyUserProfileCustomizations.stylesheets = true
       userChrome = ''
         #TabsToolbar {
         visibility: collapse;
