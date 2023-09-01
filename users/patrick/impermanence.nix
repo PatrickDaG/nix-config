@@ -16,6 +16,7 @@
 
         # for electron signal app state
         ".config/signal"
+        ".config/discord"
       ];
     };
   };
