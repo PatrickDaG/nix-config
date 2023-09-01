@@ -11,7 +11,7 @@
 
   systemd.network.networks = {
     "01-lan1" = {
-      DHCP = "yes";
+      address = ["192.168.178.31/24"];
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";

@@ -4,7 +4,7 @@
   };
   systemd.network.networks = {
     "01-lan1" = {
-      DHCP = "yes";
+      address = ["192.168.178.30/24"];
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       dns = ["192.168.178.2"];
       networkConfig = {
