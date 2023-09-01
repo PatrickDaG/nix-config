@@ -8,9 +8,14 @@
         "*" = {
           xkb_layout = "de";
           xkb_variant = "bone";
-          repeat_delay = "350";
+          repeat_delay = "235";
           repeat_rate = "60";
+          accel_profile = "flat";
         };
+      };
+      focus = {
+        followMouse = false;
+        mouseWarping = false;
       };
     };
   };
