@@ -14,7 +14,7 @@
           partitions = [
             (partEfiBoot "boot" "0%" "1GiB")
             (partSwap "swap" "1GiB" "17GiB")
-            (partLuksZfs "rpool" "rpool" "17GiB" "100%")
+            (lib.attrsets.recursiveUpdate (partLuksZfs "rpool" "rpool" "17GiB" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
           ];
         };
       };
@@ -25,7 +25,7 @@
           type = "table";
           format = "gpt";
           partitions = [
-            (partLuksZfs "panzer-1" "panzer" "0%" "100%")
+            (lib.attrsets.recursiveUpdate (partLuksZfs "panzer-1" "panzer" "0%" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
           ];
         };
       };
@@ -36,7 +36,7 @@
           type = "table";
           format = "gpt";
           partitions = [
-            (partLuksZfs "panzer-2" "panzer" "0%" "100%")
+            (lib.attrsets.recursiveUpdate (partLuksZfs "panzer-2" "panzer" "0%" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
           ];
         };
       };
@@ -54,4 +54,6 @@
         };
     };
   };
+
+  boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
 }

@@ -16,8 +16,21 @@
         user = "root";
         inherit identityFile;
       };
+
       "patricknix" = {
         hostname = "patricknix.local";
+        user = "root";
+        inherit identityFile;
+      };
+
+      "testienix" = {
+        hostname = "192.168.178.74";
+        user = "root";
+        inherit identityFile;
+      };
+
+      "desktopnix" = {
+        hostname = "192.168.178.176";
         user = "root";
         inherit identityFile;
       };

@@ -28,7 +28,7 @@ inputs: self: super: {
             content = {
               type = "luks";
               name = "enc-${name}";
-              extraOpenArgs = ["--allow-discard"];
+              extraOpenArgs = ["--allow-discards"];
               content = {
                 type = "zfs";
                 inherit pool;

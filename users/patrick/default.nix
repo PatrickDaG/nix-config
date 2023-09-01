@@ -5,7 +5,7 @@
 }: {
   # enable nixos wide hyprland config
   imports = [
-    ../../hosts/common/graphical/hyprland.nix
+    #../../hosts/common/graphical/hyprland.nix
   ];
 
   users.users.patrick = {
@@ -31,7 +31,7 @@
       ./impermanence.nix
       ../common
       ../common/interactive.nix
-      ../common/graphical.nix
+      ../common/graphical
     ];
   };
 }

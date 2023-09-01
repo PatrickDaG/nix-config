@@ -47,4 +47,6 @@
       panzer = defaultZpoolOptions // {datasets = {};};
     };
   };
+  boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
+  boot.initrd.luks.devices.enc-infantry-fighting-vehicle.allowDiscards = true;
 }

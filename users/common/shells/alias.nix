@@ -24,6 +24,5 @@ _: {
     rg = "rg -S";
 
     zf = "zathura --fork";
-    hypr = "Hyprland";
   };
 }

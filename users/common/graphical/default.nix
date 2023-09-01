@@ -1,9 +1,9 @@
 {pkgs, ...}: {
   imports = [
-    ./graphical/kitty.nix
-    ./graphical/hyprland
-    ./graphical/rofi.nix
-    ./graphical/firefox.nix
+    ./kitty.nix
+    ./sway
+    ./rofi.nix
+    ./firefox.nix
   ];
   home = {
     packages = with pkgs; [

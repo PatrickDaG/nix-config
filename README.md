@@ -83,6 +83,11 @@
     - Alternatively boot an official nixos image connect with password
 3. Copy ISO to usb using dd
 3. After booting copy the installer to the live system using `nix copy --to <target> .#packages.<target-system>.installer-package.<target>`
+4. Run the installer script from the nix store of the live system
+    - you can get the path using `nix path-info .#packages.<target-system>.installer-package.<target>`
+4. Export all zpools and reboot into system
+6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub
+5. Deploy system using colmena
 
 
 ## Deploy

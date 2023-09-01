@@ -22,7 +22,7 @@
   boot = {
     initrd.systemd.enable = true;
     initrd.systemd.emergencyAccess = true;
-    initrd.availableKernelModules = ["xhci_pci" "nvme" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc"];
+    initrd.availableKernelModules = ["xhci_pci" "nvme" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" "ahci" "uas"];
     supportedFilesystems = ["ntfs"];
     kernelModules = ["kvm-intel"];
     tmp.useTmpfs = true;

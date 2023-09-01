@@ -1,5 +1,8 @@
 {pkgs, ...}: {
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enableNvidiaPatches = true;
+    enable = true;
+  };
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;

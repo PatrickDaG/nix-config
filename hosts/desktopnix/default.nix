@@ -13,6 +13,7 @@
 
     ../common/hardware/bluetooth.nix
     ../common/hardware/intel.nix
+    ../common/hardware/nvidia.nix
     ../common/hardware/physical.nix
     ../common/hardware/pipewire.nix
     ../common/hardware/yubikey.nix

@@ -7,6 +7,10 @@
       DHCP = "yes";
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       dns = ["192.168.178.2"];
+      networkConfig = {
+        IPv6PrivacyExtensions = "yes";
+        MulticastDNS = true;
+      };
     };
   };
 }
