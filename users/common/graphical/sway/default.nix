@@ -6,6 +6,7 @@
   home.packages = [
     pkgs.wdisplays
   ];
+  home.sessionVariables.NIXOS_OZONE_WL = 1;
   wayland.windowManager.sway = {
     enable = true;
     config = {
