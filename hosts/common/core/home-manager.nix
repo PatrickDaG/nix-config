@@ -14,7 +14,6 @@
         home.stateVersion = stateVersion;
       }
       inputs.impermanence.nixosModules.home-manager.impermanence
-      inputs.hyprland.homeManagerModules.default
     ];
     extraSpecialArgs = {
       nixosConfig = config;

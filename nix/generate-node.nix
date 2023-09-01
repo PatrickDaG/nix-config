@@ -1,15 +1,4 @@
-{
-  self,
-  colmena,
-  home-manager,
-  impermanence,
-  nixos-hardware,
-  nixpkgs,
-  agenix,
-  agenix-rekey,
-  hyprland,
-  ...
-} @ inputs: {
+{self, ...} @ inputs: {
   name,
   # Additional modules to import
   modules ? [],

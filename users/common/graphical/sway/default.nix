@@ -4,6 +4,12 @@
     config = {
       modifier = "Mod4";
       terminal = "kitty";
+      input = {
+        "*" = {
+          xkb_layout = "de";
+          xkb_variant = "bone";
+        };
+      };
     };
   };
 }

@@ -3,9 +3,9 @@
   config,
   ...
 }: {
-  # enable nixos wide hyprland config
+  # enable nixos wide wayland config
   imports = [
-    #../../hosts/common/graphical/hyprland.nix
+    ../../hosts/common/graphical/wayland.nix
   ];
 
   users.users.patrick = {

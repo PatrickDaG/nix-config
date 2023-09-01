@@ -58,12 +58,6 @@
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      #url = "/home/patrick/Downloads/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
