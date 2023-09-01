@@ -12,6 +12,7 @@
   systemd.network.networks = {
     "01-lan1" = {
       address = ["192.168.178.31/24"];
+      gateway = ["192.168.178.1"];
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
