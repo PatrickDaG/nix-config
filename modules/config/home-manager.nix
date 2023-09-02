@@ -1,4 +1,8 @@
-{stateVersion, ...}: {
+{
+  stateVersion,
+  config,
+  ...
+}: {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -8,6 +12,9 @@
         home.stateVersion = stateVersion;
       }
     ];
+    extraSpecialArgs = {
+      nixosConfig = config;
+    };
   };
   # HM zsh needs this or else the startup order is fucked
   # and env variables will be loaded incorrectly

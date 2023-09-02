@@ -25,6 +25,7 @@ in
       shellcheck
       pre-commit
       rage
+      nix
     ];
     commands = with pkgs; [
       {
@@ -54,16 +55,7 @@ in
         # Daher der folgenda hack um zu verhindern das mein NixOS mit einer anderen nix version gebaut wird
         # als der intendeten
         value = ''
-          plugin-files = ${(pkgs.nix-plugins.override {inherit (pkgs) nix;}).overrideAttrs rec {
-            version = "10.0.0";
-
-            src = pkgs.fetchFromGitHub {
-              owner = "shlevy";
-              repo = "nix-plugins";
-              rev = version;
-              hash = "sha256-7Lo+YxpiRz0+ZLFDvYMJWWK2j0CyPDRoP1wAc+OaPJY=";
-            };
-          }}/lib/nix/plugins
+          plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
           extra-builtins-file = ${../nix}/extra-builtins.nix
         '';
       }

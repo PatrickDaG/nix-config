@@ -11,8 +11,12 @@
   };
   services.resolved = {
     enable = true;
-    # man i whish dnssec would be viable to use
+    # man I whish dnssec would be viable to use
     dnssec = "allow-downgrade";
-    llmnr = "true";
+    llmnr = "false";
+    extraConfig = ''
+      Domains=~.
+      MulticastDNS=true
+    '';
   };
 }
