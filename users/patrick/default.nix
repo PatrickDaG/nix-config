@@ -8,6 +8,7 @@
     ../../modules/graphical/wayland.nix
     ../../modules/graphical/steam.nix
     (import ../../modules/impermanence/users.nix "patrick")
+    (import ../../modules/optional/smb-mounts.nix "patrick")
     ./impermanence.nix
   ];
 

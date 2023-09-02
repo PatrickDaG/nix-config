@@ -118,7 +118,11 @@
           }
           {
             workspace = "2";
-            output = "DP-3";
+            output = "HDMI-A-1";
+          }
+          {
+            workspace = "2";
+            output = "DVI-D-1";
           }
         ];
       };
