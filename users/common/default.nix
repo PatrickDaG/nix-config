@@ -4,8 +4,6 @@
     ./shells/zsh
 
     ./programs/gpg
-
-    ./impermanence.nix
   ];
 
   home.packages = with pkgs; [

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   inputs,
   config,
   ...
@@ -14,7 +13,6 @@
     types
     mkOption
     mdDoc
-    mkIf
     literalExpression
     ;
   # If the given expression is a bare set, it will be wrapped in a function,

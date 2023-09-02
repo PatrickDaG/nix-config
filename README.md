@@ -3,11 +3,6 @@
 ## Structure
 
 - `hosts/` contain nixos configuration for hosts
-    - `common/` shared configuration modules
-        - `core/` base configuration shared on all machines
-        - `dev/` configuration enabling dev environment
-        - `graphical/` configuration for graphical environments
-        - `hardware/` configuration for hardware components
     - `<hostname>/` configuration for hosts
         - `default.nix` Toplevel system definition
         - `fs.nix` file system definiton
@@ -15,8 +10,13 @@
         - `secrets/` secrets local to this hosts
             - `secrets.nix.age` local secrets usable on deploy
             - `host.pub` host public key, needed for rekeying agenix secrets
-- `modules/` extra nixos modules
+- `modules/` extra nixos modules and shared configurations
     - `secrets.nix` module to enable deploy-time secrets
+    - `config/` base configuration used on all machines
+    - `dev/` configuration options enabling developer environment
+    - `graphical/` configuration for graphical environments
+    - `hardware/` configuration for hardware components
+    - `impermanence/` impermanence modules for hosts
 - `nix/` additional nix functions
     - `checks.nix` pre-commit checks
     - `colmena.nix` Setup for using colmena to deploy
@@ -34,7 +34,6 @@
         - `graphical/` configuration for graphical programs
         - `programs/` configuration for miscellaneous programs
         - `shells/` configuration for shells
-        - `impermanence.nix` hm-impermanence setup for users
         - `default.nix` minimal setup for all users
         - `interactive.nix` minimal setup for interactive users on a command line
         - `graphical.nix` configuration for users utilizing a graphical interface

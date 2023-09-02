@@ -5,7 +5,10 @@
 }: {
   # enable nixos wide wayland config
   imports = [
-    ../../hosts/common/graphical/wayland.nix
+    ../../modules/graphical/wayland.nix
+    ../../modules/graphical/steam.nix
+    (import ../../modules/impermanence/users.nix "patrick")
+    ./impermanence.nix
   ];
 
   users.users.patrick = {
@@ -28,7 +31,6 @@
     imports = [
       ./patrick.nix
       ./ssh.nix
-      ./impermanence.nix
       ../common
       ../common/interactive.nix
       ../common/graphical

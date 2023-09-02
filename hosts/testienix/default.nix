@@ -4,11 +4,11 @@
     inputs.nixos-hardware.nixosModules.common-pc-ssd
 
     # TODO: sollte entfernt werden für server
-    ../common/core
+    ../../modules/config
 
-    ../common/hardware/intel.nix
-    ../common/hardware/physical.nix
-    ../common/hardware/zfs.nix
+    ../../modules/hardware/intel.nix
+    ../../modules/hardware/physical.nix
+    ../../modules/hardware/zfs.nix
 
     ./net.nix
     ./fs.nix

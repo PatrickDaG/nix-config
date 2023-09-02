@@ -1,8 +1,8 @@
 {inputs, ...}: {
   imports = [
     ./efi.nix
+    ./fonts.nix
     ./home-manager.nix
-    ./impermanence.nix
     ./inputrc.nix
     ./issue.nix
     ./net.nix
@@ -11,10 +11,10 @@
     ./system.nix
     ./xdg.nix
 
-    ../../../users/root
+    ../../users/root
 
-    ../../../modules/secrets.nix
-    ../../../modules/meta.nix
+    ../secrets.nix
+    ../meta.nix
 
     inputs.home-manager.nixosModules.default
     inputs.impermanence.nixosModules.impermanence

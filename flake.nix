@@ -116,7 +116,7 @@
         inherit pkgs;
         modules = [
           ./nix/installer-configuration.nix
-          ./hosts/common/core/ssh.nix
+          ./modules/os-conf/core/ssh.nix
           {system.stateVersion = stateVersion;}
         ];
         format =

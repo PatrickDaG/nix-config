@@ -5,22 +5,21 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
 
-    ../common/core
-    ../common/dev
+    ../../modules/config
+    ../../modules/dev
 
-    ../common/graphical/fonts.nix
-    ../common/graphical/steam.nix
+    ../../modules/impermanence
 
-    ../common/hardware/bluetooth.nix
-    ../common/hardware/intel.nix
-    ../common/hardware/laptop.nix
-    ../common/hardware/physical.nix
-    ../common/hardware/pipewire.nix
-    ../common/hardware/yubikey.nix
-    ../common/hardware/zfs.nix
+    ../../modules/hardware/bluetooth.nix
+    ../../modules/hardware/laptop.nix
+    ../../modules/hardware/intel.nix
+    ../../modules/hardware/nvidia.nix
+    ../../modules/hardware/physical.nix
+    ../../modules/hardware/pipewire.nix
+    ../../modules/hardware/yubikey.nix
+    ../../modules/hardware/zfs.nix
 
-    ../common/hardware/nvidia.nix
-    ../common/hardware/prime-offload.nix
+    ../../modules/hardware/prime-offload.nix
 
     ./net.nix
     ./fs.nix

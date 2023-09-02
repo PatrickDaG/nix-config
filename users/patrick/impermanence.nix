@@ -1,17 +1,12 @@
 {
-  config,
-  pkgs,
-  ...
-}: {
-  home = {
-    persistence."/state/${config.home.homeDirectory}" = {
-      allowOther = true;
-      directories = pkgs.lib.impermanence.makeSymlinks [
+  environment = {
+    persistence."/state".users.patrick = {
+      directories = [
         "repos"
         "Downloads"
 
         # For nextcloud client install
-        "./Nextcloud"
+        "Nextcloud"
         ".config/Nextcloud"
 
         # for electron signal app state
