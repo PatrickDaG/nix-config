@@ -17,8 +17,10 @@
         menu = "rofi -show run";
         input = {
           "*" = {
-            xkb_layout = "de";
-            xkb_variant = "bone";
+            xkb_layout = "de,de";
+            # games are stupid so the main ui has to be de() without bone
+            xkb_variant = ",bone";
+            xkb_options = "grp:win_space_toggle";
             repeat_delay = "235";
             repeat_rate = "60";
             accel_profile = "flat";

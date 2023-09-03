@@ -7,9 +7,13 @@ userName: {
     users.${userName} = let
       hmConfig = config.home-manager.users.${userName};
     in {
-      files = [
-        ".ssh/known_hosts"
-      ];
+      files = with lib.lists;
+        [
+          ".ssh/known_hosts"
+        ]
+        ++ optionals hmConfig.programs.rofi.enable [
+          ".cache/rofi-3.runcache"
+        ];
       directories = with lib.lists;
         []
         ++
@@ -38,6 +42,7 @@ userName: {
         [
           ".local/share/Steam"
           ".steam"
+          # Ken follets pillars of earth
           ".local/share//Daedalic Entertainment GmbH/"
         ];
     };
