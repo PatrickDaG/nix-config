@@ -2,6 +2,8 @@
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;
+    # allow mdns port
+    firewall.allowedUDPPorts = [5353];
   };
   systemd.network = {
     enable = true;

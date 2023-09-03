@@ -18,19 +18,19 @@
       };
 
       "patricknix" = {
-        hostname = "192.168.178.31";
+        hostname = "patricknix.local";
         user = "root";
         inherit identityFile;
       };
 
       "testienix" = {
-        hostname = "192.168.178.32";
+        hostname = "testienix.local";
         user = "root";
         inherit identityFile;
       };
 
       "desktopnix" = {
-        hostname = "192.168.178.30";
+        hostname = "desktopnix.local";
         user = "root";
         inherit identityFile;
       };
