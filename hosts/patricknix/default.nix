@@ -23,7 +23,6 @@
 
     ./net.nix
     ./fs.nix
-    ./smb-mounts.nix
     ./wireguard.nix
 
     ../../users/patrick

@@ -3,12 +3,14 @@
     useNetworkd = true;
     dhcpcd.enable = false;
   };
-  # Should remain enabled since nscd from glibc is kinda ass
-  services.nscd.enableNsncd = true;
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
   };
+  system.nssDatabases.hosts = lib.mkMerge [
+    (lib.mkBefore ["mdns_minimal [NOTFOUND=return]"])
+    (lib.mkAfter ["mdns"])
+  ];
   services.resolved = {
     enable = true;
     # man I whish dnssec would be viable to use
