@@ -15,6 +15,7 @@
 
     ../secrets.nix
     ../meta.nix
+    ../smb-mounts.nix
 
     inputs.home-manager.nixosModules.default
     inputs.impermanence.nixosModules.impermanence

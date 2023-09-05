@@ -7,6 +7,12 @@
       "MOZ_WEBRENDER" = 1;
     };
   };
+  xdg.mimeApps.defaultApplications = {
+    "text/html" = ["firefox.desktop"];
+    "text/xml" = ["firefox.desktop"];
+    "x-scheme-handler/http" = ["firefox.desktop"];
+    "x-scheme-handler/https" = ["firefox.desktop"];
+  };
   programs.firefox = {
     enable = true;
     profiles.patrick = {

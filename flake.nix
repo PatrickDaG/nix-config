@@ -2,6 +2,10 @@
   description = "patricks tolle nix config";
 
   inputs = {
+    nixpkgs-wayland = {
+      url = "github:nix-community/nixpkgs-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # to prevent multiple instances of systems
@@ -106,7 +110,11 @@
     }
     // flake-utils.lib.eachDefaultSystem (system: rec {
       pkgs = import nixpkgs {
-        overlays = import ./lib inputs;
+        overlays =
+          import ./lib inputs
+          ++ [
+            inputs.nixpkgs-wayland.overlay
+          ];
         inherit system;
         # TODO fix this to only allow specific unfree packages
         config.allowUnfree = true;

@@ -104,40 +104,46 @@
           "${cfg.modifier}+Shift+9" = "move container to workspace number 9";
         };
       }
-      // lib.optionalAttrs (nixosConfig.networking.hostName == "desktopnix") {
-        output = {
-          DVI-D-1 = {
-            mode = "1920x1080@60Hz";
-            pos = "0,0";
+      // {
+        desktopnix = {
+          output = {
+            DVI-D-1 = {
+              mode = "1920x1080@60Hz";
+              pos = "0,0";
+            };
+            HDMI-A-1 = {
+              mode = "1920x1080@60Hz";
+              pos = "0,1080";
+            };
+            DP-3 = {
+              mode = "2560x1440@143.998Hz";
+              pos = "1920,720";
+            };
           };
-          HDMI-A-1 = {
-            mode = "1920x1080@60Hz";
-            pos = "0,1080";
-          };
-          DP-3 = {
-            mode = "2560x1440@143.998Hz";
-            pos = "1920,720";
-          };
+          workspaceOutputAssign = [
+            {
+              workspace = "1";
+              output = "DP-3";
+            }
+            {
+              workspace = "2";
+              output = "HDMI-A-1";
+            }
+            {
+              workspace = "2";
+              output = "DVI-D-1";
+            }
+          ];
         };
-        workspaceOutputAssign = [
-          {
-            workspace = "1";
-            output = "DP-3";
-          }
-          {
-            workspace = "2";
-            output = "HDMI-A-1";
-          }
-          {
-            workspace = "2";
-            output = "DVI-D-1";
-          }
-        ];
-      };
+      }
+      .${nixosConfig.node.name}
+      or {};
   };
   # Cursor invisible
   home.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = 1;
     NIXOS_OZONE_WL = 1;
+    # opengl backend flickers, also vulkan is love.
+    WLR_RENDERER = "vulkan";
   };
 }
