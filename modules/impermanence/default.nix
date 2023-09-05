@@ -4,6 +4,7 @@
   pkgs,
   ...
 }: {
+  imports = [./users.nix];
   # to allow all users to access hm managed persistent folders
   programs.fuse.userAllowOther = true;
   fileSystems."/state".neededForBoot = true;

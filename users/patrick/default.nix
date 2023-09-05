@@ -7,7 +7,6 @@
   imports = [
     ../../modules/graphical/wayland.nix
     ../../modules/graphical/steam.nix
-    (import ../../modules/impermanence/users.nix "patrick")
     (import ../../modules/optional/smb-mounts.nix "patrick")
     ./impermanence.nix
   ];
@@ -33,6 +32,7 @@
       ./patrick.nix
       ./ssh.nix
       ../common
+      ../common/impermanence.nix
       ../common/interactive.nix
       ../common/graphical
     ];

@@ -25,6 +25,8 @@
             repeat_rate = "60";
             accel_profile = "flat";
             pointer_accel = "0.5";
+          };
+          "type:touchpad" = {
             natural_scroll = "enabled";
           };
         };
