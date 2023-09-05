@@ -10,9 +10,9 @@
     types
     flip
     attrNames
-    toString
     mkMerge
     concatMap
+    optional
     ;
   baseOptions = [
     "x-systemd.idle-timeout=60"
@@ -26,12 +26,12 @@ in {
       options.home.smb = mkOption {
         description = "Samba shares to be mountable under $HOME/smb";
         default = [];
-        type = types.listOf (types.submodule {
+        type = types.listOf (types.submodule ({config, ...}: {
           options = {
             localPath = mkOption {
               description = "The path under which the share will be mounted. Defaults to the remotePath";
               type = types.str;
-              default = null;
+              default = config.remotePath;
             };
             address = mkOption {
               description = "The remote share address";
@@ -50,10 +50,10 @@ in {
             automatic = mkOption {
               description = "Whether this share should be automatically mounted on boot";
               default = false;
-              type = types.boolean;
+              type = types.bool;
             };
           };
-        });
+        }));
       };
     }
   ];
@@ -69,24 +69,22 @@ in {
           (attrNames config.home-manager.users)
           (
             user: let
-              parentPath = "${config.home-manager.users.${user}.home.homeDirectory}/smb";
+              parentPath = "/home/${user}/smb";
               cfg = config.home-manager.users.${user}.home.smb;
+              inherit (config.users.users.${user}) uid;
+              inherit (config.users.groups.${user}) gid;
             in
               flip map cfg (
                 cfg: {
-                  "${parentPath}/${cfg.localpath or cfg.remotePath}" = let
+                  "${parentPath}/${cfg.localPath}" = let
                     options =
                       baseOptions
                       ++ [
-                        "uid=${toString config.users.users.${user}.uid}"
-                        "gid=${toString config.users.groups.${user}.gid}"
+                        "uid=${toString uid}"
+                        "gid=${toString gid}"
                         "credentials=${cfg.credentials}"
-                        "${
-                          if cfg.automatic
-                          then ""
-                          else "noauto"
-                        }"
-                      ];
+                      ]
+                      ++ (optional (!cfg.automatic) "noauto");
                   in {
                     inherit options;
                     device = "//${cfg.address}/${cfg.remotePath}";

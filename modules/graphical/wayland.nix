@@ -2,7 +2,7 @@
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;
-    wlr.enable = false;
+    wlr.enable = true;
     extraPortals = with pkgs; [xdg-desktop-portal-wlr];
   };
   environment.systemPackages = with pkgs; [
