@@ -1,8 +1,7 @@
-{config, ...}: {
-  age.secrets.smb-creds.rekeyFile = ../../secrets/smb.cred.age;
+{nixosConfig, ...}: {
   home.smb = let
     address = "192.168.178.2";
-    credentials = config.age.secrets.smb-creds.path;
+    credentials = nixosConfig.age.secrets.smb-creds.path;
   in [
     {
       inherit address credentials;

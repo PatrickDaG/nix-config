@@ -11,7 +11,8 @@
     flip
     attrNames
     toString
-    flatten
+    mkMerge
+    concatMap
     ;
   baseOptions = [
     "x-systemd.idle-timeout=60"
@@ -24,8 +25,8 @@ in {
     {
       options.home.smb = mkOption {
         description = "Samba shares to be mountable under $HOME/smb";
-        default = {};
-        type = types.listOf types.submodule {
+        default = [];
+        type = types.listOf (types.submodule {
           options = {
             localPath = mkOption {
               description = "The path under which the share will be mounted. Defaults to the remotePath";
@@ -52,45 +53,49 @@ in {
               type = types.boolean;
             };
           };
-        };
+        });
       };
     }
   ];
 
-  imports = flatten (
-    flip
-    map
-    (attrNames config.home-manager.users)
-    (
-      user: let
-        parentPath = "${config.home-manager.users.${user}.homeDir}/smb";
-        cfg = config.home-manager.users.user.smb;
-      in
-        flip map cfg (
-          cfg: {
-            environment.systemPackages = [pkgs.cifs-utils];
-            fileSystems = {
-              "${parentPath}/${cfg.localpath or cfg.remotePath}" = let
-                options =
-                  baseOptions
-                  ++ [
-                    "uid=${toString config.users.users.${user}.uid}"
-                    "gid=${toString config.users.groups.${user}.gid}"
-                    "credentials=${cfg.credentials}"
-                    "${
-                      if cfg.automatic
-                      then ""
-                      else "noauto"
-                    }"
-                  ];
-              in {
-                inherit options;
-                device = "//${cfg.address}/${cfg.remotePath}";
-                fsType = "cifs";
-              };
-            };
-          }
-        )
-    )
-  );
+  imports = [
+    {
+      environment.systemPackages = [pkgs.cifs-utils];
+      fileSystems =
+        mkMerge
+        (
+          flip
+          concatMap
+          (attrNames config.home-manager.users)
+          (
+            user: let
+              parentPath = "${config.home-manager.users.${user}.home.homeDirectory}/smb";
+              cfg = config.home-manager.users.${user}.home.smb;
+            in
+              flip map cfg (
+                cfg: {
+                  "${parentPath}/${cfg.localpath or cfg.remotePath}" = let
+                    options =
+                      baseOptions
+                      ++ [
+                        "uid=${toString config.users.users.${user}.uid}"
+                        "gid=${toString config.users.groups.${user}.gid}"
+                        "credentials=${cfg.credentials}"
+                        "${
+                          if cfg.automatic
+                          then ""
+                          else "noauto"
+                        }"
+                      ];
+                  in {
+                    inherit options;
+                    device = "//${cfg.address}/${cfg.remotePath}";
+                    fsType = "cifs";
+                  };
+                }
+              )
+          )
+        );
+    }
+  ];
 }

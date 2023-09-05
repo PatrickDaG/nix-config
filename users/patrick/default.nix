@@ -25,6 +25,7 @@
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
+  age.secrets.smb-creds.rekeyFile = ../../secrets/smb.cred.age;
 
   home-manager.users.patrick = {
     imports = [

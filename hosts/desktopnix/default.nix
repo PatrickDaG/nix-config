@@ -18,6 +18,8 @@
     ../../modules/hardware/yubikey.nix
     ../../modules/hardware/zfs.nix
 
+    ../../modules/optional/streamdeck.nix
+
     ./net.nix
     ./fs.nix
 

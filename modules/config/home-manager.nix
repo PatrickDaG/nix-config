@@ -13,7 +13,7 @@
       }
     ];
     extraSpecialArgs = {
-      nixosConfig = config;
+      #nixosConfig = config;
     };
   };
   # HM zsh needs this or else the startup order is fucked
