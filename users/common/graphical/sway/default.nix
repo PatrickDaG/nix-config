@@ -25,6 +25,7 @@
             repeat_rate = "60";
             accel_profile = "flat";
             pointer_accel = "0.5";
+            natural_scroll = "enabled";
           };
         };
 
@@ -36,7 +37,7 @@
         left = "n";
         right = "s";
         up = "l";
-        bindkeysToCode = true;
+        #bindkeysToCode = true;
         window.titlebar = false;
         keybindings = let
           cfg = config.wayland.windowManager.sway.config;
@@ -76,6 +77,9 @@
 
           "${cfg.modifier}+f" = "floating toggle";
           "${cfg.modifier}+space" = "focus mode_toggle";
+
+          "${cfg.modifier}+Comma" = "workspace prev";
+          "${cfg.modifier}+Period" = "workspace next";
 
           "${cfg.modifier}+1" = "workspace number 1";
           "${cfg.modifier}+2" = "workspace number 2";
