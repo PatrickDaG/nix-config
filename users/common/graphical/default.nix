@@ -16,7 +16,7 @@
       pinentry
       feh
       galaxy-buds-client
-      netflix
+      mpv
     ];
   };
 

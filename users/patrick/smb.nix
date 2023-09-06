@@ -15,10 +15,12 @@
     {
       inherit address credentials;
       remotePath = "patri-paperless";
+      automatic = true;
     }
     {
       inherit address credentials;
       remotePath = "media";
+      automatic = true;
     }
   ];
 }
