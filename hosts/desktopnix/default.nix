@@ -12,6 +12,7 @@
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/intel.nix
+    ../../modules/hardware/nintendo.nix
     ../../modules/hardware/nvidia.nix
     ../../modules/hardware/physical.nix
     ../../modules/hardware/pipewire.nix
