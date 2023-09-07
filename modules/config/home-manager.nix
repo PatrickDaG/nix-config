@@ -12,9 +12,6 @@
         home.stateVersion = stateVersion;
       }
     ];
-    extraSpecialArgs = {
-      #nixosConfig = config;
-    };
   };
   # HM zsh needs this or else the startup order is fucked
   # and env variables will be loaded incorrectly

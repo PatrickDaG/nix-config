@@ -2,9 +2,12 @@
   home = {
     sessionVariables = {
       # Firefox touch support
-      "MOZ_USE_XINPUT2" = 1;
+      MOZ_USE_XINPUT2 = 1;
       # Firefox Hardware render
-      "MOZ_WEBRENDER" = 1;
+      MOZ_WEBRENDER = 1;
+      LIBVA_DRIVER_NAME = "nvidia";
+      NVD_BACKEND = "direct";
+      MOZ_DISABLE_RDD_SANDBOX = 1;
     };
   };
   xdg.mimeApps.defaultApplications = {

@@ -118,6 +118,7 @@
             DP-3 = {
               mode = "2560x1440@143.998Hz";
               pos = "1920,720";
+              adaptive_sync = "on";
             };
           };
           workspaceOutputAssign = [
@@ -144,6 +145,6 @@
     WLR_NO_HARDWARE_CURSORS = 1;
     NIXOS_OZONE_WL = 1;
     # opengl backend flickers, also vulkan is love.
-    WLR_RENDERER = "vulkan";
+    #WLR_RENDERER = "vulkan";
   };
 }

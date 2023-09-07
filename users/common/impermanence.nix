@@ -9,7 +9,7 @@
         ".ssh/known_hosts"
       ]
       ++ optionals config.programs.rofi.enable [
-        ".cache/rofi-3.runcache"
+        #".cache/rofi-3.runcache"
       ];
     directories = with lib.lists;
       []

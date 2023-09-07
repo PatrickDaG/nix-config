@@ -19,6 +19,8 @@
         ".steam"
         # Ken follets pillars of earth
         ".local/share//Daedalic Entertainment GmbH/"
+        # Nvidia shader cache
+        ".cache/nvidia"
       ];
     };
   };
