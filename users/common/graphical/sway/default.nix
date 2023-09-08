@@ -14,7 +14,7 @@
       {
         modifier = "Mod4";
         terminal = "kitty";
-        menu = "rofi -show run";
+        menu = "fuzzel";
         input = {
           "*" = {
             xkb_layout = "de,de";

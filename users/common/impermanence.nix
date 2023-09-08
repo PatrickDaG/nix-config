@@ -4,13 +4,10 @@
   ...
 }: {
   home.persistence."/state" = {
-    files = with lib.lists;
-      [
-        ".ssh/known_hosts"
-      ]
-      ++ optionals config.programs.rofi.enable [
-        #".cache/rofi-3.runcache"
-      ];
+    files = with lib.lists; [
+      ".ssh/known_hosts"
+      ".cache/fuzzel"
+    ];
     directories = with lib.lists;
       []
       ++

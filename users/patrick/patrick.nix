@@ -3,7 +3,6 @@
     packages = with pkgs; [
       nextcloud-client
       discord
-      sirula
     ];
   };
 }

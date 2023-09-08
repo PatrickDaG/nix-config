@@ -1,4 +1,17 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  inherit
+    (pkgs)
+    fetchFromGitHub
+    ;
+  inherit
+    (builtins)
+    readFile
+    ;
+in {
   home = {
     sessionVariables = {
       # Firefox touch support
@@ -19,8 +32,6 @@
   programs.firefox = {
     enable = true;
     profiles.patrick = {
-      # For this to work you need to enable about:config
-      # toolkit.legacyUserProfileCustomizations.stylesheets = true
       userChrome = ''
         #TabsToolbar {
         visibility: collapse;
@@ -34,6 +45,19 @@
             height: 32px !important;
         }
       '';
+      settings = {
+        # user chrome soll funzen
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        # nvidia hardware video decode
+        # https://github.com/elFarto/nvidia-vaapi-driver
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.rdd-ffmpeg.enabled" = true;
+        "gfx.x11-egl.force-enabled" = true;
+        # enable if grapics card support av1
+        "media.av1.enabled" = false;
+        "widget.dmabuf.force-enabled" = true;
+        # privacy is mir auch wichtig
+      };
     };
   };
 }

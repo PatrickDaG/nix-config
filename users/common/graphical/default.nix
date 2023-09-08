@@ -2,7 +2,7 @@
   imports = [
     ./kitty.nix
     ./sway
-    ./rofi.nix
+    ./fuzzel.nix
     ./firefox.nix
   ];
   home = {
