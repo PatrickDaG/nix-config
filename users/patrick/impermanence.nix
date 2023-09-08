@@ -21,6 +21,10 @@
         ".local/share//Daedalic Entertainment GmbH/"
         # Nvidia shader cache
         ".cache/nvidia"
+        # lutris cache
+        ".local/share/lutris"
+        # lutric games
+        "Games"
       ];
     };
   };
