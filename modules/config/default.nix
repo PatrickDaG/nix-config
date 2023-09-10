@@ -1,5 +1,6 @@
 {inputs, ...}: {
   imports = [
+    ./boot.nix
     ./efi.nix
     ./fonts.nix
     ./home-manager.nix

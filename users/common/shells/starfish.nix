@@ -1,6 +1,7 @@
 {lib, ...}: {
   programs.starship = {
     enable = true;
+    enableNushellIntegration = false;
     settings = {
       add_newline = false;
       format = lib.concatStrings [

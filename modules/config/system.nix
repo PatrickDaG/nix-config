@@ -19,15 +19,6 @@
       lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
       pubkeyPath;
   };
-  boot = {
-    initrd.systemd.enable = true;
-    initrd.systemd.emergencyAccess = true;
-    initrd.availableKernelModules = ["xhci_pci" "nvme" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" "ahci" "uas"];
-    supportedFilesystems = ["ntfs"];
-    kernelModules = ["kvm-intel"];
-    tmp.useTmpfs = true;
-  };
-
   security.sudo.enable = false;
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
