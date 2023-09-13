@@ -21,4 +21,4 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
 fi
 
 autorandr -c
-exec herbstluftwm --locked
+exec i3

@@ -4,5 +4,6 @@
     ./rofi.nix
     ./polybar.nix
     ./autorandr.nix
+    ./i3.nix
   ];
 }
