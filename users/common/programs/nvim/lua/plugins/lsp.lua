@@ -95,17 +95,18 @@ return {
 				"ray-x/lsp_signature.nvim",
 				config = true,
 			},
-			{
-				"tzachar/cmp-tabnine",
-				build = "./install.sh",
-			},
+			-- tabnine opens login window on boot
+			-- {
+			-- 	"tzachar/cmp-tabnine",
+			-- 	build = "./install.sh",
+			-- },
 		},
 		config = function()
 			local cmp = require("cmp")
 			cmp.setup({
 				sources = {
 					{ name = "luasnip" },
-					{ name = "cmp_tabnine" },
+					--{ name = "cmp_tabnine" },
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
 					{ name = "buffer" },

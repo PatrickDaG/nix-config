@@ -6,6 +6,7 @@
   # enable nixos wide wayland config
   imports = [
     ../../modules/graphical/wayland.nix
+    ../../modules/graphical/xserver.nix
     ../../modules/graphical/steam.nix
     ./impermanence.nix
   ];
@@ -26,6 +27,7 @@
     gnome3.adwaita-icon-theme
   ];
   age.secrets.smb-creds.rekeyFile = ../../secrets/smb.cred.age;
+  programs.dconf.enable = true;
 
   home-manager.users.patrick = {
     imports = [

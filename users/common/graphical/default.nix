@@ -1,8 +1,8 @@
 {pkgs, ...}: {
   imports = [
     ./kitty.nix
-    ./sway
-    ./fuzzel.nix
+    ./wayland
+    ./Xorg
     ./firefox.nix
   ];
   home = {
