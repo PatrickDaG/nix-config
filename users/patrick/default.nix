@@ -5,7 +5,6 @@
 }: {
   # enable nixos wide wayland config
   imports = [
-    ../../modules/graphical/wayland.nix
     ../../modules/graphical/xserver.nix
     ../../modules/graphical/steam.nix
     ./impermanence.nix
@@ -34,10 +33,13 @@
       ./patrick.nix
       ./ssh.nix
       ./smb.nix
+
       ../common
       ../common/impermanence.nix
       ../common/interactive.nix
       ../common/graphical
+
+      ../common/programs/bottles.nix
     ];
   };
 }

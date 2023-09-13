@@ -67,8 +67,8 @@ MOD: TAGS: pkgs:
 
   # Layouting
   "${MOD}-Return" = "   fullscreen toggle";
-  "${MOD}-Shift-x" = "         remove";
-  "${MOD}-Shift-v" = "         remove";
+  "${MOD}-Shift-x" = "remove";
+  "${MOD}-Shift-v" = "remove";
   "${MOD}-f" = "   floating toggle";
   "${MOD}-p" = "   pseudotile toggle";
   "${MOD}-space" = "   cycle_layout +1";
@@ -77,7 +77,6 @@ MOD: TAGS: pkgs:
   "${MOD}-t 	" = "spawn kitty";
   "${MOD}-b 	" = "pawn ${pkgs.firefox}/bin/firefox";
   "${MOD}-m 	" = "spawn ${pkgs.thunderbird}/bin/thunderbird";
-  "${MOD}-Shift-l 	" = "spawn systemctl suspend";
   "Menu" = "spawn rofi -show drun";
 }
 // builtins.listToAttrs (map (x: {

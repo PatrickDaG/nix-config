@@ -107,6 +107,11 @@ in {
             # for HD Polybar
             dpi = 96;
             height = 22;
+            modules = with lib; {
+              left = concatStringsSep " " ["left1" "title" "left2"];
+              center = concatStringsSep " " ["workspaces"];
+              right = concatStringsSep " " ["right5" "alsa" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
+            };
           };
           patricknix = {
             monitor = "DP-1";
@@ -114,6 +119,11 @@ in {
             # for UHD Polybar
             dpi = 144;
             height = 33;
+            modules = with lib; {
+              left = concatStringsSep " " ["left1" "title" "left2"];
+              center = concatStringsSep " " ["workspaces"];
+              right = concatStringsSep " " ["right5" "alsa" "right4" "battery" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
+            };
           };
         }
         .${nixosConfig.node.name}
@@ -172,15 +182,15 @@ in {
 
         label.volume = "%percentage%%";
 
-        format.muted.prefix = "%{T1}婢%{T-}";
+        format.muted.prefix = "%{T1}󰖁%{T-}";
         label.muted = " Mute";
         format.muted.background = color.shade5;
         format.muted.foreground = color.modulefg;
         format.muted.padding = "1";
 
-        ramp.volume."0" = "%{T1}奄%{T-}";
-        ramp.volume."1" = "%{T1}奔%{T-}";
-        ramp.volume."2" = "%{T1}墳%{T-}";
+        ramp.volume."0" = "%{T1}󰕿%{T-}";
+        ramp.volume."1" = "%{T1}󰖀%{T-}";
+        ramp.volume."2" = "%{T1}󰕾%{T-}";
       };
 
       "module/battery" = {
@@ -255,29 +265,39 @@ in {
         label = "%date% %time%";
 
         # Alternative date and time format
-        date = "%{T5}%{T-} %a, %d %{F#808080}%b %Y%{F-}";
-        time = "%{T5}%{T-} %H:%M:%S";
+        date = "%{T1}󰃭%{T-} %a, %d %{F#808080}%b %Y%{F-}";
+        time = "%{T1}%{T-} %H:%M:%S";
       };
 
-      "module/network" = {
-        type = "internal/network";
-        interface = "wlan0";
+      "module/network" =
+        {
+          type = "internal/network";
 
-        interval = "1.0";
-        accumulate.stats = "true";
-        unknown.as.up = "true";
+          interval = "1.0";
+          accumulate.stats = "true";
+          unknown.as.up = "true";
 
-        format-connected = "<label-connected>";
-        format-connected-background = color.shade3;
-        format-connected-foreground = color.modulefg;
-        format-connected-padding = "1";
-        label.connected = "%{F#808080}%ifname%%{F-} %{F#808080}%upspeed:8%   %downspeed:8% %{F-}";
+          format-connected = "<label-connected>";
+          format-connected-background = color.shade3;
+          format-connected-foreground = color.modulefg;
+          format-connected-padding = "1";
+          label.connected = "%{F#808080}%ifname%%{F-} %{F#808080}%upspeed:8%   %downspeed:8% %{F-}";
 
-        format.disconnected = "<label-disconnected>";
-        format.disconnected-background = color.shade3;
-        format.disconnected-foreground = color.modulefg;
-        format.disconnected-padding = "1";
-      };
+          format.disconnected = "<label-disconnected>";
+          format.disconnected-background = color.shade3;
+          format.disconnected-foreground = color.modulefg;
+          format.disconnected-padding = "1";
+        }
+        // {
+          desktopnix = {
+            interface = "enp0s31f6";
+          };
+          patricknix = {
+            interface = "wlan0";
+          };
+        }
+        .${nixosConfig.node.name}
+        or {};
 
       "module/keyboardswitcher" = {
         type = "custom/menu";
@@ -287,7 +307,7 @@ in {
         format.background = color.shade1;
         format.foreground = color.modulefg;
 
-        label.open = "%{T3}  %{T-}";
+        label.open = "%{T3}  %{T-}";
         label.close = " x ";
         label.separator = " | ";
 

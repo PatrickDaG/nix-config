@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   imports = [
     ./kitty.nix
-    ./wayland
     ./Xorg
     ./firefox.nix
   ];
@@ -22,4 +21,7 @@
 
   # notification are nice to have
   services.dunst.enable = true;
+  gtk.gtk3.extraConfig = {
+    gtk-application-prefer-dark-theme = 1;
+  };
 }
