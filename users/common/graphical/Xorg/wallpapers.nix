@@ -7,10 +7,12 @@
   exe =
     pkgs.writeShellScript "set-wallpaper"
     ''
-      for D in /tmp/.X11-unix/*; do
-      	file=$(${pkgs.coreutils}/bin/basename $D)
-      	DISPLAY=":''${file:1}" ${pkgs.feh}/bin/feh --bg-fill --randomize --recursive ${wallpaper-folder}/
-      done
+      if [ -d "/tmp/.X11-unix; then
+           for D in /tmp/.X11-unix/*; do
+           	file=$(${pkgs.coreutils}/bin/basename $D)
+           	DISPLAY=":''${file:1}" ${pkgs.feh}/bin/feh --bg-fill --randomize --recursive ${wallpaper-folder}/
+           done
+      fi
     '';
 in {
   systemd.user = {
