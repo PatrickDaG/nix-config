@@ -3,6 +3,7 @@
     ./kitty.nix
     ./Xorg
     ./firefox.nix
+    ./themes.nix
   ];
   home = {
     packages = with pkgs; [
@@ -21,7 +22,4 @@
 
   # notification are nice to have
   services.dunst.enable = true;
-  gtk.gtk3.extraConfig = {
-    gtk-application-prefer-dark-theme = 1;
-  };
 }

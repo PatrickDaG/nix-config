@@ -2,6 +2,7 @@
   config,
   pkgs,
   nixosConfig,
+  lib,
   ...
 }: {
   home.packages = [
@@ -10,8 +11,9 @@
   wayland.windowManager.sway = {
     enable = true;
     config =
+      lib.attrsets.recursiveUpdate
       (import ../sway3.nix)
-      // {
+      {
         menu = "fuzzel";
         input = {
           "*" = {

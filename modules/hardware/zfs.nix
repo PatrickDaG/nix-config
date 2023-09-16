@@ -38,4 +38,6 @@
       interval = "weekly";
     };
   };
+  # TODO remove once this is upstreamed
+  boot.initrd.systemd.services."zfs-import-rpool".after = ["cryptsetup.target"];
 }

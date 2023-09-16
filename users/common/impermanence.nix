@@ -4,12 +4,16 @@
   ...
 }: {
   home.persistence."/state" = {
-    files = with lib.lists; [
-      ".ssh/known_hosts"
-      ".cache/fuzzel"
-    ];
+    files = with lib.lists;
+      [
+        ".ssh/known_hosts"
+        ".cache/fuzzel"
+      ]
+      ++ optionals config.programs.rofi.enable [
+        ".cache/rofi3.druncache"
+      ];
     directories = with lib.lists;
-      []
+      [".config/dconf"]
       ++
       # firefox cannot be a symlink as home manager refuses put files outside your $HOME
       optionals config.programs.firefox.enable [

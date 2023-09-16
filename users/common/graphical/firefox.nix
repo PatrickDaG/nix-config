@@ -16,6 +16,7 @@
     "x-scheme-handler/http" = ["firefox.desktop"];
     "x-scheme-handler/https" = ["firefox.desktop"];
   };
+  xdg.mimeApps.enable = true;
   programs.firefox = {
     enable = true;
     profiles.patrick = {
