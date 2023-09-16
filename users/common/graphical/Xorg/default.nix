@@ -1,4 +1,5 @@
-{
+{pkgs, ...}: {
+  home.packages = [pkgs.xclip];
   imports = [
     ./herbstluft.nix
     ./rofi.nix

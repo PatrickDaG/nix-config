@@ -8,7 +8,7 @@
     x11.enable = true;
     package = pkgs.bibata-cursors;
     name = "Bibata-Original-Ice";
-    size = 24;
+    size = 18;
   };
 
   xresources.properties = {
@@ -23,7 +23,7 @@
   gtk = let
     gtk34extraConfig = {
       gtk-application-prefer-dark-theme = 1;
-      gtk-cursor-theme-size = 32;
+      gtk-cursor-theme-size = 18;
       gtk-enable-animations = true;
       gtk-xft-antialias = 1;
       gtk-xft-dpi = 96; # XXX: delete for wayland?

@@ -53,20 +53,6 @@
               adaptive_sync = "on";
             };
           };
-          workspaceOutputAssign = [
-            {
-              workspace = "1";
-              output = "DP-3";
-            }
-            {
-              workspace = "2";
-              output = "HDMI-A-1";
-            }
-            {
-              workspace = "2";
-              output = "DVI-D-1";
-            }
-          ];
         };
       }
       .${nixosConfig.node.name}
