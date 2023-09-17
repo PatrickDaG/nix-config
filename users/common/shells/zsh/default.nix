@@ -1,55 +1,83 @@
 {
   pkgs,
-  lib,
+  config,
   ...
 }: {
   imports = [
     ../starfish.nix
   ];
 
+  # for zsh-histdb
+  # TODO replace sqlite inplace with nix path
+  home.packages = [pkgs.sqlite];
+
+  # save history in xdg data home
+  home.sessionVariables.HISTDB_FILE = "${config.xdg.dataHome}/zsh/history.db";
+
   # has to be enabled to support zsh reverse search
   programs.fzf.enable = true;
 
-  programs.atuin = {
-    enable = true;
-    settings.auto_sync = false;
-  };
+  programs.carapace.enable = true;
+
+  programs.command-not-found.enable = true;
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
-    # Atuin makes completion and this really _really_ slows zsh startup time down
-    enableCompletion = false;
-    initExtra = lib.mkAfter (''
-              function atuin-prefix-search() {
-              	if out=$(${pkgs.sqlite}/bin/sqlite3 -readonly ~/.local/share/atuin/history.db \
-              	  'SELECT command FROM history WHERE command LIKE cast('"x'$(str_to_hex "$_atuin_search_prefix")'"' as text) ||
-        "%" ORDER BY timestamp DESC LIMIT 1 OFFSET '"$_atuin_search_offset"); then
-              	    [[ -z "$out" ]] && return 1
-          BUFFER=$out
-              	else
-              	  return 1
-              	fi
-
-              }; zle -N atuin-prefix-search
-      ''
-      + (builtins.readFile ./zshrc));
+    history = {
+      extended = true;
+      path = "${config.xdg.dataHome}/zsh/zsh_history";
+      save = 1000000;
+      share = false;
+    };
+    initExtra = builtins.readFile ./zshrc;
     plugins = [
       {
         name = "fzf-tab";
-        src = pkgs.fetchFromGitHub {
-          owner = "aloxaf";
-          repo = "fzf-tab";
-          rev = "5a81e13792a1eed4a03d2083771ee6e5b616b9ab";
-          sha256 = "0lfl4r44ci0wflfzlzzxncrb3frnwzghll8p365ypfl0n04bkxvl";
-        };
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
       }
       {
         name = "fast-syntax-highlighting";
-        src = pkgs.fetchFromGitHub {
-          owner = "zdharma-continuum";
-          repo = "fast-syntax-highlighting";
-          rev = "13d7b4e63468307b6dcb2dadf6150818f242cbff";
-          sha256 = "0ghzqg1xfvqh9z23aga7aafrpxbp9bpy1r8vk4avi6b80p3iwsq2";
+        src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
+      }
+      {
+        # TODO change to separate packages
+        name = "zsh-histdb";
+        src = pkgs.stdenv.mkDerivation {
+          name = "zsh-histdb";
+          src = pkgs.fetchFromGitHub {
+            owner = "larkery";
+            repo = "zsh-histdb";
+            rev = "30797f0c50c31c8d8de32386970c5d480e5ab35d";
+            hash = "sha256-PQIFF8kz+baqmZWiSr+wc4EleZ/KD8Y+lxW2NT35/bg=";
+          };
+          patchPhase = ''
+            substituteInPlace "sqlite-history.zsh" "histdb-migrate" "histdb-merge" \
+            --replace "sqlite3" "${pkgs.sqlite}/bin/sqlite3"
+          '';
+          installPhase = ''
+            mkdir -p $out
+            cp -r * $out
+          '';
+        };
+      }
+      {
+        name = "zsh-histdb-skim";
+        src = pkgs.rustPlatform.buildRustPackage rec {
+          pname = "zsh-histd-skim";
+          version = "0.8.6";
+          buildInputs = [pkgs.sqlite];
+          src = pkgs.fetchFromGitHub {
+            owner = "m42e";
+            repo = "zsh-histdb-skim";
+            rev = "v${version}";
+            hash = "sha256-lJ2kpIXPHE8qP0EBnLuyvatWMtepBobNAC09e7itGas=";
+          };
+          cargoHash = "sha256-BMy9Shy9KAx5+VbvH2WaA0wMFUNM5dqU/dssUNE1NWY=";
+          postInstall = ''
+            substituteInPlace zsh-histdb-skim-vendored.zsh \
+            --replace "zsh-histdb-skim" "$out/bin/zsh-histdb-skim"
+            cp zsh-histdb-skim-vendored.zsh $out/zsh-histdb-skim.plugin.zsh
+          '';
         };
       }
     ];

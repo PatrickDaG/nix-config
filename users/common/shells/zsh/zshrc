@@ -1,54 +1,3 @@
-function str_to_hex() {
-	local str="$1"
-	for (( i=0; i<${#str}; i++ )); do
-		printf "%02x" "'${str:$i:1}"
-	done
-}
-
-
-function atuin-prefix-search-any-end() {
-
-	if [[ -v _atuin_search_prev_buffer ]] && [[ $_atuin_search_prev_buffer == $BUFFER ]]; then
-		_atuin_search_offset=$((_atuin_search_offset + $direction))
-	else
-		[[ "$direction" == -1 ]] && return 1
-		_atuin_search_offset=0
-		_atuin_search_prefix=$LBUFFER
-		_atuin_search_orig_buffer=$BUFFER
-		_atuin_search_orig_cursor=$CURSOR
-	fi
-	if [[ "$_atuin_search_offset" -ge 0 ]] && zle atuin-prefix-search; then
-		zle .end-of-line
-		_atuin_search_prev_buffer=$BUFFER
-	else
-		if [[ $_atuin_search_offset -lt 0 ]];then
-			_atuin_search_offset=0
-			BUFFER=$_atuin_search_orig_buffer
-			CURSOR=$_atuin_search_orig_cursor
-		else
-			_atuin_search_offset=$((_atuin_search_offset - 1))
-		fi
-		return 1
-	fi
-	zle reset-prompt
-
-}; zle -N atuin-prefix-search-any-end
-
-function atuin-reset-search() {
-	unset _atuin_search_prev_buffer
-}
-
-autoload -U add-zle-hook-widget
-add-zle-hook-widget line-init atuin-reset-search
-
-function atuin-prefix-search-backward-end() {
-	direction=1 atuin-prefix-search-any-end
-}; zle -N atuin-prefix-search-backward-end
-
-function atuin-prefix-search-forward-end() {
-	direction=-1 atuin-prefix-search-any-end
-}; zle -N atuin-prefix-search-forward-end
-
 # Don't insert tabs when there is no completion (e.g. beginning of line)
 zstyle ':completion:*' insert-tab false
 
@@ -102,9 +51,6 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -lhF --group-directories-first -
 # preview windown min size
 zstyle ':fzf-tab:complete:cd:*' popup_pad 20 0
 
-# History settings
-unset HISTFILE
-
 # Emit an error when a glob has no match
 setopt nomatch
 # DisAllow extended globbing
@@ -151,6 +97,11 @@ function zshaddhistory() {
 	emulate -L zsh
 	[[ ! $1 =~ "$HISTORY_IGNORE_REGEX" ]]
 }
+
+if autoload history-search-end; then
+	zle -N history-beginning-search-backward-end history-search-end
+	zle -N history-beginning-search-forward-end  history-search-end
+fi
 
 # Delete all keybinds and use emacs-like key bindings by default:
 bindkey -d
@@ -210,6 +161,8 @@ function setup_keybinds() {
     local keys_PageDown=(       "${terminfo[knp]}"   )
     local keys_ShiftPageDown=(  "${terminfo[kNXT]}"  )
 
+    local keys_CtrlR=(  "^R"  )
+
     bindkeys keys_Home            beginning-of-line
     bindkeys keys_End             end-of-line
     bindkeys keys_Insert          nop
@@ -225,12 +178,12 @@ function setup_keybinds() {
     bindkeys keys_CtrlDelete      kill-line
     bindkeys keys_AltDelete       delete-word
 
-    bindkeys keys_Up              atuin-prefix-search-backward-end
+    bindkeys keys_Up              history-beginning-search-backward-end
     bindkeys keys_ShiftUp         up-line
     bindkeys keys_CtrlUp          nop
     bindkeys keys_AltUp           nop
 
-    bindkeys keys_Down            atuin-prefix-search-forward-end
+    bindkeys keys_Down            history-beginning-search-forward-end
     bindkeys keys_ShiftDown       down-line
     bindkeys keys_CtrlDown        nop
     bindkeys keys_AltDown         nop
@@ -251,15 +204,7 @@ function setup_keybinds() {
     bindkeys keys_PageDown        nop
     bindkeys keys_ShiftPageDown   nop
 
-    # atuin
-    bindkey '^r' _atuin_search_widget
-
-    # fzf file and directory related expansions and functions
-    bindkey '\ef' fzf-select-file-or-dir
-    bindkey '\eF' fzf-select-file-or-dir-hidden
-    bindkey '\ed' fzf-select-dir
-    bindkey '\eD' fzf-select-dir-hidden
-    bindkey '\ec' fzf-cd
+	bindkeys keys_CtrlR histdb-skim-widget
 }
 setup_keybinds
 unfunction bindkeys

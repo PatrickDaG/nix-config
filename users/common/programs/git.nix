@@ -14,6 +14,7 @@
       init.defaultBranch = "main";
       pull.ff = "only";
       pull.rebase = true;
+      push.autoSetupRemote = true;
     };
     signing = {
       key = null;

@@ -103,8 +103,8 @@ in {
     "${modifier}+f" = "floating toggle";
     "${modifier}+space" = "focus mode_toggle";
 
-    "${modifier}+Comma" = "workspace prev";
-    "${modifier}+Period" = "workspace next";
+    "${modifier}+comma" = "workspace prev_on_output";
+    "${modifier}+period" = "workspace next_on_output";
 
     "${modifier}+1" = "workspace number 1";
     "${modifier}+2" = "workspace number 2";

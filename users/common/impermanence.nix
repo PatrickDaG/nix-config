@@ -19,9 +19,6 @@
       optionals config.programs.firefox.enable [
         ".mozilla"
       ]
-      ++ optionals config.programs.atuin.enable [
-        ".local/share/atuin"
-      ]
       ++ optionals config.programs.direnv.enable [
         ".local/share/direnv"
       ]

@@ -1,4 +1,7 @@
 {
+  # nu does not allow language access to completions
+  # which makes it impossible to use custom completion menus
+  # ZSH is still unbeatable with their completions
   programs.atuin.enableNushellIntegration = false;
   programs.nushell = {
     enable = true;
