@@ -2,7 +2,7 @@
   imports = [
     ./shells/alias.nix
     ./shells/zsh
-    ./shells/nushell.nix
+    ./shells/nu
 
     ./programs/gpg
   ];

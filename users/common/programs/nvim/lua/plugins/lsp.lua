@@ -43,6 +43,11 @@ return {
 		main = "nvim-treesitter.configs",
 	},
 	{
+		"LhKipp/nvim-nu",
+		build = ":TSInstall nu",
+		config = true,
+	},
+	{
 		"neovim/nvim-lspconfig",
 		config = function()
 			local lspconfig = require("lspconfig")

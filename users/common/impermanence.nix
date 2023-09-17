@@ -25,6 +25,9 @@
       ++ optionals config.programs.direnv.enable [
         ".local/share/direnv"
       ]
+      ++ optionals config.programs.nushell.enable [
+        ".config/nushell"
+      ]
       ++ optionals config.programs.neovim.enable [
         ".local/share/nvim"
         ".local/state/nvim"
