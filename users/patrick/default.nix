@@ -40,6 +40,7 @@
       ../common/graphical
 
       ../common/programs/bottles.nix
+      ../common/programs/gdb.nix
     ];
   };
 }

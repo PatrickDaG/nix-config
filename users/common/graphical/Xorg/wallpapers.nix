@@ -41,4 +41,5 @@ in {
       };
     };
   };
+  home.persistence."/state".directories = [".local/share/wallpapers"];
 }
