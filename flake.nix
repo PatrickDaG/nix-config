@@ -116,6 +116,7 @@
       pkgs = import nixpkgs {
         overlays =
           import ./lib inputs
+          ++ import ./pkgs
           ++ [
             inputs.nixpkgs-wayland.overlay
           ];
