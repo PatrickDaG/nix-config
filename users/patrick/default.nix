@@ -41,6 +41,7 @@
 
       ../common/programs/bottles.nix
       ../common/programs/gdb.nix
+      ../common/programs/streamdeck.nix
     ];
   };
 }

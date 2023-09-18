@@ -38,7 +38,7 @@
     initExtra = builtins.readFile ./zshrc;
     # This needs to be loaded befor zsh-fast-syntax-highlighting
     # is sourced as that overwrites all widgets to redraw with highlighting
-    initExtraBeforeCompInit = ''
+    initExtraFirst = ''
       if autoload history-search-end; then
       	zle -N history-beginning-search-backward-end history-search-end
       	zle -N history-beginning-search-forward-end  history-search-end
