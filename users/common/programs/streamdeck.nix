@@ -32,8 +32,8 @@
           };
         };
         brightness = 99; # brighness value between 0 and 99
-        display_timeout = 1800; # dimmer timeout in seconds
-        brightness_dimmed = 10; # dimmed brighness
+        display_timeout = 0; # dimmer timeout in seconds
+        brightness_dimmed = 99; # dimmed brighness
       };
     };
   };
