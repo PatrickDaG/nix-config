@@ -17,9 +17,14 @@
   # has to be enabled to support zsh reverse search
   programs.fzf.enable = true;
 
-  programs.carapace.enable = true;
+  programs.carapace = {
+    enable = true;
+    # this would source all completers sadly some are worse than the builtin completers
+    enableZshIntegration = false;
+  };
 
-  programs.command-not-found.enable = true;
+  programs.nix-index.enable = true;
+  programs.nix-index-database.comma.enable = true;
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
