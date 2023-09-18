@@ -70,6 +70,20 @@ in {
             flip mapAttrs hmUserCfg.home.persistence
             (_: sourceCfg: {
               users.${user} = {
+                # This needs to be set for allo users with non
+                # standart home (not /home/<userName>
+                # due to nixpkgs it
+                # can't be deduced from homeDirectory
+                # as there will be infinite recursion
+                # If this setting is forgotten there
+                # are assertions in place warning you
+                home =
+                  {
+                    patrick = "/home/patrick";
+                    root = "/root";
+                  }
+                  .${user}
+                  or {};
                 files = mkUserFiles sourceCfg.files;
                 directories = mkUserDirs sourceCfg.directories;
               };

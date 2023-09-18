@@ -25,6 +25,7 @@
 
   programs.nix-index.enable = true;
   programs.nix-index-database.comma.enable = true;
+
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
@@ -35,6 +36,15 @@
       share = false;
     };
     initExtra = builtins.readFile ./zshrc;
+    # This needs to be loaded befor zsh-fast-syntax-highlighting
+    # is sourced as that overwrites all widgets to redraw with highlighting
+    initExtraBeforeCompInit = ''
+      if autoload history-search-end; then
+      	zle -N history-beginning-search-backward-end history-search-end
+      	zle -N history-beginning-search-forward-end  history-search-end
+      fi
+
+    '';
     plugins = [
       {
         name = "fzf-tab";
@@ -87,4 +97,7 @@
       }
     ];
   };
+  home.persistence."/state".directories = [
+    ".local/share/zsh"
+  ];
 }

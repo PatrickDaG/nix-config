@@ -97,12 +97,6 @@ function zshaddhistory() {
 	emulate -L zsh
 	[[ ! $1 =~ "$HISTORY_IGNORE_REGEX" ]]
 }
-
-if autoload history-search-end; then
-	zle -N history-beginning-search-backward-end history-search-end
-	zle -N history-beginning-search-forward-end  history-search-end
-fi
-
 # Delete all keybinds and use emacs-like key bindings by default:
 bindkey -d
 bindkey -e
