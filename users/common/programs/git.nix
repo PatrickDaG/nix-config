@@ -1,10 +1,12 @@
 {pkgs, ...}: {
+  home.shellAliases = {
+    commit-reuse-message = ''git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
+  };
   programs.git = {
     enable = true;
     difftastic.enable = true;
     aliases = {
       cs = "commit -v -S";
-      cr = "commit -v -S --edit --file \"$(git rev-parse --git-dir)\"/COMMIT_EDITMSG'";
       s = "status";
       a = "add";
       p = "push";
