@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -7,13 +6,12 @@
   # set the modifier key to WIN
   MOD = "Super";
   #set the default resize step for herbstluft
-  RESIZE_STEP = 0.05;
   TAGS = map toString (lib.lists.range 1 9);
 in {
   home.file.".xinitrc".source = ./xinitrc;
   xsession.windowManager.herbstluftwm = {
     enable = true;
-    package = pkgs.herbstluftwm.overrideAttrs (finalAttrs: previousAttrs: {
+    package = pkgs.herbstluftwm.overrideAttrs (_finalAttrs: _previousAttrs: {
       doCheck = false;
     });
     extraConfig = ''

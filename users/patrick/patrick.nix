@@ -4,7 +4,6 @@
       nextcloud-client
       discord
       netflix
-      pwndbg
     ];
   };
 }

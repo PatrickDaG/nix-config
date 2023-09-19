@@ -36,12 +36,17 @@
 
       ../common
       ../common/impermanence.nix
-      ../common/interactive.nix
       ../common/graphical
 
+      ../common/programs/direnv.nix
+      ../common/programs/htop.nix
+      ../common/programs/nvim
+      ../common/programs/git.nix
       ../common/programs/bottles.nix
       ../common/programs/gdb.nix
       ../common/programs/streamdeck.nix
+      ../common/programs/firefox.nix
+      ../common/programs/kitty.nix
     ];
   };
 }

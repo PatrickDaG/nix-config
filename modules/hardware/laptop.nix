@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{
   services = {
     logind.extraConfig = ''
       IdleAction=suspend

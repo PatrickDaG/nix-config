@@ -1,4 +1,5 @@
-{
+{pkgs, ...}: {
+  home.packages = [pkgs.pwndbg];
   home.enableDebugInfo = true;
   home.file.gdbinit = {
     target = ".gdbinit";

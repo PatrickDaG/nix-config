@@ -1,8 +1,6 @@
 {pkgs, ...}: {
   imports = [
-    ./kitty.nix
     ./Xorg
-    ./firefox.nix
     ./themes.nix
   ];
   home = {
