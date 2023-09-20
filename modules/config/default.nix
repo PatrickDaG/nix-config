@@ -17,12 +17,14 @@
     ../secrets.nix
     ../meta.nix
     ../smb-mounts.nix
+    ../impermanence
 
     inputs.home-manager.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
     inputs.disko.nixosModules.disko
+    inputs.nixseparatedebuginfod.nixosModules.default
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

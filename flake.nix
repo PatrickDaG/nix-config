@@ -71,6 +71,7 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixseparatedebuginfod.url = "github:symphorien/nixseparatedebuginfod";
   };
 
   outputs = {

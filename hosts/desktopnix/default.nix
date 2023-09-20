@@ -8,8 +8,6 @@
     ../../modules/config
     ../../modules/dev
 
-    ../../modules/impermanence
-
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/intel.nix
     ../../modules/hardware/nintendo.nix

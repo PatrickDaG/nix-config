@@ -8,11 +8,8 @@
     ../../modules/config
     ../../modules/dev
 
-    ../../modules/impermanence
-
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/laptop.nix
-    #../../modules/hardware/nintendo.nix
     ../../modules/hardware/intel.nix
     ../../modules/hardware/nvidia.nix
     ../../modules/hardware/physical.nix

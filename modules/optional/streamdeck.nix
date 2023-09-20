@@ -13,9 +13,6 @@
     ;
   settingsFormat = pkgs.formats.json {};
 in {
-  # broken on nixpkgs currently. How fun
-  programs.streamdeck-ui.enable = true;
-
   home-manager.sharedModules = [
     ({config, ...}: {
       options.programs.streamdeck-ui = {
@@ -33,7 +30,7 @@ in {
         };
       };
       config = mkIf config.programs.streamdeck-ui.enable {
-        home.sessionVariables.STREAMDECK_UI_CONFIG = "${config.xdg.configHome}/streamdeck-ui/config.json";
+        home.packages = [pkgs.streamdeck-ui];
         xdg.configFile.streamdeck-ui = {
           target = "streamdeck-ui/config.json";
           source = settingsFormat.generate "config.json" {
@@ -47,7 +44,8 @@ in {
               Description = "Start streamdeck-ui";
             };
             Service = {
-              ExecStart = "${config.programs.streamdeck-ui.package}/bin/streamdeck-ui --no-ui";
+              Environment = "STREAMDECK_UI_CONFIG=${config.xdg.configHome}/streamdeck-ui/config.json";
+              ExecStart = "${config.programs.streamdeck-ui.package}/bin/streamdeck --no-ui";
             };
             Install = {
               WantedBy = ["default.target"];

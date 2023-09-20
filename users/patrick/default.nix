@@ -47,6 +47,7 @@
       ../common/programs/streamdeck.nix
       ../common/programs/firefox.nix
       ../common/programs/kitty.nix
+      ../common/programs/thunderbird.nix
     ];
   };
 }
