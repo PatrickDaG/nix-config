@@ -81,6 +81,7 @@
     agenix-rekey,
     devshell,
     nixos-generators,
+    pre-commit-hooks,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
@@ -141,7 +142,17 @@
       };
 
       apps = agenix-rekey.defineApps self pkgs self.nodes;
-      checks = import ./nix/checks.nix inputs system;
+      checks.pre-commit-check =
+        pre-commit-hooks.lib.${system}.run
+        {
+          src = lib.cleanSource ./.;
+          hooks = {
+            alejandra.enable = true;
+            statix.enable = true;
+            luacheck.enable = true;
+            stylua.enable = true;
+          };
+        };
       devShell = import ./nix/devshell.nix inputs system;
       formatter = pkgs.alejandra;
     });

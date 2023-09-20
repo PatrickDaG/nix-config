@@ -3,7 +3,7 @@
   config,
   ...
 }: {
-  # enable nixos wide wayland config
+  # enable nixos wide graphical config
   imports = [
     ../../modules/graphical/xserver.nix
     ../../modules/graphical/steam.nix

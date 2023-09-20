@@ -1,13 +1,13 @@
 {pkgs, ...}: let
   initLua = pkgs.writeText "init.lua" ''
        vim.opt.buftype = "nowrite"
-       vim.opt.backup=false
-       vim.opt.modeline=false
-       vim.opt.shelltemp=false
-       vim.opt.swapfile=false
-       vim.opt.undofile=false
+       vim.opt.backup = false
+       vim.opt.modeline = false
+       vim.opt.shelltemp = false
+       vim.opt.swapfile = false
+       vim.opt.undofile = false
        vim.opt.writebackup = false
-       vim.opt.shada-file = vim.fn.stdpath "state" .. "/shada/man.shada"
+       vim.opt.shadafile = vim.fn.stdpath "state" .. "/shada/man.shada"
     vim.opt.virtualedit = "all"
     vim.opt.splitkeep = "screen"
 
