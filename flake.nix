@@ -95,21 +95,21 @@
       };
 
       inherit stateVersion;
-
-      hosts = builtins.fromTOML (builtins.readFile ./hosts.toml);
-
-      colmena = import ./nix/colmena.nix inputs;
-      # all bare metal nodes
-      colmenaNodes = ((colmena.lib.makeHive self.colmena).introspect (x: x)).nodes;
-      # todo add microvmNodes
-
-      nodes = self.colmenaNodes;
+      inherit
+        (import ./nix/hosts.nix inputs)
+        colmena
+        hosts
+        microvmConfigurations
+        nixosConfigurations
+        ;
+      nodes = self.nixosConfigurations // self.microvmConfigurations;
+      top = lib.mapAttrs (_: x: x.config.system.build.toplevel) self.nodes;
 
       inherit
         (lib.foldl' lib.recursiveUpdate {}
           (lib.mapAttrsToList
             (import ./nix/generate-installer-package.nix inputs)
-            self.colmenaNodes))
+            self.nixosConfigurations))
         packages
         ;
     }
