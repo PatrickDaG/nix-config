@@ -6,6 +6,7 @@
     # TODO: sollte entfernt werden für server
     ../../modules/config
     ../../modules/optional/initrd-ssh.nix
+    ../../modules/optional/secureboot.nix
 
     ../../modules/hardware/intel.nix
     ../../modules/hardware/physical.nix
