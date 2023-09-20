@@ -79,7 +79,6 @@
     flake-utils,
     colmena,
     agenix-rekey,
-    devshell,
     nixos-generators,
     pre-commit-hooks,
     ...

@@ -66,11 +66,7 @@ in {
     };
   };
   config.home-manager.sharedModules = [
-    ({
-      config,
-      nixosConfig,
-      ...
-    }: {
+    ({config, ...}: {
       options = {
         userSecretsFile = mkOption {
           default = ../users/${config._module.args.name}/secrets.nix.age;

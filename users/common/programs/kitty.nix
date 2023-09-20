@@ -1,11 +1,7 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.kitty = {
     enable = true;
-    package = pkgs.kitty.overrideAttrs (finalAttrs: prevAttrs: {
+    package = pkgs.kitty.overrideAttrs (_finalAttrs: _prevAttrs: {
       doCheck = false;
     });
     font = {
