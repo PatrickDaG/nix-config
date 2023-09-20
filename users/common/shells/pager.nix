@@ -13,10 +13,10 @@
 
     vim.opt.termguicolors = false
 
-    vim.keymap.set('n', '<CR>', '<C-]>', {silent = true, desc = "Jump to tag under cursor})
-    vim.keymap.set('n', '<Bs>', ':pop<CR>', {silent = true, desc = "Jump to tag under cursor})
-    vim.keymap.set('n', '<C-Left>', ':pop<CR>', {silent = true, desc = "Jump to tag under cursor})
-    vim.keymap.set('n', '<C-Right>', ':tag<CR>', {silent = true, desc = "Jump to tag under cursor})
+    vim.keymap.set('n', '<CR>', '<C-]>', {silent = true, desc = "Jump to tag under cursor"})
+    vim.keymap.set('n', '<Bs>', ':pop<CR>', {silent = true, desc = "Jump to tag under cursor"})
+    vim.keymap.set('n', '<C-Left>', ':pop<CR>', {silent = true, desc = "Jump to tag under cursor"})
+    vim.keymap.set('n', '<C-Right>', ':tag<CR>', {silent = true, desc = "Jump to tag under cursor"})
   '';
   nvimPager = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped neovimConfig;
   neovimConfig =

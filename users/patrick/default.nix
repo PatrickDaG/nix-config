@@ -15,7 +15,14 @@
     isNormalUser = true;
     uid = 1000;
     createHome = true;
-    extraGroups = ["wheel" "audio" "video" "input"];
+    extraGroups = [
+      "wheel"
+      "audio"
+      "video"
+      "input"
+      # TPM settings
+      "tss"
+    ];
     group = "patrick";
     hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
   };

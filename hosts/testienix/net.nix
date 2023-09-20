@@ -14,4 +14,8 @@
       };
     };
   };
+  boot.initrd.systemd.network = {
+    enable = true;
+    networks = {inherit (config.systemd.network.networks) "01-lan1";};
+  };
 }

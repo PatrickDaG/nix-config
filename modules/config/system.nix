@@ -18,8 +18,15 @@
     in
       lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
       pubkeyPath;
+    generatedSecretsDir = config.node.secretsDir + "/generated/";
   };
   security.sudo.enable = false;
+  security.tpm2 = {
+    enable = true;
+    abrmd.enable = true;
+    pkcs11.enable = true;
+    tctiEnvironment.enable = true;
+  };
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
   i18n.defaultLocale = "C.UTF-8";
