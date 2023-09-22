@@ -5,8 +5,8 @@
 }: {
   # enable nixos wide graphical config
   imports = [
-    ../../modules/graphical/xserver.nix
-    ../../modules/graphical/steam.nix
+    ../../modules/optional/xserver.nix
+    ../../modules/optional/steam.nix
     ./impermanence.nix
   ];
 

@@ -3,12 +3,6 @@
     enableGhostscriptFonts = false;
     fontDir.enable = false;
     fontconfig = {
-      defaultFonts = {
-        sansSerif = ["IBM Plex Sans"];
-        serif = ["IBM Plex Sans"];
-        monospace = ["FiraCode Nerd Font"];
-        emoji = ["Noto Color Emoji"];
-      };
       localConf = ''
         <?xml version="1.0"?>
         <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -48,5 +42,28 @@
       noto-fonts-emoji
       noto-fonts-extra
     ];
+  };
+  stylix.fonts = {
+    serif = {
+      package = pkgs.dejavu_fonts;
+      name = "IBM Plex Serif";
+    };
+
+    sansSerif = {
+      package = pkgs.dejavu_fonts;
+      name = "IBM Plex Sans";
+    };
+
+    monospace = {
+      # No need for patched nerd fonts, kitty can pick up on them automatically,
+      # and ideally every program should do that: https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
+      package = pkgs.jetbrains-mono;
+      name = "JetBrains Mono";
+    };
+
+    emoji = {
+      package = pkgs.noto-fonts-emoji;
+      name = "Noto Color Emoji";
+    };
   };
 }

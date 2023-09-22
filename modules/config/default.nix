@@ -2,7 +2,6 @@
   imports = [
     ./boot.nix
     ./efi.nix
-    ./fonts.nix
     ./home-manager.nix
     ./inputrc.nix
     ./issue.nix

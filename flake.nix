@@ -71,12 +71,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nixseparatedebuginfod.url = "github:symphorien/nixseparatedebuginfod";
+
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.3.0";
 
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix.url = "github:danth/stylix";
   };
 
   outputs = {

@@ -8,6 +8,7 @@
   home.packages = [
     pkgs.wdisplays
   ];
+  stylix.targets.sway.enable = true;
   wayland.windowManager.sway = {
     enable = true;
     config =

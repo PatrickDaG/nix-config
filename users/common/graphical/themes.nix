@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: {
   home.pointerCursor = {
@@ -9,6 +10,16 @@
     package = pkgs.bibata-cursors;
     name = "Bibata-Original-Ice";
     size = 18;
+  };
+
+  stylix = {
+    targets = {
+      gtk.enable = true;
+      bat.enable = true;
+      dunst.enable = true;
+      zathura.enable = true;
+      xresources.enable = true;
+    };
   };
 
   xresources.properties = {
@@ -38,7 +49,7 @@
       package = pkgs.vimix-icon-theme;
     };
 
-    theme = {
+    theme = lib.mkForce {
       name = "Orchis-purple-solid-black";
       package = pkgs.orchis-theme;
     };

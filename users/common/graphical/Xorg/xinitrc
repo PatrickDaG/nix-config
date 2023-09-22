@@ -21,5 +21,6 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
 fi
 
 autorandr -c
+streamdeck --no-ui
 systemctl --user start set-wallpaper.service
 exec i3

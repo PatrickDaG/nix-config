@@ -7,6 +7,7 @@
 
     ../../modules/config
     ../../modules/dev
+    ../../modules/graphical
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/intel.nix
@@ -24,4 +25,7 @@
 
     ../../users/patrick
   ];
+  stylix.fonts.sizes = {
+    terminal = 10;
+  };
 }

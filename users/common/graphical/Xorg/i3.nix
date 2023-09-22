@@ -3,6 +3,7 @@
   lib,
   ...
 }: {
+  stylix.targets.i3.enable = true;
   xsession.windowManager.i3 = {
     enable = true;
     config =
