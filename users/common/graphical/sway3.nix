@@ -14,6 +14,7 @@ in {
   };
   #bindkeysToCode = true;
   window.titlebar = false;
+  floating.titlebar = false;
   workspaceOutputAssign = [
     {
       workspace = "1";

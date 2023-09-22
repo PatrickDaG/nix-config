@@ -131,7 +131,6 @@
             inputs.nixpkgs-wayland.overlay
           ];
         inherit system;
-        # TODO fix this to only allow specific unfree packages
         config.allowUnfree = true;
       };
 

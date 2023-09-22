@@ -29,7 +29,6 @@
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
-      # TODO: change dns to own when at home
       dns = ["9.9.9.9"];
       dhcpV4Config.RouteMetric = 40;
       dhcpV6Config.RouteMetric = 40;
