@@ -29,5 +29,6 @@
   ];
   stylix.fonts.sizes = {
     terminal = 10;
+    applications = 10;
   };
 }

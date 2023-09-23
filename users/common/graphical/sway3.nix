@@ -15,6 +15,7 @@ in {
   #bindkeysToCode = true;
   window.titlebar = false;
   floating.titlebar = false;
+  workspaceLayout = "stacking";
   workspaceOutputAssign = [
     {
       workspace = "1";
