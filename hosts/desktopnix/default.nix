@@ -9,6 +9,8 @@
     ../../modules/dev
     ../../modules/graphical
 
+    ../../modules/optional/xserver.nix
+
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/intel.nix
     ../../modules/hardware/nintendo.nix

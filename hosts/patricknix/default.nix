@@ -7,6 +7,10 @@
 
     ../../modules/config
     ../../modules/dev
+    ../../modules/graphical
+
+    ../../modules/optional/xserver.nix
+    ../../modules/optional/wayland.nix
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/laptop.nix
@@ -25,4 +29,9 @@
 
     ../../users/patrick
   ];
+  stylix.fonts.sizes = {
+    terminal = 9;
+    applications = 9;
+    desktop = 8;
+  };
 }

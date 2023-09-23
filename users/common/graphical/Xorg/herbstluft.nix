@@ -8,7 +8,6 @@
   #set the default resize step for herbstluft
   TAGS = map toString (lib.lists.range 1 9);
 in {
-  home.file.".xinitrc".source = ./xinitrc;
   xsession.windowManager.herbstluftwm = {
     enable = true;
     package = pkgs.herbstluftwm.overrideAttrs (_finalAttrs: _previousAttrs: {

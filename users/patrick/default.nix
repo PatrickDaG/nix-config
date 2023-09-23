@@ -3,9 +3,7 @@
   config,
   ...
 }: {
-  # enable nixos wide graphical config
   imports = [
-    ../../modules/optional/xserver.nix
     ../../modules/optional/steam.nix
     ./impermanence.nix
   ];
@@ -36,25 +34,33 @@
   programs.dconf.enable = true;
 
   home-manager.users.patrick = {
-    imports = [
-      ./patrick.nix
-      ./ssh.nix
-      ./smb.nix
+    imports =
+      [
+        ./patrick.nix
+        ./ssh.nix
 
-      ../common
-      ../common/impermanence.nix
-      ../common/graphical
+        ../common
+        ../common/impermanence.nix
+        ../common/graphical/Xorg
+        #../common/graphical/wayland
 
-      ../common/programs/direnv.nix
-      ../common/programs/htop.nix
-      ../common/programs/nvim
-      ../common/programs/git.nix
-      ../common/programs/bottles.nix
-      ../common/programs/gdb.nix
-      ../common/programs/streamdeck.nix
-      ../common/programs/firefox.nix
-      ../common/programs/kitty.nix
-      ../common/programs/thunderbird.nix
-    ];
+        ../common/programs/direnv.nix
+        ../common/programs/htop.nix
+        ../common/programs/nvim
+        ../common/programs/git.nix
+        ../common/programs/bottles.nix
+        ../common/programs/gdb.nix
+        ../common/programs/firefox.nix
+        ../common/programs/kitty.nix
+        ../common/programs/thunderbird.nix
+      ]
+      ++ {
+        "desktopnix" = [
+          ../common/programs/streamdeck.nix
+          ./smb.nix
+        ];
+      }
+      .${config.node.name}
+      or [];
   };
 }

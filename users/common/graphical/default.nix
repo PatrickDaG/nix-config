@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   imports = [
-    ./Xorg
     ./themes.nix
   ];
   home = {
