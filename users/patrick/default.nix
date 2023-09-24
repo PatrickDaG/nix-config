@@ -42,7 +42,7 @@
         ../common
         ../common/impermanence.nix
         ../common/graphical/Xorg
-        #../common/graphical/wayland
+        ../common/graphical/wayland
 
         ../common/programs/direnv.nix
         ../common/programs/htop.nix

@@ -11,7 +11,7 @@
       mouse.accelProfile = "flat";
       touchpad = {
         accelProfile = "flat";
-        accelSpeed = "0.5";
+        accelSpeed = "1";
         naturalScrolling = true;
         disableWhileTyping = true;
       };

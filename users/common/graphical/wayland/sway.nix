@@ -2,9 +2,10 @@
   config,
   pkgs,
   nixosConfig,
-  lib,
   ...
 }: {
+  # import shared i3 config
+  imports = [../sway3.nix];
   home.packages = [
     pkgs.wdisplays
   ];
@@ -12,8 +13,6 @@
   wayland.windowManager.sway = {
     enable = true;
     config =
-      lib.attrsets.recursiveUpdate
-      (import ../sway3.nix)
       {
         menu = "fuzzel";
         input = {
@@ -25,9 +24,10 @@
             repeat_delay = "235";
             repeat_rate = "60";
             accel_profile = "flat";
-            pointer_accel = "0.5";
+            pointer_accel = "0.3";
           };
           "type:touchpad" = {
+            pointer_accel = "0.5";
             natural_scroll = "enabled";
           };
         };
@@ -52,6 +52,19 @@
               mode = "2560x1440@143.998Hz";
               pos = "1920,720";
               adaptive_sync = "on";
+            };
+          };
+        };
+        patricknix = {
+          output = {
+            "Acer Technologies XB271HU #ASP7ytE/6A7d" = {
+              mode = "2560x1440@59.951Hz";
+              pos = "0,0";
+            };
+            "AU Optronics 0x30EB Unknown" = {
+              mode = "3840x2160@60.002Hz";
+              pos = "2560,0";
+              scale = "2";
             };
           };
         };
