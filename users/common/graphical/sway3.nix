@@ -2,6 +2,7 @@
   config,
   nixosConfig,
   lib,
+  pkgs,
   ...
 }:
 # shared sway/i3 config
@@ -21,8 +22,16 @@ let
     #bindkeysToCode = true;
     window.titlebar = false;
     floating.titlebar = false;
-  workspaceLayout = "stacking";
-    bars = [config.lib.stylix.i3.bar];
+    workspaceLayout = "stacking";
+    bars = map (x: x // config.lib.stylix.i3.bar) [
+      {
+        mode = "dock";
+        workspaceButtons = true;
+        workspaceNumbers = true;
+        statusCommand = "${config.programs.i3status-rust.package}/bin/i3status-rs config-main.toml";
+        trayOutput = "primary";
+      }
+    ];
 
     workspaceOutputAssign = let
       output = out: workspaces:
@@ -94,4 +103,37 @@ let
 in {
   wayland.windowManager.sway.config = cfg;
   xsession.windowManager.i3.config = cfg;
+
+  programs.i3status-rust = {
+    enable = true;
+    bars.main = {
+      blocks = [
+        {
+          block = "net";
+        }
+        {
+          block = "cpu";
+        }
+        {
+          block = "nvidia_gpu";
+        }
+        {
+          block = "sound";
+        }
+        {
+          block = "backlight";
+          missing_format = "";
+        }
+        {
+          block = "time";
+          format = "$icon  $timestamp.datetime(f:'%a %d.%m.%y %H:%M:%S') ";
+          interval = 1;
+        }
+      ];
+      icons = "material-nf";
+      settings."icons.overrides" = {
+        cpu = "";
+      };
+    };
+  };
 }

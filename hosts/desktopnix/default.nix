@@ -30,6 +30,6 @@
   stylix.fonts.sizes = {
     terminal = 9;
     applications = 10;
-    desktop = 9;
+    desktop = 10;
   };
 }
