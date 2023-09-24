@@ -28,7 +28,8 @@
     ../../users/patrick
   ];
   stylix.fonts.sizes = {
-    terminal = 10;
+    terminal = 9;
     applications = 10;
+    desktop = 9;
   };
 }

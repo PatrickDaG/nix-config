@@ -19,7 +19,7 @@
             "6" = {
               keys = "F8";
               text = "deafen";
-              text_vertical_align = "top";
+              text_vertical_align = "middle-bottom";
             };
             "7" = {
               # background picture

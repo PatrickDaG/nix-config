@@ -41,8 +41,6 @@
 
         ../common
         ../common/impermanence.nix
-        ../common/graphical/Xorg
-        ../common/graphical/wayland
 
         ../common/programs/direnv.nix
         ../common/programs/htop.nix
@@ -56,8 +54,12 @@
       ]
       ++ {
         "desktopnix" = [
+          ../common/graphical/Xorg
           ../common/programs/streamdeck.nix
           ./smb.nix
+        ];
+        "patricknix" = [
+          ../common/graphical/wayland
         ];
       }
       .${config.node.name}
