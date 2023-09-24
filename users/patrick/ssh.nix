@@ -8,6 +8,8 @@
   '';
   programs.ssh = {
     enable = true;
+    controlMaster = "auto";
+    controlPersist = "5s";
     matchBlocks = let
       identityFile = ["~/.ssh/1.pub" "~/.ssh/2.pub"];
     in {
