@@ -4,6 +4,30 @@
   config,
   ...
 }: {
+  # HOW TO: Add secureboot to new systems
+  # generate keys with `sbct create-keys'
+  # tar the resulting folder using
+  # `tar cvf secureboot.tar -C /etc/secureboot .
+  # Copy the tar to local using scp
+  # and encrypt it using rage
+  # safe the encrypted archive to hosts/<host>/secrets/secureboot.tar.age
+  # DO NOT forget to delete the unecrypted archives
+  # link /run/secureboot to /etc/secureboot
+  # This is necesarry since for the first
+  # apply the rekeyed keys are not yet available but needed for
+  # signing the boot files
+  # ensure the boot files are signed using
+  # `sbctl verify'
+  # Now reboot the computer into BIOS and
+  # enable secureboot, this may include
+  # removing old keys
+  # bootctl should now read
+  # `Secure Boot: disabled (setup)'
+  # you can now enroll your secureboot keys using
+  # `sbctl enroll-keys`
+  # If you want to be able to boot microsoft signed images append
+  # `--microsoft`
+  # Time to reboot and pray
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
     (pkgs.sbctl.override

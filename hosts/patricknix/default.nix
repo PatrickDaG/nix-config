@@ -11,6 +11,7 @@
 
     ../../modules/optional/xserver.nix
     ../../modules/optional/wayland.nix
+    ../../modules/optional/secureboot.nix
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/laptop.nix
