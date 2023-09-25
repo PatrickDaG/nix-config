@@ -6,7 +6,10 @@
 }: {
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
-    pkgs.sbctl
+    pkgs.sbctl.override
+    {
+      databasePath = "/run/secureboot";
+    }
   ];
   age.secrets.secureboot.rekeyFile = ../../hosts/${config.node.name}/secrets/secureboot.tar.age;
   system.activationScripts.securebootuntar = {

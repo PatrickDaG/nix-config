@@ -55,7 +55,11 @@ inputs: let
       meta = {
         # Just a required dummy for colmena, overwritten on a per-node basis by nodeNixpkgs below.
         nixpkgs = self.pkgs.x86_64-linux;
-        nodeNixpkgs = mapNixosConfigs (v: v.pkgs);
+        nodeNixpkgs = mapNixosConfigs (v:
+          import inputs.nixpkgs {
+            inherit (v._module.args.pkgs.stdenv.hostPlatform) system;
+            inherit (v._module.args.pkgs) config;
+          });
         nodeSpecialArgs = mapNixosConfigs (v: v._module.specialArgs);
       };
     }
