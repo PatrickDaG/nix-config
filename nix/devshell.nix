@@ -3,11 +3,15 @@
   nixpkgs,
   colmena,
   devshell,
+  agenix-rekey,
   ...
 }: system: let
   pkgs = import nixpkgs {
     inherit system;
-    overlays = [devshell.overlays.default];
+    overlays = [
+      devshell.overlays.default
+      agenix-rekey.overlays.default
+    ];
   };
 in
   pkgs.devshell.mkShell {
@@ -34,6 +38,10 @@ in
         help = "Apply nix configurations";
       }
       {
+        package = pkgs.agenix-rekey;
+        help = "Edit and rekey repository secrets";
+      }
+      {
         package =
           alejandra;
         help = "Format nix code";
@@ -41,6 +49,10 @@ in
       {
         package = statix;
         help = "Linter for nix";
+      }
+      {
+        package = deadnix;
+        help = "Remove dead nix code";
       }
       {
         package = update-nix-fetchgit;

@@ -37,6 +37,7 @@
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     flake-utils = {
@@ -102,6 +103,10 @@
         #masterIdentities = [./secrets/NIXOSa.key.pub];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
+      agenix-rekey = agenix-rekey.configure {
+        userFlake = self;
+        inherit (self) nodes pkgs;
+      };
 
       inherit stateVersion;
       inherit
@@ -149,7 +154,6 @@
           .${system};
       };
 
-      apps = agenix-rekey.defineApps self pkgs self.nodes;
       checks.pre-commit-check =
         pre-commit-hooks.lib.${system}.run
         {

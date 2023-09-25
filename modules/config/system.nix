@@ -19,6 +19,7 @@
       lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
       pubkeyPath;
     generatedSecretsDir = config.node.secretsDir + "/generated/";
+    cacheDir = "/var/tmp/agenix-rekey/\"$UID\"";
   };
   security.sudo.enable = false;
   security.tpm2 = {
@@ -58,6 +59,7 @@
     ripgrep
     killall
     fd
+    kitty.terminfo
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

@@ -6,7 +6,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      allowed-users = ["@wheel"];
+      allowed-users = ["@wheel" "nixseparatedebuginfod"];
       trusted-users = ["root" "@wheel"];
       system-features = ["recursive-nix" "repl-flake" "big-parallel"];
       substituters = [

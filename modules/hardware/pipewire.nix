@@ -30,9 +30,9 @@
     "pipewire/pipewire.conf.d/92-low-latency.conf".text = ''
       context.properties = {
         default.clock.rate = 48000
-        default.clock.quantum = 32
+        default.clock.quantum = 64
         default.clock.min-quantum = 32
-        default.clock.max-quantum = 32
+        default.clock.max-quantum = 128
       }
     '';
     "pipewire/pipewire-pulse.d/91-low-latency.conf".text = builtins.toJSON {
@@ -41,28 +41,16 @@
           name = "libpipewire-module-protocol-pulse";
           args = {
             pulse.min.req = "32/48000";
-            pulse.default.req = "32/48000";
-            pulse.max.req = "32/48000";
+            pulse.default.req = "64/48000";
+            pulse.max.req = "128/48000";
             pulse.min.quantum = "32/48000";
-            pulse.max.quantum = "32/48000";
+            pulse.max.quantum = "128/48000";
           };
         }
       ];
       stream.properties = {
-        node.latency = "32/48000";
-        resample.quality = 1;
+        node.latency = "128/48000";
       };
-    };
-
-    # If resampling is required, use a higher quality. 15 is overkill and too cpu expensive without any obvious audible advantage
-    "pipewire/pipewire-pulse.conf.d/99-resample.conf".text = builtins.toJSON {
-      "stream.properties"."resample.quality" = 10;
-    };
-    "pipewire/client.conf.d/99-resample.conf".text = builtins.toJSON {
-      "stream.properties"."resample.quality" = 10;
-    };
-    "pipewire/client-rt.conf.d/99-resample.conf".text = builtins.toJSON {
-      "stream.properties"."resample.quality" = 10;
     };
   };
 

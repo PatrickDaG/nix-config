@@ -18,24 +18,10 @@
     ];
     directories =
       [
-        {
-          directory = "/var/log";
-          user = "root";
-          group = "root";
-          mode = "0755";
-        }
-        {
-          directory = "/var/lib/systemd";
-          user = "root";
-          group = "root";
-          mode = "0755";
-        }
-        {
-          directory = "/var/lib/nixos";
-          user = "root";
-          group = "root";
-          mode = "0775";
-        }
+        "/var/tmp/agenix-rekey"
+        "/var/log"
+        "/var/lib/systemd"
+        "/var/lib/nixos"
       ]
       ++ lib.lists.optionals config.hardware.bluetooth.enable [
         "/var/lib/bluetooth"
