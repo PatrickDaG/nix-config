@@ -53,12 +53,6 @@
 
     templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
-    colmena = {
-      url = "github:zhaofengli/colmena";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
     impermanence.url = "github:nix-community/impermanence";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -88,10 +82,11 @@
     self,
     nixpkgs,
     flake-utils,
-    colmena,
     agenix-rekey,
     nixos-generators,
     pre-commit-hooks,
+    devshell,
+    nixpkgs-wayland,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
@@ -111,7 +106,6 @@
       inherit stateVersion;
       inherit
         (import ./nix/hosts.nix inputs)
-        colmena
         hosts
         microvmConfigurations
         nixosConfigurations
@@ -133,7 +127,9 @@
           import ./lib inputs
           ++ import ./pkgs
           ++ [
-            inputs.nixpkgs-wayland.overlay
+            nixpkgs-wayland.overlay
+            devshell.overlays.default
+            agenix-rekey.overlays.default
           ];
         inherit system;
         config.allowUnfree = true;

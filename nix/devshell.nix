@@ -1,18 +1,11 @@
 {
   self,
   nixpkgs,
-  colmena,
   devshell,
   agenix-rekey,
   ...
 }: system: let
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = [
-      devshell.overlays.default
-      agenix-rekey.overlays.default
-    ];
-  };
+  pkgs = self.pkgs.${system};
 in
   pkgs.devshell.mkShell {
     name = "nix-config";
@@ -31,31 +24,29 @@ in
       rage
       nix
     ];
-    commands = with pkgs; [
+    commands = [
       {
-        package =
-          colmena.packages.${system}.colmena;
-        help = "Apply nix configurations";
+        package = pkgs.deploy;
+        help = "build and deploy nix configurations";
       }
       {
         package = pkgs.agenix-rekey;
         help = "Edit and rekey repository secrets";
       }
       {
-        package =
-          alejandra;
+        package = pkgs.alejandra;
         help = "Format nix code";
       }
       {
-        package = statix;
+        package = pkgs.statix;
         help = "Linter for nix";
       }
       {
-        package = deadnix;
+        package = pkgs.deadnix;
         help = "Remove dead nix code";
       }
       {
-        package = update-nix-fetchgit;
+        package = pkgs.update-nix-fetchgit;
         help = "Update fetcher inside nix files";
       }
     ];

@@ -34,12 +34,11 @@ let
     ];
 
     workspaceOutputAssign = let
-      output = out: workspaces:
+      output = out:
         map (x: {
           workspace = x;
           output = out;
-        })
-        workspaces;
+        });
     in
       {
         "desktopnix" =

@@ -6,10 +6,10 @@
 }: {
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
-    pkgs.sbctl.override
-    {
-      databasePath = "/run/secureboot";
-    }
+    (pkgs.sbctl.override
+      {
+        databasePath = "/run/secureboot";
+      })
   ];
   age.secrets.secureboot.rekeyFile = ../../hosts/${config.node.name}/secrets/secureboot.tar.age;
   system.activationScripts.securebootuntar = {
@@ -29,7 +29,8 @@
 
   boot.lanzaboote = {
     enable = true;
-    enrollKeys = true;
+    # Not usable anyway
+    #enrollKeys = true;
     pkiBundle = "/run/secureboot";
   };
 }

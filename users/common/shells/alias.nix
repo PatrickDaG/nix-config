@@ -25,6 +25,5 @@
 
     zf = "zathura --fork";
     gdb = "${pkgs.pwndbg}/bin/pwndbg";
-    build = "nix build --no-link --print-out-paths";
   };
 }

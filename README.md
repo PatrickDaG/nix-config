@@ -18,11 +18,9 @@
     - `hardware/` configuration for hardware components
     - `impermanence/` impermanence modules for hosts
 - `nix/` additional nix functions
-    - `checks.nix` pre-commit checks
-    - `colmena.nix` Setup for using colmena to deploy
     - `devshell.nix` Development shell
     - `extra-builtins.nix` Extra builtin plugin file to enable repository secrets
-    - `generate-node.nix` logic to generate nodes for colmena
+    - TODO
     - `lib.nix` additional library functions
 - `secrets/` global secrets
     - `<name>.key.pub` public key handles to decrypt secrets using yubikey
@@ -56,9 +54,8 @@
     - `rekey-save-output` only internal use
 - `checks` linting and other checks for this repository
     - `pre-commit-check` automatic checks executed as pre-commit hooks
-- `colmena` outputs used by colmena
-- `colmenaNodes` per node configuration
-- `nodes` alias to `colmenaNodes`
+- `nixosNodes` top level configs for hosts
+- `nodes` alias to `nixosNodes`
 - `devshell` development shell using devshell
 - `formatter` nix code formatter
 - `hosts` host meta declaration
@@ -86,14 +83,11 @@
     - you can get the path using `nix path-info .#packages.<target-system>.installer-package.<target>`
 4. Export all zpools and reboot into system
 6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub
-5. Deploy system using colmena
+5. Deploy system
 
 
 ## Deploy
 
-```bash
-colmena apply --on <hostname>
-```
 If deploying from a host not containing the necessary nix configuration option append
 ```bash
 --nix-option plugin-files "$NIX_PLUGINS"/lib/nix/plugins --nix-option extra-builtins-file ./nix/extra-builtins`
