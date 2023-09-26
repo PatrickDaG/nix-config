@@ -26,32 +26,6 @@
         192000
       ];
     };
-    # Nixos wiki copied
-    "pipewire/pipewire.conf.d/92-low-latency.conf".text = ''
-      context.properties = {
-        default.clock.rate = 48000
-        default.clock.quantum = 64
-        default.clock.min-quantum = 32
-        default.clock.max-quantum = 128
-      }
-    '';
-    "pipewire/pipewire-pulse.d/91-low-latency.conf".text = builtins.toJSON {
-      context.modules = [
-        {
-          name = "libpipewire-module-protocol-pulse";
-          args = {
-            pulse.min.req = "32/48000";
-            pulse.default.req = "64/48000";
-            pulse.max.req = "128/48000";
-            pulse.min.quantum = "32/48000";
-            pulse.max.quantum = "128/48000";
-          };
-        }
-      ];
-      stream.properties = {
-        node.latency = "128/48000";
-      };
-    };
   };
 
   sound.enable = false;
