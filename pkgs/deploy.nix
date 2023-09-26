@@ -72,8 +72,9 @@
       (
       exec > >(trap "" INT TERM; sed "s/^/[0;32m$1:[0m /")
       exec 2> >(trap "" INT TERM; sed "s/^/[0;32m$1:[0m /" >&2)
-          	# shellcheck disable=SC2029
-          	ssh "$1" "$top_level/bin/switch-to-configuration" "$ACTION" \
+          	ssh "$1" -- /run/current-system/sw/bin/nix-env --profile /nix/var/nix/profiles/system --set "$top_level" \
+          	|| die "Error registering toplevel$1"
+          	ssh "$1" -- "$top_level/bin/switch-to-configuration" "$ACTION" \
           	|| die "Error activating toplevel for $1"
       )
           }

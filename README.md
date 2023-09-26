@@ -48,13 +48,9 @@
 - `root` root user imported by every host
 
 ## Flake output structure
-- `apps` executables used for editing this configuration
-    - `edit-secret` edit an age encrypted secret
-    - `rekey` rekey all secret files for the host's secret key, enabling agenix
-    - `rekey-save-output` only internal use
 - `checks` linting and other checks for this repository
     - `pre-commit-check` automatic checks executed as pre-commit hooks
-- `nixosNodes` top level configs for hosts
+- `nixosHosts` top level configs for hosts
 - `nodes` alias to `nixosNodes`
 - `devshell` development shell using devshell
 - `formatter` nix code formatter
@@ -84,6 +80,23 @@
 4. Export all zpools and reboot into system
 6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub
 5. Deploy system
+
+### Add secureboot to new systems
+1. generate keys with `sbct create-keys'
+1. tar the resulting folder using `tar cvf secureboot.tar -C /etc/secureboot`
+1. Copy the tar to local using scp and encrypt it using rage
+1. safe the encrypted archive to `hosts/<host>/secrets/secureboot.tar.age`
+1. *DO NOT* forget to delete the unecrypted archives
+1. link `/run/secureboot` to `/etc/secureboot`
+1. This is necesarry since for your next apply the rekeyed keys are not yet available but needed for signing the boot files
+1. ensure the boot files are signed using `sbctl verify`
+1. Now reboot the computer into BIOS and enable secureboot
+    this may include removing any existing old keys
+1. bootctl should now read `Secure Boot: disabled (setup)`
+1. you can now enroll your secureboot keys using
+1. `sbctl enroll-keys`
+    If you want to be able to boot microsoft signed images append `--microsoft`
+1. Time to reboot and pray
 
 
 ## Deploy
