@@ -1,4 +1,9 @@
 {
+  lib,
+  minimal,
+  ...
+}:
+lib.optionalAttrs (!minimal) {
   imports = [
     ./docs.nix
   ];

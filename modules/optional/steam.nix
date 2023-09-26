@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  lib,
+  minimal,
+  pkgs,
+  ...
+}:
+lib.optionalAttrs (!minimal) {
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {

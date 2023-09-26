@@ -1,9 +1,11 @@
 {
-  pkgs,
   lib,
+  minimal,
+  pkgs,
   config,
   ...
-}: {
+}:
+lib.optionalAttrs (!minimal) {
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
     (pkgs.sbctl.override

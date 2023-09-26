@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  minimal,
+  lib,
+  ...
+}:
+lib.optionalAttrs (!minimal) {
   fonts = {
     enableGhostscriptFonts = false;
     fontDir.enable = false;

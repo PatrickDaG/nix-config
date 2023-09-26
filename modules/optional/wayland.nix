@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  lib,
+  minimal,
+  pkgs,
+  ...
+}:
+lib.optionalAttrs (!minimal) {
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;

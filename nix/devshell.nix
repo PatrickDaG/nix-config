@@ -46,6 +46,10 @@ in
         help = "Remove dead nix code";
       }
       {
+        package = pkgs.nix-tree;
+        help = "Show nix closure tree";
+      }
+      {
         package = pkgs.update-nix-fetchgit;
         help = "Update fetcher inside nix files";
       }

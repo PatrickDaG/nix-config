@@ -1,8 +1,11 @@
 {
   pkgs,
   config,
+  lib,
+  minimal,
   ...
-}: {
+}:
+lib.optionalAttrs (!minimal) {
   imports = [
     ../../modules/optional/steam.nix
     ./impermanence.nix

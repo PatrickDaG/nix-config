@@ -12,9 +12,9 @@
           type = "table";
           format = "gpt";
           partitions = [
-            (partEfiBoot "boot" "0%" "512MiB")
-            #(partSwap "swap" "1GiB" "17GiB")
-            (partLuksZfs "rpool" "rpool" "512MiB" "100%")
+            (partEfiBoot "boot" "0%" "1GiB")
+            (partSwap "swap" "1GiB" "17GiB")
+            (partLuksZfs "rpool" "rpool" "17GiB" "100%")
           ];
         };
       };

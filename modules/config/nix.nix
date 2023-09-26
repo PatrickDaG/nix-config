@@ -7,7 +7,7 @@
     settings = {
       auto-optimise-store = true;
       allowed-users = ["@wheel" "nixseparatedebuginfod"];
-      trusted-users = ["root" "@wheel"];
+      trusted-users = ["root"];
       system-features = ["recursive-nix" "repl-flake" "big-parallel"];
       substituters = [
         "https://nix-config.cachix.org"
@@ -25,6 +25,8 @@
       ];
       cores = 0;
       max-jobs = "auto";
+      # make agenix rekey find the secrets even without trusted user
+      extra-sandbox-paths = ["/var/tmp/agenix-rekey?"];
     };
     daemonCPUSchedPolicy = "batch";
     daemonIOSchedPriority = 5;

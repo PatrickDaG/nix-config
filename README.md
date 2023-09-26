@@ -78,7 +78,7 @@
 4. Run the installer script from the nix store of the live system
     - you can get the path using `nix path-info .#packages.<target-system>.installer-package.<target>`
 4. Export all zpools and reboot into system
-6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub
+6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub`
 5. Deploy system
 
 ### Add secureboot to new systems

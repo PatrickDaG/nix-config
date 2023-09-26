@@ -109,15 +109,15 @@
         hosts
         microvmConfigurations
         nixosConfigurations
+        minimalConfigurations
         ;
       nodes = self.nixosConfigurations // self.microvmConfigurations;
-      top = lib.mapAttrs (_: x: x.config.system.build.toplevel) self.nodes;
 
       inherit
         (lib.foldl' lib.recursiveUpdate {}
           (lib.mapAttrsToList
             (import ./nix/generate-installer-package.nix inputs)
-            self.nixosConfigurations))
+            self.minimalConfigurations))
         packages
         ;
     }
@@ -139,7 +139,7 @@
         inherit pkgs;
         modules = [
           ./nix/installer-configuration.nix
-          ./modules/os-conf/core/ssh.nix
+          ./modules/config/ssh.nix
           {system.stateVersion = stateVersion;}
         ];
         format =

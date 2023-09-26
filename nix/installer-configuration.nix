@@ -15,9 +15,6 @@
     ];
   };
 
-  # Grub broken
-  boot.loader.systemd-boot.enable = true;
-
   environment = {
     variables.EDITOR = "nvim";
     systemPackages = with pkgs; [

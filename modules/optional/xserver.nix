@@ -1,4 +1,9 @@
 {
+  lib,
+  minimal,
+  ...
+}:
+lib.optionalAttrs (!minimal) {
   # Configure keymap in X11
   services.xserver = {
     enable = true;
