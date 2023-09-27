@@ -1,5 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
+    #./deadd
     ./themes.nix
   ];
   home = {
@@ -18,5 +23,12 @@
   };
 
   # notification are nice to have
-  services.dunst.enable = true;
+  services.dunst = {
+    enable = true;
+    settings.global = {
+      highlight = config.lib.stylix.colors.withHashtag.base0C;
+      progress_bar_frame_width = 0;
+      progress_bar_corner_radius = 0;
+    };
+  };
 }
