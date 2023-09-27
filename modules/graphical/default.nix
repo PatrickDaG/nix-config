@@ -7,6 +7,7 @@
   imports = [
     inputs.stylix.nixosModules.stylix
     ./fonts.nix
+    ./images.nix
   ];
 
   stylix = {

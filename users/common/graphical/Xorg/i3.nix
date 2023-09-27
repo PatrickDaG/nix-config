@@ -31,7 +31,12 @@
               ${maim} | ${pkgs.xclip}/bin/xclip -selection clipboard -t image/png
             ''
           );
-        "${cfg.modifier}+F10" =
+        "${cfg.modifier}+F10" = let
+          nsend = ''            ${pkgs.libnotify}/bin/notify-send \
+            			-h string:category:Screenshot\
+            			-h string:image-path:"${config.images.images."qr.png"}" \
+          '';
+        in
           "exec "
           + toString (
             pkgs.writeShellScript "clipboard-qr-screenshot" ''
@@ -43,15 +48,15 @@
               fi
               case "$return" in
               	"0")
-              		${pkgs.libnotify}/bin/notify-send -h string:category:"Screenshot" "Copied qr to clipboard"
+              		${nsend} "Copied qr to clipboard"
               		${pkgs.xclip}/bin/xclip -selection clipboard -f <<< ''${qr%"''${qr##*[![:space:]]}"}
               		exit 0
               	;;
               	"4")
-              		${pkgs.libnotify}/bin/notify-send -h string:category:"Screenshot" "No qr found"
+              		${nsend} "No qr found"
               	;;
               	*)
-              		${pkgs.libnotify}/bin/notify-send -h string:category:"Screenshot" "Failure scanning qr"
+              		${nsend} "Failure scanning qr"
               	;;
               esac
             ''

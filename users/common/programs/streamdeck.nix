@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   programs.streamdeck-ui = {
     enable = true;
     settings = {
@@ -12,7 +12,8 @@
               # keyInput to press
               keys = "F7";
               # Text shown on button
-              text = "mute";
+              #text = "mute";
+              icon = config.images.images."mic.png";
               # Text position
               text_vertical_align = "middle-bottom";
             };
@@ -20,14 +21,6 @@
               keys = "F8";
               text = "deafen";
               text_vertical_align = "middle-bottom";
-            };
-            "7" = {
-              # background picture
-              icon = "/home/patrick/ms.jpg";
-              # command to execute on press
-              command = "echo lol";
-              # background fill colour
-              background_color = "#000000";
             };
           };
         };

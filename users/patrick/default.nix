@@ -33,7 +33,12 @@ lib.optionalAttrs (!minimal) {
     # xournalpp needs this or else it will crash
     gnome3.adwaita-icon-theme
   ];
-  age.secrets.smb-creds.rekeyFile = ../../secrets/smb.cred.age;
+  age.secrets = {
+    smb-creds = {
+      owner = "patrick";
+      rekeyFile = ../../secrets/smb.cred.age;
+    };
+  };
   programs.dconf.enable = true;
 
   home-manager.users.patrick = {

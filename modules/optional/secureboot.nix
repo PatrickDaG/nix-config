@@ -16,9 +16,10 @@ lib.optionalAttrs (!minimal) {
   age.secrets.secureboot.rekeyFile = ../../hosts/${config.node.name}/secrets/secureboot.tar.age;
   system.activationScripts.securebootuntar = {
     text = ''
-      rm -r /run/secureboot || true
-      mkdir -p /run/secureboot
-      ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /run/secureboot || true
+         rm -r /run/secureboot || true
+         mkdir -p /run/secureboot
+      chmod 700 /run/secureboot
+         ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /run/secureboot || true
     '';
     deps = ["agenix"];
   };
