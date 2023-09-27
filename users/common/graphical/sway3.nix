@@ -129,6 +129,7 @@ in {
           interval = 1;
         }
       ];
+      theme = "native";
       icons = "material-nf";
       settings."icons.overrides" = {
         cpu = "";

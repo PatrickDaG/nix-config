@@ -20,27 +20,8 @@
       disable_ligatures = "always";
 
       # Modified onehalfdark color scheme
-      foreground = "#c9d3e5";
-      background = "#090a0c";
       cursor = "#cccccc";
       shell_integration = "disabled";
-
-      color0 = " #090a0c";
-      color8 = " #393e48";
-      color1 = " #b2555d";
-      color9 = " #e06c75";
-      color2 = " #81a566";
-      color10 = "#98c379";
-      color3 = " #ccab6e";
-      color11 = "#e6c17c";
-      color4 = " #5395cc";
-      color12 = "#61afef";
-      color5 = " #9378de";
-      color13 = "#c678dd";
-      color6 = " #56b6c2";
-      color14 = "#56b6c2";
-      color7 = " #979eab";
-      color15 = "#abb2bf";
 
       selection_foreground = "#282c34";
       selection_background = "#979eab";
@@ -69,9 +50,10 @@
       "ctrl+shift+." = "change_font_size all -2.0";
       "ctrl+shift+," = "change_font_size all +2.0";
     };
-    extraConfig = ''
-      # Use nvim as scrollback pager
-      scrollback_pager nvim -u NONE -c "set nonumber nolist showtabline=0 foldcolumn=0 laststatus=0" -c "autocmd TermOpen * normal G" -c "silent write! /tmp/kitty_scrollback_buffer | te head -c-1 /tmp/kitty_scrollback_buffer; rm /tmp/kitty_scrollback_buffer; cat"
+    extraConfig = lib.mkAfter ''
+         # Use nvim as scrollback pager
+         scrollback_pager nvim -u NONE -c "set nonumber nolist showtabline=0 foldcolumn=0 laststatus=0" -c "autocmd TermOpen * normal G" -c "silent write! /tmp/kitty_scrollback_buffer | te head -c-1 /tmp/kitty_scrollback_buffer; rm /tmp/kitty_scrollback_buffer; cat"
+      background #000000
     '';
   };
 }

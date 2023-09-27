@@ -7,8 +7,8 @@
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
-    package = pkgs.bibata-cursors;
-    name = "Bibata-Original-Ice";
+    package = pkgs.openzone-cursors;
+    name = "OpenZone_White_Slim";
     size = 18;
   };
 

@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   # import shared sway config
   imports = [../sway3.nix];
   stylix.targets.i3.enable = true;
@@ -11,6 +15,7 @@
       in {
         "Menu" = "exec ${cfg.menu}";
         "${cfg.modifier}+c" = "exec ${cfg.menu}";
+        "${cfg.modifier}+F12" = "exec ${pkgs.maim}/bin/maim -s | xclip -selection clipboard -t image/png";
       };
     };
   };
