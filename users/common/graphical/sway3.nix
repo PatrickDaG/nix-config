@@ -27,7 +27,7 @@ let
       {
         mode = "dock";
         workspaceButtons = true;
-        workspaceNumbers = true;
+        workspaceNumbers = false;
         statusCommand = "${config.programs.i3status-rust.package}/bin/i3status-rs config-main.toml";
         trayOutput = "primary";
       }
@@ -35,8 +35,8 @@ let
 
     workspaceOutputAssign = let
       output = out:
-        map (x: {
-          workspace = x;
+        lib.lists.imap1 (i: x: {
+          workspace = "${toString i}:${x}";
           output = out;
         });
     in
@@ -53,10 +53,12 @@ let
       or {};
 
     keybindings =
-      (lib.attrsets.mergeAttrsList (map (x: {
-          "${modifier}+${x.workspace}" = "workspace ${x.workspace}";
-          "${modifier}+Shift+${x.workspace}" = "move container to workspace ${x.workspace}";
-        })
+      (lib.attrsets.mergeAttrsList (map (x: (let
+          key = lib.elemAt (lib.strings.splitString ":" x.workspace) 1;
+        in {
+          "${modifier}+${key}" = "workspace ${x.workspace}";
+          "${modifier}+Shift+${key}" = "move container to workspace ${x.workspace}";
+        }))
         cfg.workspaceOutputAssign))
       // {
         "${modifier}+t" = "exec ${terminal}";
