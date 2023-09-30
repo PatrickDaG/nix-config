@@ -14,11 +14,6 @@
       ];
     directories = with lib.lists;
       [".config/dconf"]
-      ++
-      # firefox cannot be a symlink as home manager refuses put files outside your $HOME
-      optionals config.programs.firefox.enable [
-        ".mozilla"
-      ]
       ++ optionals config.programs.direnv.enable [
         ".local/share/direnv"
       ]

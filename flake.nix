@@ -127,7 +127,7 @@
           import ./lib inputs
           ++ import ./pkgs
           ++ [
-            nixpkgs-wayland.overlay
+            # nixpkgs-wayland.overlay
             devshell.overlays.default
             agenix-rekey.overlays.default
           ];

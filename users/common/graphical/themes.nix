@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  nixosConfig,
   ...
 }: {
   home.pointerCursor = {
@@ -9,7 +10,10 @@
     x11.enable = true;
     package = pkgs.openzone-cursors;
     name = "OpenZone_White_Slim";
-    size = 18;
+    size =
+      if nixosConfig.hidpi
+      then 24
+      else 18;
   };
 
   stylix = {

@@ -35,4 +35,5 @@
     applications = 9;
     desktop = 8;
   };
+  hidpi = true;
 }
