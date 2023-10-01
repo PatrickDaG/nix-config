@@ -9,7 +9,6 @@
     ../../modules/dev
     ../../modules/graphical
 
-    ../../modules/optional/xserver.nix
     ../../modules/optional/wayland.nix
     ../../modules/optional/secureboot.nix
 

@@ -12,7 +12,7 @@
     name = "OpenZone_White_Slim";
     size =
       if nixosConfig.hidpi
-      then 24
+      then 48
       else 18;
   };
 
