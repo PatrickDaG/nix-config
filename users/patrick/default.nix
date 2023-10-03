@@ -23,6 +23,7 @@ lib.optionalAttrs (!minimal) {
       "input"
       # TPM settings
       "tss"
+      "wireshark"
     ];
     group = "patrick";
     hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
