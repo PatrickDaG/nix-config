@@ -21,6 +21,7 @@
     ../../modules/hardware/zfs.nix
 
     ../../modules/optional/streamdeck.nix
+    ../../modules/optional/printing.nix
 
     ./net.nix
     ./fs.nix

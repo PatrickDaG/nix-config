@@ -37,18 +37,18 @@ let
     ];
 
     assigns = {
-      "d" = [
+      "2:d" = [
         {class = "^firefox$";}
       ];
-      "a" = [
+      "4:a" = [
         {class = "^bottles$";}
         {class = "^steam$";}
         {class = "^prismlauncher$";}
       ];
-      "F1" = [
+      "1:F1" = [
         {class = "^Discord$";}
       ];
-      "F2" = [
+      "2:F2" = [
         {class = "^Signal$";}
         {class = "^TelegramDesktop$";}
       ];
