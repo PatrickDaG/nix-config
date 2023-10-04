@@ -54,8 +54,11 @@
     };
 
     theme = lib.mkForce {
-      name = "Orchis-purple-solid-black";
-      package = pkgs.orchis-theme;
+      # Orchis has no support for qt
+      #name = "Orchis-purple-solid-black";
+      #package = pkgs.orchis-theme;
+      name = "WhiteSur-Dark-solid";
+      package = pkgs.whitesur-gtk-theme;
     };
 
     gtk2.extraConfig = "gtk-application-prefer-dark-theme = true";

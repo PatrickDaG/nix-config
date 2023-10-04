@@ -32,6 +32,27 @@ let
         trayOutput = "primary";
       }
     ];
+    floating.criteria = [
+      {class = "Pavucontrol";}
+    ];
+
+    assigns = {
+      "d" = [
+        {class = "^firefox$";}
+      ];
+      "a" = [
+        {class = "^bottles$";}
+        {class = "^steam$";}
+        {class = "^prismlauncher$";}
+      ];
+      "F1" = [
+        {class = "^Discord$";}
+      ];
+      "F2" = [
+        {class = "^Signal$";}
+        {class = "^TelegramDesktop$";}
+      ];
+    };
 
     workspaceOutputAssign = let
       output = out:

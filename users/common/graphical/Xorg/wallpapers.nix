@@ -22,7 +22,7 @@ in {
           Description = "Set a random wallpaper every 3 minutes";
         };
         Timer = {
-          OnActiveSec = "0 sec";
+          OnActiveSec = "2 sec";
           OnUnitActiveSec = "3 min";
         };
         Install.WantedBy = ["timers.target"];
