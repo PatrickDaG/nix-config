@@ -12,7 +12,10 @@ lib.optionalAttrs (!minimal) {
     enable = true;
     package = pkgs.wireshark;
   };
-  services.nixseparatedebuginfod.enable = true;
+  services.nixseparatedebuginfod = {
+    enable = true;
+    allowUser = true;
+  };
   environment = {
     enableDebugInfo = true;
     shellInit = ''

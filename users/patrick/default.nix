@@ -64,7 +64,7 @@ lib.optionalAttrs (!minimal) {
       ++ {
         "desktopnix" = [
           ../common/graphical/Xorg
-          ../common/programs/streamdeck.nix
+          #../common/programs/streamdeck.nix
           ./smb.nix
         ];
         "patricknix" = [

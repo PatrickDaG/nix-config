@@ -40,6 +40,9 @@ let
       "2:d" = [
         {class = "^firefox$";}
       ];
+      "3:u" = [
+        {class = "^thunderbird$";}
+      ];
       "4:a" = [
         {class = "^bottles$";}
         {class = "^steam$";}
@@ -86,6 +89,12 @@ let
         "${modifier}+b" = "exec firefox";
         "${modifier}+m" = "exec thunderbird";
         "${modifier}+q" = "kill";
+        "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play-pause";
+        "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl next";
+        "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl previous";
+        "XF86AudioMute" = "exec ${pkgs.pamixer}/bin/pamixer -t";
+        "XF86AudioLowerVolume" = "exec ${pkgs.pamixer}/bin/pamixer -d 5";
+        "XF86AudioRaiseVolume" = "exec ${pkgs.pamixer}/bin/pamixer -i 5";
 
         "${modifier}+${left}" = "focus left";
         "${modifier}+${down}" = "focus down";
