@@ -49,7 +49,7 @@ let
         {class = "^prismlauncher$";}
       ];
       "1:F1" = [
-        {class = "^Discord$";}
+        {class = "^discord$";}
       ];
       "2:F2" = [
         {class = "^Signal$";}

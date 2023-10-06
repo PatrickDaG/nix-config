@@ -63,6 +63,10 @@
 
   qt = {
     enable = true;
-    platformTheme = "gtk";
+    platformTheme = "qtct";
+    style.name = "kvantum";
   };
+
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = "theme=KvLibadwaita";
+  xdg.configFile."Kvantum/KvLibadwaita/".source = ./kvantum;
 }

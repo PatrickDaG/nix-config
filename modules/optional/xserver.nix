@@ -13,7 +13,10 @@ lib.optionalAttrs (!minimal) {
     videoDrivers = ["modesetting"];
     libinput = {
       enable = true;
-      mouse.accelProfile = "flat";
+      mouse = {
+        accelSpeed = "0.5";
+        accelProfile = "flat";
+      };
       touchpad = {
         accelProfile = "flat";
         accelSpeed = "1";
