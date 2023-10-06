@@ -98,6 +98,9 @@
     If you want to be able to boot microsoft signed images append `--microsoft`
 1. Time to reboot and pray
 
+TPM keys
+`systemd-cryptenroll --tpm2-pcrs=7+8+9 --tpm2-with-pin={yes/no} --tpm2-device=auto <device>`
+
 
 ## Deploy
 

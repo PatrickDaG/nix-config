@@ -9,15 +9,9 @@
   ];
   home = {
     packages = with pkgs; [
-      thunderbird
-      signal-desktop
-      chromium
-      xdragon
-      xournalpp
       zathura
       pinentry
       feh
-      galaxy-buds-client
       mpv
     ];
   };

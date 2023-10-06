@@ -1,5 +1,8 @@
 {pkgs, ...}: {
-  home.packages = [pkgs.xclip];
+  home.packages = [
+    pkgs.xclip
+    pkgs.xdragon
+  ];
   imports = [
     ../.
     ./rofi.nix

@@ -5,6 +5,11 @@
       nextcloud-client
       discord
       netflix
+      xournalpp
+      galaxy-buds-client
+      thunderbird
+      signal-desktop
+      chromium
     ];
   };
 }
