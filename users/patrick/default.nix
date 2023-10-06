@@ -7,8 +7,6 @@
 }:
 lib.optionalAttrs (!minimal) {
   imports = [
-    ../../modules/optional/steam.nix
-    ./impermanence.nix
   ];
 
   users.users.patrick = {
@@ -47,6 +45,9 @@ lib.optionalAttrs (!minimal) {
       [
         ./patrick.nix
         ./ssh.nix
+        ./firefox.nix
+        ./gpg
+        ./impermanence.nix
 
         ../common
         ../common/impermanence.nix
@@ -64,7 +65,7 @@ lib.optionalAttrs (!minimal) {
       ++ {
         "desktopnix" = [
           ../common/graphical/Xorg
-          #../common/programs/streamdeck.nix
+          #./streamdeck.nix
           ./smb.nix
         ];
         "patricknix" = [

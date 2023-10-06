@@ -19,6 +19,11 @@
         inherit identityFile;
       };
 
+      "gojo" = {
+        hostname = "10.181.97.217";
+        user = "root";
+        inherit identityFile;
+      };
       "patricknix" = {
         hostname = "patricknix.local";
         user = "root";

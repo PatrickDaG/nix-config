@@ -79,11 +79,10 @@ in {
                 # are assertions in place warning you
                 home =
                   {
-                    patrick = "/home/patrick";
                     root = "/root";
                   }
                   .${user}
-                  or {};
+                  or "/home/${user}";
                 files = mkUserFiles sourceCfg.files;
                 directories = mkUserDirs sourceCfg.directories;
               };

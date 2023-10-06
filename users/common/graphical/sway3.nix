@@ -74,7 +74,7 @@ let
           ++ output "DP-1" ["j" "d" "u" "a"];
       }
       .${nixosConfig.node.name}
-      or {};
+      or [];
 
     keybindings =
       (lib.attrsets.mergeAttrsList (map (x: (let

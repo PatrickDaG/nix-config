@@ -7,16 +7,6 @@
   programs.gpg = {
     enable = true;
     scdaemonSettings.disable-ccid = true;
-    publicKeys = [
-      {
-        source = ./pubkey.gpg;
-        trust = 5;
-      }
-      {
-        source = ./newpubkey.gpg;
-        trust = 5;
-      }
-    ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
       # https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html

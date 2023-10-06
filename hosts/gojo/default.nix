@@ -10,33 +10,26 @@
     ../../modules/graphical
 
     ../../modules/optional/wayland.nix
-    ../../modules/optional/secureboot.nix
     ../../modules/optional/printing.nix
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/laptop.nix
     ../../modules/hardware/intel.nix
-    ../../modules/hardware/nvidia.nix
     ../../modules/hardware/physical.nix
     ../../modules/hardware/pipewire.nix
     ../../modules/hardware/yubikey.nix
     ../../modules/hardware/zfs.nix
 
-    ../../modules/hardware/prime-offload.nix
-    ../../modules/optional/steam.nix
-
     ./net.nix
     ./fs.nix
-    ./wireguard.nix
 
-    ../../users/patrick
+    ../../users/simon
   ];
   stylix.fonts.sizes = {
-    terminal = 9;
-    applications = 9;
-    desktop = 8;
+    #terminal = 9;
+    #applications = 9;
+    #desktop = 8;
   };
-  hidpi = true;
   services.xserver = {
     layout = "de";
     xkbVariant = "bone";

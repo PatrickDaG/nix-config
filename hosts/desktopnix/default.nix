@@ -21,6 +21,7 @@
     ../../modules/hardware/zfs.nix
 
     ../../modules/optional/streamdeck.nix
+    ../../modules/optional/steam.nix
     ../../modules/optional/printing.nix
 
     ./net.nix
@@ -32,5 +33,9 @@
     terminal = 9;
     applications = 10;
     desktop = 10;
+  };
+  services.xserver = {
+    layout = "de";
+    xkbVariant = "bone";
   };
 }

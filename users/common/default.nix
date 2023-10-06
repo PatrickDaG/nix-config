@@ -4,7 +4,7 @@
     ./shells/zsh
     ./shells/pager.nix
 
-    ./programs/gpg
+    ./programs/gpg.nix
   ];
 
   programs.bat.enable = true;

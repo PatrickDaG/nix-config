@@ -22,6 +22,17 @@
       dhcpV4Config.RouteMetric = 10;
       dhcpV6Config.RouteMetric = 10;
     };
+    "02-lan1" = {
+      DHCP = "yes";
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan2.mac;
+      networkConfig = {
+        IPv6PrivacyExtensions = "yes";
+        MulticastDNS = true;
+      };
+      dns = ["9.9.9.9"];
+      dhcpV4Config.RouteMetric = 10;
+      dhcpV6Config.RouteMetric = 10;
+    };
     "01-wlan1" = {
       DHCP = "yes";
       matchConfig.MACAddress = config.secrets.secrets.local.networking.wlan1.mac;

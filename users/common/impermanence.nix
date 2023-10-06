@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  nixosConfig,
   ...
 }: {
   home.persistence."/state" = {
@@ -24,6 +25,10 @@
         ".local/share/nvim"
         ".local/state/nvim"
         ".cache/nvim"
+      ]
+      ++ optionals nixosConfig.services.pipewire.enable [
+        # persist sound config
+        ".local/state/wireplumber"
       ];
   };
 }

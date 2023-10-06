@@ -38,10 +38,6 @@
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
   i18n.defaultLocale = "C.UTF-8";
-  services.xserver = {
-    layout = "de";
-    xkbVariant = "bone";
-  };
   console = {
     font = "ter-v28n";
     packages = with pkgs; [terminus_font];
