@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-gpu-intel
@@ -10,6 +14,7 @@
     ../../modules/graphical
 
     ../../modules/optional/wayland.nix
+    ../../modules/optional/xserver.nix
     ../../modules/optional/printing.nix
 
     ../../modules/hardware/bluetooth.nix
@@ -32,6 +37,11 @@
   };
   services.xserver = {
     layout = "de";
-    xkbVariant = "bone";
+    xkbVariant = "neo";
+    libinput = {
+      touchpad = lib.mkForce {
+        accelSpeed = "0.5";
+      };
+    };
   };
 }

@@ -72,6 +72,8 @@ let
         "patricknix" =
           output "eDP-1" ["1" "2" "3" "4"]
           ++ output "DP-1" ["j" "d" "u" "a"];
+        "gojo" =
+          output "eDP-1" ["1" "2" "3" "4" "5" "6"];
       }
       .${nixosConfig.node.name}
       or [];

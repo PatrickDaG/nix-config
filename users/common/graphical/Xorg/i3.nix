@@ -34,7 +34,6 @@
         "${cfg.modifier}+F10" = let
           nsend = ''            ${pkgs.libnotify}/bin/notify-send \
             			-h string:category:Screenshot\
-            			-h string:image-path:"${config.images.images."qr.png"}" \
           '';
         in
           "exec "

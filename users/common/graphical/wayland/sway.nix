@@ -17,9 +17,9 @@
         menu = "fuzzel";
         input = {
           "*" = {
-            xkb_layout = "de,de";
+            xkb_layout = "de,de,de";
             # games are stupid so the main ui has to be de() without bone
-            xkb_variant = ",bone";
+            xkb_variant = ",bone,neo";
             xkb_options = "grp:win_space_toggle";
             repeat_delay = "235";
             repeat_rate = "60";
