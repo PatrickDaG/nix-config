@@ -46,6 +46,8 @@
         "browser.tabs.crashReporting.sendReport" = false; # don't send crash reports
         "accessibility.typeaheadfind.enablesound" = false; # No sound in search windows pls
         "general.autoScroll" = true;
+        "browser.translations.automaticallyPopup" = false;
+        "browser.translations.neverTranslateLanguages" = "de";
 
         # Privacy
         "privacy.donottrackheader.enabled" = true;

@@ -1,6 +1,7 @@
 {
   inputs,
   stateVersion,
+  pkgs,
   ...
 }: {
   nix = {
@@ -49,5 +50,6 @@
       templates.flake = inputs.templates;
     };
   };
+  programs.nix-ld.enable = true;
   system.stateVersion = stateVersion;
 }

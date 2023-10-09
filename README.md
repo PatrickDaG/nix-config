@@ -82,15 +82,17 @@
 5. Deploy system
 
 ### Add secureboot to new systems
-1. generate keys with `sbct create-keys'
-1. tar the resulting folder using `tar cvf secureboot.tar -C /etc/secureboot`
+1. generate keys with `sbct create-keys`
+1. tar the resulting folder using `tar cvf secureboot.tar -C /etc/secureboot .`
 1. Copy the tar to local using scp and encrypt it using rage
+    - `rage -e -R ./secrets/recipients.txt secureboot.tar -o <host>/secrets/secureboot.tar.age`
 1. safe the encrypted archive to `hosts/<host>/secrets/secureboot.tar.age`
 1. *DO NOT* forget to delete the unecrypted archives
-1. link `/run/secureboot` to `/etc/secureboot`
-1. This is necesarry since for your next apply the rekeyed keys are not yet available but needed for signing the boot files
+1. Deploy your system with lanzaboote enabled
+    - link `/run/secureboot` to `/etc/secureboot`
+    - This is necesarry since for your this apply the rekeyed keys are not yet available but already needed for signing the boot files
 1. ensure the boot files are signed using `sbctl verify`
-1. Now reboot the computer into BIOS and enable secureboot
+1. Now reboot the computer into BIOS and enable secureboot,
     this may include removing any existing old keys
 1. bootctl should now read `Secure Boot: disabled (setup)`
 1. you can now enroll your secureboot keys using
@@ -98,7 +100,7 @@
     If you want to be able to boot microsoft signed images append `--microsoft`
 1. Time to reboot and pray
 
-TPM keys
+### Add luks encryption TPM keys
 `systemd-cryptenroll --tpm2-pcrs=7+8+9 --tpm2-with-pin={yes/no} --tpm2-device=auto <device>`
 
 
