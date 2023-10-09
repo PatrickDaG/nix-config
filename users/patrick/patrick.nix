@@ -9,6 +9,7 @@
       galaxy-buds-client
       thunderbird
       signal-desktop
+      telegram-desktop
       chromium
     ];
   };

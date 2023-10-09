@@ -11,6 +11,7 @@
       # for electron signal app state
       ".config/Signal"
       ".config/discord"
+      ".local/share/TelegramDesktop"
 
       # Folders for steam
       ".local/share/Steam"
