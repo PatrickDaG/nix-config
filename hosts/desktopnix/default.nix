@@ -10,7 +10,7 @@
     ../../modules/graphical
 
     ../../modules/optional/xserver.nix
-    #../../modules/optional/secureboot.nix
+    ../../modules/optional/secureboot.nix
 
     ../../modules/hardware/intel.nix
     ../../modules/hardware/nintendo.nix
