@@ -21,11 +21,6 @@
       ++ optionals config.programs.nushell.enable [
         ".config/nushell"
       ]
-      ++ optionals config.programs.neovim.enable [
-        ".local/share/nvim"
-        ".local/state/nvim"
-        ".cache/nvim"
-      ]
       ++ optionals nixosConfig.services.pipewire.enable [
         # persist sound config
         ".local/state/wireplumber"

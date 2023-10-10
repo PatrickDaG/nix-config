@@ -39,7 +39,7 @@
   time.timeZone = lib.mkDefault "Europe/Berlin";
   i18n.defaultLocale = "C.UTF-8";
   console = {
-    font = "ter-v28n";
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-v28n.psf.gz";
     packages = with pkgs; [terminus_font];
     useXkbConfig = true; # use xkbOptions in tty.
     keyMap = lib.mkDefault "de-latin1-nodeadkeys";

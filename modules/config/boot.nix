@@ -11,7 +11,7 @@
       extraBin.ip = "${pkgs.iproute}/bin/ip";
     };
 
-    initrd.availableKernelModules = ["xhci_pci" "nvme" "r8169" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" "ahci" "uas"];
+    initrd.availableKernelModules = ["xhci_pci" "nvme" "r8169" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" "ahci" "uas" "tpm_crb"];
     supportedFilesystems = ["ntfs"];
     kernelModules = ["kvm-intel"];
     kernelParams = [

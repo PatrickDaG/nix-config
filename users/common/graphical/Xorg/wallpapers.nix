@@ -17,9 +17,13 @@ in {
           Description = "Set a random wallpaper every 3 minutes";
         };
         Timer = {
+          OnActiveSec = "5 sec";
           OnUnitActiveSec = "3 min";
         };
-        Install.WantedBy = ["timers.target"];
+        Install.WantedBy = [
+          "timers.target"
+          "graphical-session.target"
+        ];
       };
     };
     services = {
@@ -32,7 +36,6 @@ in {
           ExecStart =
             exe;
         };
-        Install.WantedBy = ["graphical-session.target"];
       };
     };
   };

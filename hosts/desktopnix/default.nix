@@ -12,7 +12,6 @@
     ../../modules/optional/xserver.nix
     ../../modules/optional/secureboot.nix
 
-    ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/intel.nix
     ../../modules/hardware/nintendo.nix
     ../../modules/hardware/nvidia.nix

@@ -74,18 +74,4 @@
       };
     };
   };
-  systemd.user = {
-    services = {
-      streamdeck-ui = {
-        Unit = {
-          Description = "start streamdeck-ui";
-        };
-        Service = {
-          Type = "exec";
-          ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck-ui --no-ui";
-        };
-        Install.WantedBy = ["graphical-session.target"];
-      };
-    };
-  };
 }

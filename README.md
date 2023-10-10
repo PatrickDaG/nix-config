@@ -101,7 +101,7 @@
 1. Time to reboot and pray
 
 ### Add luks encryption TPM keys
-`systemd-cryptenroll --tpm2-pcrs=7+8+9 --tpm2-with-pin={yes/no} --tpm2-device=auto <device>`
+`systemd-cryptenroll --tpm2-with-pin={yes/no} --tpm2-device=auto <device>`
 
 
 ## Deploy
