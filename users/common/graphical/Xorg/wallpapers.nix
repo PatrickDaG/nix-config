@@ -7,12 +7,7 @@
   exe =
     pkgs.writeShellScript "set-wallpaper"
     ''
-      if [ -d "/tmp/.X11-unix" ]; then
-           for D in /tmp/.X11-unix/*; do
-           	file=$(${pkgs.coreutils}/bin/basename $D)
-           	DISPLAY=":''${file:1}" ${pkgs.feh}/bin/feh --no-fehbg --bg-fill --randomize --recursive ${wallpaper-folder}/
-           done
-      fi
+      ${pkgs.feh}/bin/feh --no-fehbg --bg-fill --randomize --recursive ${wallpaper-folder}/
     '';
 in {
   systemd.user = {
@@ -22,7 +17,6 @@ in {
           Description = "Set a random wallpaper every 3 minutes";
         };
         Timer = {
-          OnActiveSec = "2 sec";
           OnUnitActiveSec = "3 min";
         };
         Install.WantedBy = ["timers.target"];
@@ -38,6 +32,7 @@ in {
           ExecStart =
             exe;
         };
+        Install.WantedBy = ["graphical-session.target"];
       };
     };
   };

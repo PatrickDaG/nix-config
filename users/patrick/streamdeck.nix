@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs.streamdeck-ui = {
     enable = true;
     settings = {
@@ -67,6 +71,20 @@
         brightness = 99; # brighness value between 0 and 99
         display_timeout = 0; # dimmer timeout in seconds
         brightness_dimmed = 99; # dimmed brighness
+      };
+    };
+  };
+  systemd.user = {
+    services = {
+      streamdeck-ui = {
+        Unit = {
+          Description = "start streamdeck-ui";
+        };
+        Service = {
+          Type = "exec";
+          ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck-ui --no-ui";
+        };
+        Install.WantedBy = ["graphical-session.target"];
       };
     };
   };

@@ -4,11 +4,6 @@
 #
 # Executed by startx (run your window manager from here)
 
-xset m 1 0
-xsetroot -solid '#000000'
-#
-xset r rate 235 60
-
 # copied from nixos wiki
 # https://nixos.wiki/wiki/Using_X_without_a_Display_Manager
 if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
@@ -20,7 +15,4 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
         dbus-update-activation-environment DISPLAY XAUTHORITY
 fi
 
-autorandr -c
-streamdeck --no-ui &
-systemctl --user start set-wallpaper.timer &
 exec i3
