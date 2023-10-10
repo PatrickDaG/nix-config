@@ -48,7 +48,7 @@
         defaultZpoolOptions
         // {
           datasets = {
-            "save" = unmountable;
+            "safe" = unmountable;
             "safe/data" = filesystem "/data";
           };
         };

@@ -33,8 +33,10 @@
   # to create a link called /run/agenix. Agenix should probably fail in this case,
   # but doesn't and instead puts the generation link into the existing directory.
   # TODO See https://github.com/ryantm/agenix/pull/187.
-  system.activationScripts.removeAgenixLink.text = "[[ ! -L /run/agenix ]] && [[ -d /run/agenix ]] && rm -rf /run/agenix";
-  system.activationScripts.agenixNewGeneration.deps = ["removeAgenixLink"];
+  system.activationScripts = {
+    removeAgenixLink.text = "[[ ! -L /run/agenix ]] && [[ -d /run/agenix ]] && rm -rf /run/agenix";
+    #agenixNewGeneration.deps = ["removeAgenixLink"];
+  };
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
   i18n.defaultLocale = "C.UTF-8";
