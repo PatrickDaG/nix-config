@@ -48,12 +48,18 @@
         defaultZpoolOptions
         // {
           datasets = {
+            "local" = unmountable;
+            "local/state" = filesystem "/panzer/state";
             "safe" = unmountable;
-            "safe/data" = filesystem "/data";
+            "safe/persist" = filesystem "/panzer/persist";
           };
         };
     };
   };
 
+  fileSystems."/state".neededForBoot = true;
+  fileSystems."/panzer/state".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
+  boot.initrd.luks.devices.enc-panzer-1.allowDiscards = true;
+  boot.initrd.luks.devices.enc-panzer-2.allowDiscards = true;
 }

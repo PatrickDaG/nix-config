@@ -16,56 +16,39 @@
       "elisabeth" = {
         hostname = "lel.lol";
         user = "root";
-        inherit identityFile;
       };
 
       "gojo" = {
         hostname = "10.181.97.217";
         user = "root";
-        inherit identityFile;
       };
+
       "patricknix" = {
         hostname = "patricknix.local";
         user = "root";
-        inherit identityFile;
       };
 
       "testienix" = {
         hostname = "testienix.local";
         user = "root";
-        inherit identityFile;
       };
 
       "desktopnix" = {
         hostname = "desktopnix.local";
         user = "root";
-        inherit identityFile;
       };
 
       "valhalla" = {
         hostname = "valhalla.fs.tum.de";
         user = "grossmann";
-        inherit identityFile;
       };
       "elisabethprivate" = {
         hostname = "lel.lol";
         user = "patrick";
-        inherit identityFile;
-      };
-      "*.lel.lol" = {
-        inherit identityFile;
-      };
-      "localhost" = {
-        inherit identityFile;
-      };
-      "gitlab.lrz.de" = {
-        inherit identityFile;
-      };
-      "github.com" = {
-        inherit identityFile;
       };
       "*" = {
         identitiesOnly = true;
+        inherit identityFile;
       };
     };
   };
