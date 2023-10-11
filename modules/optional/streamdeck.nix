@@ -25,8 +25,22 @@ in {
         };
       };
       config = mkIf config.programs.streamdeck-ui.enable {
-        home.packages = [pkgs.streamdeck-ui];
-        home.sessionVariables.STREAMDECK_UI_CONFIG = "${config.xdg.configHome}/streamdeck-ui/config.json";
+        systemd.user = {
+          services = {
+            streamdeck = {
+              Unit = {
+                Description = "start streamdeck-ui";
+              };
+              Service = {
+                Type = "exec";
+                ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck-ui --no-ui";
+                Environment = "STREAMDECK_UI_CONFIG=${config.xdg.configHome}/streamdeck-ui/config.json";
+              };
+              Install.WantedBy = ["graphical-session.target"];
+            };
+          };
+        };
+
         xdg.configFile.streamdeck-ui = {
           target = "streamdeck-ui/config.json";
           source = settingsFormat.generate "config.json" {

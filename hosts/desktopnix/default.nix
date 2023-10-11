@@ -34,8 +34,4 @@
     applications = 10;
     desktop = 10;
   };
-  services.xserver = {
-    layout = "de";
-    xkbVariant = "bone";
-  };
 }

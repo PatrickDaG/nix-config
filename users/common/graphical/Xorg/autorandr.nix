@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.autorandr = let
     dpi_hd = 96;
     dpi_uhd = 216;

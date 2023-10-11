@@ -15,9 +15,7 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
         dbus-update-activation-environment DISPLAY XAUTHORITY
 fi
 
-autorandr -c
 # I3 does no start graphical session.target because ????
 # so we need to manually start all service we want
-systemctl --user start set-wallpaper.timer streamdeck.service
 xset r rate 235 60
 exec i3

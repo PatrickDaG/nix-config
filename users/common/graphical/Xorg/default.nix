@@ -6,7 +6,6 @@
   imports = [
     ../.
     ./rofi.nix
-    ./autorandr.nix
     ./i3.nix
     ./wallpapers.nix
   ];

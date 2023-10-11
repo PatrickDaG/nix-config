@@ -9,6 +9,10 @@
   xsession.windowManager.i3 = {
     enable = true;
     config = {
+      startup = [
+        {command = "xrandr --output DVI-D-0 --mode 1920x1080 --pos 0x0 --rate 60.00 --output DP-4 --mode 2560x1440 --pos 1920x720 --primary --rate 144 --output HDMI-0 --pos 0x1080 --rate 60.00";}
+        {command = "systemctl --user start set-wallpaper.timer streamdeck.service";}
+      ];
       menu = "rofi -show drun";
       keybindings = let
         cfg = config.xsession.windowManager.i3.config;

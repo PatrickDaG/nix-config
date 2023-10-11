@@ -32,8 +32,18 @@
     };
     zpool = with lib.disko.zfs; {
       rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
-      panzer = defaultZpoolOptions // {datasets = {};};
+      panzer =
+        defaultZpoolOptions
+        // {
+          datasets = {
+            "local" = unmountable;
+            "local/state" = filesystem "/panzer/state";
+          };
+        };
     };
   };
+  fileSystems."/state".neededForBoot = true;
+  fileSystems."/panzer/state".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
+  boot.initrd.luks.devices.enc-panzer.allowDiscards = true;
 }

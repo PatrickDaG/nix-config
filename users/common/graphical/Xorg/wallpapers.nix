@@ -17,7 +17,7 @@ in {
           Description = "Set a random wallpaper every 3 minutes";
         };
         Timer = {
-          OnActiveSec = "5 sec";
+          OnActiveSec = "10 sec";
           OnUnitActiveSec = "3 min";
         };
         Install.WantedBy = [
