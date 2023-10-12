@@ -76,6 +76,11 @@
     };
 
     stylix.url = "github:danth/stylix";
+    wired-notify = {
+      url = "github:Toqozz/wired-notify";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "flake-utils";
+    };
   };
 
   outputs = {
@@ -87,6 +92,7 @@
     pre-commit-hooks,
     devshell,
     nixpkgs-wayland,
+    wired-notify,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
@@ -130,6 +136,7 @@
             # nixpkgs-wayland.overlay
             devshell.overlays.default
             agenix-rekey.overlays.default
+            wired-notify.overlays.default
           ];
         inherit system;
         config.allowUnfree = true;

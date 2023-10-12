@@ -30,6 +30,8 @@ in {
             streamdeck = {
               Unit = {
                 Description = "start streamdeck-ui";
+                # For some reason this depends on X or wayland running
+                ConditionEnvironment = ["DISPLAY" "WAYLAND_DISPLAYS"];
               };
               Service = {
                 Type = "exec";

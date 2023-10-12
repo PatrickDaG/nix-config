@@ -15,6 +15,7 @@ in {
       set-wallpaper = {
         Unit = {
           Description = "Set a random wallpaper every 3 minutes";
+          ConditionEnvironment = "DISPLAY";
         };
         Timer = {
           OnActiveSec = "10 sec";

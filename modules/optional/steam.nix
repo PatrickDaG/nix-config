@@ -12,6 +12,7 @@ lib.optionalAttrs (!minimal) {
         with pkgs; [
           # vampir überlebende braucht diese pkgs
           libgdiplus
+          xdg-desktop-portal
           cups
         ];
     };
