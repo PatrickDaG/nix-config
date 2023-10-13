@@ -6,9 +6,6 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
-  imports = [
-  ];
-
   users.users.patrick = {
     shell = pkgs.zsh;
     isNormalUser = true;

@@ -14,4 +14,8 @@
     ./net.nix
     ./fs.nix
   ];
+  services.xserver = {
+    layout = "de";
+    xkbVariant = "bone";
+  };
 }

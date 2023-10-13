@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
     inputs.nixos-hardware.nixosModules.common-pc
@@ -33,5 +37,9 @@
     terminal = 9;
     applications = 10;
     desktop = 10;
+  };
+  services.xserver = {
+    layout = "de";
+    xkbVariant = "neo";
   };
 }
