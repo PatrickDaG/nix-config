@@ -31,11 +31,11 @@ in {
               Unit = {
                 Description = "start streamdeck-ui";
                 # For some reason this depends on X or wayland running
-                ConditionEnvironment = ["DISPLAY" "WAYLAND_DISPLAYS"];
+                ConditionEnvironment = ["DISPLAY"];
               };
               Service = {
                 Type = "exec";
-                ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck-ui --no-ui";
+                ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck --no-ui";
                 Environment = "STREAMDECK_UI_CONFIG=${config.xdg.configHome}/streamdeck-ui/config.json";
               };
               Install.WantedBy = ["graphical-session.target"];

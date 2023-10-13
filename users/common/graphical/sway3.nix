@@ -172,8 +172,8 @@ in {
       # icons = "material-nf";
       settings = {
         icons.icons = "material-nf";
-        "icons.overrides" = {
-          cpu = "";
+        icons.overrides = {
+          cpu = " ";
         };
       };
     };

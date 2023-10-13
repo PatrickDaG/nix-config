@@ -30,6 +30,9 @@
 
         # bottles state games
         ".local/share/bottles"
+
+        ".config/spotify"
+        ".cache/spotify"
       ];
     };
     "/panzer/state".directories =

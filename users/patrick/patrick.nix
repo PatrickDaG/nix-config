@@ -11,6 +11,7 @@
       signal-desktop
       telegram-desktop
       chromium
+      spotify
     ];
   };
 }
