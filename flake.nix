@@ -76,11 +76,14 @@
     };
 
     stylix.url = "github:danth/stylix";
+
     wired-notify = {
       url = "github:Toqozz/wired-notify";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "flake-utils";
     };
+
+    spicetify-nix.url = "github:the-argus/spicetify-nix";
   };
 
   outputs = {
