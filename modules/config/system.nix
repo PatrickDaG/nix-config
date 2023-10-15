@@ -58,6 +58,7 @@
     killall
     fd
     kitty.terminfo
+    nvd
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

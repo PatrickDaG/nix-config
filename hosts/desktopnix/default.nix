@@ -40,6 +40,6 @@
   };
   services.xserver = {
     layout = "de";
-    xkbVariant = "neo";
+    xkbVariant = "bone";
   };
 }
