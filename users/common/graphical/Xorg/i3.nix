@@ -36,8 +36,9 @@
             ''
           );
         "${cfg.modifier}+F10" = let
-          nsend = ''            ${pkgs.libnotify}/bin/notify-send \
-            			-h string:category:Screenshot\
+          nsend = ''
+            ${pkgs.libnotify}/bin/notify-send \
+                  -h string:category:Screenshot\
           '';
         in
           "exec "

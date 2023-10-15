@@ -17,7 +17,7 @@
       inherit (config.stylix) fonts;
 
       # A global scaling factor to apply to all notifications.
-      globalScale = 1.2;
+      globalScale = 0.6;
 
       # Ron format shorthands and helpers
       unnamedStruct = struct "";
@@ -418,7 +418,7 @@
                 ]))
               ];
               params = struct "NotificationBlock" (unnamedStruct {
-                monitor = 1;
+                monitor = 2;
                 border_width = globalScale * 2;
                 border_rounding = globalScale * 0;
                 background_color = colors.base00;

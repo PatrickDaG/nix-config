@@ -23,5 +23,6 @@
       rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
     };
   };
+  fileSystems."/state".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
 }

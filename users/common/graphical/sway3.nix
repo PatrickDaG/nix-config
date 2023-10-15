@@ -40,6 +40,9 @@ let
       "2:d" = [
         {class = "^firefox$";}
       ];
+      "1:1" = [
+        {class = "^spotify$";}
+      ];
       "3:u" = [
         {class = "^thunderbird$";}
       ];
