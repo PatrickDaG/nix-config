@@ -10,13 +10,14 @@
     ./ssh.nix
     ./system.nix
     ./xdg.nix
+    #./usbguard
 
     ../../users/root
 
     ../secrets.nix
     ../meta.nix
     ../smb-mounts.nix
-    ../impermanence
+    ./impermanence
 
     inputs.home-manager.nixosModules.default
     inputs.impermanence.nixosModules.impermanence

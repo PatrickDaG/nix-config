@@ -7,7 +7,8 @@
   exe =
     pkgs.writeShellScript "set-wallpaper"
     ''
-      ${pkgs.feh}/bin/feh --no-fehbg --bg-fill --randomize $( ${pkgs.findutils}/bin/find ${wallpaper-folder} | ${pkgs.ripgrep}/bin/rg ".*(\.png|\.jpg)$")
+         ${pkgs.feh}/bin/feh --no-fehbg --bg-fill --randomize \
+      $( ${pkgs.findutils}/bin/find ${wallpaper-folder} | ${pkgs.ripgrep}/bin/rg ".*(\.png|\.jpg)$")
     '';
 in {
   systemd.user = {
