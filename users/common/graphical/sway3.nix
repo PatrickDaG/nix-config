@@ -69,12 +69,12 @@ let
     in
       {
         "desktopnix" =
-          output "HDMI-0" ["1" "2" "3" "4"]
-          ++ output "DP-4" ["j" "d" "u" "a"]
+          output "HDMI-0" ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
+          ++ output "DP-4" ["j" "d" "u" "a" "x" "p"]
           ++ output "DVI-D-0" ["F1" "F2" "F3" "F4"];
         "patricknix" =
-          output "eDP-1" ["1" "2" "3" "4"]
-          ++ output "DP-1" ["j" "d" "u" "a"];
+          output "eDP-1" ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
+          ++ output "DP-1" ["j" "d" "u" "a" "x" "p"];
         "gojo" =
           output "eDP-1" ["1" "2" "3" "4" "5" "6"];
       }

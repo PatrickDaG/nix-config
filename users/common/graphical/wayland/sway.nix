@@ -15,6 +15,14 @@
     config =
       {
         menu = "fuzzel";
+        startup = [
+          # for games to work input 1 has to be qwerts
+          # but i would like to have bone as my layout
+          {
+            command = "swaymsg input \"*\" xkb_switch_layout 1";
+            always = true;
+          }
+        ];
         input = {
           "*" = {
             xkb_layout = "de,de,de";
