@@ -33,10 +33,14 @@
             repeat_rate = "60";
             accel_profile = "flat";
             pointer_accel = "0.3";
+            tap = "enabled";
           };
           "type:touchpad" = {
             pointer_accel = "0.5";
             natural_scroll = "enabled";
+          };
+          "type:touch" = {
+            map_to_output = "eDP-1";
           };
         };
         keybindings = let
@@ -79,6 +83,13 @@
       }
       .${nixosConfig.node.name}
       or {};
+    extraConfig = let
+      cfg = config.wayland.windowManager.sway.config;
+    in ''
+      bindgesture swipe:3:left workpace next
+      bindgesture swipe:3:right workpace prev
+      bindgesture pinch:4:outward exec ${cfg.menu}
+    '';
   };
   # Cursor invisible
   home.sessionVariables = {

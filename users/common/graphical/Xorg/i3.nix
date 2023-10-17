@@ -29,7 +29,6 @@
         maim = "${pkgs.maim}/bin/maim -qs -b 1 --hidecursor";
       in {
         "Menu" = "exec ${cfg.menu}";
-        "${cfg.modifier}+c" = "exec ${cfg.menu}";
         "${cfg.modifier}+F12" =
           "exec "
           + toString (
