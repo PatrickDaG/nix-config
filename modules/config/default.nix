@@ -10,7 +10,7 @@
     ./ssh.nix
     ./system.nix
     ./xdg.nix
-    #./usbguard
+    ./usbguard.nix
 
     ../../users/root
 
