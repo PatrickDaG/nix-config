@@ -23,6 +23,8 @@ in {
   ];
 
   config = {
+    # needed for gnome pinentry
+    services.dbus.packages = [pkgs.gcr];
     stylix = {
       autoEnable = false;
       polarity = "dark";
