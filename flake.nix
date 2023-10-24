@@ -84,6 +84,11 @@
     };
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -96,6 +101,7 @@
     devshell,
     nixpkgs-wayland,
     wired-notify,
+    nixvim,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
@@ -140,6 +146,7 @@
             devshell.overlays.default
             agenix-rekey.overlays.default
             wired-notify.overlays.default
+            nixvim.overlays.default
           ];
         inherit system;
         config.allowUnfree = true;

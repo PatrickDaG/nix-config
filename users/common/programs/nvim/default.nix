@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -29,4 +33,8 @@
     ".local/state/nvim"
     ".cache/nvim"
   ];
+  home.shellAliases.nixvim = lib.getExe (pkgs.nixvim.makeNixvim {
+    colorscheme = "onedark";
+    colorschemes.onedark.enable = true;
+  });
 }
