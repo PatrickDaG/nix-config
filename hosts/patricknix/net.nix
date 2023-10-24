@@ -53,4 +53,8 @@
     rekeyFile = ./secrets/iwd/devolo-og.psk.age;
     path = "/var/lib/iwd/devolo-og.psk";
   };
+  age.secrets.simonWlan = {
+    rekeyFile = ./. + "/secrets/iwd/=467269747a21426f78373539302048616e7373656e.psk.age";
+    path = "/var/lib/=467269747a21426f78373539302048616e7373656e.psk";
+  };
 }

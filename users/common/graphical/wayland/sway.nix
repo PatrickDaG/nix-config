@@ -42,6 +42,9 @@
           "type:touch" = {
             map_to_output = "eDP-1";
           };
+          "type:tablet_tool" = {
+            map_to_output = "eDP-1";
+          };
         };
         keybindings = let
           cfg = config.wayland.windowManager.sway.config;

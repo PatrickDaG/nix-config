@@ -39,6 +39,7 @@ lib.optionalAttrs (!minimal) {
 
       ./simon.nix
       ./impermanence.nix
+      ./ssh.nix
     ];
   };
 }
