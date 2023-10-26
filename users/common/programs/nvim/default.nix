@@ -34,6 +34,14 @@
     ".cache/nvim"
   ];
   home.shellAliases.nixvim = lib.getExe (pkgs.nixvim.makeNixvim {
+    package = pkgs.neovim-unwrapped.overrideAttrs (_final: prev: {
+      nativeBuildInputs = (prev.nativeBuildInputs or []) ++ [pkgs.makeWrapper];
+      postInstall =
+        (prev.postInstall or "")
+        + ''
+          wrapProgram $out/bin/nvim --add-flags "--clean"
+        '';
+    });
     colorscheme = "onedark";
     colorschemes.onedark.enable = true;
   });
