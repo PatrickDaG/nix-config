@@ -1,7 +1,7 @@
 {
   # yubikey public key parts
   home.file.".ssh/1.pub".text = ''
-    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM cardno:15 489 049
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmees72GMKG/rsQQRhs2I/lQnJa0uW5KmZlNBeriCh0 cardno:15 489 006
   '';
   programs.ssh = {
     enable = true;
