@@ -4,6 +4,7 @@
   pkgs,
   ...
 }: {
+  # Sadly no wayland support and kinda very icky when run on different resolutions
   systemd.user.services.wired.Unit.ConditionEnvironment = "DISPLAY";
   services.wired = {
     enable = true;
