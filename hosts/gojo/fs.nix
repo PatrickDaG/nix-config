@@ -28,4 +28,5 @@
       rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
     };
   };
+  fileSystems."/state".neededForBoot = true;
 }

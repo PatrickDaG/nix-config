@@ -29,6 +29,7 @@ lib.optionalAttrs (!minimal) {
       ../common/impermanence.nix
 
       ../common/programs/htop.nix
+      ../common/programs/direnv.nix
       ../common/programs/firefox.nix
       ../common/programs/nvim
       ../common/programs/gdb.nix
