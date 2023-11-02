@@ -59,6 +59,7 @@ lib.optionalAttrs (!minimal) {
         ../common/programs/kitty.nix
         ../common/programs/thunderbird.nix
         ../common/programs/spicetify.nix
+        ../common/programs/minecraft.nix
       ]
       ++ {
         "desktopnix" = [

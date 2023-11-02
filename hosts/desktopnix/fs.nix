@@ -43,6 +43,7 @@
     };
   };
   fileSystems."/state".neededForBoot = true;
+  fileSystems."/persist".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
   boot.initrd.luks.devices.enc-panzer.allowDiscards = true;

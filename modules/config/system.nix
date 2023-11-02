@@ -61,6 +61,8 @@
     nvd
   ];
 
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   secrets.secretFiles = let
