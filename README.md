@@ -39,9 +39,10 @@
         - `impermanence.nix` users persistence configuration
 
 ## Hosts
-- `patricknix` my main laptop
-- `desktopnix` my main desktop
+- `patricknix` Patricks main laptop
+- `desktopnix` Patricks main desktop
 - `testienix` old laptop for testing
+- `gojo` Simons Laptop
 
 ## Users
 - `patrick` my normal everyday unprivileged user

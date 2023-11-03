@@ -1,8 +1,11 @@
 {
   config,
   pkgs,
+  lib,
+  minimal,
   ...
-}: {
+}:
+lib.optionalAttrs (!minimal) {
   age.secrets.initrd_host_ed25519_key.generator.script = "ssh-ed25519";
 
   boot.initrd.network.enable = true;
