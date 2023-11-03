@@ -10,6 +10,8 @@
     ../../modules/hardware/physical.nix
     ../../modules/hardware/zfs.nix
 
+    ../../modules/services/samba.nix
+
     ./net.nix
     ./fs.nix
   ];

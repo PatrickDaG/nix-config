@@ -9,6 +9,7 @@
     ./nix.nix
     ./ssh.nix
     ./system.nix
+    ./users.nix
     ./xdg.nix
     ./usbguard.nix
 
@@ -17,6 +18,7 @@
     ../secrets.nix
     ../meta.nix
     ../smb-mounts.nix
+    ../deterministic-ids.nix
     ./impermanence
 
     inputs.home-manager.nixosModules.default

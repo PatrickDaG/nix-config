@@ -59,6 +59,7 @@
 
   fileSystems."/state".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
+  fileSystems."/panzer/persist".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
   boot.initrd.luks.devices.enc-panzer-1.allowDiscards = true;
   boot.initrd.luks.devices.enc-panzer-2.allowDiscards = true;

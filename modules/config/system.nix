@@ -47,7 +47,6 @@
     keyMap = lib.mkDefault "de-latin1-nodeadkeys";
   };
 
-  users.mutableUsers = false;
   environment.systemPackages = with pkgs; [
     wget
     gcc
