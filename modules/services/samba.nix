@@ -11,13 +11,14 @@
     securityType = "user";
     openFirewall = true;
     extraConfig = ''
-        logging = systemd
-        log level = 1
-            hosts allow = 192.168.178. 127.0.0.1 10.0.0. localhost
+         logging = systemd
+         log level = 0 auth:2 passdb:2
+         hosts allow = 192.168.178. 127.0.0.1 10.0.0. localhost
          hosts deny = 0.0.0.0/0
          guest account = nobody
          map to guest = bad user
-      passdb backend = tdbsam:/tmp/smbpasswd.tdb
+         passdb backend = tdbsam:${config.age.secrets.smbpassdb.path}
+      server role = standalone
     '';
     shares = {
       ggr-data = {
@@ -52,16 +53,14 @@
       };
     };
   };
-  age.secrets.smbpasswd.rekeyFile = ../../secrets/smbpasswd.age;
-  system.activationScripts.importSMBPasswd = {
-    text = ''
-      ${config.services.samba.package}/bin/pdbedit -i smbpasswd:${config.age.secrets.smbpasswd.path} -e tdbsam:/tmp/smbpasswd.tdb
-    '';
+  # to get this file start a smbd add users using 'smbpasswd -a <user>'
+  # then export the database using 'pdbedit -e tdbsam:<location>'
+  age.secrets.smbpassdb = {
+    rekeyFile = ../../secrets/smbpassdb.tdb.age;
   };
   users.users.smb = {
     isSystemUser = true;
     group = "smb";
-    hashedPassword = config.secrets.secrets.global.users.smb.passwordHash;
   };
   users.groups.smb = {};
   environment.persistence."/panzer/persist".directories = [
