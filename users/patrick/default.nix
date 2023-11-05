@@ -22,6 +22,7 @@ lib.optionalAttrs (!minimal) {
     ];
     group = "patrick";
     hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
+    autoSubUidGidRange = false;
   };
   users.groups.patrick.gid = config.users.users.patrick.uid;
 
