@@ -5,18 +5,15 @@
   nixosConfig,
   ...
 }: {
-  home.pointerCursor = {
-    gtk.enable = true;
-    x11.enable = true;
-    package = pkgs.openzone-cursors;
-    name = "OpenZone_White_Slim";
-    size =
-      if nixosConfig.hidpi
-      then 48
-      else 18;
-  };
-
   stylix = {
+    cursor = {
+      package = pkgs.openzone-cursors;
+      name = "OpenZone_White_Slim";
+      size =
+        if nixosConfig.hidpi
+        then 48
+        else 18;
+    };
     inherit (nixosConfig.stylix) polarity;
     targets = {
       gtk.enable = true;
