@@ -64,5 +64,6 @@
   };
   home.persistence."/state".directories = [
     ".local/share/zsh"
+    ".local/share/zoxide"
   ];
 }
