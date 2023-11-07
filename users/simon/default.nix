@@ -19,6 +19,7 @@ lib.optionalAttrs (!minimal) {
     ];
     group = "simon";
     hashedPassword = config.secrets.secrets.global.users.simon.passwordHash;
+    autoSubUidGidRange = false;
   };
   users.groups.simon.gid = config.users.users.simon.uid;
   programs.dconf.enable = true;

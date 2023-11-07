@@ -52,7 +52,6 @@ lib.optionalAttrs (!minimal) {
 
         ../common/programs/direnv.nix
         ../common/programs/htop.nix
-        ../common/programs/nvim
         ../common/programs/git.nix
         ../common/programs/bottles.nix
         ../common/programs/gdb.nix

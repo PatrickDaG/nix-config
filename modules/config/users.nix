@@ -14,6 +14,7 @@
     nixseparatedebuginfod = uidGid 205;
     wireshark = uidGid 206;
     polkituser = uidGid 207;
+    msr = uidGid 208;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };
