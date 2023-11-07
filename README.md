@@ -37,6 +37,8 @@
         - `graphical.nix` configuration for users utilizing a graphical interface
     - `<username>/` configuration for users
         - `impermanence.nix` users persistence configuration
+- `keys` collection of yubikeys public key parts for decryption
+- `img` images, encrypted to not break any copyright by redistribution
 
 ## Hosts
 - `patricknix` Patricks main laptop
