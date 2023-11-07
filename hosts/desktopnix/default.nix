@@ -42,4 +42,8 @@
     layout = "de";
     xkbVariant = "bone";
   };
+
+  system.activationScripts.decryptKey.text = ''
+    ln -s ${../../keys/PatC.key} /run/decrypt.key.pub
+  '';
 }

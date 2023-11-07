@@ -7,8 +7,6 @@
   inherit
     (lib)
     mapAttrs
-    # Not really unused LSP is confuse
-    
     assertMsg
     types
     mkOption
@@ -29,7 +27,7 @@
   importEncrypted = path:
     constSet (
       if builtins.pathExists path
-      then builtins.extraBuiltins.rageImportEncrypted inputs.self.secretsConfig.masterIdentities path
+      then rageImportEncrypted inputs.self.secretsConfig.masterIdentities path
       else {}
     );
   cfg = config.secrets;

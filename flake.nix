@@ -109,8 +109,8 @@
   in
     {
       secretsConfig = {
-        masterIdentities = [./secrets/NIXOSc.key.pub];
-        #masterIdentities = [./secrets/NIXOSa.key.pub];
+        # This should be a link to one of the age public keys is './keys'
+        masterIdentities = ["/run/decrypt.key.pub"];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
       agenix-rekey = agenix-rekey.configure {
