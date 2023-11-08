@@ -30,6 +30,10 @@ in
         help = "build and deploy nix configurations";
       }
       {
+        package = pkgs.minify;
+        help = "build and deploy nix configurations";
+      }
+      {
         package = pkgs.agenix-rekey;
         help = "Edit and rekey repository secrets";
       }
