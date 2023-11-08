@@ -37,7 +37,7 @@
     package = pkgs.neovim-clean;
     colorschemes.onedark.enable = true;
     options = import ./nixvim/options.nix;
-    glkbals.mapleader = " ";
+    globals.mapleader = " ";
     keymaps = let
       options = {
         noremap = true;
