@@ -2,8 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
-  home.sessionVariables.MANPAGER = lib.getExe (pkgs.nixvim.makeNixvim {
+}: let
+  exe = lib.getExe (pkgs.nixvim.makeNixvim {
     package = pkgs.neovim-clean;
 
     options = {
@@ -62,4 +62,6 @@
       }
     ];
   });
+in {
+  home.sessionVariables.MANPAGER = "${exe} '+Man!'";
 }
