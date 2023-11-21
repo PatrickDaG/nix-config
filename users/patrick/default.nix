@@ -60,12 +60,12 @@ lib.optionalAttrs (!minimal) {
         ../common/programs/thunderbird.nix
         ../common/programs/spicetify.nix
         ../common/programs/minecraft.nix
-        ../common/programs/obs.nix
       ]
       ++ {
         "desktopnix" = [
           ../common/graphical/Xorg
           ./streamdeck.nix
+          ../common/programs/obs.nix
           ./smb.nix
         ];
         "patricknix" = [
