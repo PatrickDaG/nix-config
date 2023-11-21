@@ -16,6 +16,7 @@
     polkituser = uidGid 207;
     msr = uidGid 208;
     avahi = uidGid 209;
+    fwupd-refresh = uidGid 210;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };
