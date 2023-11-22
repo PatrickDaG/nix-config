@@ -17,7 +17,7 @@
       close_on_child_death = "yes";
 
       # Disable ligatures.
-      disable_ligatures = "always";
+      disable_ligatures = "cursor";
 
       # Modified onehalfdark color scheme
       cursor = "#cccccc";
