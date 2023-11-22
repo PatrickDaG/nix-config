@@ -60,7 +60,7 @@
     nvd
   ];
 
-  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+  boot.binfmt.emulatedSystems = ["aarch64-linux" "mips-linux"];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
