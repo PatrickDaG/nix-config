@@ -18,6 +18,7 @@
       inputs.nix-index-database.hmModules.nix-index
       inputs.wired-notify.homeManagerModules.default
       inputs.spicetify-nix.homeManagerModule
+      inputs.nixvim.homeManagerModules.nixvim
     ];
   };
   # HM zsh needs this or else the startup order is fucked

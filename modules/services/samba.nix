@@ -11,13 +11,13 @@
     securityType = "user";
     openFirewall = true;
     extraConfig = ''
-         logging = systemd
-         log level = 0 auth:2 passdb:2
-         hosts allow = 192.168.178. 127.0.0.1 10.0.0. localhost
-         hosts deny = 0.0.0.0/0
-         guest account = nobody
-         map to guest = bad user
-         passdb backend = tdbsam:${config.age.secrets.smbpassdb.path}
+      logging = systemd
+      log level = 0 auth:2 passdb:2
+      hosts allow = 192.168.178. 127.0.0.1 10.0.0. localhost
+      hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+      passdb backend = tdbsam:${config.age.secrets.smbpassdb.path}
       server role = standalone
     '';
     shares = {

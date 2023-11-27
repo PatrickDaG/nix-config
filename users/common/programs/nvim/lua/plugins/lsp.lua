@@ -100,11 +100,6 @@ return {
 				"ray-x/lsp_signature.nvim",
 				config = true,
 			},
-			-- tabnine opens login window on boot
-			-- {
-			-- 	"tzachar/cmp-tabnine",
-			-- 	build = "./install.sh",
-			-- },
 		},
 		config = function()
 			local cmp = require("cmp")

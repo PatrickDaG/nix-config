@@ -19,6 +19,7 @@
     ../meta.nix
     ../smb-mounts.nix
     ../deterministic-ids.nix
+    ../interface-naming.nix
     ./impermanence
 
     inputs.home-manager.nixosModules.default
@@ -28,6 +29,7 @@
     inputs.disko.nixosModules.disko
     inputs.nixseparatedebuginfod.nixosModules.default
     inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.nixvim.nixosModules.nixvim
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }

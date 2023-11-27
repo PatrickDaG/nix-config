@@ -1,114 +1,38 @@
-{
-  pkgs,
-  lib,
-  ...
-}: {
-  programs.neovim = {
+{pkgs, ...}: {
+  imports = [
+    ./nixvim/keybinds.nix
+    ./nixvim/options.nix
+    ./nixvim/plugins.nix
+  ];
+  programs.nixvim = {
     enable = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-    defaultEditor = true;
-    withNodeJs = true;
-    extraPackages = with pkgs; [
-      # treesitter
-      clang_15
-      clang-tools_15
-      # tabnine complition braucht unzip
-      unzip
-      # telescope fzf native braucht make
-      gnumake
-      # telescope braucht die
-      ripgrep
-      fd
+    luaLoader.enable = true;
+    files."ftplugin/nix.lua".extraConfigLua = ''
+      vim.opt_local.expandtab = true
+      vim.opt_local.tabstop = 2
+      vim.opt_local.shiftwidth = 2
+      vim.opt_local.softtabstop = 2
+    '';
+    globals.mapleader = " ";
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-better-whitespace
+      dressing-nvim
+      nvim-window-picker
+      nabla-nvim
+      vim-gnupg
+      onedark-nvim
     ];
+    extraConfigLuaPre = ''
+      require("onedark").load()
+    '';
+    extraConfigLuaPost = ''
+    '';
   };
-
-  xdg.configFile.nvim = {
-    recursive = true;
-    source = ./.;
-  };
+  home.sessionVariables.EDITOR = "nvim";
+  home.shellAliases.vimdiff = "nvim -d";
   home.persistence."/state".directories = [
     ".local/share/nvim"
     ".local/state/nvim"
     ".cache/nvim"
   ];
-  home.shellAliases.nixvim = lib.getExe (pkgs.nixvim.makeNixvim {
-    package = pkgs.neovim-clean;
-    colorschemes.onedark.enable = true;
-    options = import ./nixvim/options.nix;
-    globals.mapleader = " ";
-    keymaps = let
-      options = {
-        noremap = true;
-        silent = true;
-      };
-    in [
-      {
-        key = "<M-down>";
-        action = "<C-w><down>";
-        inherit options;
-      }
-      {
-        key = "<M-up>";
-        action = "<C-w><up>";
-        inherit options;
-      }
-      {
-        key = "<M-left>";
-        action = "<C-w><left>";
-        inherit options;
-      }
-      {
-        key = "<M-right>";
-        action = "<C-w><right>";
-        inherit options;
-      }
-
-      {
-        key = "<M-r>";
-        action = "<C-w><down>";
-        inherit options;
-      }
-      {
-        key = "<M-l>";
-        action = "<C-w><up>";
-        inherit options;
-      }
-      {
-        key = "<M-n>";
-        action = "<C-w><left>";
-        inherit options;
-      }
-      {
-        key = "<M-s>";
-        action = "<C-w><right>";
-        inherit options;
-      }
-
-      # scroll with cursor lock
-      {
-        key = "<S-down>";
-        action = "<C-e>";
-        inherit options;
-      }
-      {
-        key = "<S-up>";
-        action = "<C-y>";
-        inherit options;
-      }
-      {
-        key = "<S-down>";
-        action = "<C-[><C-e>a";
-        inherit options;
-        mode = "i";
-      }
-      {
-        key = "<S-up>";
-        action = "<C-[><C-y>a";
-        inherit options;
-        mode = "i";
-      }
-    ];
-  });
 }

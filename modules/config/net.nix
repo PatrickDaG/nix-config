@@ -1,9 +1,16 @@
-{lib, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;
     # allow mdns port
     firewall.allowedUDPPorts = [5353];
+    renameInterfacesByMac =
+      lib.mapAttrs (_: v: v.mac)
+      (config.secrets.secrets.local.networking.interfaces or {});
   };
   systemd.network = {
     enable = true;

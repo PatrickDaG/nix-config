@@ -6,7 +6,7 @@
     "01-lan1" = {
       address = ["192.168.178.32/24"];
       gateway = ["192.168.178.1"];
-      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan01.mac;
       dns = ["192.168.178.2"];
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
@@ -14,6 +14,7 @@
       };
     };
   };
+
   boot.initrd.systemd.network = {
     enable = true;
     networks = {inherit (config.systemd.network.networks) "01-lan1";};
