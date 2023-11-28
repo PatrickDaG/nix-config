@@ -26,6 +26,7 @@
       require("onedark").load()
     '';
     extraConfigLuaPost = ''
+      vim.notify = require("notify")
     '';
   };
   home.sessionVariables.EDITOR = "nvim";

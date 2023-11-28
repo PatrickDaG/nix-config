@@ -7,12 +7,15 @@
   ];
   programs.nixvim.plugins = {
     lualine = {
+      theme = "auto";
+      globalstatus = true;
       extensions = [
         "nvim-tree"
         "quickfix"
         "fugitive"
       ];
     };
+    notify.enable = true;
     indent-blankline = {
       enable = true;
       extraOptions = {
@@ -38,6 +41,15 @@
       extensions = {
         fzf-native.enable = true;
       };
+      enabledExtensions = ["notify"];
+      keymaps = {
+        "<leader>gf" = {
+          action = "git_files";
+          desc = "Telescope Git Files";
+        };
+        "<leader>gg" = "live_grep";
+      };
+      keymapsSilent = true;
     };
 
     # Undo tree
