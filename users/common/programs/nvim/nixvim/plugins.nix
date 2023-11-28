@@ -35,8 +35,9 @@
     # Fzf picker for arbitrary stuff
     telescope = {
       enable = true;
-      enabledExtensions = ["fzf" "notify" "ui-select"];
-      extensions.fzf-native.enable = true;
+      extensions = {
+        fzf-native.enable = true;
+      };
     };
 
     # Undo tree

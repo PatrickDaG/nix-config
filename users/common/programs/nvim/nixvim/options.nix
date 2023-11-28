@@ -4,7 +4,6 @@
     undolevels = 1000000;
     # Persistent Undo
     undofile = true;
-    undodir = "~/.cache/nvim/undo";
 
     # swap file save interval
     updatetime = 300;
