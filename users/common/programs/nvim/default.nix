@@ -30,8 +30,8 @@
     '';
   };
   home.sessionVariables.EDITOR = "nvim";
-  home.sessionVariables.vim = "nvim";
-  home.sessionVariables.vi = "nvim";
+  home.shellAliases.vim = "nvim";
+  home.shellAliases.vi = "nvim";
   home.shellAliases.vimdiff = "nvim -d";
   home.persistence."/state".directories = [
     ".local/share/nvim"
