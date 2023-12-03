@@ -7,6 +7,9 @@
 }: let
   inherit
     (lib)
+    mapAttrs'
+    concatStrings
+    nameValuePair
     mapAttrsToList
     flip
     types
@@ -47,6 +50,15 @@ in {
       }
     ));
   };
+  config.system.activationScripts = let
+    mkDir = paths: (concatStrings (flip map paths (path: ''
+      [[ -d "${path}" ]] || ${pkgs.coreutils}/bin/mkdir -p "${path}"
+    '')));
+  in
+    flip mapAttrs' config.containers (
+      name: value:
+        nameValuePair "mkContainerFolder-${name}" (mkDir (mapAttrsToList (_: x: x.hostPath) value.bindMounts))
+    );
   config.disko = mkMerge (flip mapAttrsToList config.containers
     (
       _: cfg: {
