@@ -40,7 +40,6 @@ in {
 
             mountpoint = mkOption {
               type = types.str;
-              default = "/containers/${name}";
               description = mdDoc "The host's mountpoint for the containers dataset";
             };
           };

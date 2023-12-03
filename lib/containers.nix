@@ -5,16 +5,17 @@ _inputs: _self: super: {
       containers.mkConfig = name: config:
         super.lib.mkMerge [
           {
-            bindmounts = {
+            bindMounts = {
               "state" = {
-                mountpoint = "/state";
+                mountPoint = "/state";
                 hostPath = "/state/containers/${name}";
               };
               "persist" = {
-                mountpoint = "/persist";
-                hostPath = config.zfs.mountpoint;
+                mountPoint = "/persist";
+                hostPath = "/containers/${name}";
               };
             };
+            zfs.mountpoint = super.lib.mkDefault "/containers/${name}";
             #config = {...}: {
             #};
           }

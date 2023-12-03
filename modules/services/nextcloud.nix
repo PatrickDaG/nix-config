@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [./containers.nix];
-  containers.nextcloud = lib.container.mkConfig "nextcloud" {
+  containers.nextcloud = lib.containers.mkConfig "nextcloud" {
     autoStart = true;
     zfs = {
       enable = true;

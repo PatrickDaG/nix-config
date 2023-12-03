@@ -57,6 +57,63 @@
     };
   };
 
+  services.zrepl = {
+    enable = true;
+    settings = {
+      global = {
+        logging = [
+          {
+            type = "syslog";
+            level = "info";
+            format = "human";
+          }
+        ];
+        # TODO Monitoring
+      };
+      jobs = [
+        #{
+        #  type = "push";
+        #  name = "push-to-remote";
+        #}
+        {
+          type = "snap";
+          name = "mach-schnipp-schusss";
+          filesystems = {
+            "panzer/local/state<" = true;
+            "panzer/safe<" = true;
+            "rpool/local/state<" = true;
+            "rpool/safe<" = true;
+          };
+          snapshotting = {
+            type = "periodic";
+            prefix = "zrepl-";
+            interval = "10m";
+            timestamp_format = "iso-8601";
+          };
+          pruning = {
+            keep = [
+              {
+                type = "regex";
+                regex = "^zrepl-.*$";
+                negate = true;
+              }
+              {
+                type = "grid";
+                grid = lib.concatStringsSep " | " [
+                  "1x1d(keep=all)"
+                  "142x1h(keep=2)"
+                  "90x1d(keep=2)"
+                  "500x7d"
+                ];
+                regex = "^zrepl-.*$";
+              }
+            ];
+          };
+        }
+      ];
+    };
+  };
+
   fileSystems."/state".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
   fileSystems."/panzer/persist".neededForBoot = true;
