@@ -61,6 +61,7 @@ _inputs: _self: super: {
             "local/nix" = filesystem "/nix";
             "local/state" = filesystem "/state";
             "safe" = unmountable;
+            "safe/containers" = unmountable;
             "safe/persist" = filesystem "/persist";
           };
           unmountable = {type = "zfs_fs";};

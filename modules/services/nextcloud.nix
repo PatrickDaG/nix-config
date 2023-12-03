@@ -1,6 +1,15 @@
-{lib, ...}: {
-  containers.nextcloud = {
+{
+  lib,
+  stateVersion,
+  ...
+}: {
+  imports = [./containers.nix];
+  containers.nextcloud = lib.container.mkConfig "nextcloud" {
     autoStart = true;
+    zfs = {
+      enable = true;
+      pool = "panzer";
+    };
     macvlans = [
       "lan01"
     ];
@@ -16,7 +25,7 @@
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
       };
 
-      system.stateVersion = "23.05";
+      system.stateVersion = stateVersion;
 
       networking = {
         firewall = {
@@ -28,10 +37,19 @@
       };
 
       services.resolved.enable = true;
-      bindMounts.data = {
-        mountPoint = "/persist";
-        hostPath = "/persist/containers/nextcloud";
-      };
     };
   };
 }
+#wireguard
+#samba/printer finding
+#vaultwarden
+#nextcloud
+#acme
+#nginx
+#maddy
+#kanidm
+#xdg portals
+#zfs snapshots
+#remote backups
+#immich
+

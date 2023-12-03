@@ -11,6 +11,7 @@
     ../../modules/hardware/zfs.nix
 
     ../../modules/services/samba.nix
+    ../../modules/services/nextcloud.nix
 
     ./net.nix
     ./fs.nix
