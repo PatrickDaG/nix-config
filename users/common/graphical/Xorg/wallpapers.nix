@@ -19,6 +19,7 @@ in {
         };
         Timer = {
           OnUnitActiveSec = "3 min";
+          OnActiveSec = "3 min";
         };
         Install.WantedBy = [
           "timers.target"
