@@ -26,22 +26,6 @@
     enable = true;
     pkcs11.enable = true;
   };
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-gtk
-    ];
-    config = {
-      common.default = [
-        "gtk"
-      ];
-      sway.default = [
-        "wlr"
-      ];
-    };
-  };
   # Just before switching, remove the agenix directory if it exists.
   # This can happen when a secret is used in the initrd because it will
   # then be copied to the initramfs under the same path. This materializes

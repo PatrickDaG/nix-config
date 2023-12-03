@@ -23,6 +23,21 @@ in {
   ];
 
   config = {
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      config = {
+        common.default = [
+          "gtk"
+        ];
+        sway.default = [
+          "wlr"
+        ];
+      };
+    };
     # needed for gnome pinentry
     services.dbus.packages = [pkgs.gcr];
     stylix = {
