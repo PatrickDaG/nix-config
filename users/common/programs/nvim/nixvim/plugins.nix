@@ -31,6 +31,10 @@
       };
     };
     notify.enable = true;
+    rust-tools = {
+      enable = true;
+      server.check.command = "clippy";
+    };
     indent-blankline = {
       enable = true;
       extraOptions = {
