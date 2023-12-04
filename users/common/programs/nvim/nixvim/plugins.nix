@@ -30,6 +30,7 @@
         lualine_z = ["location"];
       };
     };
+    fugitive.enable = true;
     notify.enable = true;
     rust-tools = {
       enable = true;
