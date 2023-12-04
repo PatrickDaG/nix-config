@@ -23,6 +23,9 @@ in {
   ];
 
   config = {
+    environment.systemPackages = with pkgs; [
+      xdg-utils
+    ];
     xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
