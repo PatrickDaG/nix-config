@@ -27,6 +27,7 @@ in {
       xdg-utils
     ];
     xdg.portal = {
+      xdgOpenUsePortal = true;
       enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
