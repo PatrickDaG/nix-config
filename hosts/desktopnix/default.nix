@@ -42,6 +42,10 @@
     layout = "de";
     xkbVariant = "bone";
   };
+  virtualisation.podman = {
+    enable = false;
+    dockerCompat = true;
+  };
 
   system.activationScripts.decryptKey.text = ''
     ln -f -s ${../../keys/PatC.key} /run/decrypt.key.pub

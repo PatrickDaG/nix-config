@@ -23,6 +23,18 @@ lib.optionalAttrs (!minimal) {
     group = "patrick";
     hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
     autoSubUidGidRange = false;
+    subUidRanges = [
+      {
+        count = 65534;
+        startUid = 100001;
+      }
+    ];
+    subGidRanges = [
+      {
+        count = 65534;
+        startGid = 100001;
+      }
+    ];
   };
   users.groups.patrick.gid = config.users.users.patrick.uid;
 

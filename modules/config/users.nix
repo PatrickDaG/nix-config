@@ -17,6 +17,7 @@
     msr = uidGid 208;
     avahi = uidGid 209;
     fwupd-refresh = uidGid 210;
+    podman = uidGid 211;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };
