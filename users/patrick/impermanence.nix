@@ -9,6 +9,9 @@
         "repos"
         "Downloads"
 
+        "invokeai"
+        ".textgen"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
