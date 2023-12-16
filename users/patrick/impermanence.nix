@@ -11,6 +11,7 @@
 
         "invokeai"
         ".textgen"
+        ".ollama"
 
         # For nextcloud client install
         "Nextcloud"
