@@ -4,6 +4,7 @@
   pkgs,
   ...
 }: {
+  imports = [./impermanence/users.nix];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;

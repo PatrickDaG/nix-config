@@ -122,11 +122,10 @@
       inherit
         (import ./nix/hosts.nix inputs)
         hosts
-        microvmConfigurations
         nixosConfigurations
         minimalConfigurations
         ;
-      nodes = self.nixosConfigurations // self.microvmConfigurations;
+      nodes = self.nixosConfigurations;
 
       inherit
         (lib.foldl' lib.recursiveUpdate {}

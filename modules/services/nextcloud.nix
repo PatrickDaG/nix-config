@@ -1,9 +1,27 @@
 {
   lib,
   stateVersion,
+  config,
   ...
-}: {
-  imports = [./containers.nix];
+}: let
+  hostName = "nc.${config.secrets.secrets.global.domains.mail}";
+in {
+  imports = [./containers.nix ./nginx.nix ./ddclient.nix ./acme.nix];
+  services.nginx = {
+    enable = true;
+    upstreams.nextcloud = {
+      servers."192.168.178.33:80" = {};
+      extraConfig = ''
+        zone nextcloud 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${hostName} = {
+      forceSSL = true;
+      useACMEHost = "mail";
+      locations."/".proxyPass = "http://nextcloud";
+    };
+  };
   containers.nextcloud = lib.containers.mkConfig "nextcloud" {
     autoStart = true;
     zfs = {
@@ -18,11 +36,41 @@
       pkgs,
       ...
     }: {
+      systemd.network.networks = {
+        "lan01" = {
+          address = ["192.168.178.33/24"];
+          gateway = ["192.168.178.1"];
+          matchConfig.Name = "mv-lan01*";
+          dns = ["192.168.178.2"];
+          networkConfig = {
+            IPv6PrivacyExtensions = "yes";
+            MulticastDNS = true;
+          };
+        };
+      };
       services.nextcloud = {
+        inherit hostName;
         enable = true;
         package = pkgs.nextcloud27;
-        hostName = "localhost";
+        configureRedis = true;
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
+        extraApps = with config.services.nextcloud.package.packages.apps; {
+          inherit contacts calendar tasks;
+        };
+        extraAppsEnable = true;
+        extraOptions.enabledPreviewProviders = [
+          "OC\\Preview\\BMP"
+          "OC\\Preview\\GIF"
+          "OC\\Preview\\JPEG"
+          "OC\\Preview\\Krita"
+          "OC\\Preview\\MarkDown"
+          "OC\\Preview\\MP3"
+          "OC\\Preview\\OpenDocument"
+          "OC\\Preview\\PNG"
+          "OC\\Preview\\TXT"
+          "OC\\Preview\\XBitmap"
+          "OC\\Preview\\HEIC"
+        ];
       };
 
       system.stateVersion = stateVersion;

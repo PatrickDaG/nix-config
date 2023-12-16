@@ -18,6 +18,7 @@
     avahi = uidGid 209;
     fwupd-refresh = uidGid 210;
     podman = uidGid 211;
+    acme = uidGid 212;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };

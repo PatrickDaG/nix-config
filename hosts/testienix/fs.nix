@@ -115,6 +115,7 @@
   };
 
   fileSystems."/state".neededForBoot = true;
+  fileSystems."/persist".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
   fileSystems."/panzer/persist".neededForBoot = true;
   boot.initrd.luks.devices.enc-rpool.allowDiscards = true;

@@ -58,7 +58,6 @@ inputs: let
 in {
   inherit
     hosts
-    microvmConfigurations
     nixosConfigurations
     minimalConfigurations
     ;

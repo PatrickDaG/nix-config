@@ -10,8 +10,10 @@
     attrNames
     mkOption
     types
+    hasAttr
     mkMerge
     isAttrs
+    mkIf
     ;
 in {
   # Expose a home manager module for each user that allows extending

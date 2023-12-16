@@ -3,14 +3,16 @@
   lib,
   pkgs,
   ...
-}: {
-  imports = [./users.nix];
+}: let
+  onlyHost =
+    lib.mkIf (!config.boot.isContainer);
+in {
   # to allow all users to access hm managed persistent folders
   programs.fuse.userAllowOther = true;
   environment.persistence."/state" = {
     hideMounts = true;
 
-    files = [
+    files = onlyHost [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_ed25519_key.pub"
@@ -25,20 +27,34 @@
           mode = "0777";
         }
       ]
+      ++ lib.lists.optionals config.security.acme.acceptTerms [
+        {
+          directory = "/var/lib/acme";
+          user = "acme";
+          group = "acme";
+          mode = "0755";
+        }
+      ]
       ++ lib.lists.optionals config.hardware.bluetooth.enable [
         "/var/lib/bluetooth"
       ];
   };
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [];
+  };
 
   # After importing the rpool, rollback the root system to be empty.
-  boot.initrd.systemd.services.impermanence-root = {
-    wantedBy = ["initrd.target"];
-    after = ["zfs-import-rpool.service"];
-    before = ["sysroot.mount"];
-    unitConfig.DefaultDependencies = "no";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.zfs}/bin/zfs rollback -r rpool/local/root@blank";
+  boot.initrd.systemd.services.impermanence-root =
+    onlyHost
+    {
+      wantedBy = ["initrd.target"];
+      after = ["zfs-import-rpool.service"];
+      before = ["sysroot.mount"];
+      unitConfig.DefaultDependencies = "no";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.zfs}/bin/zfs rollback -r rpool/local/root@blank";
+      };
     };
-  };
 }

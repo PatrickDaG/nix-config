@@ -52,6 +52,8 @@ in {
       mode = "440";
       group = "nginx";
     };
+    security.acme.acceptTerms = true;
+    security.acme.defaults.email = config.secrets.secrets.global.devEmail;
 
     # Sensible defaults for nginx
     services.nginx = {
