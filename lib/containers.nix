@@ -15,6 +15,7 @@ inputs: _self: super: {
               ];
             };
 
+            ephemeral = true;
             bindMounts = {
               "state" = {
                 mountPoint = "/state";

@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -20,4 +24,5 @@
     layout = "de";
     xkbVariant = "bone";
   };
+  services.thermald.enable = lib.mkForce false;
 }

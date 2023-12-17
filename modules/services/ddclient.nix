@@ -8,6 +8,7 @@
     zone = config.secrets.secrets.global.domains.mail;
     protocol = "Cloudflare";
     username = "token";
+    use = "web, web='https://cloudflare.com/cdn-cgi/trace', web-skip='ip='";
     passwordFile = config.age.secrets.cloudflare_token_dns.path;
     domains = [config.secrets.secrets.global.domains.mail];
   };

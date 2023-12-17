@@ -29,7 +29,7 @@ in {
       pool = "panzer";
     };
     macvlans = [
-      "lan01"
+      "lan01:lan01-nextcloud"
     ];
     config = {
       config,
@@ -40,7 +40,7 @@ in {
         "lan01" = {
           address = ["192.168.178.33/24"];
           gateway = ["192.168.178.1"];
-          matchConfig.Name = "mv-lan01*";
+          matchConfig.Name = "lan01*";
           dns = ["192.168.178.2"];
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
@@ -55,8 +55,9 @@ in {
         configureRedis = true;
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
         extraApps = with config.services.nextcloud.package.packages.apps; {
-          inherit contacts calendar tasks;
+          inherit contacts calendar tasks notes unsplash maps;
         };
+        maxUploadSize = "2G";
         extraAppsEnable = true;
         extraOptions.enabledPreviewProviders = [
           "OC\\Preview\\BMP"
@@ -71,6 +72,9 @@ in {
           "OC\\Preview\\XBitmap"
           "OC\\Preview\\HEIC"
         ];
+        config = {
+          defaultPhoneRegion = "DE";
+        };
       };
 
       system.stateVersion = stateVersion;

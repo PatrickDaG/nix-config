@@ -6,6 +6,7 @@
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;
+    useDHCP = false;
     firewall.enable = true;
     # allow mdns port
     firewall.allowedUDPPorts = [5353];
