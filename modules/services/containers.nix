@@ -104,7 +104,7 @@ in {
               unitConfig.DefaultDependencies = "no";
               serviceConfig.Type = "oneshot";
               script = ''
-                chmod 700 ${escapeShellArg cfg.zfs.mountpoint}
+                chmod 755 ${escapeShellArg cfg.zfs.mountpoint}
               '';
             };
 

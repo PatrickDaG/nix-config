@@ -1,25 +1,28 @@
 {
   inputs,
   lib,
+  minimal,
   ...
 }: {
-  imports = [
-    inputs.nixos-hardware.nixosModules.common-pc
-    inputs.nixos-hardware.nixosModules.common-pc-ssd
+  imports =
+    [
+      inputs.nixos-hardware.nixosModules.common-pc
+      inputs.nixos-hardware.nixosModules.common-pc-ssd
 
-    ../../modules/config
-    ../../modules/optional/initrd-ssh.nix
+      ../../modules/config
+      ../../modules/optional/initrd-ssh.nix
 
-    ../../modules/hardware/intel.nix
-    ../../modules/hardware/physical.nix
-    ../../modules/hardware/zfs.nix
+      ../../modules/hardware/intel.nix
+      ../../modules/hardware/physical.nix
+      ../../modules/hardware/zfs.nix
 
-    ../../modules/services/samba.nix
-    ../../modules/services/nextcloud.nix
-
-    ./net.nix
-    ./fs.nix
-  ];
+      ./net.nix
+      ./fs.nix
+    ]
+    ++ lib.lists.optionals (!minimal) [
+      ../../modules/services/samba.nix
+      ../../modules/services/nextcloud.nix
+    ];
   services.xserver = {
     layout = "de";
     xkbVariant = "bone";

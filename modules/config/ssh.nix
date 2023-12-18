@@ -1,4 +1,4 @@
-{
+{lib, ...}: {
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
@@ -7,6 +7,7 @@
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "yes";
     };
+    startWhenNeeded = lib.mkForce false;
     hostKeys = [
       {
         # never set this to an actual nix type path
