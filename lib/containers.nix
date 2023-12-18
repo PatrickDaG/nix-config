@@ -23,6 +23,9 @@ inputs: _self: super: {
             specialArgs = {
               inherit (attrs) lib inputs minimal stateVersion;
             };
+            extraFlags = [
+              "--uuid=${builtins.substring 0 32 (builtins.hashString "sha256" name)}"
+            ];
 
             autoStart = true;
             macvlans = [
