@@ -124,8 +124,9 @@
         hosts
         nixosConfigurations
         minimalConfigurations
+        guestConfigurations
         ;
-      nodes = self.nixosConfigurations;
+      nodes = self.nixosConfigurations // self.guestConfigurations;
 
       inherit
         (lib.foldl' lib.recursiveUpdate {}

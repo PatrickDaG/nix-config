@@ -38,7 +38,7 @@ in {
             dataset = mkOption {
               type = types.str;
               default = "safe/containers/${name}";
-              description = mdDoc "The host's dataset that should be used for this containers persistent data (will automatically be created, parent dataset must exist)";
+              description = mdDoc "The host's dataset that should be used for this containers persistent data (will automatically be created)";
             };
 
             mountpoint = mkOption {

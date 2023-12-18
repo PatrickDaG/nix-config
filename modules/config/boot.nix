@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: {
-  boot = {
+  boot = lib.mkIf (!config.boot.isContainer) {
     initrd.systemd = {
       enable = true;
       emergencyAccess = config.secrets.secrets.global.users.root.passwordHash;

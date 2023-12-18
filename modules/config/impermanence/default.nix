@@ -12,32 +12,24 @@ in {
   environment.persistence."/state" = {
     hideMounts = true;
 
-    files = onlyHost [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-    ];
-    directories =
+    files =
       [
-        "/var/log"
-        "/var/lib/systemd"
-        "/var/lib/nixos"
-        {
-          directory = "/var/tmp/agenix-rekey";
-          mode = "0777";
-        }
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
       ]
-      ++ lib.lists.optionals config.security.acme.acceptTerms [
-        {
-          directory = "/var/lib/acme";
-          user = "acme";
-          group = "acme";
-          mode = "0755";
-        }
-      ]
-      ++ lib.lists.optionals config.hardware.bluetooth.enable [
-        "/var/lib/bluetooth"
+      ++ lib.lists.optionals (!config.boot.isContainer)
+      [
+        "/etc/machine-id"
       ];
+    directories = [
+      "/var/log"
+      "/var/lib/systemd"
+      "/var/lib/nixos"
+      {
+        directory = "/var/tmp/agenix-rekey";
+        mode = "0777";
+      }
+    ];
   };
   environment.persistence."/persist" = {
     hideMounts = true;

@@ -2,8 +2,9 @@
   lib,
   stateVersion,
   config,
+  pkgs, # not unused neede for the usage of attrs later to contains pkgs
   ...
-}: let
+} @ attrs: let
   hostName = "nc.${config.secrets.secrets.global.domains.mail}";
 in {
   imports = [./containers.nix ./nginx.nix ./ddclient.nix ./acme.nix];
@@ -11,6 +12,7 @@ in {
     enable = true;
     upstreams.nextcloud = {
       servers."192.168.178.33:80" = {};
+
       extraConfig = ''
         zone nextcloud 64k ;
         keepalive 5 ;
@@ -22,15 +24,11 @@ in {
       locations."/".proxyPass = "http://nextcloud";
     };
   };
-  containers.nextcloud = lib.containers.mkConfig "nextcloud" {
-    autoStart = true;
+  containers.nextcloud = lib.containers.mkConfig "nextcloud" attrs {
     zfs = {
       enable = true;
       pool = "panzer";
     };
-    macvlans = [
-      "lan01:lan01-nextcloud"
-    ];
     config = {
       config,
       pkgs,
@@ -48,6 +46,14 @@ in {
           };
         };
       };
+      environment.persistence."/persist".directories = [
+        {
+          directory = config.services.nextcloud.home;
+          user = "nextcloud";
+          group = "nextcloud";
+          mode = "750";
+        }
+      ];
       services.nextcloud = {
         inherit hostName;
         enable = true;
@@ -95,13 +101,8 @@ in {
 #wireguard
 #samba/printer finding
 #vaultwarden
-#nextcloud
-#acme
-#nginx
 #maddy
 #kanidm
-#xdg portals
-#zfs snapshots
 #remote backups
 #immich
 

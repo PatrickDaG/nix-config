@@ -19,6 +19,8 @@
     fwupd-refresh = uidGid 210;
     podman = uidGid 211;
     acme = uidGid 212;
+    nextcloud = uidGid 213;
+    redis-nextcloud = uidGid 214;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };

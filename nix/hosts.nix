@@ -51,14 +51,15 @@ inputs: let
   # True NixOS nodes can define additional microvms (guest nodes) that are built
   # together with the true host. We collect all defined microvm nodes
   # from each node here to allow accessing any node via the unified attribute `nodes`.
-  microvmConfigurations = flip concatMapAttrs self.nixosConfigurations (_: node:
+  guestConfigurations = flip concatMapAttrs self.nixosConfigurations (_: node:
     mapAttrs'
-    (vm: def: nameValuePair def.nodeName node.config.microvm.vms.${vm}.config)
-    (node.config.meta.microvms.vms or {}));
+    (vm: def: nameValuePair vm {config = node.config.containers.${vm}.config;})
+    (node.config.containers or {}));
 in {
   inherit
     hosts
     nixosConfigurations
     minimalConfigurations
+    guestConfigurations
     ;
 }

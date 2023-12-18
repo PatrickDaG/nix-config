@@ -24,4 +24,7 @@
     '';
     extraModules = with pkgs; [pulseaudio-modules-bt];
   };
+  environment.persistence."/state".directories = [
+    "/var/lib/bluetooth"
+  ];
 }
