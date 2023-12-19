@@ -53,7 +53,7 @@ inputs: let
   # from each node here to allow accessing any node via the unified attribute `nodes`.
   guestConfigurations = flip concatMapAttrs self.nixosConfigurations (_: node:
     mapAttrs'
-    (vm: def: nameValuePair vm {config = node.config.containers.${vm}.config;})
+    (vm: _: nameValuePair vm {inherit (node.config.containers.${vm}) config;})
     (node.config.containers or {}));
 in {
   inherit

@@ -14,9 +14,8 @@ inputs: _self: super: {
               node.name = name;
               node.secretsDir = "${attrs.config.node.secretsDir}/guests/${name}";
               nixpkgs = {
-                hostPlatform = attrs.config.nixpkgs.hostPlatform;
-                overlays = attrs.pkgs.overlays;
-                config = attrs.pkgs.config;
+                inherit (attrs.pkgs) overlays config;
+                inherit (attrs.config.nixpkgs) hostPlatform;
               };
               boot.initrd.systemd.enable = super.lib.mkForce false;
             };

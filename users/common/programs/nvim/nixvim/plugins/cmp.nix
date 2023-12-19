@@ -26,7 +26,7 @@
         {name = "nvim_lsp_signature_help";}
         {name = "nvim_lsp";}
         {name = "buffer";}
-        {name = "async_path";}
+        {name = "path";}
         {name = "calc";}
         {name = "emoji";}
         {name = "nvim_lua";}
