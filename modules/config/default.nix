@@ -1,7 +1,10 @@
-{inputs, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     ./boot.nix
-    ./efi.nix
     ./home-manager.nix
     ./inputrc.nix
     ./issue.nix
@@ -32,4 +35,5 @@
     inputs.nixos-extra-modules.nixosModules.default
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
+  boot.mode = lib.mkDefault "efi";
 }

@@ -1,11 +1,8 @@
 {
   config,
   pkgs,
-  lib,
-  minimal,
   ...
-}:
-lib.optionalAttrs (!minimal) {
+}: {
   age.secrets.initrd_host_ed25519_key.generator.script = "ssh-ed25519";
 
   boot.initrd.network.enable = true;
@@ -28,10 +25,12 @@ lib.optionalAttrs (!minimal) {
   # for the first time, and the secrets were rekeyed for the the new host identity.
   system.activationScripts.agenixEnsureInitrdHostkey = {
     text = ''
-      [[ -e ${config.age.secrets.initrd_host_ed25519_key.path} ]] \
-        || ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -N "" -f ${config.age.secrets.initrd_host_ed25519_key.path}
+      if [[ ! -e ${config.age.secrets.initrd_host_ed25519_key.path} ]]; then
+        mkdir -p "$(dirname "${config.age.secrets.initrd_host_ed25519_key.path}")"
+        ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -N "" -f "${config.age.secrets.initrd_host_ed25519_key.path}"
+      fi
     '';
-    deps = ["agenixInstall"];
+    deps = ["agenixInstall" "users"];
   };
   system.activationScripts.agenixChown.deps = ["agenixEnsureInitrdHostkey"];
 }

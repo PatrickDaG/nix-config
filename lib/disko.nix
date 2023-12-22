@@ -4,6 +4,11 @@ _inputs: _self: super: {
     // {
       disko = {
         gpt = {
+          partGrub = name: start: end: {
+            inherit name start end;
+            part-type = "primary";
+            flags = ["bios_grub"];
+          };
           partEfiBoot = name: start: end: {
             inherit name start end;
             fs-type = "fat32";
