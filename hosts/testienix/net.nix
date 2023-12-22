@@ -24,6 +24,18 @@
 
   boot.initrd.systemd.network = {
     enable = true;
-    networks = {inherit (config.systemd.network.networks) "lan01";};
+    networks = {
+      # redo the network cause the livesystem has macvlans
+      "lan01" = {
+        address = ["192.168.178.32/24"];
+        gateway = ["192.168.178.1"];
+        matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
+        dns = ["192.168.178.2"];
+        networkConfig = {
+          IPv6PrivacyExtensions = "yes";
+          MulticastDNS = true;
+        };
+      };
+    };
   };
 }

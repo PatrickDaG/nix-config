@@ -9,10 +9,9 @@ inputs: _self: super: {
               imports = [
                 ../modules/services/nginx.nix
                 ../modules/config
-                ../modules/interface-naming.nix
               ];
               node.name = name;
-              node.secretsDir = "${attrs.config.node.secretsDir}/guests/${name}";
+              node.secretsDir = attrs.config.node.secretsDir + "/guests/${name}";
               nixpkgs = {
                 inherit (attrs.pkgs) overlays config;
                 inherit (attrs.config.nixpkgs) hostPlatform;
