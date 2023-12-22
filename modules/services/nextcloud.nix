@@ -2,7 +2,7 @@
   lib,
   stateVersion,
   config,
-  pkgs, # not unused neede for the usage of attrs later to contains pkgs
+  pkgs, # not unused needed for the usage of attrs later to contains pkgs
   ...
 } @ attrs: let
   hostName = "nc.${config.secrets.secrets.global.domains.mail}";
@@ -63,6 +63,7 @@ in {
         extraApps = with config.services.nextcloud.package.packages.apps; {
           inherit contacts calendar tasks notes unsplash maps;
         };
+        # TODO increase outer nginx upload size as well
         maxUploadSize = "2G";
         extraAppsEnable = true;
         extraOptions.enabledPreviewProviders = [

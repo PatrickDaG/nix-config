@@ -21,6 +21,7 @@
     acme = uidGid 212;
     nextcloud = uidGid 213;
     redis-nextcloud = uidGid 214;
+    radicale = uidGid 215;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
   };
