@@ -8,6 +8,11 @@
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixos-extra-modules = {
+      url = "github:oddlama/nixos-extra-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # to prevent multiple instances of systems
     systems.url = "github:nix-systems/default";
 

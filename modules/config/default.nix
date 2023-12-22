@@ -30,6 +30,7 @@
     inputs.nixseparatedebuginfod.nixosModules.default
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nixvim.nixosModules.nixvim
+    inputs.nixos-extra-modules.nixosModules.default
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
 }
