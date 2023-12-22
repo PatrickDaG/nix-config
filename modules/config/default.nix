@@ -19,7 +19,6 @@
     ../meta.nix
     ../smb-mounts.nix
     ../deterministic-ids.nix
-    ../interface-naming.nix
     ./impermanence
 
     inputs.home-manager.nixosModules.default
