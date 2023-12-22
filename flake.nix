@@ -99,7 +99,6 @@
     nixos-generators,
     pre-commit-hooks,
     devshell,
-    nixpkgs-wayland,
     wired-notify,
     nixvim,
     ...
@@ -173,9 +172,8 @@
           src = lib.cleanSource ./.;
           hooks = {
             alejandra.enable = true;
+            deadnix.enable = true;
             statix.enable = true;
-            luacheck.enable = true;
-            stylua.enable = true;
           };
         };
       devShell = import ./nix/devshell.nix inputs system;
