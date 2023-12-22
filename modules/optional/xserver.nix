@@ -18,6 +18,7 @@ lib.optionalAttrs (!minimal) {
       mouse = {
         accelSpeed = "0.5";
         accelProfile = "flat";
+        middleEmulation = false;
       };
       touchpad = {
         accelProfile = "flat";
