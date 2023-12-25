@@ -7,7 +7,7 @@
 } @ attrs: let
   hostName = "radicale.${config.secrets.secrets.global.domains.mail}";
 in {
-  imports = [./containers.nix ./nginx.nix ./ddclient.nix ./acme.nix];
+  imports = [./containers.nix ./ddclient.nix ./acme.nix];
   services.nginx = {
     enable = true;
     upstreams.radicale = {

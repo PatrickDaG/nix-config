@@ -7,7 +7,6 @@ inputs: _self: super: {
           {
             config = {
               imports = [
-                ../modules/services/nginx.nix
                 ../modules/config
               ];
               node.name = name;

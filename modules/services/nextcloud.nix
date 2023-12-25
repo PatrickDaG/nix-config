@@ -7,15 +7,17 @@
 } @ attrs: let
   hostName = "nc.${config.secrets.secrets.global.domains.mail}";
 in {
-  imports = [./containers.nix ./nginx.nix ./ddclient.nix ./acme.nix];
+  imports = [./containers.nix ./ddclient.nix ./acme.nix];
   services.nginx = {
     enable = true;
+    recommendedSetup = true;
     upstreams.nextcloud = {
       servers."192.168.178.33:80" = {};
 
       extraConfig = ''
         zone nextcloud 64k ;
         keepalive 5 ;
+        client_max_body_size 4G ;
       '';
     };
     virtualHosts.${hostName} = {
@@ -34,6 +36,7 @@ in {
       pkgs,
       ...
     }: {
+      #TODO enable recommended nginx setup
       systemd.network.networks = {
         "lan01" = {
           address = ["192.168.178.33/24"];
@@ -57,7 +60,7 @@ in {
       services.nextcloud = {
         inherit hostName;
         enable = true;
-        package = pkgs.nextcloud27;
+        package = pkgs.nextcloud28;
         configureRedis = true;
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
         extraApps = with config.services.nextcloud.package.packages.apps; {

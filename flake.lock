@@ -974,12 +974,12 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "dirtyRev": "f4a871a401059ff0662ef86a059742d47d45a5bc-dirty",
-        "dirtyShortRev": "f4a871a-dirty",
-        "lastModified": 1703274528,
-        "narHash": "sha256-3bmxjxILyOrmjPYJvGZqcBgQPPgUd2cIxFAbvmag0kE=",
-        "type": "git",
-        "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
+        "lastModified": 1703537346,
+        "narHash": "sha256-uHS8w7HzkPyPh4K2L0U13A0IUeSI9yugYXgK8xz+CyA=",
+        "owner": "oddlama",
+        "repo": "nixos-extra-modules",
+        "rev": "4daf3ffd02f7cfb1c9a3c8c95bec21dd078ab26f",
+        "type": "github"
       },
       "original": {
         "owner": "oddlama",
