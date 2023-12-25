@@ -974,10 +974,10 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "dirtyRev": "c2b389938b166987c4a4fb867ccaa8ff530ddc71-dirty",
-        "dirtyShortRev": "c2b3899-dirty",
-        "lastModified": 1703274021,
-        "narHash": "sha256-r5y1DmRxlKF3rlJoIULeq1lGVGWbTZxmNGlQ0jW8ZjQ=",
+        "dirtyRev": "f4a871a401059ff0662ef86a059742d47d45a5bc-dirty",
+        "dirtyShortRev": "f4a871a-dirty",
+        "lastModified": 1703274528,
+        "narHash": "sha256-3bmxjxILyOrmjPYJvGZqcBgQPPgUd2cIxFAbvmag0kE=",
         "type": "git",
         "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
       },

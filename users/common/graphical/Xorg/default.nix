@@ -7,7 +7,7 @@
     ../.
     ./rofi.nix
     ./i3.nix
-    ./wallpapers.nix
   ];
+  xsession.wallpapers.enable = true;
   home.file.".xinitrc".source = ./xinitrc;
 }
