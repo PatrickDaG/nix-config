@@ -1,7 +1,33 @@
 {config, ...}: {
+  age.secrets.eduroam = {
+    rekeyFile = ./secrets/iwd/eduroam.8021x.age;
+    path = "/var/lib/iwd/eduroam.8021x";
+  };
+  age.secrets.simonWlan = {
+    rekeyFile = ./. + "/secrets/iwd/=467269747a21426f78373539302048616e7373656e.psk.age";
+    path = "/var/lib/=467269747a21426f78373539302048616e7373656e.psk";
+  };
+  age.secrets = {
+    devoloog-psk.rekeyFile = ./secrets/iwd/devoloog-psk.age;
+    devoloog-pass.rekeyFile = ./secrets/iwd/devoloog-pass.age;
+    devoloog-sae19.rekeyFile = ./secrets/iwd/devoloog-sae19.age;
+    devoloog-sae20.rekeyFile = ./secrets/iwd/devoloog-sae20.age;
+  };
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
-    wireless.iwd.enable = true;
+    wireless.iwd = {
+      enable = true;
+      networks = {
+        devoloog.settings = {
+          Security = {
+            PreSharedKey = config.age.secrets.devoloog-psk.path;
+            Passphrase = config.age.secrets.devoloog-pass.path;
+            SAE-PT-Group19 = config.age.secrets.devoloog-sae19.path;
+            SAE-PT-Group20 = config.age.secrets.devoloog-sae20.path;
+          };
+        };
+      };
+    };
     # Add the VPN based route to my paperless instance to
     # etc/hosts
     extraHosts = ''
@@ -44,17 +70,5 @@
       dhcpV4Config.RouteMetric = 40;
       dhcpV6Config.RouteMetric = 40;
     };
-  };
-  age.secrets.eduroam = {
-    rekeyFile = ./secrets/iwd/eduroam.8021x.age;
-    path = "/var/lib/iwd/eduroam.8021x";
-  };
-  age.secrets.devoloog = {
-    rekeyFile = ./secrets/iwd/devolo-og.psk.age;
-    path = "/var/lib/iwd/devolo-og.psk";
-  };
-  age.secrets.simonWlan = {
-    rekeyFile = ./. + "/secrets/iwd/=467269747a21426f78373539302048616e7373656e.psk.age";
-    path = "/var/lib/=467269747a21426f78373539302048616e7373656e.psk";
   };
 }

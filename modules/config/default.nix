@@ -22,6 +22,7 @@
     ../meta.nix
     ../smb-mounts.nix
     ../deterministic-ids.nix
+    ../optional/iwd.nix
     ./impermanence
 
     inputs.home-manager.nixosModules.default
