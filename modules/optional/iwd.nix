@@ -46,10 +46,10 @@
             description = "The type of network. This will determine the file ending. The module will try to determine this automatically so this should only be set when the heuristics fail.";
           };
           settings = mkOption {
-            type = with types; (attrsOf (attrsOf str));
+            type = with types; (attrsOf (attrsOf (oneOf [str path])));
             description = ''
               Contents of the iwd config file for this network
-              If a file named like this exists the content will be read from file, else the raw string will be used.
+              The lowest level values should be files, that will be read into the config files
             '';
             default = {};
           };
@@ -65,7 +65,6 @@
       flip
       mapAttrsToList
       concatStringsSep
-      hasPrefix
       ;
     cfg = config.networking.wireless.iwd;
 
@@ -95,11 +94,7 @@
             ${concatStringsSep "\n" (flip mapAttrsToList config.settings (toplevel: config: ''
               [${toplevel}]
               ${concatStringsSep "\n" (flip mapAttrsToList config (name: value: ''
-                ${name}=${
-                  if hasPrefix "/" value
-                  then "$(<${value})"
-                  else value
-                }
+                ${name}=$(<${value})
               ''))}
             ''))}
             EOF

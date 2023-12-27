@@ -17,6 +17,7 @@ _inputs: _self: super: let
     occurrences = countOccurrences xs;
   in
     unique (filter (x: occurrences.${x} > 1) xs);
+  writeText = text: (super.writeText (builtins.hashString "sha256" "${text}") "${text}");
 in {
   lib =
     super.lib
@@ -24,6 +25,7 @@ in {
       inherit
         countOccurrences
         duplicates
+        writeText
         ;
     };
 }
