@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  lib,
   nixosConfig,
   ...
 }: {
@@ -60,10 +59,7 @@
 
   qt = {
     enable = true;
-    platformTheme = "qtct";
-    style.name = "kvantum";
+    platformTheme = "gnome";
+    style.name = "Adwaita-Dark";
   };
-
-  xdg.configFile."Kvantum/kvantum.kvconfig".text = "theme=KvLibadwaita";
-  xdg.configFile."Kvantum/KvLibadwaita/".source = ./kvantum;
 }
