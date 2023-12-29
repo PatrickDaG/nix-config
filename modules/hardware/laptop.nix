@@ -4,7 +4,10 @@
       IdleAction=suspend
       IdleActionSec=300
     '';
-    physlock.enable = true;
+    physlock = {
+      enable = true;
+      muteKernelMessages = true;
+    };
     tlp = {
       enable = true;
       settings = {

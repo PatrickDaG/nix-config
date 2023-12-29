@@ -12,6 +12,7 @@
       telegram-desktop
       chromium
       libreoffice
+      lftp
     ];
   };
 }
