@@ -12,7 +12,7 @@
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
-      dns = ["9.9.9.9"];
+      dns = ["1.1.1.1"];
       dhcpV4Config.RouteMetric = 40;
       dhcpV6Config.RouteMetric = 40;
     };
