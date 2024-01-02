@@ -9,7 +9,6 @@ lib.optionalAttrs (!minimal) {
   users.users.patrick = {
     shell = pkgs.zsh;
     isNormalUser = true;
-    uid = 1000;
     createHome = true;
     extraGroups = [
       "wheel"
@@ -36,7 +35,6 @@ lib.optionalAttrs (!minimal) {
       }
     ];
   };
-  users.groups.patrick.gid = config.users.users.patrick.uid;
 
   environment.systemPackages = with pkgs; [
     # xournalpp needs this or else it will crash
