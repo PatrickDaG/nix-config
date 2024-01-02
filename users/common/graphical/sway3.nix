@@ -150,15 +150,23 @@ in {
           }
           {
             block = "cpu";
+            format = " $icon  $utilization ";
           }
           {
             block = "nvidia_gpu";
+            format = " $icon  $utilization $memory $temperature ";
           }
         ]
         ++ {"patricknix" = [{block = "battery";}];}.${nixosConfig.node.name} or []
         ++ [
           {
             block = "sound";
+            click = [
+              {
+                button = "left";
+                action = "toggle_mute";
+              }
+            ];
           }
           {
             block = "backlight";
