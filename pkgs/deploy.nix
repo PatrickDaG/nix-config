@@ -1,6 +1,7 @@
 {
   symlinkJoin,
   writeShellApplication,
+  nix-output-monitor,
 }: let
   deploy = writeShellApplication {
     name = "deploy";
@@ -158,7 +159,7 @@
 
 
       echo -e "Building toplevels for \033[0;32m''${#HOSTS[*]} hosts\033[0m"
-      nix build --print-out-paths --no-link "''${OPTIONS[@]}" "''${NIXOS_CONFIGS[@]}" \
+      ${nix-output-monitor}/bin/nom build --print-out-paths --no-link "''${OPTIONS[@]}" "''${NIXOS_CONFIGS[@]}" \
       || die "Failed building derivations"
 
     '';

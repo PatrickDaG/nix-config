@@ -30,7 +30,6 @@
     inputs.agenix.nixosModules.default
     inputs.agenix-rekey.nixosModules.default
     inputs.disko.nixosModules.disko
-    inputs.nixseparatedebuginfod.nixosModules.default
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nixvim.nixosModules.nixvim
     inputs.nixos-extra-modules.nixosModules.default

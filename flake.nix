@@ -65,14 +65,11 @@
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "systems";
     };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixseparatedebuginfod.url = "github:symphorien/nixseparatedebuginfod";
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.3.0";
