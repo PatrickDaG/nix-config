@@ -14,4 +14,9 @@
       };
     };
   };
+
+  networking.extraHosts = ''
+    192.168.178.32 pgrossmann.org
+    192.168.178.32 nc.pgrossmann.org
+  '';
 }

@@ -35,6 +35,7 @@ lib.optionalAttrs (!minimal) {
       }
     ];
   };
+  users.groups.patrick = {};
 
   environment.systemPackages = with pkgs; [
     # xournalpp needs this or else it will crash

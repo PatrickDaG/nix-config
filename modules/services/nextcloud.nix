@@ -2,6 +2,7 @@
   lib,
   stateVersion,
   config,
+  #deadnix: skip
   pkgs, # not unused needed for the usage of attrs later to contains pkgs
   ...
 } @ attrs: let
@@ -17,13 +18,15 @@ in {
       extraConfig = ''
         zone nextcloud 64k ;
         keepalive 5 ;
-        client_max_body_size 4G ;
       '';
     };
     virtualHosts.${hostName} = {
       forceSSL = true;
       useACMEHost = "mail";
       locations."/".proxyPass = "http://nextcloud";
+      extraConfig = ''
+        client_max_body_size 4G ;
+      '';
     };
   };
   containers.nextcloud = lib.containers.mkConfig "nextcloud" attrs {
@@ -63,27 +66,35 @@ in {
         package = pkgs.nextcloud28;
         configureRedis = true;
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
+        config.adminuser = "admin";
         extraApps = with config.services.nextcloud.package.packages.apps; {
           inherit contacts calendar tasks notes maps;
         };
         # TODO increase outer nginx upload size as well
         maxUploadSize = "2G";
         extraAppsEnable = true;
-        extraOptions.enabledPreviewProviders = [
-          "OC\\Preview\\BMP"
-          "OC\\Preview\\GIF"
-          "OC\\Preview\\JPEG"
-          "OC\\Preview\\Krita"
-          "OC\\Preview\\MarkDown"
-          "OC\\Preview\\MP3"
-          "OC\\Preview\\OpenDocument"
-          "OC\\Preview\\PNG"
-          "OC\\Preview\\TXT"
-          "OC\\Preview\\XBitmap"
-          "OC\\Preview\\HEIC"
-        ];
+        database.createLocally = true;
+        phpOptions."opcache.interned_strings_buffer" = "32";
+        extraOptions = {
+          trusted_proxies = ["192.168.178.32"];
+          overwriteprotocol = "https";
+          enabledPreviewProviders = [
+            "OC\\Preview\\BMP"
+            "OC\\Preview\\GIF"
+            "OC\\Preview\\JPEG"
+            "OC\\Preview\\Krita"
+            "OC\\Preview\\MarkDown"
+            "OC\\Preview\\MP3"
+            "OC\\Preview\\OpenDocument"
+            "OC\\Preview\\PNG"
+            "OC\\Preview\\TXT"
+            "OC\\Preview\\XBitmap"
+            "OC\\Preview\\HEIC"
+          ];
+        };
         config = {
           defaultPhoneRegion = "DE";
+          dbtype = "pgsql";
         };
       };
 
