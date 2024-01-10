@@ -11,8 +11,6 @@
       signal-desktop
       telegram-desktop
       chromium
-      libreoffice
-      lftp
     ];
   };
 }

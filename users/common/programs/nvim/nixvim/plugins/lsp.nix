@@ -54,7 +54,6 @@
         cssls.enable = true;
         gopls.enable = true;
         html.enable = true;
-        hls.enable = true;
         zls.enable = true;
         pyright.enable = true;
         texlab.enable = true;

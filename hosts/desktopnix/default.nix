@@ -39,7 +39,7 @@
     xkbVariant = "bone";
   };
   virtualisation.podman = {
-    enable = true;
+    enable = false;
     dockerCompat = true;
   };
 
