@@ -1,6 +1,5 @@
 {
   self,
-  nixpkgs,
   devshell,
   agenix-rekey,
   ...
@@ -69,10 +68,6 @@ in
     env = [
       {
         name = "NIX_CONFIG";
-        # Nix plugins braucht nix version 2.16
-        # Nixpkgs hat aber aktuell 2.15 also main version
-        # Daher der folgenda hack um zu verhindern das mein NixOS mit einer anderen nix version gebaut wird
-        # als der intendeten
         value = ''
           plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
           extra-builtins-file = ${../nix}/extra-builtins.nix

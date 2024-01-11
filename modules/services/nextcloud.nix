@@ -70,7 +70,6 @@ in {
         extraApps = with config.services.nextcloud.package.packages.apps; {
           inherit contacts calendar tasks notes maps;
         };
-        # TODO increase outer nginx upload size as well
         maxUploadSize = "2G";
         extraAppsEnable = true;
         database.createLocally = true;

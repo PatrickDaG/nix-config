@@ -25,6 +25,9 @@
     systemd-coredump = uidGid 301;
     patrick = uidGid 1000;
     smb = uidGid 2000;
-    ggr = uidGid 2001;
+    david = uidGid 2004;
+    helen = uidGid 2001;
+    ggr = uidGid 2002;
+    family = uidGid 2003;
   };
 }

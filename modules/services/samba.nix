@@ -25,7 +25,7 @@
       # and next to the IPC connection in net view.
       "server string = patricks-tolles-nas"
       # Set the NetBIOS name by which the Samba server is known.
-      "netbios name = my-nas"
+      "netbios name = patricks-tolles-nas"
       # Disable netbios support. We don't need to support browsing since all
       # clients hardcode the host and share names.
       "disable netbios = yes"
@@ -86,14 +86,29 @@
           user = "patrick";
           group = "patrick";
         } {})
+        (mkShare {
+          name = "helen-data";
+          user = "helen";
+          group = "helen";
+        } {})
+        (mkShare {
+          name = "david-data";
+          user = "david";
+          group = "david";
+        } {})
+        (mkShare {
+          name = "family-data";
+          user = "family";
+          group = "family";
+        } {})
         ((mkShare {name = "media";})
           {
             "read only" = "yes";
-            "write list" = "smb";
+            "write list" = "@family";
           })
       ];
   };
-  # to get this file start a smbd add users using 'smbpasswd -a <user>'
+  # to get this file start a smbd, add users using 'smbpasswd -a <user>'
   # then export the database using 'pdbedit -e tdbsam:<location>'
   age.secrets.smbpassdb = {
     rekeyFile = ../../secrets/smbpassdb.tdb.age;
@@ -118,6 +133,12 @@
             "family"
           ];
           ggr.extraGroups = [
+            "family"
+          ];
+          david.extraGroups = [
+            "family"
+          ];
+          helen.extraGroups = [
             "family"
           ];
         }

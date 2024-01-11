@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   programs.obs-studio = {
-    enable = false;
+    enable = true;
     plugins = with pkgs.obs-studio-plugins; [
       obs-backgroundremoval
       obs-pipewire-audio-capture
