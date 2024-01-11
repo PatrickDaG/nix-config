@@ -17,3 +17,7 @@ system = "x86_64-linux"
 [maddy]
 type = "nixos"
 system = "x86_64-linux"
+
+[elisabeth]
+type = "nixos"
+system = "x86_64-linux"

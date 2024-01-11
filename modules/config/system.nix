@@ -1,10 +1,13 @@
 {
   inputs,
   lib,
+  stateVersion,
   pkgs,
   config,
   ...
 }: {
+  system.stateVersion = stateVersion;
+
   age.rekey = {
     inherit
       (inputs.self.secretsConfig)

@@ -19,7 +19,6 @@
 
     ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/laptop.nix
-    ../../modules/hardware/intel.nix
     ../../modules/hardware/nvidia.nix
     ../../modules/hardware/physical.nix
     ../../modules/hardware/pipewire.nix

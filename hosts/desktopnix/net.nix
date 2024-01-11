@@ -4,19 +4,12 @@
   };
   systemd.network.networks = {
     "01-lan1" = {
-      address = ["192.168.178.30/24"];
-      gateway = ["192.168.178.1"];
+      DHCP = "yes";
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
-      dns = ["192.168.178.2"];
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
     };
   };
-
-  networking.extraHosts = ''
-    192.168.178.32 pgrossmann.org
-    192.168.178.32 nc.pgrossmann.org
-  '';
 }

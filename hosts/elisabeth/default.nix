@@ -1,13 +1,16 @@
 {
   inputs,
-  lib,
   minimal,
+  lib,
   ...
 }: {
   imports =
     [
       inputs.nixos-hardware.nixosModules.common-pc
       inputs.nixos-hardware.nixosModules.common-pc-ssd
+      inputs.nixos-hardware.nixosModules.common-pc-hdd
+      inputs.nixos-hardware.nixosModules.common-cpu-amd
+      inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 
       ../../modules/config
       ../../modules/optional/initrd-ssh.nix
@@ -15,16 +18,17 @@
       ../../modules/hardware/physical.nix
       ../../modules/hardware/zfs.nix
 
+      ../../modules/services/acme.nix
+      ../../modules/services/ddclient.nix
+
       ./net.nix
       ./fs.nix
     ]
     ++ lib.lists.optionals (!minimal) [
-      ../../modules/services/samba.nix
-      ../../modules/services/nextcloud.nix
+      ./guests.nix
     ];
   services.xserver = {
     layout = "de";
     xkbVariant = "bone";
   };
-  services.thermald.enable = lib.mkForce false;
 }

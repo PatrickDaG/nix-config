@@ -3,17 +3,16 @@
   lib,
   ...
 }: {
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
-  networking.firewall.allowedTCPPorts = [
-    5357 # wsdd
-  ];
-  networking.firewall.allowedUDPPorts = [
-    3702 # wsdd
-  ];
+  services.samba-wsdd = {
+    enable = true; # make shares visible for windows 10 clients
+    openFirewall = true;
+  };
   services.samba = {
     enable = true;
     securityType = "user";
     openFirewall = true;
+    enableWinbindd = false;
+    enableNmbd = false;
     extraConfig = lib.concatLines [
       ''
         logging = systemd
@@ -56,10 +55,12 @@
         name,
         user ? "smb",
         group ? "smb",
+        persistRoot ? "/panzer",
       }: cfg: {
         "${name}" =
           {
             "path" = "/media/smb/${name}";
+            "#persistRoot" = persistRoot;
             "read only" = "no";
             "guest ok" = "no";
             "create mask" = "0640";
@@ -101,7 +102,10 @@
           user = "family";
           group = "family";
         } {})
-        ((mkShare {name = "media";})
+        (mkShare {
+            name = "media";
+            persistRoot = "/renaultft";
+          }
           {
             "read only" = "yes";
             "write list" = "@family";
@@ -149,10 +153,14 @@
     }));
   };
 
-  environment.persistence."/panzer/persist".directories = lib.flip lib.mapAttrsToList config.services.samba.shares (_: v: {
-    directory = "${v.path}";
-    user = "${v."force user"}";
-    group = "${v."force group"}";
-    mode = "0770";
-  });
+  environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v: {
+    ${v."#persistRoot"}.directories = [
+      {
+        directory = "${v.path}";
+        user = "${v."force user"}";
+        group = "${v."force group"}";
+        mode = "0770";
+      }
+    ];
+  }));
 }

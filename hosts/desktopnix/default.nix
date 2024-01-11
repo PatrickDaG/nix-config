@@ -1,6 +1,8 @@
 {inputs, ...}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-hdd
     inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -12,7 +14,6 @@
     ../../modules/optional/xserver.nix
     ../../modules/optional/secureboot.nix
 
-    ../../modules/hardware/intel.nix
     ../../modules/hardware/nintendo.nix
     ../../modules/hardware/nvidia.nix
     ../../modules/hardware/physical.nix

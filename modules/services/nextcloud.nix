@@ -1,122 +1,92 @@
 {
   lib,
-  stateVersion,
+  pkgs,
   config,
-  #deadnix: skip
-  pkgs, # not unused needed for the usage of attrs later to contains pkgs
   ...
-} @ attrs: let
-  hostName = "nc.${config.secrets.secrets.global.domains.mail}";
+}: let
+  hostName = "nc.${config.secrets.secrets.global.domains.web}";
 in {
-  imports = [./containers.nix ./ddclient.nix ./acme.nix];
-  services.nginx = {
-    enable = true;
-    recommendedSetup = true;
-    upstreams.nextcloud = {
-      servers."192.168.178.33:80" = {};
-
-      extraConfig = ''
-        zone nextcloud 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${hostName} = {
-      forceSSL = true;
-      useACMEHost = "mail";
-      locations."/".proxyPass = "http://nextcloud";
-      extraConfig = ''
-        client_max_body_size 4G ;
-      '';
+  systemd.network.networks = {
+    "TODO" = {
+      address = ["192.168.178.33/24"];
+      gateway = ["192.168.178.1"];
+      matchConfig.Name = "lan01*";
+      dns = ["192.168.178.2"];
+      networkConfig = {
+        IPv6PrivacyExtensions = "yes";
+        MulticastDNS = true;
+      };
     };
   };
-  containers.nextcloud = lib.containers.mkConfig "nextcloud" attrs {
-    zfs = {
-      enable = true;
-      pool = "panzer";
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/postgresql/";
+      user = "postgres";
+      group = "postgres";
+      mode = "750";
+    }
+  ];
+  environment.persistence."/panzer".directories = [
+    {
+      directory = config.services.nextcloud.home;
+      user = "nextcloud";
+      group = "nextcloud";
+      mode = "750";
+    }
+  ];
+  age.secrets.ncpasswd = {
+    generator.script = "alnum";
+    mode = "440";
+    owner = "nextcloud";
+  };
+  services.postgresql.package = pkgs.postgresql_16;
+  services.nginx.virtualHosts.${hostName}.extraConfig = ''
+    allow TODO;
+    deny all;
+  '';
+
+  services.nextcloud = {
+    inherit hostName;
+    enable = true;
+    package = pkgs.nextcloud28;
+    configureRedis = true;
+    config.adminpassFile = config.age.secrets.ncpasswd.path; # Kinda ok just remember to instanly change after first setup
+    config.adminuser = "admin";
+    extraApps = with config.services.nextcloud.package.packages.apps; {
+      inherit contacts calendar tasks notes maps phonetrack;
+    };
+    maxUploadSize = "4G";
+    extraAppsEnable = true;
+    database.createLocally = true;
+    phpOptions."opcache.interned_strings_buffer" = "32";
+    extraOptions = {
+      default_phone_region = "DE";
+      trusted_proxies = ["TODO"];
+      overwriteprotocol = "https";
+      enabledPreviewProviders = [
+        "OC\\Preview\\BMP"
+        "OC\\Preview\\GIF"
+        "OC\\Preview\\JPEG"
+        "OC\\Preview\\Krita"
+        "OC\\Preview\\MarkDown"
+        "OC\\Preview\\MP3"
+        "OC\\Preview\\OpenDocument"
+        "OC\\Preview\\PNG"
+        "OC\\Preview\\TXT"
+        "OC\\Preview\\XBitmap"
+        "OC\\Preview\\HEIC"
+      ];
     };
     config = {
-      config,
-      pkgs,
-      ...
-    }: {
-      #TODO enable recommended nginx setup
-      systemd.network.networks = {
-        "lan01" = {
-          address = ["192.168.178.33/24"];
-          gateway = ["192.168.178.1"];
-          matchConfig.Name = "lan01*";
-          dns = ["192.168.178.2"];
-          networkConfig = {
-            IPv6PrivacyExtensions = "yes";
-            MulticastDNS = true;
-          };
-        };
-      };
-      environment.persistence."/persist".directories = [
-        {
-          directory = config.services.nextcloud.home;
-          user = "nextcloud";
-          group = "nextcloud";
-          mode = "750";
-        }
-      ];
-      services.nextcloud = {
-        inherit hostName;
-        enable = true;
-        package = pkgs.nextcloud28;
-        configureRedis = true;
-        config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # DON'T DO THIS IN PRODUCTION - the password file will be world-readable in the Nix Store!
-        config.adminuser = "admin";
-        extraApps = with config.services.nextcloud.package.packages.apps; {
-          inherit contacts calendar tasks notes maps;
-        };
-        maxUploadSize = "2G";
-        extraAppsEnable = true;
-        database.createLocally = true;
-        phpOptions."opcache.interned_strings_buffer" = "32";
-        extraOptions = {
-          default_phone_region = "DE";
-          trusted_proxies = ["192.168.178.32"];
-          overwriteprotocol = "https";
-          enabledPreviewProviders = [
-            "OC\\Preview\\BMP"
-            "OC\\Preview\\GIF"
-            "OC\\Preview\\JPEG"
-            "OC\\Preview\\Krita"
-            "OC\\Preview\\MarkDown"
-            "OC\\Preview\\MP3"
-            "OC\\Preview\\OpenDocument"
-            "OC\\Preview\\PNG"
-            "OC\\Preview\\TXT"
-            "OC\\Preview\\XBitmap"
-            "OC\\Preview\\HEIC"
-          ];
-        };
-        config = {
-          dbtype = "pgsql";
-        };
-      };
-
-      system.stateVersion = stateVersion;
-
-      networking = {
-        firewall = {
-          enable = true;
-          allowedTCPPorts = [80];
-        };
-        # Use systemd-resolved inside the container
-        useHostResolvConf = lib.mkForce false;
-      };
-
-      services.resolved.enable = true;
+      dbtype = "pgsql";
     };
   };
-}
-#wireguard
-#samba/printer finding
-#vaultwarden
-#maddy
-#kanidm
-#remote backups
-#immich
 
+  networking = {
+    firewall.allowedTCPPorts = [80];
+    # Use systemd-resolved inside the container
+    useHostResolvConf = lib.mkForce false;
+  };
+
+  services.resolved.enable = true;
+}

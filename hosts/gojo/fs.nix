@@ -12,7 +12,7 @@
           type = "table";
           format = "gpt";
           partitions = [
-            (partEfiBoot "boot" "0%" "260MB")
+            (partEfi "boot" "0%" "260MB")
             {
               name = "rpool";
               content = {
@@ -25,7 +25,7 @@
       };
     };
     zpool = with lib.disko.zfs; {
-      rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
+      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
     };
   };
   fileSystems."/state".neededForBoot = true;

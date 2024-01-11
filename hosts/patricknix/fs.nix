@@ -12,7 +12,7 @@
           type = "table";
           format = "gpt";
           partitions = [
-            (partEfiBoot "boot" "0%" "1GiB")
+            (partEfi "boot" "0%" "1GiB")
             (partSwap "swap" "1GiB" "17GiB")
             (partLuksZfs "rpool" "rpool" "17GiB" "100%")
           ];
@@ -20,7 +20,7 @@
       };
     };
     zpool = with lib.disko.zfs; {
-      rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
+      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
     };
   };
   fileSystems."/state".neededForBoot = true;

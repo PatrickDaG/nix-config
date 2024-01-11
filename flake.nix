@@ -165,7 +165,6 @@
         modules = [
           ./nix/installer-configuration.nix
           ./modules/config/ssh.nix
-          {system.stateVersion = stateVersion;}
         ];
         format =
           {

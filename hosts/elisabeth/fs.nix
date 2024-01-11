@@ -5,55 +5,62 @@
 }: {
   disko.devices = {
     disk = {
-      internal-hdd = {
+      internal-ssd = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.internal-hdd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.nvme}";
         content = with lib.disko.gpt; {
           type = "table";
           format = "gpt";
           partitions = [
             (partEfi "boot" "0%" "1GiB")
-            (partSwap "swap" "1GiB" "17GiB")
-            (lib.attrsets.recursiveUpdate (partLuksZfs "rpool" "rpool" "17GiB" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
+            (partLuksZfs "ssd" "rpool" "1GiB" "100%")
           ];
         };
       };
-      external-hdd-1 = {
+      "4TB-hdd-1" = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.external-hdd-1}";
-        content = with lib.disko.gpt; {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            (lib.attrsets.recursiveUpdate (partLuksZfs "panzer-1" "panzer" "0%" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
-          ];
-        };
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."4TB-1"}";
+        content = lib.disko.content.luksZfs "hdd-4TB-1" "renaultft";
       };
-      external-hdd-2 = {
+      "4TB-hdd-2" = {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.external-hdd-2}";
-        content = with lib.disko.gpt; {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            (lib.attrsets.recursiveUpdate (partLuksZfs "panzer-2" "panzer" "0%" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
-          ];
-        };
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."4TB-2"}";
+        content = lib.disko.content.luksZfs "hdd-4TB-2" "renaultft";
+      };
+      "4TB-hdd-3" = {
+        type = "disk";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."4TB-3"}";
+        content = lib.disko.content.luksZfs "hdd-4TB-3" "renaultft";
+      };
+      "8TB-hdd-1" = {
+        type = "disk";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."8TB-1"}";
+        content = lib.disko.content.luksZfs "hdd-8TB-1" "panzer";
+      };
+      "8TB-hdd-2" = {
+        type = "disk";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."8TB-2"}";
+        content = lib.disko.content.luksZfs "hdd-8TB-2" "panzer";
+      };
+      "8TB-hdd-3" = {
+        type = "disk";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko."8TB-3"}";
+        content = lib.disko.content.luksZfs "hdd-8TB-3" "panzer";
       };
     };
 
     zpool = with lib.disko.zfs; {
       rpool = mkZpool {datasets = impermanenceZfsDatasets;};
-      panzer =
-        mkZpool
-        {
-          datasets = {
-            "local" = unmountable;
-            "local/state" = filesystem "/panzer/state";
-            "safe" = unmountable;
-            "safe/persist" = filesystem "/panzer/persist";
-          };
+      panzer = mkZpool {
+        datasets = {
+          "safe/guests" = unmountable;
         };
+      };
+      renaultft = mkZpool {
+        datasets = {
+          "safe/guests" = unmountable;
+        };
+      };
     };
   };
 
@@ -79,10 +86,10 @@
           type = "snap";
           name = "mach-schnipp-schusss";
           filesystems = {
-            "panzer/local/state<" = true;
             "panzer/safe<" = true;
             "rpool/local/state<" = true;
             "rpool/safe<" = true;
+            "renaultft/safe<" = true;
           };
           snapshotting = {
             type = "periodic";
@@ -116,9 +123,6 @@
 
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-  fileSystems."/panzer/state".neededForBoot = true;
-  fileSystems."/panzer/persist".neededForBoot = true;
-  boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
-  boot.initrd.luks.devices.enc-panzer-1.allowDiscards = true;
-  boot.initrd.luks.devices.enc-panzer-2.allowDiscards = true;
+  boot.initrd.systemd.services."zfs-import-panzer".after = ["cryptsetup.target"];
+  boot.initrd.systemd.services."zfs-import-renaultft".after = ["cryptsetup.target"];
 }

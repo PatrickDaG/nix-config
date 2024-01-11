@@ -13,7 +13,7 @@
           format = "gpt";
           partitions = [
             (partGrub "grub" "0%" "1MiB")
-            (partEfiBoot "bios" "1MiB" "512MiB")
+            (partEfi "bios" "1MiB" "512MiB")
             (partLuksZfs "rpool" "rpool" "512MiB" "100%")
             #(lib.attrsets.recursiveUpdate (partLuksZfs "rpool" "rpool" "17GiB" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
           ];
@@ -22,7 +22,7 @@
     };
 
     zpool = with lib.disko.zfs; {
-      rpool = defaultZpoolOptions // {datasets = defaultZfsDatasets;};
+      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
     };
   };
 
