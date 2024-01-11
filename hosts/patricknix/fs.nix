@@ -25,5 +25,4 @@
   };
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-  boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
 }

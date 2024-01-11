@@ -909,6 +909,43 @@
         "type": "github"
       }
     },
+    "lib-net": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1596309860,
+        "narHash": "sha256-izAzepR/6cDvnRfaa2ceSolMLMwqzQB5x9q62aR5J2g=",
+        "type": "tarball",
+        "url": "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz"
+      }
+    },
+    "microvm": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "spectrum": "spectrum"
+      },
+      "locked": {
+        "lastModified": 1704120350,
+        "narHash": "sha256-s5BOPAnVc4e/4WvGDeeF3VSLAWzBUB+YW6fJb3pFbRw=",
+        "owner": "astro",
+        "repo": "microvm.nix",
+        "rev": "d5553b1388f2947915c4cec6249b89474046573a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "astro",
+        "repo": "microvm.nix",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -1012,17 +1049,18 @@
       "inputs": {
         "devshell": "devshell_3",
         "flake-utils": "flake-utils_4",
+        "lib-net": "lib-net",
         "nixpkgs": [
           "nixpkgs"
         ],
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1704474098,
-        "narHash": "sha256-qeSqlbSQAhvtcBsn0SUpAiGwAqVLMbxOkm6NX+NHNPI=",
+        "lastModified": 1704938286,
+        "narHash": "sha256-/uv+N2v5ixqYz7SG8R5GWOTdrNKboHEp85BR5Jdz6qE=",
         "owner": "oddlama",
         "repo": "nixos-extra-modules",
-        "rev": "7013e9116ddfde2e39a16b6ae8c26d869e2dbe98",
+        "rev": "c55f465ba1f369852ab4122a9fa42c85b4a571de",
         "type": "github"
       },
       "original": {
@@ -1408,6 +1446,7 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
+        "microvm": "microvm",
         "nix-index-database": "nix-index-database",
         "nixos-extra-modules": "nixos-extra-modules",
         "nixos-generators": "nixos-generators",
@@ -1446,6 +1485,22 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
+      }
+    },
+    "spectrum": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1703273931,
+        "narHash": "sha256-CJ1Crdi5fXHkCiemovsp20/RC4vpDaZl1R6V273FecI=",
+        "ref": "refs/heads/main",
+        "rev": "97e2f3429ee61dc37664b4d096b2fec48a57b691",
+        "revCount": 597,
+        "type": "git",
+        "url": "https://spectrum-os.org/git/spectrum"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://spectrum-os.org/git/spectrum"
       }
     },
     "spicetify-nix": {

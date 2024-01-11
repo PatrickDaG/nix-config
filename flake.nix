@@ -12,6 +12,11 @@
       url = "github:oddlama/nixos-extra-modules";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
 
     # to prevent multiple instances of systems
     systems.url = "github:nix-systems/default";
@@ -103,6 +108,7 @@
     devshell,
     wired-notify,
     nixvim,
+    nixos-extra-modules,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
@@ -144,6 +150,7 @@
           ++ import ./pkgs
           ++ [
             # nixpkgs-wayland.overlay
+            nixos-extra-modules.overlays.default
             devshell.overlays.default
             agenix-rekey.overlays.default
             wired-notify.overlays.default

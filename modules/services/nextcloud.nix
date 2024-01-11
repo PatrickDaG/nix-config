@@ -75,6 +75,7 @@ in {
         database.createLocally = true;
         phpOptions."opcache.interned_strings_buffer" = "32";
         extraOptions = {
+          default_phone_region = "DE";
           trusted_proxies = ["192.168.178.32"];
           overwriteprotocol = "https";
           enabledPreviewProviders = [
@@ -92,7 +93,6 @@ in {
           ];
         };
         config = {
-          defaultPhoneRegion = "DE";
           dbtype = "pgsql";
         };
       };
