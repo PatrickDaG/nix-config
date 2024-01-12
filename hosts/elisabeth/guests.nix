@@ -10,11 +10,31 @@
   adguardhomedomain = "adguardhome.${config.secrets.secrets.global.domains.web}";
   nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
   giteadomain = "git.${config.secrets.secrets.global.domains.web}";
+  vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
 in {
   services.nginx = {
     enable = true;
     recommendedSetup = true;
+    upstreams.vaultwarden = {
+      servers."${ipOf "vaultwarden"}:3000" = {};
+
+      extraConfig = ''
+        zone vaultwarden 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${vaultwardendomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/" = {
+        proxyPass = "http://vaultwarden";
+        proxyWebsockets = true;
+      };
+      extraConfig = ''
+        client_max_body_size 1G ;
+      '';
+    };
     upstreams.gitea = {
       servers."${ipOf "gitea"}:3000" = {};
 
@@ -141,6 +161,7 @@ in {
   in
     {}
     // mkContainer "adguardhome" {}
+    // mkContainer "vaultwarden" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
