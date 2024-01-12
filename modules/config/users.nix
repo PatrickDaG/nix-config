@@ -21,6 +21,7 @@
     nextcloud = uidGid 213;
     redis-nextcloud = uidGid 214;
     radicale = uidGid 215;
+    gitea = uidGid 215;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
     patrick = uidGid 1000;

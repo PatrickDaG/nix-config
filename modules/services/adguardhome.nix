@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   services.adguardhome = {
     enable = true;
     mutableSettings = false;
@@ -7,7 +11,7 @@
       bind_port = 3000;
       bind_host = "0.0.0.0";
       dns = {
-        bind_hosts = ["TODO"];
+        bind_hosts = ["0.0.0.0"];
         anonymize_client_ip = true;
         upstream_dns = [
           "1.0.0.1"
@@ -22,9 +26,9 @@
           "2001:4860:4860::8844"
         ];
       };
-      user_rules = ''
-        ||${config.secrets.secrets.global.domains.web}^$dnsrewrite=TODO
-      '';
+      user_rules = [
+        "||${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet}"
+      ];
       dhcp.enabled = false;
       ratelimit = 60;
       users = [

@@ -6,18 +6,7 @@
 }: let
   hostName = "nc.${config.secrets.secrets.global.domains.web}";
 in {
-  systemd.network.networks = {
-    "TODO" = {
-      address = ["192.168.178.33/24"];
-      gateway = ["192.168.178.1"];
-      matchConfig.Name = "lan01*";
-      dns = ["192.168.178.2"];
-      networkConfig = {
-        IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
-      };
-    };
-  };
+  # TODO mailer
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/postgresql/";
@@ -40,10 +29,6 @@ in {
     owner = "nextcloud";
   };
   services.postgresql.package = pkgs.postgresql_16;
-  services.nginx.virtualHosts.${hostName}.extraConfig = ''
-    allow TODO;
-    deny all;
-  '';
 
   services.nextcloud = {
     inherit hostName;
@@ -61,7 +46,7 @@ in {
     phpOptions."opcache.interned_strings_buffer" = "32";
     extraOptions = {
       default_phone_region = "DE";
-      trusted_proxies = ["TODO"];
+      trusted_proxies = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet)];
       overwriteprotocol = "https";
       enabledPreviewProviders = [
         "OC\\Preview\\BMP"

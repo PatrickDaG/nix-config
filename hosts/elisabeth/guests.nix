@@ -9,12 +9,33 @@
 }: let
   adguardhomedomain = "adguardhome.${config.secrets.secrets.global.domains.web}";
   nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
+  giteadomain = "git.${config.secrets.secrets.global.domains.web}";
+  ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
 in {
   services.nginx = {
     enable = true;
     recommendedSetup = true;
+    upstreams.gitea = {
+      servers."${ipOf "gitea"}:3000" = {};
+
+      extraConfig = ''
+        zone gitea 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${giteadomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/" = {
+        proxyPass = "http://gitea";
+        proxyWebsockets = true;
+      };
+      extraConfig = ''
+        client_max_body_size 1G ;
+      '';
+    };
     upstreams.adguardhome = {
-      servers."TODO:3000" = {};
+      servers."${ipOf "adguardhome"}:3000" = {};
 
       extraConfig = ''
         zone adguardhome 64k ;
@@ -34,7 +55,7 @@ in {
       '';
     };
     upstreams.nextcloud = {
-      servers."TODO:80" = {};
+      servers."${ipOf "nextcloud"}:3000" = {};
 
       extraConfig = ''
         zone nextcloud 64k ;
@@ -80,7 +101,7 @@ in {
           node.secretsDir = ./secrets/${guestName};
           systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
             DHCP = lib.mkForce "no";
-            address = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.guests.${guestName}.nodeName} config.secrets.secrets.global.net.privateSubnet)];
+            address = [(ipOf guestName)];
             gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet)];
           };
         }
@@ -121,6 +142,9 @@ in {
     {}
     // mkContainer "adguardhome" {}
     // mkContainer "nextcloud" {
+      enablePanzer = true;
+    }
+    // mkContainer "gitea" {
       enablePanzer = true;
     }
     // mkContainer "samba" {
