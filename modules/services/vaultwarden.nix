@@ -46,6 +46,8 @@ in {
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
 
+  networking.firewall.allowedTCPPorts = [3000];
+
   # Replace uses of old name
   systemd.services.backup-vaultwarden.environment.DATA_FOLDER = lib.mkForce "/var/lib/vaultwarden";
   systemd.services.vaultwarden.serviceConfig = {

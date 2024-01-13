@@ -11,7 +11,7 @@
       bind_port = 3000;
       bind_host = "0.0.0.0";
       dns = {
-        bind_hosts = ["0.0.0.0"];
+        bind_hosts = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnet)];
         anonymize_client_ip = true;
         upstream_dns = [
           "1.0.0.1"
@@ -34,7 +34,7 @@
       users = [
         {
           name = "patrick";
-          password = "$2b$05$Dapc2LWUfebNOgIeBcaf2OVhW7uKmthmp9Ptykn96Iw1UE5pt2U72";
+          password = "$2y$10$cmdb7U/qbtUvrcFeKQvr6.BPrm/UwCiP.gBW2jG0Aq24hnzd2co4m";
         }
       ];
       filters = [

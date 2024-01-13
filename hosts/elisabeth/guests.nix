@@ -75,7 +75,7 @@ in {
       '';
     };
     upstreams.nextcloud = {
-      servers."${ipOf "nextcloud"}:3000" = {};
+      servers."${ipOf "nextcloud"}:80" = {};
 
       extraConfig = ''
         zone nextcloud 64k ;
@@ -166,6 +166,7 @@ in {
     {}
     // mkContainer "adguardhome" {}
     // mkContainer "vaultwarden" {}
+    // mkContainer "ddclient" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }

@@ -20,7 +20,6 @@
       ../../modules/hardware/zfs.nix
 
       ../../modules/services/acme.nix
-      ../../modules/services/ddclient.nix
 
       ./net.nix
       ./fs.nix

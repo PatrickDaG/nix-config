@@ -55,11 +55,13 @@
         datasets = {
           "safe/guests" = unmountable;
         };
+        mode = "raidz";
       };
       renaultft = mkZpool {
         datasets = {
           "safe/guests" = unmountable;
         };
+        mode = "raidz";
       };
     };
   };

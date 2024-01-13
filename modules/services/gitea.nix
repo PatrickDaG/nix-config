@@ -7,6 +7,7 @@
 in {
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
   services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
+  networking.firewall.allowedTCPPorts = [3000 9922];
 
   environment.persistence."/panzer".directories = [
     {
