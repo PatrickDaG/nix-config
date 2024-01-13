@@ -67,8 +67,8 @@
         if [[ $1 == *"@"* ]]; then
         	arr=()
         	echo -n "$1" | readarray -d "@" -t arr
-        	system=''${arr[0]}
-        	host=''${arr[1]}
+        	system="''${arr[0]}"
+        	host="root@''${arr[1]}"
         else
         	system=$1
         	host=$system

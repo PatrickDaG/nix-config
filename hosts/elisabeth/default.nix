@@ -14,6 +14,7 @@
 
       ../../modules/config
       ../../modules/optional/initrd-ssh.nix
+      ../../modules/optional/secureboot.nix
 
       ../../modules/hardware/physical.nix
       ../../modules/hardware/zfs.nix

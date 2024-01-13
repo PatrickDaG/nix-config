@@ -121,7 +121,11 @@ in {
           node.secretsDir = ./secrets/${guestName};
           systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
             DHCP = lib.mkForce "no";
-            address = [(ipOf guestName)];
+            address = [
+              (
+                lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}" config.secrets.secrets.global.net.privateSubnet
+              )
+            ];
             gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet)];
           };
         }

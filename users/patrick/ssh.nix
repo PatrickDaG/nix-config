@@ -47,10 +47,6 @@
         hostname = "valhalla.fs.tum.de";
         user = "grossmann";
       };
-      "elisabethprivate" = {
-        hostname = "lel.lol";
-        user = "patrick";
-      };
       "binex" = {
         hostname = "praksrv.sec.in.tum.de";
         user = "team402";
