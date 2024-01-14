@@ -12,7 +12,7 @@
       bind_host = "0.0.0.0";
       dns = {
         bind_hosts = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnet)];
-        anonymize_client_ip = true;
+        anonymize_client_ip = false;
         upstream_dns = [
           "1.0.0.1"
           "2606:4700:4700::1111"
@@ -27,7 +27,8 @@
         ];
       };
       user_rules = [
-        "||${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet}"
+        "||adguardhome.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet}"
+        "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet}"
       ];
       dhcp.enabled = false;
       ratelimit = 60;

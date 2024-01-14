@@ -45,7 +45,7 @@ in {
       # federation.ENABLED = true;
       mailer = {
         ENABLED = true;
-        HOST = config.secrets.secrets.local.gitea.mail.host;
+        SMTP_ADDR = config.secrets.secrets.local.gitea.mail.host;
         FROM = config.secrets.secrets.local.gitea.mail.from;
         USER = config.secrets.secrets.local.gitea.mail.user;
         SEND_AS_PLAIN_TEXT = true;
@@ -77,7 +77,7 @@ in {
         DEFAULT_KEEP_EMAIL_PRIVATE = true;
       };
       session.COOKIE_SECURE = true;
-      ui.DEFAULT_THEME = "forgejo-auto";
+      ui.DEFAULT_THEME = "forgejo-dark";
       "ui.meta" = {
         AUTHOR = "Patrick";
         DESCRIPTION = "Tollstes Forgejo EU-West";

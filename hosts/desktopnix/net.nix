@@ -12,11 +12,4 @@
       };
     };
   };
-  networking.extraHosts = ''
-    192.168.178.2 lel.lol
-    192.168.178.2 pw.lel.lol
-    192.168.178.2 nc.lel.lol
-    192.168.178.2 adguardhome.lel.lol
-    192.168.178.2 git.lel.lol
-  '';
 }
