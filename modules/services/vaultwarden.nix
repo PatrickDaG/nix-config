@@ -55,7 +55,7 @@ in {
   services.vaultwarden = {
     enable = true;
     dbBackend = "sqlite";
-    backupDir = "/tmp/vaultwardenBackup";
+    backupDir = "/var/cache/backups/vaultwarden";
     config = {
       dataFolder = lib.mkForce "/var/lib/vaultwarden";
       extendedLogging = true;

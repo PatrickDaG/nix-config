@@ -61,6 +61,8 @@
     fd
     kitty.terminfo
     nvd
+    # fix pcscd
+    pcscliteWithPolkit.out
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

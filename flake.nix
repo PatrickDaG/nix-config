@@ -61,7 +61,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
+    #templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
     impermanence.url = "github:nix-community/impermanence";
 
@@ -87,7 +87,6 @@
     wired-notify = {
       url = "github:Toqozz/wired-notify";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
     };
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";

@@ -14,6 +14,7 @@
       lib.mapAttrs (_: v: v.mac)
       (config.secrets.secrets.local.networking.interfaces or {})
     );
+    nftables.enable = true;
   };
   systemd.network = {
     enable = true;

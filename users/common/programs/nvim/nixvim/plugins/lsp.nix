@@ -23,7 +23,7 @@
           jq.enable = true;
           markdownlint.enable = true;
           rustfmt.enable = true;
-          sqlfluff.enable = true;
+          #sqlfluff.enable = true;
           shfmt.enable = true;
           stylua.enable = true;
         };

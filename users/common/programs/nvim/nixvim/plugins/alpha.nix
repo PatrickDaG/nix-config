@@ -1,6 +1,6 @@
 {
   programs.nixvim.plugins.alpha = {
-    enable = true;
+    #enable = true;
     layout = let
       padding = val: {
         type = "padding";

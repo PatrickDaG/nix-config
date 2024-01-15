@@ -87,11 +87,7 @@
         user ? "smb",
         group ? "smb",
         hasBunker ? false,
-        persistRoot ? (
-          if hasBunker
-          then "/bunker"
-          else "/panzer"
-        ),
+        persistRoot ? "/panzer",
       }: cfg: let
         config =
           {
@@ -112,14 +108,17 @@
       in
         {
           "${name}" =
-            {"path" = "/media/smb/${name}";}
-            // config;
+            config
+            // {"path" = "/media/smb/${name}";};
         }
         // lib.optionalAttrs hasBunker
         {
           "${name}-important" =
-            {"path" = "/media/smb/${name}-important";}
-            // config;
+            config
+            // {
+              "path" = "/media/smb/${name}-important";
+              "#persistRoot" = "/bunker";
+            };
         };
     in
       lib.mkMerge [
