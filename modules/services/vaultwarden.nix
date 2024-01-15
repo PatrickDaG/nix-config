@@ -20,9 +20,42 @@ in {
     }
   ];
 
+  age.secrets.resticpasswd = {
+    generator.script = "alnum";
+  };
+  age.secrets.vaultwardenHetznerSsh = {
+    generator.script = "ssh-ed25519";
+  };
+  services.restic.backups = {
+    main = {
+      user = "root";
+      timerConfig = {
+        OnCalendar = "06:00";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+      initialize = true;
+      passwordFile = config.age.secrets.resticpasswd.path;
+      hetznerStorageBox = {
+        enable = true;
+        inherit (config.secrets.secrets.global.hetzner) mainUser;
+        inherit (config.secrets.secrets.global.hetzner.users.vaultwarden) subUid path;
+        sshAgeSecret = "vaultwardenHetznerSsh";
+      };
+      paths = [config.services.vaultwarden.backupDir];
+      pruneOpts = [
+        "--keep-daily 10"
+        "--keep-weekly 7"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
+    };
+  };
+
   services.vaultwarden = {
     enable = true;
     dbBackend = "sqlite";
+    backupDir = "/tmp/vaultwardenBackup";
     config = {
       dataFolder = lib.mkForce "/var/lib/vaultwarden";
       extendedLogging = true;

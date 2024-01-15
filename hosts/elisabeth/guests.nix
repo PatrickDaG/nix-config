@@ -95,6 +95,7 @@ in {
     mkGuest = guestName: {
       enablePanzer ? false,
       enableRenaultFT ? false,
+      enableBunker ? false,
       ...
     }: {
       autostart = true;
@@ -113,6 +114,10 @@ in {
       zfs."/renaultft" = lib.mkIf enableRenaultFT {
         pool = "renaultft";
         dataset = "safe/guests/${guestName}";
+      };
+      zfs."/bunker" = lib.mkIf enableBunker {
+        pool = "panzer";
+        dataset = "bunker/guests/${guestName}";
       };
       modules = [
         ../../modules/config

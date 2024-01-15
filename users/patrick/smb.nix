@@ -1,6 +1,6 @@
 {nixosConfig, ...}: {
   home.smb = let
-    address = "192.168.178.2";
+    address = "192.168.178.12";
     credentials = nixosConfig.age.secrets.smb-creds.path;
   in [
     {
@@ -8,15 +8,11 @@
       remotePath = "patri-data";
       automatic = true;
     }
-    {
-      inherit address credentials;
-      remotePath = "ggr-data";
-    }
-    {
-      inherit address credentials;
-      remotePath = "patri-paperless";
-      automatic = true;
-    }
+    #{
+    #  inherit address credentials;
+    #  remotePath = "patri-paperless";
+    #  automatic = true;
+    #}
     {
       inherit address credentials;
       remotePath = "media";

@@ -3,6 +3,8 @@
     rekeyFile = ../../secrets/cloudflare/api_token.age;
     mode = "440";
   };
+  # So we only update the A record
+  networking.enableIPv6 = false;
   services.ddclient = {
     enable = true;
     zone = config.secrets.secrets.global.domains.web;

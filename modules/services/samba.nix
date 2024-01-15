@@ -7,6 +7,37 @@
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;
   };
+  age.secrets.resticpasswd = {
+    generator.script = "alnum";
+  };
+  age.secrets.resticHetznerSsh = {
+    generator.script = "ssh-ed25519";
+  };
+  services.restic.backups = {
+    main = {
+      user = "root";
+      timerConfig = {
+        OnCalendar = "06:00";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+      initialize = true;
+      passwordFile = config.age.secrets.resticpasswd.path;
+      hetznerStorageBox = {
+        enable = true;
+        inherit (config.secrets.secrets.global.hetzner) mainUser;
+        inherit (config.secrets.secrets.global.hetzner.users.smb) subUid path;
+        sshAgeSecret = "resticHetznerSsh";
+      };
+      paths = ["/bunker"];
+      pruneOpts = [
+        "--keep-daily 10"
+        "--keep-weekly 7"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
+    };
+  };
   services.samba = {
     enable = true;
     securityType = "user";
@@ -55,11 +86,15 @@
         name,
         user ? "smb",
         group ? "smb",
-        persistRoot ? "/panzer",
-      }: cfg: {
-        "${name}" =
+        hasBunker ? false,
+        persistRoot ? (
+          if hasBunker
+          then "/bunker"
+          else "/panzer"
+        ),
+      }: cfg: let
+        config =
           {
-            "path" = "/media/smb/${name}";
             "#persistRoot" = persistRoot;
             "read only" = "no";
             "guest ok" = "no";
@@ -74,28 +109,43 @@
             "acl allow execute always" = "no";
           }
           // cfg;
-      };
+      in
+        {
+          "${name}" =
+            {"path" = "/media/smb/${name}";}
+            // config;
+        }
+        // lib.optionalAttrs hasBunker
+        {
+          "${name}-important" =
+            {"path" = "/media/smb/${name}-important";}
+            // config;
+        };
     in
       lib.mkMerge [
         (mkShare {
           name = "ggr-data";
           user = "ggr";
           group = "ggr";
+          hasBunker = true;
         } {})
         (mkShare {
           name = "patri-data";
           user = "patrick";
           group = "patrick";
+          hasBunker = true;
         } {})
         (mkShare {
           name = "helen-data";
           user = "helen";
           group = "helen";
+          hasBunker = true;
         } {})
         (mkShare {
           name = "david-data";
           user = "david";
           group = "david";
+          hasBunker = true;
         } {})
         (mkShare {
           name = "family-data";
@@ -104,6 +154,8 @@
         } {})
         (mkShare {
             name = "media";
+            user = "family";
+            group = "family";
             persistRoot = "/renaultft";
           }
           {
@@ -122,35 +174,20 @@
     groups = lib.unique (users ++ (lib.mapAttrsToList (_: val: val."force group") config.services.samba.shares));
   in {
     users = lib.mkMerge (lib.flip map users (user: {
-        ${user} = {
-          isNormalUser = true;
-          home = "/var/empty";
-          createHome = false;
-          useDefaultShell = false;
-          autoSubUidGidRange = false;
-          group = "${user}";
-        };
-      })
-      ++ [
-        {
-          patrick.extraGroups = [
-            "family"
-          ];
-          ggr.extraGroups = [
-            "family"
-          ];
-          david.extraGroups = [
-            "family"
-          ];
-          helen.extraGroups = [
-            "family"
-          ];
-        }
-      ]);
-    groups = lib.mkMerge (lib.flip map groups (group: {
-      ${group} = {
+      ${user} = {
+        isNormalUser = true;
+        home = "/var/empty";
+        createHome = false;
+        useDefaultShell = false;
+        autoSubUidGidRange = false;
+        group = "${user}";
       };
     }));
+    groups = lib.mkMerge ((lib.flip map groups (group: {
+        ${group} = {
+        };
+      }))
+      ++ [{family.members = ["patrick" "david" "helen" "ggr"];}]);
   };
 
   environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v: {
