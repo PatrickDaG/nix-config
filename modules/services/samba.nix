@@ -72,6 +72,10 @@
       "server min protocol = SMB3_11"
       # Require native SMB transport encryption by default.
       "server smb encrypt = required"
+      # Do not map the executable bit to anything
+      "map archive = no"
+      "map system = no"
+      "map hidden = no"
 
       # Disable printer sharing. By default Samba shares printers configured
       # using CUPS.
@@ -94,7 +98,7 @@
             "#persistRoot" = persistRoot;
             "read only" = "no";
             "guest ok" = "no";
-            "create mask" = "0640";
+            "create mask" = "0740";
             "directory mask" = "0750";
             "force user" = "${user}";
             "force group" = "${group}";

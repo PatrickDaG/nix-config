@@ -82,6 +82,8 @@ in {
                       ++ [
                         "uid=${toString uid}"
                         "gid=${toString gid}"
+                        "file_mode=0600"
+                        "dir_mode=0700"
                         "credentials=${cfg.credentials}"
                       ]
                       ++ (optional (!cfg.automatic) "noauto");
