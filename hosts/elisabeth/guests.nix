@@ -11,6 +11,7 @@
   nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
   giteadomain = "git.${config.secrets.secrets.global.domains.web}";
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
+  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
 in {
   services.nginx = {
@@ -35,6 +36,7 @@ in {
         client_max_body_size 1G ;
       '';
     };
+
     upstreams.gitea = {
       servers."${ipOf "gitea"}:3000" = {};
 
@@ -54,6 +56,7 @@ in {
         client_max_body_size 1G ;
       '';
     };
+
     upstreams.adguardhome = {
       servers."${ipOf "adguardhome"}:3000" = {};
 
@@ -74,6 +77,27 @@ in {
         deny all;
       '';
     };
+    upstreams.paperless = {
+      servers."${ipOf "paperless"}:3000" = {};
+
+      extraConfig = ''
+        zone paperless 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${paperlessdomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/" = {
+        proxyPass = "http://paperless";
+        proxyWebsockets = true;
+        X-Frame-Options = "SAMEORIGIN";
+      };
+      extraConfig = ''
+        client_max_body_size 4G ;
+      '';
+    };
+
     upstreams.nextcloud = {
       servers."${ipOf "nextcloud"}:80" = {};
 
@@ -96,6 +120,7 @@ in {
       enablePanzer ? false,
       enableRenaultFT ? false,
       enableBunker ? false,
+      enableSharedPaperless ? false,
       ...
     }: {
       autostart = true;
@@ -118,6 +143,11 @@ in {
       zfs."/bunker" = lib.mkIf enableBunker {
         pool = "panzer";
         dataset = "bunker/guests/${guestName}";
+      };
+      zfs."/paperless" = lib.mkIf enableSharedPaperless {
+        pool = "panzer";
+        dataset = "bunker/shared/paperless";
+        shared = true;
       };
       modules = [
         ../../modules/config
@@ -175,11 +205,16 @@ in {
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
+    // mkContainer "paperless" {
+      enableSharedPaperless = true;
+    }
     // mkContainer "gitea" {
       enablePanzer = true;
     }
     // mkContainer "samba" {
       enablePanzer = true;
       enableRenaultFT = true;
+      enableBunker = true;
+      enableSharedPaperless = true;
     };
 }

@@ -91,17 +91,20 @@
         user ? "smb",
         group ? "smb",
         hasBunker ? false,
+        hasPaperless ? false,
         persistRoot ? "/panzer",
       }: cfg: let
         config =
           {
             "#persistRoot" = persistRoot;
+            "#user" = user;
+            "#group" = group;
             "read only" = "no";
             "guest ok" = "no";
             "create mask" = "0740";
             "directory mask" = "0750";
-            "force user" = "${user}";
-            "force group" = "${group}";
+            "force user" = user;
+            "force group" = group;
             "valid users" = "${user} @${group}";
             "force create mode" = "0660";
             "force directory mode" = "0770";
@@ -123,6 +126,19 @@
               "path" = "/media/smb/${name}-important";
               "#persistRoot" = "/bunker";
             };
+        }
+        // lib.optionalAttrs hasPaperless
+        {
+          "${name}-paperless" =
+            config
+            // {
+              "path" = "/media/smb/${name}-paperless";
+              "#paperless" = true;
+              "force user" = "paperless";
+              "force group" = "paperless";
+              # Empty to prevent imperamence setting a persistence folder
+              "#persistRoot" = "";
+            };
         };
     in
       lib.mkMerge [
@@ -137,6 +153,7 @@
           user = "patrick";
           group = "patrick";
           hasBunker = true;
+          hasPaperless = true;
         } {})
         (mkShare {
           name = "helen-data";
@@ -176,16 +193,19 @@
     users = lib.unique (lib.mapAttrsToList (_: val: val."force user") config.services.samba.shares);
     groups = lib.unique (users ++ (lib.mapAttrsToList (_: val: val."force group") config.services.samba.shares));
   in {
-    users = lib.mkMerge (lib.flip map users (user: {
-      ${user} = {
-        isNormalUser = true;
-        home = "/var/empty";
-        createHome = false;
-        useDefaultShell = false;
-        autoSubUidGidRange = false;
-        group = "${user}";
-      };
-    }));
+    users = lib.mkMerge ((lib.flip map users (user: {
+        ${user} = {
+          isNormalUser = true;
+          home = "/var/empty";
+          createHome = false;
+          useDefaultShell = false;
+          autoSubUidGidRange = false;
+          group = "${user}";
+        };
+      }))
+      ++ [
+        {paperless.isNormalUser = lib.mkForce false;}
+      ]);
     groups = lib.mkMerge ((lib.flip map groups (group: {
         ${group} = {
         };
@@ -193,14 +213,42 @@
       ++ [{family.members = ["patrick" "david" "helen" "ggr"];}]);
   };
 
-  environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v: {
-    ${v."#persistRoot"}.directories = [
-      {
-        directory = "${v.path}";
-        user = "${v."force user"}";
-        group = "${v."force group"}";
+  fileSystems = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
+    lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+      "${v.path}/consume" = {
+        fsType = "none";
+        options = ["bind"];
+        device = "/paperless/consume/${v."#user"}";
+      };
+      "${v.path}/media" = {
+        fsType = "none  ";
+        options = ["bind"];
+        device = "/paperless/media/${v."#user"}";
+      };
+    }));
+
+  systemd.tmpfiles.settings = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
+    lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+      "10-smb-paperless"."/paperless/consume/${v."#user"}".d = {
+        user = "paperless";
+        group = "paperless";
         mode = "0770";
-      }
-    ];
-  }));
+      };
+      "10-smb-paperless"."/paperless/media/${v."#user"}".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
+    }));
+  environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
+    lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
+      ${v."#persistRoot"}.directories = [
+        {
+          directory = "${v.path}";
+          user = "${v."force user"}";
+          group = "${v."force group"}";
+          mode = "0770";
+        }
+      ];
+    }));
 }

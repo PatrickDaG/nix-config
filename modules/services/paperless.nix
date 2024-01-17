@@ -1,0 +1,49 @@
+{
+  config,
+  lib,
+  ...
+}: let
+  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
+in {
+  networking.firewall.allowedTCPPorts = [3000];
+  age.secrets.paperless-admin-passwd = {
+    generator.script = "alnum";
+    mode = "440";
+    group = "paperless";
+  };
+  users.users.paperless.isSystemUser = true;
+  services.paperless = {
+    enable = true;
+    address = "0.0.0.0";
+    port = 3000;
+    passwordFile = config.age.secrets.paperless-admin-passwd.path;
+    consumptionDir = "/paperless/consume";
+    mediaDir = "/paperless/media";
+    settings = {
+      PAPERLESS_URL = "https://${paperlessdomain}";
+      PAPERLESS_ALLOWED_HOSTS = paperlessdomain;
+      PAPERLESS_CORS_ALLOWED_HOSTS = "https://${paperlessdomain}";
+      PAPERLESS_TRUSTED_PROXIES = lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet;
+
+      # let nginx do all the compression
+      PAPERLESS_ENABLE_COMPRESSION = false;
+      PAPERLESS_CONSUMER_ENABLE_BARCODES = true;
+      PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE = true;
+      PAPERLESS_CONSUMER_BARCODE_SCANNER = "ZXING";
+      PAPERLESS_CONSUMER_RECURSIVE = true;
+      PAPERLESS_FILENAME_FORMAT = "{owner_username}/{created_year}-{created_month}-{created_day}_{asn}_{title}";
+      PAPERLESS_NUMBER_OF_SUGESSTED_DATES = 11;
+      PAPERLESS_OCR_LANGUAGE = "deu+eng";
+      PAPERLESS_TASK_WORKERS = 4;
+      PAPERLESS_WEBSERVER_WORKERS = 4;
+    };
+  };
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/paperless";
+      user = "paperless";
+      group = "paperless";
+      mode = "0750";
+    }
+  ];
+}
