@@ -25,6 +25,7 @@ in {
         keepalive 5 ;
       '';
     };
+
     virtualHosts.${vaultwardendomain} = {
       forceSSL = true;
       useACMEHost = "web";
@@ -147,7 +148,6 @@ in {
       zfs."/paperless" = lib.mkIf enableSharedPaperless {
         pool = "panzer";
         dataset = "bunker/shared/paperless";
-        shared = true;
       };
       modules = [
         ../../modules/config

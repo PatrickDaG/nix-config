@@ -13,6 +13,11 @@
       remotePath = "patri-data-important";
       automatic = true;
     }
+    {
+      inherit address credentials;
+      remotePath = "family-data";
+      automatic = true;
+    }
     #{
     #  inherit address credentials;
     #  remotePath = "patri-paperless";
