@@ -28,7 +28,7 @@ in {
   };
   services.restic.backups = {
     main = {
-      user = "root";
+      user = "vaultwarden";
       timerConfig = {
         OnCalendar = "06:00";
         Persistent = true;
@@ -75,7 +75,6 @@ in {
       smtpSecurity = "force_tls";
       smtpPort = 465;
     };
-    #backupDir = "/data/backup";
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
 

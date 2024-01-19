@@ -4,7 +4,62 @@
   ...
 }: let
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
+  paperlessBackupDir = "/var/cache/backups/paperless";
 in {
+  systemd.tmpfiles.settings = {
+    "10-paperless".${paperlessBackupDir}.d = {
+      inherit (config.services.paperless) user;
+      mode = "0770";
+    };
+  };
+  age.secrets.resticpasswd = {
+    generator.script = "alnum";
+  };
+  age.secrets.paperlessHetznerSsh = {
+    generator.script = "ssh-ed25519";
+  };
+  services.restic.backups = {
+    main = {
+      inherit (config.services.paperless) user;
+      timerConfig = {
+        OnCalendar = "06:00";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+      initialize = true;
+      passwordFile = config.age.secrets.resticpasswd.path;
+      hetznerStorageBox = {
+        enable = true;
+        inherit (config.secrets.secrets.global.hetzner) mainUser;
+        inherit (config.secrets.secrets.global.hetzner.users.paperless) subUid path;
+        sshAgeSecret = "paperlessHetznerSsh";
+      };
+      paths = [paperlessBackupDir];
+      pruneOpts = [
+        "--keep-daily 10"
+        "--keep-weekly 7"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
+    };
+  };
+  systemd.services.paperless-backup = let
+    cfg = config.systemd.services.paperless-consumer;
+  in {
+    description = "Paperless document backup";
+    serviceConfig =
+      lib.recursiveUpdate
+      cfg.serviceConfig
+      {
+        ExecStart = "${config.services.paperless.package}/bin/paperless-ngx document_exporter -na -nt -f -d ${paperlessBackupDir}";
+        ReadWritePaths = cfg.serviceConfig.ReadWritePaths ++ [paperlessBackupDir];
+        Restart = "no";
+        Type = "oneshot";
+      };
+    inherit (cfg) environment;
+    requiredBy = ["restic-backups-main.service"];
+  };
+
   networking.firewall.allowedTCPPorts = [3000];
   age.secrets.paperless-admin-passwd = {
     generator.script = "alnum";

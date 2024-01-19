@@ -234,7 +234,28 @@
 
   systemd.tmpfiles.settings = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
     lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+      "10-smb-paperless"."/paperless/consume/".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
       "10-smb-paperless"."/paperless/consume/${v."#user"}".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
+      "10-smb-paperless"."/paperless/media/".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
+      "10-smb-paperless"."/paperless/media/documents/".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
+
+      "10-smb-paperless"."/paperless/media/documents/archive/".d = {
         user = "paperless";
         group = "paperless";
         mode = "0770";
@@ -244,10 +265,25 @@
         group = "paperless";
         mode = "0770";
       };
+      "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}/.keep".f = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0660";
+      };
+      "10-smb-paperless"."/paperless/media/documents/originals/".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
       "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}".d = {
         user = "paperless";
         group = "paperless";
         mode = "0770";
+      };
+      "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}/.keep".f = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0660";
       };
     }));
   environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
