@@ -149,7 +149,7 @@
           hasBunker = true;
         } {})
         (mkShare {
-          name = "patri-data";
+          name = "patri";
           user = "patrick";
           group = "patrick";
           hasBunker = true;
@@ -220,10 +220,15 @@
         options = ["bind"];
         device = "/paperless/consume/${v."#user"}";
       };
-      "${v.path}/media" = {
+      "${v.path}/media/archive" = {
         fsType = "none  ";
-        options = ["bind"];
-        device = "/paperless/media/${v."#user"}";
+        options = ["bind" "ro"];
+        device = "/paperless/media/documents/archive/${v."#user"}";
+      };
+      "${v.path}/media/originals" = {
+        fsType = "none  ";
+        options = ["bind" "ro"];
+        device = "/paperless/media/documents/originals/${v."#user"}";
       };
     }));
 
@@ -234,7 +239,12 @@
         group = "paperless";
         mode = "0770";
       };
-      "10-smb-paperless"."/paperless/media/${v."#user"}".d = {
+      "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}".d = {
+        user = "paperless";
+        group = "paperless";
+        mode = "0770";
+      };
+      "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}".d = {
         user = "paperless";
         group = "paperless";
         mode = "0770";

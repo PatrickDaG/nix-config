@@ -5,12 +5,17 @@
   in [
     {
       inherit address credentials;
-      remotePath = "patri-data";
+      remotePath = "patri";
       automatic = true;
     }
     {
       inherit address credentials;
-      remotePath = "patri-data-important";
+      remotePath = "patri-important";
+      automatic = true;
+    }
+    {
+      inherit address credentials;
+      remotePath = "patri-paperless";
       automatic = true;
     }
     {
@@ -18,11 +23,6 @@
       remotePath = "family-data";
       automatic = true;
     }
-    #{
-    #  inherit address credentials;
-    #  remotePath = "patri-paperless";
-    #  automatic = true;
-    #}
     {
       inherit address credentials;
       remotePath = "media";
