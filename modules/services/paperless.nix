@@ -20,7 +20,7 @@ in {
   };
   services.restic.backups = {
     main = {
-      inherit (config.services.paperless) user;
+      user = "root";
       timerConfig = {
         OnCalendar = "06:00";
         Persistent = true;
@@ -58,6 +58,7 @@ in {
       };
     inherit (cfg) environment;
     requiredBy = ["restic-backups-main.service"];
+    before = ["restic-backups-main.service"];
   };
 
   networking.firewall.allowedTCPPorts = [3000];
@@ -99,6 +100,14 @@ in {
       user = "paperless";
       group = "paperless";
       mode = "0750";
+    }
+  ];
+  environment.persistence."/state".directories = [
+    {
+      directory = paperlessBackupDir;
+      user = "paperless";
+      group = "paperless";
+      mode = "0770";
     }
   ];
 }

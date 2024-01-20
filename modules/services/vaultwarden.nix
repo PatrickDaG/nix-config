@@ -28,7 +28,7 @@ in {
   };
   services.restic.backups = {
     main = {
-      user = "vaultwarden";
+      user = "root";
       timerConfig = {
         OnCalendar = "06:00";
         Persistent = true;
@@ -86,4 +86,12 @@ in {
     StateDirectory = lib.mkForce "vaultwarden";
     RestartSec = "600"; # Retry every 10 minutes
   };
+  environment.persistence."/state".directories = [
+    {
+      directory = config.services.vaultwarden.backupDir;
+      user = "vaultwarden";
+      group = "vaultwarden";
+      mode = "0770";
+    }
+  ];
 }

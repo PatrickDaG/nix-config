@@ -12,6 +12,7 @@
   giteadomain = "git.${config.secrets.secrets.global.domains.web}";
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
+  immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
 in {
   services.nginx = {
@@ -55,6 +56,27 @@ in {
       };
       extraConfig = ''
         client_max_body_size 1G ;
+      '';
+    };
+
+    upstreams.immich = {
+      servers."${ipOf "immich"}:3000" = {};
+
+      extraConfig = ''
+        zone gitea 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${immichdomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/" = {
+        proxyPass = "http://immich";
+        proxyWebsockets = true;
+      };
+      extraConfig = ''
+        client_max_body_size 1G ;
+        deny all
       '';
     };
 
@@ -209,6 +231,9 @@ in {
       enableSharedPaperless = true;
     }
     // mkContainer "gitea" {
+      enablePanzer = true;
+    }
+    // mkContainer "immich" {
       enablePanzer = true;
     }
     // mkContainer "samba" {
