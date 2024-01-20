@@ -60,7 +60,7 @@ in {
     };
 
     upstreams.immich = {
-      servers."${ipOf "immich"}:3000" = {};
+      servers."${ipOf "immich"}:2283" = {};
 
       extraConfig = ''
         zone gitea 64k ;
@@ -76,7 +76,6 @@ in {
       };
       extraConfig = ''
         client_max_body_size 1G ;
-        deny all
       '';
     };
 
@@ -198,7 +197,7 @@ in {
           microvm = {
             system = "x86_64-linux";
             macvtap = "lan";
-            baseMac = config.repo.secrets.local.networking.interfaces.lan.mac;
+            baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           };
           extraSpecialArgs = {
             inherit (inputs.self) nodes;
@@ -233,7 +232,7 @@ in {
     // mkContainer "gitea" {
       enablePanzer = true;
     }
-    // mkContainer "immich" {
+    // mkMicrovm "immich" {
       enablePanzer = true;
     }
     // mkContainer "samba" {

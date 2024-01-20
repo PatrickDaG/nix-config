@@ -1,22 +1,31 @@
 # Auto-generated using compose2nix v0.1.6.
 {
   pkgs,
+  lib,
   config,
   ...
 }: let
   version = "v1.93.3";
+
+  ipImmichMachineLearning = "10.89.0.10";
+  ipImmichMicroservices = "10.89.0.11";
+  ipImmichPostgres = "10.89.0.12";
+  ipImmichRedis = "10.89.0.13";
+  ipImmichServer = "10.89.0.14";
+
   environment = {
     DB_DATABASE_NAME = "immich";
-    DB_HOSTNAME = "immich_postgres";
+    DB_HOSTNAME = ipImmichPostgres;
     DB_PASSWORD_FILE = config.age.secrets.postgrespasswd.path;
     DB_USERNAME = "postgres";
     IMMICH_VERSION = "${version}";
-    REDIS_HOSTNAME = "immich_redis";
-    REDIS_PASSWORD_FILE = config.age.secrets.redispasswd.path;
     UPLOAD_LOCATION = upload_folder;
+    IMMICH_SERVER_URL = "http://${ipImmichServer}:3001/";
+    IMMICH_MACHINE_LEARNING_URL = "http://${ipImmichMachineLearning}:3003";
+    REDIS_HOSTNAME = ipImmichRedis;
   };
   upload_folder = "/panzer/immich";
-  pgdata_folder = "/state/immich/pgdata";
+  pgdata_folder = "/persist/immich/pgdata";
   model_folder = "/state/immich/modeldata";
 
   serviceConfig = {
@@ -37,7 +46,15 @@
     ];
   };
 in {
-  networking.firewall.allowedTCPPorts = [2283];
+  microvm = {
+    mem = 1024 * 8;
+    vcpu = 12;
+  };
+  networking.firewall = {
+    allowedTCPPorts = [2283];
+    filterForward = true;
+    extraForwardRules = "ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnet} tcp dport 3001 accept";
+  };
   systemd.tmpfiles.settings = {
     "10-immich" = {
       ${upload_folder}.d = {
@@ -62,10 +79,6 @@ in {
     enable = true;
     autoPrune.enable = true;
     dockerCompat = true;
-    defaultNetwork.settings = {
-      # Required for container networking to be able to use names.
-      dns_enabled = true;
-    };
   };
   virtualisation.oci-containers.backend = "podman";
 
@@ -80,15 +93,18 @@ in {
     extraOptions = [
       "--network-alias=immich-machine-learning"
       "--network=immich-default"
+      "--ip=${ipImmichMachineLearning}"
     ];
   };
   systemd.services."podman-immich_machine_learning" = serviceConfig;
+
   virtualisation.oci-containers.containers."immich_microservices" = {
     image = "ghcr.io/immich-app/immich-server:${version}";
     inherit environment;
     volumes = [
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
+      "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
     ];
     cmd = ["start.sh" "microservices"];
     dependsOn = [
@@ -99,6 +115,7 @@ in {
     extraOptions = [
       "--network-alias=immich-microservices"
       "--network=immich-default"
+      "--ip=${ipImmichMicroservices}"
     ];
   };
   systemd.services."podman-immich_microservices" =
@@ -109,6 +126,7 @@ in {
         "podman-immich_redis.service"
       ];
     };
+
   virtualisation.oci-containers.containers."immich_postgres" = {
     image = "tensorchord/pgvecto-rs:pg14-v0.1.11@sha256:0335a1a22f8c5dd1b697f14f079934f5152eaaa216c09b61e293be285491f8ee";
     environment = {
@@ -118,11 +136,13 @@ in {
     };
     volumes = [
       "${pgdata_folder}:/var/lib/postgresql/data:rw"
+      "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
     ];
     log-driver = "journald";
     extraOptions = [
-      "--network-alias=database"
+      "--network-alias=immich_postgres"
       "--network=immich-default"
+      "--ip=${ipImmichPostgres}"
     ];
   };
   systemd.services."podman-immich_postgres" = serviceConfig;
@@ -130,8 +150,9 @@ in {
     image = "redis:6.2-alpine@sha256:c5a607fb6e1bb15d32bbcf14db22787d19e428d59e31a5da67511b49bb0f1ccc";
     log-driver = "journald";
     extraOptions = [
-      "--network-alias=redis"
+      "--network-alias=immich_redis"
       "--network=immich-default"
+      "--ip=${ipImmichRedis}"
     ];
   };
   systemd.services."podman-immich_redis" = serviceConfig;
@@ -141,6 +162,7 @@ in {
     volumes = [
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
+      "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
     ];
     ports = [
       "2283:3001/tcp"
@@ -154,6 +176,7 @@ in {
     extraOptions = [
       "--network-alias=immich-server"
       "--network=immich-default"
+      "--ip=${ipImmichServer}"
     ];
   };
   systemd.services."podman-immich_server" =
@@ -174,7 +197,7 @@ in {
       ExecStop = "${pkgs.podman}/bin/podman network rm -f immich-default";
     };
     script = ''
-      podman network inspect immich-default || podman network create immich-default --opt isolate=true
+      podman network inspect immich-default || podman network create immich-default --opt isolate=true --disable-dns --subnet=10.89.0.0/24
     '';
     partOf = ["podman-compose-immich-root.target"];
     wantedBy = ["podman-compose-immich-root.target"];

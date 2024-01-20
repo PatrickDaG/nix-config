@@ -24,6 +24,7 @@
     gitea = uidGid 215;
     vaultwarden = uidGid 215;
     redis-paperless = uidGid 216;
+    microvm = uidGid 217;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;

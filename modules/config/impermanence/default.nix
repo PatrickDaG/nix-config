@@ -41,6 +41,8 @@ in {
     hideMounts = true;
     directories = [];
   };
+  fileSystems."/persist".neededForBoot = true;
+  fileSystems."/state".neededForBoot = true;
 
   # After importing the rpool, rollback the root system to be empty.
   boot.initrd.systemd.services.impermanence-root =
