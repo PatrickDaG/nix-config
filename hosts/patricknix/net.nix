@@ -60,7 +60,9 @@
       dhcpV6Config.RouteMetric = 10;
     };
     "01-wlan1" = {
-      DHCP = "yes";
+      DHCP = "no";
+      address = ["192.168.1.6/24"];
+      gateway = ["192.168.1.2"];
       matchConfig.MACAddress = config.secrets.secrets.local.networking.wlan1.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";

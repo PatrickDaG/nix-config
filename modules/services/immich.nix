@@ -92,7 +92,10 @@ in {
   networking.firewall = {
     allowedTCPPorts = [2283];
     filterForward = true;
-    extraForwardRules = "ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnet} tcp dport 3001 accept";
+    extraForwardRules = ''
+      ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnet} tcp dport 3001 accept
+      iifname "podman1" oifname lan accept
+    '';
   };
   systemd.tmpfiles.settings = {
     "10-immich" = {
