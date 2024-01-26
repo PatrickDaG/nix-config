@@ -13,6 +13,7 @@
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
+  ollamadomain = "ollama.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
 in {
   services.nginx = {
@@ -79,6 +80,27 @@ in {
       '';
     };
 
+    upstreams.ollama = {
+      servers."${ipOf "ollama"}:3000" = {};
+
+      extraConfig = ''
+        zone ollama 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${ollamadomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/" = {
+        proxyPass = "http://ollama";
+        proxyWebsockets = true;
+      };
+      extraConfig = ''
+        allow ${config.secrets.secrets.global.net.privateSubnet};
+        deny all;
+      '';
+    };
+
     upstreams.adguardhome = {
       servers."${ipOf "adguardhome"}:3000" = {};
 
@@ -95,10 +117,11 @@ in {
         proxyWebsockets = true;
       };
       extraConfig = ''
-        allow 192.168.178.0/24;
+        allow ${config.secrets.secrets.global.net.privateSubnet};
         deny all;
       '';
     };
+
     upstreams.paperless = {
       servers."${ipOf "paperless"}:3000" = {};
 
@@ -223,6 +246,7 @@ in {
     // mkContainer "adguardhome" {}
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
+    // mkContainer "ollama" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
