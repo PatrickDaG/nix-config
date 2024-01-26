@@ -6,6 +6,7 @@
 
     ./programs/gpg.nix
     ./programs/nvim
+    ./programs/htop.nix
   ];
 
   programs.bat.enable = true;

@@ -33,6 +33,7 @@
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nixvim.nixosModules.nixvim
     inputs.nixos-extra-modules.nixosModules.default
+    inputs.musnix.nixosModules.musnix
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
   boot.mode = lib.mkDefault "efi";

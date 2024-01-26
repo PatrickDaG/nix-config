@@ -61,7 +61,6 @@ lib.optionalAttrs (!minimal) {
         ../common/impermanence.nix
 
         ../common/programs/direnv.nix
-        ../common/programs/htop.nix
         ../common/programs/git.nix
         ../common/programs/bottles.nix
         ../common/programs/gdb.nix

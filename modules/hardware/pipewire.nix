@@ -5,6 +5,14 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  # Sadly does not seem to do anything yet
+  #musnix = {
+  #  enable = true;
+  #  kernel= {
+  #    realtime = true;
+  #    packages = pkgs.linuxPackages_6_6_rt;
+  #  };
+  #};
   environment.systemPackages = with pkgs; [pulseaudio pulsemixer];
 
   hardware.pulseaudio.enable = lib.mkForce false;

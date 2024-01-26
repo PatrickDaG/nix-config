@@ -61,6 +61,8 @@
     fd
     kitty.terminfo
     nvd
+    pciutils
+    usbutils
     # fix pcscd
     pcscliteWithPolkit.out
   ];

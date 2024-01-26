@@ -1,10 +1,11 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: {
   boot.supportedFilesystems = ["zfs"];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages = lib.mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # The root pool should never be imported forcefully.
   # Failure to import is important to notice!

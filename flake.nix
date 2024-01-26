@@ -60,6 +60,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    musnix = {
+      url = "github:musnix/musnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     #templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
