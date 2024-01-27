@@ -30,4 +30,35 @@
       linkConfig.RequiredForOnline = "routable";
     };
   };
+  age.secrets.cloudflare_token_acme = {
+    rekeyFile = ./secrets/cloudflare_api_token.age;
+    mode = "440";
+    group = "acme";
+  };
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = config.secrets.secrets.global.devEmail;
+      dnsProvider = "cloudflare";
+      dnsPropagationCheck = true;
+      reloadServices = ["nginx"];
+      credentialFiles = {
+        "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
+        "CF_ZONE_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
+      };
+    };
+  };
+  security.acme.certs.mail = {
+    domain = config.secrets.secrets.global.domains.mail;
+    extraDomainNames = ["*.${config.secrets.secrets.global.domains.mail}"];
+  };
+  users.groups.acme.members = ["maddy"];
+  environment.persistence."/state".directories = [
+    {
+      directory = "/var/lib/acme";
+      user = "acme";
+      group = "acme";
+      mode = "0755";
+    }
+  ];
 }

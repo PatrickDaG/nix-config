@@ -7,6 +7,7 @@
     [
       ../../modules/config
       ../../modules/optional/initrd-ssh.nix
+      ../../modules/services/maddy.nix
 
       ../../modules/hardware/zfs.nix
 

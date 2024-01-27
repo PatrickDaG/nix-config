@@ -25,6 +25,7 @@
     vaultwarden = uidGid 215;
     redis-paperless = uidGid 216;
     microvm = uidGid 217;
+    maddy = uidGid 218;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;

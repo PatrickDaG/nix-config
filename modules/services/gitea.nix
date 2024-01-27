@@ -5,6 +5,38 @@
 }: let
   giteaDomain = "git.${config.secrets.secrets.global.domains.web}";
 in {
+  age.secrets.resticpasswd = {
+    generator.script = "alnum";
+  };
+  age.secrets.forgejoHetznerSsh = {
+    generator.script = "ssh-ed25519";
+  };
+  services.restic.backups = {
+    main = {
+      user = "root";
+      timerConfig = {
+        OnCalendar = "06:00";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+      initialize = true;
+      passwordFile = config.age.secrets.resticpasswd.path;
+      hetznerStorageBox = {
+        enable = true;
+        inherit (config.secrets.secrets.global.hetzner) mainUser;
+        inherit (config.secrets.secrets.global.hetzner.users.forgejo) subUid path;
+        sshAgeSecret = "forgejoHetznerSsh";
+      };
+      paths = [config.services.gitea.stateDir];
+      pruneOpts = [
+        "--keep-daily 10"
+        "--keep-weekly 7"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
+    };
+  };
+
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
   services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
   networking.firewall.allowedTCPPorts = [3000 9922];

@@ -28,7 +28,6 @@
 
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-  boot.initrd.luks.devices.enc-rpool.allowDiscards = true;
   boot.loader.grub.devices = [
     "/dev/disk/by-id/${config.secrets.secrets.local.disko.drive}"
   ];

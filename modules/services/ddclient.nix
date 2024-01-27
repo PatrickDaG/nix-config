@@ -1,6 +1,6 @@
 {config, ...}: {
   age.secrets.cloudflare_token_dns = {
-    rekeyFile = ../../secrets/cloudflare/api_token.age;
+    rekeyFile = "${config.node.secretsDir}/cloudflare_api_token.age";
     mode = "440";
   };
   # So we only update the A record

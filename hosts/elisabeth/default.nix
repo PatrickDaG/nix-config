@@ -19,8 +19,6 @@
       ../../modules/hardware/physical.nix
       ../../modules/hardware/zfs.nix
 
-      ../../modules/services/acme.nix
-
       ./net.nix
       ./fs.nix
     ]
