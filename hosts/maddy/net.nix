@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   networking.hostId = config.secrets.secrets.local.networking.hostId;
   networking.domain = config.secrets.secrets.global.domains.mail;
 
@@ -13,7 +17,7 @@
     in {
       address = [
         icfg.hostCidrv4
-        icfg.hostCidrv6
+        (lib.net.cidr.hostCidr 1 icfg.hostCidrv6)
       ];
       gateway = ["fe80::1"];
       routes = [
