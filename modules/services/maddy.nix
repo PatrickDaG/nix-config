@@ -1,14 +1,13 @@
 # TODO
 # autoconfig
-# catch all
 # service sending
-# trash domain
 {
   config,
   pkgs,
   ...
 }: let
-  domain = config.secrets.secrets.global.domains.mail;
+  priv_domain = config.secrets.secrets.global.domains.mail_private;
+  domain = config.secrets.secrets.global.domains.mail_public;
 in {
   age.secrets.patrickPasswd = {
     generator.script = "alnum";
@@ -20,13 +19,21 @@ in {
   networking.firewall.allowedTCPPorts = [993 465];
   services.maddy = {
     enable = true;
-    hostname = "mx1" + domain;
+    hostname = "mx1." + domain;
     primaryDomain = domain;
+    localDomains = [
+      "$(primary_domain)"
+      priv_domain
+    ];
     tls = {
       certificates = [
         {
-          keyPath = "${config.security.acme.certs.mail.directory}/key.pem";
-          certPath = "${config.security.acme.certs.mail.directory}/fullchain.pem";
+          keyPath = "${config.security.acme.certs.mail_private.directory}/key.pem";
+          certPath = "${config.security.acme.certs.mail_private.directory}/fullchain.pem";
+        }
+        {
+          keyPath = "${config.security.acme.certs.mail_public.directory}/key.pem";
+          certPath = "${config.security.acme.certs.mail_public.directory}/fullchain.pem";
         }
       ];
       loader = "file";
@@ -83,9 +90,11 @@ in {
       # SMTP endpoints + message routing
 
       table.chain local_rewrites {
+          # Reroute everything to me
+          optional_step regexp ".*" "patrick@${domain}"
           optional_step regexp "(.+)\+(.+)@(.+)" "$1@$3"
           optional_step static {
-              entry postmaster postmaster@$(primary_domain)
+              entry postmaster patrick@$(primary_domain)
           }
           optional_step file /etc/maddy/aliases
       }
@@ -149,8 +158,12 @@ in {
           source $(local_domains) {
               check {
                   authorize_sender {
-                      prepare_email &local_rewrites
-                      user_to_email identity
+                      user_to_email table.chain {
+                        optional_step static {
+                          entry patrick@${domain} "*"
+                        }
+                        step identity
+                      }
                   }
               }
 

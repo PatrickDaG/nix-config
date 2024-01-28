@@ -4,7 +4,7 @@
   ...
 }: {
   networking.hostId = config.secrets.secrets.local.networking.hostId;
-  networking.domain = config.secrets.secrets.global.domains.mail;
+  networking.domain = config.secrets.secrets.global.domains.mail_public;
 
   boot.initrd.systemd.network = {
     enable = true;
@@ -52,9 +52,15 @@
       };
     };
   };
-  security.acme.certs.mail = {
-    domain = config.secrets.secrets.global.domains.mail;
-    extraDomainNames = ["*.${config.secrets.secrets.global.domains.mail}"];
+  security.acme.certs = {
+    mail_public = {
+      domain = config.secrets.secrets.global.domains.mail_public;
+      extraDomainNames = ["*.${config.secrets.secrets.global.domains.mail_public}"];
+    };
+    mail_private = {
+      domain = config.secrets.secrets.global.domains.mail_private;
+      extraDomainNames = ["*.${config.secrets.secrets.global.domains.mail_private}"];
+    };
   };
   users.groups.acme.members = ["maddy"];
   environment.persistence."/state".directories = [
