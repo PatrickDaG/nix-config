@@ -1,6 +1,6 @@
 {
   programs.nixvim.plugins.alpha = {
-    #enable = true;
+    enable = true;
     layout = let
       padding = val: {
         type = "padding";
@@ -38,14 +38,50 @@
         opts.spacing = 1;
         val = [
           {
-            command = ":enew<CR>";
-            desc = "  New file";
-            shortcut = "e";
+            type = "button";
+            val = "  New file";
+            on_press.raw = "funcion() vim.cmd[[enew]] end";
+            opts = {
+              keymap = [
+                "n"
+                "e"
+                ":enew<CR>"
+                {
+                  noremap = true;
+                  silent = true;
+                  nowait = true;
+                }
+              ];
+              shortcut = "e";
+              position = "center";
+              cursor = 3;
+              width = 50;
+              align_shortcut = "right";
+              hl_shortcut = "Keyword";
+            };
           }
           {
-            command = ":qa<CR>";
-            desc = "󰅙  Quit Neovim";
-            shortcut = "q";
+            type = "button";
+            val = "󰅙  Quit Neovim";
+            on_press.raw = "funcion() vim.cmd[[qa]] end";
+            opts = {
+              keymap = [
+                "n"
+                "q"
+                ":qa<CR>"
+                {
+                  noremap = true;
+                  silent = true;
+                  nowait = true;
+                }
+              ];
+              shortcut = "q";
+              position = "center";
+              cursor = 3;
+              width = 50;
+              align_shortcut = "right";
+              hl_shortcut = "Keyword";
+            };
           }
         ];
       }
