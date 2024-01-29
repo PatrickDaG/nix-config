@@ -4,11 +4,68 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   priv_domain = config.secrets.secrets.global.domains.mail_private;
   domain = config.secrets.secrets.global.domains.mail_public;
+  maddyBackupDir = "/var/cache/backups/maddy";
 in {
+  systemd.tmpfiles.settings = {
+    "10-maddy".${maddyBackupDir}.d = {
+      inherit (config.services.maddy) user group;
+      mode = "0770";
+    };
+  };
+
+  age.secrets.resticpasswd = {
+    generator.script = "alnum";
+  };
+  age.secrets.maddyHetznerSsh = {
+    generator.script = "ssh-ed25519";
+  };
+  services.restic.backups = {
+    main = {
+      user = "root";
+      timerConfig = {
+        OnCalendar = "06:00";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+      initialize = true;
+      passwordFile = config.age.secrets.resticpasswd.path;
+      hetznerStorageBox = {
+        enable = true;
+        inherit (config.secrets.secrets.global.hetzner) mainUser;
+        inherit (config.secrets.secrets.global.hetzner.users.maddy) subUid path;
+        sshAgeSecret = "maddyHetznerSsh";
+      };
+      paths = ["/var/lib/maddy/messages" maddyBackupDir];
+      pruneOpts = [
+        "--keep-daily 10"
+        "--keep-weekly 7"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
+    };
+  };
+  systemd.services.maddy-backup = let
+    cfg = config.systemd.services.maddy;
+  in {
+    description = "Maddy db backup";
+    serviceConfig =
+      lib.recursiveUpdate
+      cfg.serviceConfig
+      {
+        ExecStart = "${pkgs.sqlite}/bin/sqlite3 /var/lib/maddy/imapsql.db \".backup '${maddyBackupDir}/imapsql.sqlite3'\"";
+        Restart = "no";
+        Type = "oneshot";
+      };
+    inherit (cfg) environment;
+    requiredBy = ["restic-backups-main.service"];
+    before = ["restic-backups-main.service"];
+  };
+
   age.secrets.patrickPasswd = {
     generator.script = "alnum";
     owner = "maddy";
@@ -240,7 +297,7 @@ in {
             mx: mx1.pgrossmann.org
           " > "$out/.well-known/mta-sts.txt"
         ''
-      }
+      } ;
     '';
   };
   environment.persistence."/persist".directories = [
