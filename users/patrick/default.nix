@@ -60,15 +60,16 @@ lib.optionalAttrs (!minimal) {
         ../common
         ../common/impermanence.nix
 
-        ../common/programs/direnv.nix
-        ../common/programs/git.nix
         ../common/programs/bottles.nix
-        ../common/programs/gdb.nix
+        ../common/programs/direnv.nix
         ../common/programs/firefox.nix
+        ../common/programs/gdb.nix
+        ../common/programs/git.nix
         ../common/programs/kitty.nix
-        ../common/programs/thunderbird.nix
-        ../common/programs/spicetify.nix
         ../common/programs/minecraft.nix
+        ../common/programs/poe.nix
+        ../common/programs/spicetify.nix
+        ../common/programs/thunderbird.nix
       ]
       ++ {
         "desktopnix" = [
