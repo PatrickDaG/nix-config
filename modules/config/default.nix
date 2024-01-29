@@ -22,6 +22,7 @@
     ../meta.nix
     ../smb-mounts.nix
     ../deterministic-ids.nix
+    ../distributed-config.nix
     ../optional/iwd.nix
     ./impermanence
 

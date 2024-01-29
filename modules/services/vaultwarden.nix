@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  nodes,
   ...
 }: let
   vaultwardenDomain = "pw.${config.secrets.secrets.global.domains.web}";
@@ -51,6 +52,29 @@ in {
       ];
     };
   };
+  age.secrets.maddyPasswd = {
+    generator.script = "alnum";
+    group = "vaultwarden";
+  };
+
+  nodes.maddy = {
+    age.secrets.vaultwardenPasswd = {
+      inherit (config.age.secrets.maddyPasswd) rekeyFile;
+      inherit (nodes.maddy.config.services.maddy) group;
+      mode = "640";
+    };
+    services.maddy.ensureCredentials = {
+      "vaultwarden@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.vaultwardenPasswd.path;
+    };
+  };
+  system.activationScripts.systemd_env_smtp_passwd = {
+    text = ''
+      echo "SMTP_PASSWORD=$(< ${lib.escapeShellArg config.age.secrets.maddyPasswd.path})" > /run/vaultwarden_smtp_passwd
+    '';
+    deps = ["agenix"];
+  };
+
+  systemd.services.vaultwarden.serviceConfig.EnvironmentFile = ["/run/vaultwarden_smtp_passwd"];
 
   services.vaultwarden = {
     enable = true;
@@ -71,9 +95,12 @@ in {
       invitationOrgName = "Vaultwarden";
       domain = "https://${vaultwardenDomain}";
 
-      smtpEmbedImages = true;
-      smtpSecurity = "force_tls";
+      smtpHost = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+      smtpFrom = "vaultwarden@${config.secrets.secrets.global.domains.mail_public}";
       smtpPort = 465;
+      smtpSecurity = "force_tls";
+      smtpUsername = "vaultwarden@${config.secrets.secrets.global.domains.mail_public}";
+      smtpEmbedImages = true;
     };
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
