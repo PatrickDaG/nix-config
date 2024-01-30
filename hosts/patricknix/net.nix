@@ -37,8 +37,7 @@
 
   systemd.network.networks = {
     "01-lan1" = {
-      address = ["192.168.178.31/24"];
-      gateway = ["192.168.178.1"];
+      DHCP = "yes";
       matchConfig.MACAddress = config.secrets.secrets.local.networking.lan1.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
@@ -60,9 +59,7 @@
       dhcpV6Config.RouteMetric = 10;
     };
     "01-wlan1" = {
-      DHCP = "no";
-      address = ["192.168.1.6/24"];
-      gateway = ["192.168.1.2"];
+      DHCP = "yes";
       matchConfig.MACAddress = config.secrets.secrets.local.networking.wlan1.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
