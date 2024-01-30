@@ -1,4 +1,15 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
+  accounts.email.accounts = lib.flip lib.mapAttrs' config.userSecrets.accounts.email (
+    _: v:
+      lib.nameValuePair v.address (lib.recursiveUpdate v {
+        thunderbird.enable = true;
+        thunderbird.profiles = ["personal"];
+      })
+  );
   programs.thunderbird = {
     enable = true;
 
