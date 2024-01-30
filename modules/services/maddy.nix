@@ -1,6 +1,5 @@
 # TODO
 # autoconfig
-# service sending
 {
   config,
   pkgs,
@@ -284,17 +283,32 @@ in {
   };
   services.nginx = {
     enable = true;
-    virtualHosts."mta-sts.pgrossmann.org".extraConfig = ''
+    virtualHosts."mta-sts.${priv_domain}".extraConfig = ''
       encode gzip
       file_server
       root * ${
-        pkgs.runCommand "testdir" {} ''
+        pkgs.runCommand "priv_domain" {} ''
           mkdir -p "$out/.well-known"
           echo "
             version: STSv1
             mode: enforce
             max_age: 604800
-            mx: mx1.pgrossmann.org
+            mx: mx1.${priv_domain}
+          " > "$out/.well-known/mta-sts.txt"
+        ''
+      } ;
+    '';
+    virtualHosts."mta-sts.${domain}".extraConfig = ''
+      encode gzip
+      file_server
+      root * ${
+        pkgs.runCommand "domain" {} ''
+          mkdir -p "$out/.well-known"
+          echo "
+            version: STSv1
+            mode: enforce
+            max_age: 604800
+            mx: mx1.${domain}
           " > "$out/.well-known/mta-sts.txt"
         ''
       } ;

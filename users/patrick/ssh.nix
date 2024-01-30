@@ -42,11 +42,6 @@
         hostname = "desktopnix.local";
         user = "root";
       };
-
-      "valhalla" = {
-        hostname = "valhalla.fs.tum.de";
-        user = "grossmann";
-      };
       "binex" = {
         hostname = "praksrv.sec.in.tum.de";
         user = "team402";
