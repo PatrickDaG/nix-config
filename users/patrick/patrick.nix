@@ -11,6 +11,8 @@
       signal-desktop
       telegram-desktop
       chromium
+      python3
+      jq
     ];
   };
 }
