@@ -40,7 +40,7 @@
           {
             type = "button";
             val = "  New file";
-            on_press.raw = "funcion() vim.cmd[[enew]] end";
+            on_press.__raw = "function() vim.cmd[[enew]] end";
             opts = {
               keymap = [
                 "n"
@@ -63,7 +63,7 @@
           {
             type = "button";
             val = "󰅙  Quit Neovim";
-            on_press.raw = "funcion() vim.cmd[[qa]] end";
+            on_press.__raw = "function() vim.cmd[[qa]] end";
             opts = {
               keymap = [
                 "n"
