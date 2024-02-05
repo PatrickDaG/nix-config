@@ -52,7 +52,6 @@
 
   environment.systemPackages = with pkgs; [
     wget
-    gcc
     tree
     rage
     file
@@ -61,8 +60,8 @@
     fd
     kitty.terminfo
     nvd
-    pciutils
-    usbutils
+    htop
+    unzip
     # fix pcscd
     pcscliteWithPolkit.out
   ];

@@ -8,6 +8,12 @@ lib.optionalAttrs (!minimal) {
   imports = [
     ./docs.nix
   ];
+  environment.systemPackages = with pkgs; [
+    gnumake
+    pciutils
+    gcc
+    usbutils
+  ];
   programs.wireshark = {
     enable = true;
     package = pkgs.wireshark;

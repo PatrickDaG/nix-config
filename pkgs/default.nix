@@ -14,10 +14,5 @@
           wrapProgram $out/bin/nvim --add-flags "--clean"
         '';
     });
-    formats =
-      super.formats
-      // {
-        ron = import ./ron.nix {inherit (super) lib pkgs;};
-      };
   })
 ]
