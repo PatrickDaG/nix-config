@@ -56,7 +56,7 @@ in {
         proxyWebsockets = true;
       };
       extraConfig = ''
-        client_max_body_size 1G ;
+        client_max_body_size 2G ;
       '';
     };
 

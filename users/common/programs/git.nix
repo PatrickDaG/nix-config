@@ -5,6 +5,7 @@
   programs.git = {
     enable = true;
     difftastic.enable = true;
+    lfs.enable = true;
     aliases = {
       cs = "commit -v -S";
       s = "status";
