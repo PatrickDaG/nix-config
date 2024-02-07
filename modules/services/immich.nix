@@ -6,12 +6,100 @@
   ...
 }: let
   version = "v1.93.3";
+  immichDomain = "immich.${config.secrets.secrets.global.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
   ipImmichMicroservices = "10.89.0.11";
   ipImmichPostgres = "10.89.0.12";
   ipImmichRedis = "10.89.0.13";
   ipImmichServer = "10.89.0.14";
+
+  configFile = pkgs.writeText "immich.config.json" (
+    builtins.toJSON {
+      ffmpeg = {
+        accel = "disabled";
+        bframes = -1;
+        cqMode = "auto";
+        crf = 23;
+        gopSize = 0;
+        maxBitrate = "0";
+        npl = 0;
+        preset = "ultrafast";
+        refs = 0;
+        targetAudioCodec = "aac";
+        targetResolution = "720";
+        targetVideoCodec = "h264";
+        temporalAQ = false;
+        threads = 0;
+        tonemap = "hable";
+        transcode = "required";
+        twoPass = false;
+      };
+      job = {
+        backgroundTask.concurrency = 5;
+        faceDetection.concurrency = 10;
+        library.concurrency = 5;
+        metadataExtraction.concurrency = 10;
+        migration.concurrency = 5;
+        search.concurrency = 5;
+        sidecar.concurrency = 5;
+        smartSearch.concurrency = 10;
+        thumbnailGeneration.concurrency = 10;
+        videoConversion.concurrency = 5;
+      };
+      library.scan = {
+        enabled = true;
+        cronExpression = "0 0 * * *";
+      };
+      logging = {
+        enabled = true;
+        level = "log";
+      };
+      machineLearning = {
+        clip = {
+          enabled = true;
+          modelName = "ViT-B-32__openai";
+        };
+        enabled = true;
+        facialRecognition = {
+          enabled = true;
+          maxDistance = 0.45;
+          minFaces = 2;
+          minScore = 0.65;
+          modelName = "buffalo_l";
+        };
+        url = "http://${ipImmichMachineLearning}:3003";
+      };
+      map = {
+        enabled = true;
+        darkStyle = "";
+        lightStyle = "";
+      };
+      newVersionCheck.enabled = true;
+      passwordLogin.enabled = true;
+      reverseGeocoding.enabled = true;
+      server = {
+        externalDomain = "https://${immichDomain}";
+        loginPageMessage = "Wilkommen in Patricks tollem bilderparadies";
+      };
+      storageTemplate = {
+        enabled = true;
+        hashVerificationEnabled = true;
+        template = "{{y}}/{{MM}}/{{filename}}";
+      };
+      theme.customCss = "";
+      thumbnail = {
+        colorspace = "p3";
+        jpegSize = 1440;
+        quality = 80;
+        webpSize = 250;
+      };
+      trash = {
+        days = 30;
+        enabled = true;
+      };
+    }
+  );
 
   environment = {
     DB_DATABASE_NAME = "immich";
@@ -23,6 +111,7 @@
     IMMICH_SERVER_URL = "http://${ipImmichServer}:3001/";
     IMMICH_MACHINE_LEARNING_URL = "http://${ipImmichMachineLearning}:3003";
     REDIS_HOSTNAME = ipImmichRedis;
+    IMMICH_CONFIG_FILE = "/immich.config.json";
   };
   upload_folder = "/panzer/immich";
   pgdata_folder = "/persist/immich/pgdata";
@@ -129,6 +218,7 @@ in {
     image = "ghcr.io/immich-app/immich-machine-learning:${version}";
     inherit environment;
     volumes = [
+      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "${model_folder}:/cache:rw"
     ];
     log-driver = "journald";
@@ -144,6 +234,7 @@ in {
     image = "ghcr.io/immich-app/immich-server:${version}";
     inherit environment;
     volumes = [
+      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
@@ -202,6 +293,7 @@ in {
     image = "ghcr.io/immich-app/immich-server:${version}";
     inherit environment;
     volumes = [
+      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
