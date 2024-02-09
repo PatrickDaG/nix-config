@@ -8,7 +8,7 @@
   ];
 
   home.packages = [
-    pkgs.awakened-poe-trade
+    #pkgs.awakened-poe-trade
     pkgs.path-of-building
   ];
 }

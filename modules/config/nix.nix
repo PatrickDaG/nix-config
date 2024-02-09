@@ -39,6 +39,7 @@
       experimental-features = nix-command flakes recursive-nix
       flake-registry = /etc/nix/registry.json
     '';
+    nixPath = ["nixpkgs=/run/current-system/nixpkgs"];
     optimise.automatic = true;
     gc = {
       automatic = true;
@@ -51,6 +52,11 @@
       pkgs.flake = inputs.nixpkgs;
       #templates.flake = inputs.templates;
     };
+  };
+  system = {
+    extraSystemBuilderCmds = ''
+      ln -sv ${inputs.nixpkgs} $out/nixpkgs
+    '';
   };
   programs.nix-ld.enable = true;
   system.stateVersion = stateVersion;
