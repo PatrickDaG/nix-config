@@ -28,11 +28,6 @@
         };
       };
     };
-    # Add the VPN based route to my paperless instance to
-    # etc/hosts
-    extraHosts = ''
-      10.0.0.1 paperless.lel.lol
-    '';
   };
 
   systemd.network.networks = {
