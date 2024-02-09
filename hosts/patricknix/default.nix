@@ -30,7 +30,6 @@
 
     ./net.nix
     ./fs.nix
-    ./wireguard.nix
 
     ../../users/patrick
   ];
