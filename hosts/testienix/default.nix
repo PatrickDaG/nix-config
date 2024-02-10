@@ -19,8 +19,6 @@
       ./fs.nix
     ]
     ++ lib.lists.optionals (!minimal) [
-      ../../modules/services/samba.nix
-      ../../modules/services/nextcloud.nix
     ];
   services.xserver = {
     layout = "de";

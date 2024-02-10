@@ -7,11 +7,6 @@
     inherit (config.secrets.secrets.local.networking) hostId;
   };
   systemd.network.networks = {
-    "40-lan01" = {
-      matchConfig.Name = "lan01";
-      dhcpV6Config.UseDNS = false;
-      dhcpV4Config.UseDNS = false;
-    };
     "10-lan01" = {
       address = [(lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)];
       gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4)];
@@ -19,6 +14,7 @@
       matchConfig.Name = "lan";
       dhcpV6Config.UseDNS = false;
       dhcpV4Config.UseDNS = false;
+      ipv6AcceptRAConfig.UseDNS = false;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;

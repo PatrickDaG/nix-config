@@ -284,7 +284,6 @@ in {
   services.nginx = {
     enable = true;
     virtualHosts."mta-sts.${priv_domain}".extraConfig = ''
-      encode gzip
       file_server
       root * ${
         pkgs.runCommand "priv_domain" {} ''

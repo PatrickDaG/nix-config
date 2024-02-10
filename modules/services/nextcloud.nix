@@ -2,11 +2,27 @@
   lib,
   pkgs,
   config,
+  nodes,
   ...
 }: let
   hostName = "nc.${config.secrets.secrets.global.domains.web}";
 in {
-  # TODO mailer
+  age.secrets.maddyPasswd = {
+    generator.script = "alnum";
+    mode = "440";
+    owner = "nextcloud";
+  };
+
+  nodes.maddy = {
+    age.secrets.nextcloudPasswd = {
+      inherit (config.age.secrets.maddyPasswd) rekeyFile;
+      inherit (nodes.maddy.config.services.maddy) group;
+      mode = "640";
+    };
+    services.maddy.ensureCredentials = {
+      "nextcloud@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.nextcloudPasswd.path;
+    };
+  };
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/postgresql/";
@@ -44,10 +60,11 @@ in {
     extraAppsEnable = true;
     database.createLocally = true;
     phpOptions."opcache.interned_strings_buffer" = "32";
-    extraOptions = {
+    settings = {
       default_phone_region = "DE";
       trusted_proxies = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4)];
       overwriteprotocol = "https";
+      maintenance_window_start = 2;
       enabledPreviewProviders = [
         "OC\\Preview\\BMP"
         "OC\\Preview\\GIF"
@@ -61,11 +78,31 @@ in {
         "OC\\Preview\\XBitmap"
         "OC\\Preview\\HEIC"
       ];
+
+      mail_smtpmode = "smtp";
+      mail_smtphost = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+      mail_smtpport = 465;
+      mail_from_address = "nextcloud";
+      mail_smtpsecure = "ssl";
+      mail_domain = config.secrets.secrets.global.domains.mail_public;
+      mail_smtpauth = true;
+      mail_smtpname = "nextcloud@${config.secrets.secrets.global.domains.mail_public}";
+      loglevel = 2;
     };
     config = {
       dbtype = "pgsql";
     };
   };
+  systemd.tmpfiles.rules = let
+    mailer-passwd-conf = pkgs.writeText "nextcloud-config.php" ''
+      <?php
+        $CONFIG = [
+        'mail_smtppassword' => trim(file_get_contents('${config.age.secrets.maddyPasswd.path}')),
+        ];
+    '';
+  in [
+    "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
+  ];
 
   networking = {
     firewall.allowedTCPPorts = [80];
