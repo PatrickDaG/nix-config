@@ -14,7 +14,7 @@
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
   ollamadomain = "ollama.${config.secrets.secrets.global.domains.web}";
-  ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnet;
+  ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
     enable = true;
@@ -96,7 +96,8 @@ in {
         proxyWebsockets = true;
       };
       extraConfig = ''
-        allow ${config.secrets.secrets.global.net.privateSubnet};
+        allow ${config.secrets.secrets.global.net.privateSubnetv4};
+        allow ${config.secrets.secrets.global.net.privateSubnetv6};
         deny all;
       '';
     };
@@ -117,7 +118,8 @@ in {
         proxyWebsockets = true;
       };
       extraConfig = ''
-        allow ${config.secrets.secrets.global.net.privateSubnet};
+        allow ${config.secrets.secrets.global.net.privateSubnetv4};
+        allow ${config.secrets.secrets.global.net.privateSubnetv6};
         deny all;
       '';
     };
@@ -201,11 +203,10 @@ in {
           systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
             DHCP = lib.mkForce "no";
             address = [
-              (
-                lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}" config.secrets.secrets.global.net.privateSubnet
-              )
+              (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4)
+              (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv6)
             ];
-            gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet)];
+            gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4)];
           };
         }
       ];

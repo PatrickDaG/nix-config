@@ -7,11 +7,18 @@
     inherit (config.secrets.secrets.local.networking) hostId;
   };
   systemd.network.networks = {
+    "40-lan01" = {
+      matchConfig.Name = "lan01";
+      dhcpV6Config.UseDNS = false;
+      dhcpV4Config.UseDNS = false;
+    };
     "10-lan01" = {
-      address = [(lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnet)];
-      gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet)];
+      address = [(lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)];
+      gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4)];
       #matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
       matchConfig.Name = "lan";
+      dhcpV6Config.UseDNS = false;
+      dhcpV4Config.UseDNS = false;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
@@ -23,9 +30,11 @@
     networks = {
       # redo the network cause the livesystem has macvlans
       "10-lan01" = {
-        address = [(lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnet)];
-        gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet)];
+        address = [(lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)];
+        gateway = [(lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4)];
         matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
+        dhcpV6Config.UseDNS = false;
+        dhcpV4Config.UseDNS = false;
         networkConfig = {
           IPv6PrivacyExtensions = "yes";
           MulticastDNS = true;

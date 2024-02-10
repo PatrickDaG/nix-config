@@ -182,7 +182,7 @@ in {
     allowedTCPPorts = [2283];
     filterForward = true;
     extraForwardRules = ''
-      ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnet} tcp dport 3001 accept
+      ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnetv4} tcp dport 3001 accept
       iifname "podman1" oifname lan accept
     '';
   };

@@ -11,13 +11,16 @@
       bind_port = 3000;
       bind_host = "0.0.0.0";
       dns = {
-        bind_hosts = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnet)];
+        bind_hosts = [
+          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)
+          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv6)
+        ];
         anonymize_client_ip = false;
         upstream_dns = [
-          "1.0.0.1"
-          "2606:4700:4700::1111"
-          "8.8.8.8"
-          "2001:4860:4860::8844"
+          "https://dns.google/dns-query"
+          "https://dns.quad9.net/dns-query"
+          "https://dns.cloudflare.com/dns-query"
+          "https://doh.mullvad.net/dns-query"
         ];
         bootstrap_dns = [
           "1.0.0.1"
@@ -27,9 +30,9 @@
         ];
       };
       user_rules = [
-        "||adguardhome.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet}"
-        "||nc.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet}"
-        "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnet}"
+        "||adguardhome.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
+        "||nc.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
+        "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4}"
       ];
       dhcp.enabled = false;
       ratelimit = 60;

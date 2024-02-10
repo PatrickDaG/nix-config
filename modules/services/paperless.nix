@@ -79,7 +79,7 @@ in {
       PAPERLESS_URL = "https://${paperlessdomain}";
       PAPERLESS_ALLOWED_HOSTS = paperlessdomain;
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${paperlessdomain}";
-      PAPERLESS_TRUSTED_PROXIES = lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet;
+      PAPERLESS_TRUSTED_PROXIES = lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4;
 
       # let nginx do all the compression
       PAPERLESS_ENABLE_COMPRESSION = false;

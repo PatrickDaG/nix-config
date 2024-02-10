@@ -46,7 +46,7 @@ in {
     phpOptions."opcache.interned_strings_buffer" = "32";
     extraOptions = {
       default_phone_region = "DE";
-      trusted_proxies = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnet)];
+      trusted_proxies = [(lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4)];
       overwriteprotocol = "https";
       enabledPreviewProviders = [
         "OC\\Preview\\BMP"
