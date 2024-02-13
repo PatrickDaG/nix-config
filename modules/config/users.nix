@@ -27,6 +27,7 @@
     microvm = uidGid 217;
     maddy = uidGid 218;
     tt_rss = uidGid 219;
+    freshrss = uidGid 220;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;

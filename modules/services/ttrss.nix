@@ -1,33 +1,21 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{config, ...}: {
+  age.secrets.freshrsspasswd = {
+    generator.script = "alnum";
+    owner = config.services.freshrss.user;
+  };
   networking.firewall.allowedTCPPorts = [80];
-  services.tt-rss = {
+  services.freshrss = {
     enable = true;
-    logDestination = "syslog";
-    selfUrlPath = "https://rss.lel.lol";
+    passwordFile = config.age.secrets.freshrsspasswd.path;
+    defaultUser = "patrick";
+    baseUrl = "https://rss.lel.lol";
     virtualHost = "rss.lel.lol";
-    themePackages = [
-      pkgs.tt-rss-theme-feedly
-    ];
-    auth = {
-      autoLogin = false;
-      autoCreate = false;
-    };
   };
   environment.persistence."/persist".directories = [
     {
-      directory = "/var/lib/postgresql/";
-      user = "postgres";
-      group = "postgres";
-      mode = "750";
-    }
-    {
-      inherit (config.services.tt-rss) user;
-      directory = config.services.tt-rss.root;
-      group = config.services.tt-rss.user;
+      inherit (config.services.freshrss) user;
+      directory = config.services.freshrss.dataDir;
+      group = config.services.freshrss.user;
       mode = "0750";
     }
   ];
