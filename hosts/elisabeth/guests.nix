@@ -8,12 +8,13 @@
   ...
 }: let
   adguardhomedomain = "adguardhome.${config.secrets.secrets.global.domains.web}";
-  nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
   giteadomain = "git.${config.secrets.secrets.global.domains.web}";
-  vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
-  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
+  nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
   ollamadomain = "ollama.${config.secrets.secrets.global.domains.web}";
+  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
+  ttrssdomain = "rss.${config.secrets.secrets.global.domains.web}";
+  vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
@@ -145,6 +146,22 @@ in {
       '';
     };
 
+    upstreams.tt-rss = {
+      servers."${ipOf "ttrss"}:80" = {};
+
+      extraConfig = ''
+        zone tt-rss 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${ttrssdomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/".proxyPass = "http://tt-rss";
+      extraConfig = ''
+      '';
+    };
+
     upstreams.nextcloud = {
       servers."${ipOf "nextcloud"}:80" = {};
 
@@ -248,6 +265,7 @@ in {
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
+    // mkContainer "ttrss" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }

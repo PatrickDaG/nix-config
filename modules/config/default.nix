@@ -14,7 +14,6 @@
     ./system.nix
     ./users.nix
     ./xdg.nix
-    ./usbguard.nix
 
     ../../users/root
 
