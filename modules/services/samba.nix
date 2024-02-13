@@ -162,10 +162,11 @@
           hasBunker = true;
         } {})
         (mkShare {
-          name = "david-data";
+          name = "david";
           user = "david";
           group = "david";
           hasBunker = true;
+          hasPaperless = true;
         } {})
         (mkShare {
           name = "family-data";
