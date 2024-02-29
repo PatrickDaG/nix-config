@@ -3,6 +3,7 @@
   (_self: super: {
     zsh-histdb-skim = super.callPackage ./zsh-histdb-skim.nix {};
     zsh-histdb = super.callPackage ./zsh-histdb.nix {};
+    your_spotify = super.callPackage ./your_spotify.nix {};
     deploy = super.callPackage ./deploy.nix {};
     minify = super.callPackage ./minify {};
     awakened-poe-trade = super.callPackage ./awakened-poe-trade.nix {};
