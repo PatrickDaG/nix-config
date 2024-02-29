@@ -65,7 +65,7 @@ in {
       servers."${ipOf "immich"}:2283" = {};
 
       extraConfig = ''
-        zone gitea 64k ;
+        zone immich 64k ;
         keepalive 5 ;
       '';
     };
@@ -77,7 +77,7 @@ in {
         proxyWebsockets = true;
       };
       extraConfig = ''
-        client_max_body_size 1G ;
+        client_max_body_size 5G ;
       '';
     };
 

@@ -13,7 +13,7 @@
           format = "gpt";
           partitions = [
             (partEfi "boot" "0%" "2GiB")
-            (partSwap "swap" "2GiB" "18GiB")
+            #(partSwap "swap" "2GiB" "18GiB")
             (partLuksZfs "m2-ssd" "rpool" "18GiB" "100%")
           ];
         };

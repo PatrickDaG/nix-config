@@ -1,6 +1,7 @@
 {
   symlinkJoin,
   writeShellApplication,
+  nvd,
   nix-output-monitor,
 }: let
   deploy = writeShellApplication {
@@ -92,7 +93,7 @@
                  	ssh "$host" -- "$top_level/bin/switch-to-configuration" "$ACTION" \
                  	|| die "Error activating toplevel for $system"
           if [[ -n "$prev_system" ]]; then
-                 ssh "$host" -- nvd --color always diff "$prev_system" "$top_level"
+                 ssh "$host" -- ${nvd}/bin/nvd --color always diff "$prev_system" "$top_level"
                fi
              )
                  }
