@@ -15,6 +15,7 @@
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   ttrssdomain = "rss.${config.secrets.secrets.global.domains.web}";
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
+  spotifydomain = "spotify.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
@@ -96,6 +97,7 @@ in {
         proxyPass = "http://ollama";
         proxyWebsockets = true;
       };
+
       extraConfig = ''
         allow ${config.secrets.secrets.global.net.privateSubnetv4};
         allow ${config.secrets.secrets.global.net.privateSubnetv6};
@@ -158,6 +160,22 @@ in {
       forceSSL = true;
       useACMEHost = "web";
       locations."/".proxyPass = "http://tt-rss";
+      extraConfig = ''
+      '';
+    };
+
+    upstreams.spotify = {
+      servers."${ipOf "your_spotify"}:80" = {};
+
+      extraConfig = ''
+        zone spotify 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${spotifydomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/".proxyPass = "http://spotify";
       extraConfig = ''
       '';
     };
@@ -266,6 +284,7 @@ in {
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
     // mkContainer "ttrss" {}
+    // mkContainer "your_spotify" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
