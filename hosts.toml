@@ -6,10 +6,6 @@ system = "x86_64-linux"
 type = "nixos"
 system = "x86_64-linux"
 
-[testienix]
-type = "nixos"
-system = "x86_64-linux"
-
 [gojo]
 type = "nixos"
 system = "x86_64-linux"

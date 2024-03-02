@@ -31,7 +31,7 @@
     };
     nvim-lightbulb = {
       enable = true;
-      autocmd.enabled = true;
+      settings.autocmd.enabled = true;
     };
     lsp = {
       enable = true;

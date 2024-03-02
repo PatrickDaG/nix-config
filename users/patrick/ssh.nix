@@ -28,11 +28,6 @@
         user = "root";
       };
 
-      "testienix" = {
-        hostname = "testienix.local";
-        user = "root";
-      };
-
       "maddy" = {
         hostname = config.userSecrets.hetzner_ip;
         user = "root";

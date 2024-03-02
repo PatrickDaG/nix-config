@@ -36,9 +36,9 @@
     applications = 10;
     desktop = 10;
   };
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "de";
-    xkbVariant = "bone";
+    variant = "bone";
   };
   virtualisation.podman = {
     enable = true;

@@ -9,18 +9,16 @@
         type = "disk";
         device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.ssd}";
         content = with lib.disko.gpt; {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            (partEfi "boot" "0%" "260MB")
-            {
-              name = "rpool";
+          type = "gpt";
+          partitions = {
+            boot = partEfi "0%" "260MB";
+            rpool = {
               content = {
                 type = "zfs";
                 pool = "rpool";
               };
-            }
-          ];
+            };
+          };
         };
       };
     };

@@ -75,8 +75,10 @@
     # Undo tree
     undotree = {
       enable = true;
-      focusOnToggle = true;
-      windowLayout = 4;
+      settings = {
+        WindowLayout = 4;
+        focusOnToggle = true;
+      };
     };
 
     # Quickfix menu

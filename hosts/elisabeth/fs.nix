@@ -5,16 +5,15 @@
 }: {
   disko.devices = {
     disk = {
-      internal-ssd = {
+      internal-ssd = rec {
         type = "disk";
         device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.nvme}";
         content = with lib.disko.gpt; {
-          type = "table";
-          format = "gpt";
-          partitions = [
-            (partEfi "boot" "0%" "1GiB")
-            (partLuksZfs "ssd" "rpool" "1GiB" "100%")
-          ];
+          type = "gpt";
+          partitions = {
+            boot = (partEfi "0%" "1GiB") // {device = "${device}-part1";};
+            "rpool_ssd" = (partLuksZfs "ssd" "rpool" "1GiB" "100%") // {device = "${device}-part2";};
+          };
         };
       };
       "4TB-hdd-1" = {

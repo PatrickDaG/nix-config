@@ -15,6 +15,8 @@
       extraEncryptionPubkeys
       ;
 
+    storageMode = "derivation";
+
     forceRekeyOnSystem = builtins.extraBuiltins.unsafeCurrentSystem;
     hostPubkey = let
       pubkeyPath = config.node.secretsDir + "/host.pub";
