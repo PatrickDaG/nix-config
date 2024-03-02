@@ -14,18 +14,12 @@
         diagnostics = {
           deadnix.enable = true;
           gitlint.enable = true;
-          luacheck.enable = true;
           protolint.enable = true;
-          shellcheck.enable = true;
         };
         formatting = {
           alejandra.enable = true;
-          jq.enable = true;
           markdownlint.enable = true;
-          rustfmt.enable = true;
-          #sqlfluff.enable = true;
           shfmt.enable = true;
-          stylua.enable = true;
         };
       };
     };
@@ -58,7 +52,6 @@
         pyright.enable = true;
         texlab.enable = true;
         java-language-server.enable = true;
-        lua-ls.enable = true;
         rust-analyzer = {
           enable = true;
           settings = {
