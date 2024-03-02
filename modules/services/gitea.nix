@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   giteaDomain = "git.${config.secrets.secrets.global.domains.web}";
@@ -82,6 +83,13 @@ in {
         USER = config.secrets.secrets.local.gitea.mail.user;
         SEND_AS_PLAIN_TEXT = true;
       };
+      oauth2_client = {
+        ACCOUNT_LINKING = "auto";
+        ENABLE_AUTO_REGISTRATION = true;
+        OPENID_CONNECT_SCOPES = "email profile";
+        REGISTER_EMAIL_CONFIRM = false;
+        UPDATE_AVATAR = true;
+      };
       # packages.ENABLED = true;
       repository = {
         DEFAULT_PRIVATE = "private";
@@ -117,7 +125,47 @@ in {
     };
   };
 
+  # XXX: PKCE is currently not supported by gitea/forgejo,
+  # see https://github.com/go-gitea/gitea/issues/21376.
+  # Disable PKCE manually in kanidm for now.
+  # `kanidm system oauth2 warning-insecure-client-disable-pkce forgejo`
   systemd.services.gitea = {
     serviceConfig.RestartSec = "600"; # Retry every 10 minutes
+    preStart = let
+      exe = lib.getExe config.services.gitea.package;
+      providerName = "authelia";
+      clientId = "forgejo";
+      args = lib.escapeShellArgs [
+        "--name"
+        providerName
+        "--provider"
+        "openidConnect"
+        "--key"
+        clientId
+        "--auto-discover-url"
+        "https://auth.${config.secrets.secrets.global.domains.web}/.well-known/openid-configuration"
+        "--required-claim-name"
+        "groups"
+        "--group-claim-name"
+        "groups"
+        "--admin-group"
+        "forgejo_admins"
+        "--skip-local-2fa"
+      ];
+    in
+      lib.mkAfter ''
+        provider_id=$(${exe} admin auth list | ${pkgs.gnugrep}/bin/grep -w '${providerName}' | cut -f1)
+        if [[ -z "$provider_id" ]]; then
+          FORGEJO_ADMIN_OAUTH2_SECRET="$(< ${config.age.secrets.openid-secret.path})" ${exe} admin auth add-oauth ${args}
+        else
+          FORGEJO_ADMIN_OAUTH2_SECRET="$(< ${config.age.secrets.openid-secret.path})" ${exe} admin auth update-oauth --id "$provider_id" ${args}
+        fi
+      '';
+  };
+
+  age.secrets.openid-secret = {
+    generator.script = "alnum";
+    mode = "440";
+    inherit (config.services.gitea) group;
   };
 }

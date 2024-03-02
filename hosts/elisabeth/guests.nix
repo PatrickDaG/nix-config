@@ -17,6 +17,7 @@
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   spotifydomain = "spotify.${config.secrets.secrets.global.domains.web}";
   apispotifydomain = "api.spotify.${config.secrets.secrets.global.domains.web}";
+  autheliadomain = "auth.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
@@ -212,6 +213,23 @@ in {
         client_max_body_size 4G ;
       '';
     };
+
+    upstreams.authelia = {
+      servers."${ipOf "authelia"}:${nodes.elisabeth-authelia.config.services.authelia.instances.main.settings.server.port}" = {};
+
+      extraConfig = ''
+        zone authelia 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${autheliadomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/".proxyPass = "http://authelia";
+      extraConfig = ''
+        client_max_body_size 4G ;
+      '';
+    };
   };
   guests = let
     mkGuest = guestName: {
@@ -301,6 +319,7 @@ in {
     // mkContainer "ollama" {}
     // mkContainer "ttrss" {}
     // mkContainer "your_spotify" {}
+    // mkContainer "authelia" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
