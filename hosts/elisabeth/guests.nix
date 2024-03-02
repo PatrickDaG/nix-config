@@ -16,6 +16,7 @@
   ttrssdomain = "rss.${config.secrets.secrets.global.domains.web}";
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   spotifydomain = "spotify.${config.secrets.secrets.global.domains.web}";
+  apispotifydomain = "api.spotify.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
@@ -176,6 +177,21 @@ in {
       forceSSL = true;
       useACMEHost = "web";
       locations."/".proxyPass = "http://spotify";
+      extraConfig = ''
+      '';
+    };
+    upstreams.apispotify = {
+      servers."${ipOf "your_spotify"}:8080" = {};
+
+      extraConfig = ''
+        zone spotify 64k ;
+        keepalive 5 ;
+      '';
+    };
+    virtualHosts.${apispotifydomain} = {
+      forceSSL = true;
+      useACMEHost = "web";
+      locations."/".proxyPass = "http://apispotify";
       extraConfig = ''
       '';
     };

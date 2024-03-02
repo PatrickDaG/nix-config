@@ -19,6 +19,7 @@
     ../../modules/hardware/physical.nix
     ../../modules/hardware/pipewire.nix
     ../../modules/hardware/yubikey.nix
+    ../../modules/hardware/bluetooth.nix
     ../../modules/hardware/zfs.nix
 
     ../../modules/optional/streamdeck.nix

@@ -1,15 +1,18 @@
 {config, ...}: {
   imports = [./your_spotify_m.nix];
   age.secrets.spotify = {
-    inherit (config.services.your_spotify) user group;
+    owner = "your_spotify";
+    mode = "440";
     rekeyFile = ../../secrets/your_spotify.age;
   };
   services.your_spotify = {
     enable = true;
-    config = {
-      clientEndpoint = "https://spotify.${config.secrets.secrets.global.domains.web}";
-      apiEndpoint = "https://api.spotify.${config.secrets.secrets.global.domains.web}";
+    settings = {
+      CLIENT_ENDPOINT = "https://spotify.${config.secrets.secrets.global.domains.web}";
+      API_ENDPOINT = "https://api.spotify.${config.secrets.secrets.global.domains.web}";
     };
+    enableLocalDB = true;
+    enableNginxVirtualHost = true;
     environmentFile = config.age.secrets.spotify.path;
   };
   environment.persistence."/persist".directories = [

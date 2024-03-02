@@ -28,7 +28,7 @@
         then boolToString value
         else toString value;
     })
-  cfg.config;
+  cfg.settings;
 
   configFile = pkgs.writeText "your_spotify.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 in {
@@ -44,20 +44,20 @@ in {
 
     clientPackage = mkOption {
       type = package;
-      default = cfg.package.client.override {inherit (cfg.config) apiEndpoint;};
+      default = cfg.package.client.override {apiEndpoint = cfg.settings.API_ENDPOINT;};
       description = "Client package to use.";
     };
 
     settings = mkOption {
       type = types.submodule {
-        freeformType = types.attrOf types.str;
+        freeformType = types.attrsOf types.str;
         options = {
-          clientEndpoint = mkOption {
+          CLIENT_ENDPOINT = mkOption {
             type = str;
             description = "The endpoint of your web application";
             example = "https://your_spotify.example.org";
           };
-          apiEndpoint = mkOption {
+          API_ENDPOINT = mkOption {
             type = str;
             description = ''
               The endpoint of your server
@@ -170,20 +170,58 @@ in {
         EnvironmentFile = [configFile] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
         ExecStartPre = "${pkgs.your_spotify}/bin/your_spotify_migrate";
         ExecStart = "${pkgs.your_spotify}/bin/your_spotify_server";
+        StateDirectory = "your_spotify";
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
-        ProtectHome = true;
-        ProtectSystem = "strict";
-        StateDirectory = "your_spotify";
         StateDirectoryMode = "0700";
         Restart = "always";
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        DevicePolicy = "closed";
+        SupplementaryGroups = ["dialout"];
+        #NoNewPrivileges = true; # Implied by DynamicUser
+        PrivateUsers = true;
+        #PrivateTmp = true; # Implied by DynamicUser
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
+        ProtectKernelModules = true;
+        ProtectKernelTunables = false; # breaks bwrap
+        ProtectProc = "invisible";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
+        ProtectSystem = "strict";
+        #RemoveIPC = true; # Implied by DynamicUser
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        #RestrictSUIDSGID = true; # Implied by DynamicUser
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@mount" # Required by platformio for chroot
+        ];
+        UMask = "0077";
       };
       wantedBy = ["multi-user.target"];
     };
-    services.nginx = {
+    services.nginx = mkIf cfg.enableNginxVirtualHost {
       enable = true;
-      virtualHosts.${cfg.clientEndpoint}.root = cfg.clientPackage;
+      virtualHosts.${cfg.settings.CLIENT_ENDPOINT} = {
+        locations."/".extraConfig = ''
+          try_files = "$uri $uri/ /index.html;
+        '';
+      };
     };
     services.mongodb = mkIf cfg.enableLocalDB {
       enable = true;
