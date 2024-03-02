@@ -85,6 +85,7 @@ in {
       };
       oauth2_client = {
         ACCOUNT_LINKING = "auto";
+        USERNAME = "userid";
         ENABLE_AUTO_REGISTRATION = true;
         OPENID_CONNECT_SCOPES = "email profile";
         REGISTER_EMAIL_CONFIRM = false;
@@ -108,9 +109,7 @@ in {
         # port forwarding in elisabeth
       };
       service = {
-        DISABLE_REGISTRATION = true;
-        ALLOW_ONLY_INTERNAL_REGISTRATION = true;
-        ALLOW_ONLY_EXTERNAL_REGISTRATION = false;
+        DISABLE_REGISTRATION = false;
         SHOW_REGISTRATION_BUTTON = false;
         REGISTER_EMAIL_CONFIRM = false;
         ENABLE_NOTIFY_MAIL = true;
@@ -149,16 +148,17 @@ in {
         "--group-claim-name"
         "groups"
         "--admin-group"
-        "forgejo_admins"
+        "forgejo_admin"
         "--skip-local-2fa"
       ];
     in
       lib.mkAfter ''
         provider_id=$(${exe} admin auth list | ${pkgs.gnugrep}/bin/grep -w '${providerName}' | cut -f1)
+          SECRET="$(< ${config.age.secrets.openid-secret.path})"
         if [[ -z "$provider_id" ]]; then
-          FORGEJO_ADMIN_OAUTH2_SECRET="$(< ${config.age.secrets.openid-secret.path})" ${exe} admin auth add-oauth ${args}
+          ${exe} admin auth add-oauth ${args} --secret "$SECRET"
         else
-          FORGEJO_ADMIN_OAUTH2_SECRET="$(< ${config.age.secrets.openid-secret.path})" ${exe} admin auth update-oauth --id "$provider_id" ${args}
+          ${exe} admin auth update-oauth --id "$provider_id" ${args} --secret "$SECRET"
         fi
       '';
   };

@@ -29,7 +29,7 @@
     tt_rss = uidGid 219;
     freshrss = uidGid 220;
     mongodb = uidGid 221;
-    your_spotify = uidGid 222;
+    authelia-main = uidGid 222;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;

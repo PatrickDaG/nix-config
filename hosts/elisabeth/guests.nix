@@ -167,7 +167,7 @@ in {
     };
 
     upstreams.spotify = {
-      servers."${ipOf "your_spotify"}:80" = {};
+      servers."${ipOf "yourspotify"}:80" = {};
 
       extraConfig = ''
         zone spotify 64k ;
@@ -182,7 +182,7 @@ in {
       '';
     };
     upstreams.apispotify = {
-      servers."${ipOf "your_spotify"}:8080" = {};
+      servers."${ipOf "yourspotify"}:8080" = {};
 
       extraConfig = ''
         zone spotify 64k ;
@@ -215,7 +215,7 @@ in {
     };
 
     upstreams.authelia = {
-      servers."${ipOf "authelia"}:${nodes.elisabeth-authelia.config.services.authelia.instances.main.settings.server.port}" = {};
+      servers."${ipOf "authelia"}:${toString nodes.elisabeth-authelia.config.services.authelia.instances.main.settings.server.port}" = {};
 
       extraConfig = ''
         zone authelia 64k ;
@@ -318,7 +318,7 @@ in {
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
     // mkContainer "ttrss" {}
-    // mkContainer "your_spotify" {}
+    // mkContainer "yourspotify" {}
     // mkContainer "authelia" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;

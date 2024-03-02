@@ -6,7 +6,7 @@
     rekeyFile = ../../secrets/your_spotify.age;
   };
   services.your_spotify = {
-    enable = true;
+    #enable = true;
     settings = {
       CLIENT_ENDPOINT = "https://spotify.${config.secrets.secrets.global.domains.web}";
       API_ENDPOINT = "https://api.spotify.${config.secrets.secrets.global.domains.web}";
