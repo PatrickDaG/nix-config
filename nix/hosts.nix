@@ -32,7 +32,7 @@ inputs: let
           nixpkgs.overlays = pkgs.overlays;
           nixpkgs.config = pkgs.config;
           node.name = name;
-          node.secretsDir = ../hosts/${name}/secrets;
+          node.secretsDir = ../. + "/hosts/${name}/secrets";
         }
         ../hosts/${name}
       ];

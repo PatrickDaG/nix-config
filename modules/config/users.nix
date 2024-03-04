@@ -30,6 +30,7 @@
     freshrss = uidGid 220;
     mongodb = uidGid 221;
     authelia-main = uidGid 222;
+    kanidm = uidGid 223;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;

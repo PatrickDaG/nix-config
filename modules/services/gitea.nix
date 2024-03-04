@@ -88,6 +88,7 @@ in {
         ENABLE_AUTO_REGISTRATION = true;
         REGISTER_EMAIL_CONFIRM = false;
         UPDATE_AVATAR = true;
+        USERNAME = "email";
       };
       # packages.ENABLED = true;
       repository = {
@@ -107,7 +108,8 @@ in {
         # port forwarding in elisabeth
       };
       service = {
-        DISABLE_REGISTRATION = false;
+        DISABLE_REGISTRATION = true;
+        ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
         SHOW_REGISTRATION_BUTTON = true;
         REGISTER_EMAIL_CONFIRM = false;
         ENABLE_NOTIFY_MAIL = true;
@@ -140,7 +142,7 @@ in {
         "--key"
         clientId
         "--auto-discover-url"
-        "https://auth.${config.secrets.secrets.global.domains.web}/.well-known/openid-configuration"
+        "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
         "--required-claim-name"
         "groups"
         "--scopes"

@@ -17,7 +17,7 @@
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
   spotifydomain = "spotify.${config.secrets.secrets.global.domains.web}";
   apispotifydomain = "api.spotify.${config.secrets.secrets.global.domains.web}";
-  autheliadomain = "auth.${config.secrets.secrets.global.domains.web}";
+  kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
   services.nginx = {
@@ -214,20 +214,20 @@ in {
       '';
     };
 
-    upstreams.authelia = {
-      servers."${ipOf "authelia"}:${toString nodes.elisabeth-authelia.config.services.authelia.instances.main.settings.server.port}" = {};
+    upstreams.kanidm = {
+      servers."${ipOf "kanidm"}:3000" = {};
 
       extraConfig = ''
-        zone authelia 64k ;
+        zone kanidm 64k ;
         keepalive 5 ;
       '';
     };
-    virtualHosts.${autheliadomain} = {
+    virtualHosts.${kanidmdomain} = {
       forceSSL = true;
       useACMEHost = "web";
-      locations."/".proxyPass = "http://authelia";
+      locations."/".proxyPass = "https://kanidm";
       extraConfig = ''
-        client_max_body_size 4G ;
+        proxy_ssl_verify off ;
       '';
     };
   };
@@ -268,7 +268,7 @@ in {
         ../../modules/config
         ../../modules/services/${guestName}.nix
         {
-          node.secretsDir = ./secrets/${guestName};
+          node.secretsDir = config.node.secretsDir + "/${guestName}";
           systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
             DHCP = lib.mkForce "no";
             address = [
@@ -319,7 +319,7 @@ in {
     // mkContainer "ollama" {}
     // mkContainer "ttrss" {}
     // mkContainer "yourspotify" {}
-    // mkContainer "authelia" {}
+    // mkContainer "kanidm" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
     }
