@@ -26,7 +26,9 @@
       ./guests.nix
     ];
   services.xserver = {
-    layout = "de";
-    xkbVariant = "bone";
+    xkb = {
+      layout = "de";
+      variant = "bone";
+    };
   };
 }

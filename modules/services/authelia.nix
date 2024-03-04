@@ -74,6 +74,13 @@ in {
               email = "patrick@${config.secrets.secrets.global.domains.mail_public}";
               groups = ["admin" "forgejo_admin"];
             };
+            users.test = {
+              disabled = false;
+              displayname = "Test";
+              password = "$argon2id$v=19$m=4096,t=3,p=1$cmJuaWJldGRheA$kG4NCJRryXTCe/8Jc2/BBnEmlWSRwq4pZG7LH7fKs/o";
+              email = "test@${config.secrets.secrets.global.domains.mail_public}";
+              groups = [];
+            };
           });
         };
       };

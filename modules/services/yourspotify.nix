@@ -3,7 +3,7 @@
   age.secrets.spotify = {
     owner = "your_spotify";
     mode = "440";
-    rekeyFile = ../../secrets/your_spotify.age;
+    rekeyFile = "${config.node.secretsDir}/yourspotify.age";
   };
   services.your_spotify = {
     #enable = true;

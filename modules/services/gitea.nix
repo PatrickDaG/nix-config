@@ -84,10 +84,8 @@ in {
         SEND_AS_PLAIN_TEXT = true;
       };
       oauth2_client = {
-        ACCOUNT_LINKING = "auto";
-        USERNAME = "userid";
+        ACCOUNT_LINKING = "login";
         ENABLE_AUTO_REGISTRATION = true;
-        OPENID_CONNECT_SCOPES = "email profile";
         REGISTER_EMAIL_CONFIRM = false;
         UPDATE_AVATAR = true;
       };
@@ -110,7 +108,7 @@ in {
       };
       service = {
         DISABLE_REGISTRATION = false;
-        SHOW_REGISTRATION_BUTTON = false;
+        SHOW_REGISTRATION_BUTTON = true;
         REGISTER_EMAIL_CONFIRM = false;
         ENABLE_NOTIFY_MAIL = true;
         DEFAULT_KEEP_EMAIL_PRIVATE = true;
@@ -144,6 +142,12 @@ in {
         "--auto-discover-url"
         "https://auth.${config.secrets.secrets.global.domains.web}/.well-known/openid-configuration"
         "--required-claim-name"
+        "groups"
+        "--scopes"
+        "email"
+        "--scopes"
+        "profile"
+        "--scopes"
         "groups"
         "--group-claim-name"
         "groups"
