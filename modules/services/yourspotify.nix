@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   networking.firewall.allowedTCPPorts = [3000 80];
   imports = [./your_spotify_m.nix];
   age.secrets.spotifySecret = {
@@ -20,7 +24,7 @@
       API_ENDPOINT = "https://apisptfy.${config.secrets.secrets.global.domains.web}";
     };
     enableLocalDB = true;
-    enableNginxVirtualHost = true;
+    nginxVirtualHost = "sptfy.${config.secrets.secrets.global.domains.web}";
   };
   environment.persistence."/persist".directories = [
     {
@@ -28,4 +32,5 @@
       directory = config.services.mongodb.dbpath;
     }
   ];
+  services.mongodb.package = pkgs.mongodb-bin;
 }

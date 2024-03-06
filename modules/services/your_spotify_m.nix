@@ -37,7 +37,15 @@ in {
     enable = mkEnableOption "your_spotify";
 
     enableLocalDB = mkEnableOption "a local mongodb instance";
-    enableNginxVirtualHost = mkEnableOption "a ngnix virtual Host for your client";
+    nginxVirtualHost = mkOption {
+      type = nullOr str;
+      default = null;
+      description = ''
+        If set creates an nginx virtual host for the client.
+        In most cases this should be the CLIENT_ENDPOINT without
+        protocol prefix.
+      '';
+    };
 
     package = mkPackageOption pkgs "your_spotify" {};
 
@@ -70,7 +78,10 @@ in {
         options = {
           CLIENT_ENDPOINT = mkOption {
             type = str;
-            description = "The endpoint of your web application";
+            description = ''
+              The endpoint of your web application
+              Has to include a protocol Prefix (e.g. `http://`)
+            '';
             example = "https://your_spotify.example.org";
           };
           API_ENDPOINT = mkOption {
@@ -80,6 +91,7 @@ in {
               This api has to be reachable from the device you use the website from not from the server.
               This means that for example you may need two nginx virtual hosts if you want to expose this on the
               internet.
+              Has to include a protocol Prefix (e.g. `http://`)
             '';
             default = "https://localhost:3000";
           };
@@ -149,6 +161,7 @@ in {
       script = ''
         export SPOTIFY_PUBLIC=$(< "$CREDENTIALS_DIRECTORY/SPOTIFY_PUBLIC")
         export SPOTIFY_SECRET=$(< "$CREDENTIALS_DIRECTORY/SPOTIFY_SECRET")
+        ${pkgs.your_spotify}/bin/your_spotify_migrate
         exec ${pkgs.your_spotify}/bin/your_spotify_server
       '';
       serviceConfig = {
@@ -156,7 +169,6 @@ in {
         Group = "your_spotify";
         DynamicUser = true;
         EnvironmentFile = [configFile];
-        ExecStartPre = "${pkgs.your_spotify}/bin/your_spotify_migrate";
         StateDirectory = "your_spotify";
         LimitNOFILE = "1048576";
         PrivateTmp = true;
@@ -166,45 +178,44 @@ in {
 
         LoadCredential = ["SPOTIFY_PUBLIC:${cfg.spotifyPublicFile}" "SPOTIFY_SECRET:${cfg.spotifySecretFile}"];
 
-        ## Hardening
-        #CapabilityBoundingSet = "";
-        #LockPersonality = true;
-        ##MemoryDenyWriteExecute = true;
-        ##NoNewPrivileges = true; # Implied by DynamicUser
-        #PrivateUsers = true;
-        ##PrivateTmp = true; # Implied by DynamicUser
-        #ProtectClock = true;
-        #ProtectControlGroups = true;
-        #ProtectHome = true;
-        #ProtectHostname = false; # breaks bwrap
-        #ProtectKernelLogs = false; # breaks bwrap
-        #ProtectKernelModules = true;
-        #ProtectKernelTunables = false; # breaks bwrap
-        #ProtectProc = "invisible";
-        #ProcSubset = "all"; # Using "pid" breaks bwrap
-        #ProtectSystem = "strict";
-        ##RemoveIPC = true; # Implied by DynamicUser
-        #RestrictAddressFamilies = [
-        #  "AF_INET"
-        #  "AF_INET6"
-        #  "AF_NETLINK"
-        #  "AF_UNIX"
-        #];
-        #RestrictNamespaces = true;
-        #RestrictRealtime = true;
-        ##RestrictSUIDSGID = true; # Implied by DynamicUser
-        #SystemCallArchitectures = "native";
-        #SystemCallFilter = [
-        #  "@system-service"
-        #  "@mount" # Required by platformio for chroot
-        #];
-        #UMask = "0077";
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        #MemoryDenyWriteExecute = true;
+        #NoNewPrivileges = true; # Implied by DynamicUser
+        PrivateUsers = true;
+        #PrivateTmp = true; # Implied by DynamicUser
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
+        ProtectKernelModules = true;
+        ProtectKernelTunables = false; # breaks bwrap
+        ProtectProc = "invisible";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
+        ProtectSystem = "strict";
+        #RemoveIPC = true; # Implied by DynamicUser
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        #RestrictSUIDSGID = true; # Implied by DynamicUser
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@pkey"
+        ];
+        UMask = "0077";
       };
       wantedBy = ["multi-user.target"];
     };
-    services.nginx = mkIf cfg.enableNginxVirtualHost {
+    services.nginx = mkIf (cfg.nginxVirtualHost != null) {
       enable = true;
-      virtualHosts.${cfg.settings.CLIENT_ENDPOINT} = {
+      virtualHosts.${cfg.nginxVirtualHost} = {
         root = cfg.clientPackage;
         locations."/".extraConfig = ''
           try_files = $uri $uri/ /index.html ;
