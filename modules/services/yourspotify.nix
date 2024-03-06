@@ -1,19 +1,26 @@
 {config, ...}: {
+  networking.firewall.allowedTCPPorts = [3000 80];
   imports = [./your_spotify_m.nix];
-  age.secrets.spotify = {
-    owner = "your_spotify";
+  age.secrets.spotifySecret = {
+    owner = "root";
     mode = "440";
-    rekeyFile = config.node.secretsDir + "/yourspotify.age";
+    rekeyFile = config.node.secretsDir + "/spotifySecret.age";
+  };
+  age.secrets.spotifyPublic = {
+    owner = "root";
+    mode = "440";
+    rekeyFile = config.node.secretsDir + "/spotifyPublic.age";
   };
   services.your_spotify = {
-    #enable = true;
+    enable = true;
+    spotifySecretFile = config.age.secrets.spotifySecret.path;
+    spotifyPublicFile = config.age.secrets.spotifyPublic.path;
     settings = {
-      CLIENT_ENDPOINT = "https://spotify.${config.secrets.secrets.global.domains.web}";
-      API_ENDPOINT = "https://api.spotify.${config.secrets.secrets.global.domains.web}";
+      CLIENT_ENDPOINT = "https://sptfy.${config.secrets.secrets.global.domains.web}";
+      API_ENDPOINT = "https://apisptfy.${config.secrets.secrets.global.domains.web}";
     };
     enableLocalDB = true;
     enableNginxVirtualHost = true;
-    environmentFile = config.age.secrets.spotify.path;
   };
   environment.persistence."/persist".directories = [
     {

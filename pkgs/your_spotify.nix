@@ -4,6 +4,8 @@
   fetchYarnDeps,
   makeWrapper,
   nodejs,
+  yarn,
+  prefetch-yarn-deps,
   lib,
   callPackage,
 }: let
@@ -23,23 +25,37 @@ in
       yarnLock = src + "/yarn.lock";
       hash = "sha256-pj6owoEPx9gdtFvXF8E89A+Thhe/7m0+OJU6Ttc6ooA=";
     };
+
+    configurePhase = ''
+      runHook preConfigure
+
+      export HOME=$(mktemp -d)
+      yarn config --offline set yarn-offline-mirror $offlineCache
+      fixup-yarn-lock yarn.lock
+      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+      patchShebangs node_modules/
+
+      runHook postConfigure
+    '';
+
     buildPhase = ''
       runHook preBuild
-      pushd ./deps/@your_spotify/root/apps/server/
-      yarn --offline --production
+      ls -lah
+      pushd ./apps/server/
+      yarn --offline run build
       popd
       runHook postBuild
     '';
-    nativeBuildInputs = [makeWrapper];
+    nativeBuildInputs = [makeWrapper yarn prefetch-yarn-deps];
     installPhase = ''
       mkdir -p $out
-      cp -r $node_modules $out/node_modules
-      cp -r ./deps/your_spotify/apps/server/{lib,package.json} $out
+      cp -r node_modules $out/node_modules
+      cp -r ./apps/server/{lib,package.json} $out
       mkdir -p $out/bin
       makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_migrate" \
         --add-flags "$out/lib/migrations.js"
       makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_server" \
-        --add-flags "$out/lib/bin/www.js"
+        --add-flags "$out/lib/index.js"
     '';
     doDist = false;
     passthru = {

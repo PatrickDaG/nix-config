@@ -15,8 +15,8 @@
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   ttrssdomain = "rss.${config.secrets.secrets.global.domains.web}";
   vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
-  spotifydomain = "spotify.${config.secrets.secrets.global.domains.web}";
-  apispotifydomain = "api.spotify.${config.secrets.secrets.global.domains.web}";
+  spotifydomain = "sptfy.${config.secrets.secrets.global.domains.web}";
+  apispotifydomain = "apisptfy.${config.secrets.secrets.global.domains.web}";
   kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
@@ -182,7 +182,7 @@ in {
       '';
     };
     upstreams.apispotify = {
-      servers."${ipOf "yourspotify"}:8080" = {};
+      servers."${ipOf "yourspotify"}:3000" = {};
 
       extraConfig = ''
         zone spotify 64k ;
