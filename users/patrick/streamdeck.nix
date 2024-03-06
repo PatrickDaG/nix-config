@@ -53,7 +53,7 @@
             };
             "13" = {
               icon = config.images.images."player.png";
-              switch_page = 1;
+              switch_page = 2;
             };
           };
           "1" = {
