@@ -169,6 +169,13 @@
           hasPaperless = true;
         } {})
         (mkShare {
+            name = "printer";
+            user = "printer";
+            group = "printer";
+          } {
+            "write list" = "@family";
+          })
+        (mkShare {
           name = "family-data";
           user = "family";
           group = "family";

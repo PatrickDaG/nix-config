@@ -25,6 +25,11 @@
     }
     {
       inherit address credentials;
+      remotePath = "printer";
+      automatic = true;
+    }
+    {
+      inherit address credentials;
       remotePath = "media";
       automatic = true;
     }
