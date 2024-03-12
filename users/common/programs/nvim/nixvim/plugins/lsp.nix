@@ -9,7 +9,6 @@
       sources = {
         code_actions = {
           # gitsigns.enable = true;
-          shellcheck.enable = true;
         };
         diagnostics = {
           deadnix.enable = true;

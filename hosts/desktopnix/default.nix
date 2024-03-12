@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
     inputs.nixos-hardware.nixosModules.common-cpu-intel
@@ -50,4 +54,7 @@
   '';
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];
+  nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
+    "nix-2.16.2"
+  ];
 }

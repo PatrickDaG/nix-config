@@ -51,4 +51,7 @@
   system.activationScripts.decryptKey.text = ''
     ln -f -s ${../../keys/PatC.key} /run/decrypt.key.pub
   '';
+  nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
+    "nix-2.16.2"
+  ];
 }

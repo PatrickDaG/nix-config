@@ -5,7 +5,6 @@
     ./shells/pager.nix
 
     ./programs/gpg.nix
-    ./programs/nvim
     ./programs/htop.nix
   ];
 
