@@ -87,7 +87,7 @@ in {
 
       PAPERLESS_SOCIALACCOUNT_PROVIDERS = builtins.toJSON {
         openid_connect = {
-          OAUTH_PKCE_PROVIDER = "True";
+          OAUTH_PKCE_ENABLED = "True";
           APPS = [
             rec {
               provider_id = "kanidm";
