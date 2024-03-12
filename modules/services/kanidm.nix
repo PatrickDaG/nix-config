@@ -73,6 +73,7 @@ in {
         basicSecretFile = config.age.secrets.oauth2-nextcloud.path;
         allowInsecureClientDisablePkce = true;
         scopeMaps."nextcloud.access" = ["openid" "email" "profile"];
+        preferShortUsername = true;
       };
 
       groups."immich.access" = {
@@ -88,6 +89,7 @@ in {
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
         scopeMaps."immich.access" = ["openid" "email" "profile"];
+        preferShortUsername = true;
       };
 
       groups."forgejo.access" = {

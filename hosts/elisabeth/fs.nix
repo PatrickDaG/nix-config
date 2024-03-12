@@ -87,10 +87,11 @@
           type = "snap";
           name = "mach-schnipp-schusss";
           filesystems = {
-            "panzer/safe<" = true;
+            "panzer<" = true;
             "rpool/local/state<" = true;
+            "rpool/local/guests<" = true;
             "rpool/safe<" = true;
-            "renaultft/safe<" = true;
+            "renaultft<" = true;
           };
           snapshotting = {
             type = "periodic";
