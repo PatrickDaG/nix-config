@@ -1,4 +1,6 @@
 {
+  pkgs,
+  nodes,
   config,
   lib,
   ...
@@ -81,6 +83,22 @@ in {
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${paperlessdomain}";
       PAPERLESS_TRUSTED_PROXIES = lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4;
 
+      PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
+
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS = builtins.toJSON {
+        openid_connect = {
+          OAUTH_PKCE_PROVIDER = "True";
+          APPS = [
+            rec {
+              provider_id = "kanidm";
+              name = "Kanidm";
+              client_id = "paperless";
+              settings.server_url = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${client_id}/.well-known/openid-configuration";
+            }
+          ];
+        };
+      };
+
       # let nginx do all the compression
       PAPERLESS_ENABLE_COMPRESSION = false;
       PAPERLESS_CONSUMER_ENABLE_BARCODES = true;
@@ -110,4 +128,15 @@ in {
       mode = "0770";
     }
   ];
+  # Mirror the original oauth2 secret
+  age.secrets.paperless-oauth2-client-secret = {
+    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-paperless) rekeyFile;
+    mode = "440";
+    group = "paperless";
+  };
+
+  systemd.services.paperless-web.script = lib.mkBefore ''
+    paperlessClientSecret=$(< ${config.age.secrets.paperless-oauth2-client-secret.path})
+    export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$( <<< $PAPERLESS_SOCIALACCOUNT_PROVIDERS ${pkgs.jq}/bin/jq -c --arg paperlessClientSecret "$paperlessClientSecret" '.openid_connect.APPS.[0].secret = $paperlessClientSecret')"
+  '';
 }

@@ -33,6 +33,11 @@ in {
       mode = "440";
       group = "kanidm";
     };
+    oauth2-paperless = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-forgejo = {
       generator.script = "alnum";
       mode = "440";
@@ -59,6 +64,21 @@ in {
       enable = true;
 
       inherit (config.secrets.secrets.local.kanidm) persons;
+
+      groups."paperless.access" = {
+        members = ["paperless.admins"];
+      };
+      # currently not usable
+      groups."paperless.admins" = {
+        members = ["administrator"];
+      };
+      systems.oauth2.paperless = {
+        displayName = "paperless";
+        originUrl = "https://ppl.${config.secrets.secrets.global.domains.web}/";
+        basicSecretFile = config.age.secrets.oauth2-paperless.path;
+        scopeMaps."paperless.access" = ["openid" "email" "profile"];
+        preferShortUsername = true;
+      };
 
       groups."nextcloud.access" = {
         members = ["nextcloud.admins"];
