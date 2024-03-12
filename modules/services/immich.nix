@@ -1,6 +1,7 @@
 # Auto-generated using compose2nix v0.1.6.
 {
   pkgs,
+  nodes,
   lib,
   config,
   ...
@@ -70,6 +71,24 @@
         };
         url = "http://${ipImmichMachineLearning}:3003";
       };
+      # XXX: Immich's oauth cannot use PKCE and uses legacy crypto so we need to run:
+      # kanidm system oauth2 warning-insecure-client-disable-pkce immich
+      # kanidm system oauth2 warning-enable-legacy-crypto immich
+      oauth = rec {
+        enabled = true;
+        autoLaunch = false;
+        autoRegister = true;
+        buttonText = "Login with Kanidm";
+
+        mobileOverrideEnabled = true;
+        mobileRedirectUri = "https://${immichDomain}/api/oauth/mobile-redirect";
+
+        clientId = "immich";
+        # clientSecret will be dynamically added in activation script
+        issuerUrl = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}";
+        scope = "openid email profile";
+        storageLabelClaim = "preferred_username";
+      };
       map = {
         enabled = true;
         darkStyle = "";
@@ -134,6 +153,7 @@
       "podman-compose-immich-root.target"
     ];
   };
+  processedConfigFile = "/run/agenix/immich.config.json";
 in {
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -174,6 +194,24 @@ in {
       ];
     };
   };
+
+  # Mirror the original oauth2 secret
+  age.secrets.immich-oauth2-client-secret = {
+    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-immich) rekeyFile;
+    mode = "440";
+    group = "root";
+  };
+
+  system.activationScripts.agenixRooterDerivedSecrets = {
+    # Run after agenix has generated secrets
+    deps = ["agenix"];
+    text = ''
+      immichClientSecret=$(< ${config.age.secrets.immich-oauth2-client-secret.path})
+      ${pkgs.jq}/bin/jq --arg immichClientSecret "$immichClientSecret" '.oauth.clientSecret = $immichClientSecret' ${configFile} > ${processedConfigFile}
+      chmod 444 ${processedConfigFile}
+    '';
+  };
+
   microvm = {
     mem = 1024 * 8;
     vcpu = 12;
@@ -218,7 +256,7 @@ in {
     image = "ghcr.io/immich-app/immich-machine-learning:${version}";
     inherit environment;
     volumes = [
-      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
+      "${processedConfigFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "${model_folder}:/cache:rw"
     ];
     log-driver = "journald";
@@ -234,7 +272,7 @@ in {
     image = "ghcr.io/immich-app/immich-server:${version}";
     inherit environment;
     volumes = [
-      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
+      "${processedConfigFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
@@ -293,7 +331,7 @@ in {
     image = "ghcr.io/immich-app/immich-server:${version}";
     inherit environment;
     volumes = [
-      "${configFile}:${environment.IMMICH_CONFIG_FILE}:ro"
+      "${processedConfigFile}:${environment.IMMICH_CONFIG_FILE}:ro"
       "/etc/localtime:/etc/localtime:ro"
       "${upload_folder}:/usr/src/app/upload:rw"
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"

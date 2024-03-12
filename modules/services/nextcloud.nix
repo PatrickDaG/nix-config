@@ -54,7 +54,7 @@ in {
     config.adminpassFile = config.age.secrets.ncpasswd.path; # Kinda ok just remember to instanly change after first setup
     config.adminuser = "admin";
     extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit contacts calendar tasks notes maps phonetrack;
+      inherit contacts calendar tasks notes maps phonetrack user_oidc;
     };
     maxUploadSize = "4G";
     extraAppsEnable = true;

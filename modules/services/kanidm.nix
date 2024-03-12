@@ -23,6 +23,16 @@ in {
       group = "kanidm";
       mode = "440";
     };
+    oauth2-nextcloud = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
+    oauth2-immich = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-forgejo = {
       generator.script = "alnum";
       mode = "440";
@@ -48,23 +58,44 @@ in {
     provision = {
       enable = true;
 
-      persons = {
-        "patrick" = {
-          displayName = "Patrick";
-          mailAddresses = ["patrick@${config.secrets.secrets.global.domains.mail}"];
-          groups = ["forgejo.admins"];
-        };
-        "test" = {
-          displayName = "test";
-          mailAddresses = ["test@${config.secrets.secrets.global.domains.mail}"];
-          groups = ["forgejo.access"];
-        };
+      inherit (config.secrets.secrets.local.kanidm) persons;
+
+      groups."nextcloud.access" = {
+        members = ["nextcloud.admins"];
+      };
+      # currently not usable
+      groups."nextcloud.admins" = {
+        members = ["administrator"];
+      };
+      systems.oauth2.nextcloud = {
+        displayName = "nextcloud";
+        originUrl = "https://nc.${config.secrets.secrets.global.domains.web}/";
+        basicSecretFile = config.age.secrets.oauth2-nextcloud.path;
+        allowInsecureClientDisablePkce = true;
+        scopeMaps."nextcloud.access" = ["openid" "email" "profile"];
+      };
+
+      groups."immich.access" = {
+        members = ["immich.admins"];
+      };
+      # currently not usable
+      groups."immich.admins" = {
+        members = ["administrator"];
+      };
+      systems.oauth2.immich = {
+        displayName = "Immich";
+        originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/";
+        basicSecretFile = config.age.secrets.oauth2-immich.path;
+        allowInsecureClientDisablePkce = true;
+        scopeMaps."immich.access" = ["openid" "email" "profile"];
       };
 
       groups."forgejo.access" = {
         members = ["forgejo.admins"];
       };
-      groups."forgejo.admins" = {};
+      groups."forgejo.admins" = {
+        members = ["administrator"];
+      };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
         originUrl = "https://git.${config.secrets.secrets.global.domains.web}/";
