@@ -1,10 +1,11 @@
 {
   config,
+  nodes,
   pkgs,
   lib,
   ...
 }: let
-  giteaDomain = "git.${config.secrets.secrets.global.domains.web}";
+  forgejoDomain = "git.${config.secrets.secrets.global.domains.web}";
 in {
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -28,7 +29,7 @@ in {
         inherit (config.secrets.secrets.global.hetzner.users.forgejo) subUid path;
         sshAgeSecret = "forgejoHetznerSsh";
       };
-      paths = [config.services.gitea.stateDir];
+      paths = [config.services.forgejo.stateDir];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -44,29 +45,27 @@ in {
 
   environment.persistence."/panzer".directories = [
     {
-      directory = config.services.gitea.stateDir;
-      user = "gitea";
-      group = "gitea";
+      directory = config.services.forgejo.stateDir;
+      user = "forgejo";
+      group = "forgejo";
       mode = "0700";
     }
   ];
-  age.secrets.gitea-mailer-passwd = {
-    rekeyFile = config.node.secretsDir + "/gitea-passwd.age";
-    owner = "gitea";
-    group = "gitea";
+  age.secrets.forgejo-mailer-passwd = {
+    rekeyFile = config.node.secretsDir + "/forgejo-passwd.age";
+    owner = "forgejo";
+    group = "forgejo";
     mode = "0700";
   };
 
-  services.gitea = {
+  services.forgejo = {
     enable = true;
-    package = pkgs.forgejo;
-    appName = "Patricks tolles git"; # tungsten inert gas?
-    stateDir = "/var/lib/forgejo";
     # TODO db backups
     # dump.enable = true;
     lfs.enable = true;
-    mailerPasswordFile = config.age.secrets.gitea-mailer-passwd.path;
+    mailerPasswordFile = config.age.secrets.forgejo-mailer-passwd.path;
     settings = {
+      DEFAULT.APP_NAME = "Patricks tolles git"; # tungsten inert gas?
       actions = {
         ENABLED = true;
         DEFAULT_ACTIONS_URL = "github";
@@ -78,17 +77,17 @@ in {
       # federation.ENABLED = true;
       mailer = {
         ENABLED = true;
-        SMTP_ADDR = config.secrets.secrets.local.gitea.mail.host;
-        FROM = config.secrets.secrets.local.gitea.mail.from;
-        USER = config.secrets.secrets.local.gitea.mail.user;
+        SMTP_ADDR = config.secrets.secrets.local.forgejo.mail.host;
+        FROM = config.secrets.secrets.local.forgejo.mail.from;
+        USER = config.secrets.secrets.local.forgejo.mail.user;
         SEND_AS_PLAIN_TEXT = true;
       };
       oauth2_client = {
         ACCOUNT_LINKING = "login";
-        ENABLE_AUTO_REGISTRATION = true;
+        ENABLE_AUTO_REGISTRATION = false;
         REGISTER_EMAIL_CONFIRM = false;
         UPDATE_AVATAR = true;
-        USERNAME = "email";
+        USERNAME = "nickname";
       };
       # packages.ENABLED = true;
       repository = {
@@ -99,8 +98,8 @@ in {
       server = {
         HTTP_ADDR = "0.0.0.0";
         HTTP_PORT = 3000;
-        DOMAIN = giteaDomain;
-        ROOT_URL = "https://${giteaDomain}/";
+        DOMAIN = forgejoDomain;
+        ROOT_URL = "https://${forgejoDomain}/";
         LANDING_PAGE = "login";
         SSH_PORT = 9922;
         # TODO
@@ -108,9 +107,9 @@ in {
         # port forwarding in elisabeth
       };
       service = {
-        DISABLE_REGISTRATION = true;
+        DISABLE_REGISTRATION = false;
         ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
-        SHOW_REGISTRATION_BUTTON = true;
+        SHOW_REGISTRATION_BUTTON = false;
         REGISTER_EMAIL_CONFIRM = false;
         ENABLE_NOTIFY_MAIL = true;
         DEFAULT_KEEP_EMAIL_PRIVATE = true;
@@ -126,13 +125,11 @@ in {
 
   # XXX: PKCE is currently not supported by gitea/forgejo,
   # see https://github.com/go-gitea/gitea/issues/21376.
-  # Disable PKCE manually in kanidm for now.
-  # `kanidm system oauth2 warning-insecure-client-disable-pkce forgejo`
-  systemd.services.gitea = {
+  systemd.services.forgejo = {
     serviceConfig.RestartSec = "600"; # Retry every 10 minutes
     preStart = let
-      exe = lib.getExe config.services.gitea.package;
-      providerName = "authelia";
+      exe = lib.getExe config.services.forgejo.package;
+      providerName = "kanidm";
       clientId = "forgejo";
       args = lib.escapeShellArgs [
         "--name"
@@ -143,18 +140,14 @@ in {
         clientId
         "--auto-discover-url"
         "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
-        "--required-claim-name"
-        "groups"
         "--scopes"
         "email"
         "--scopes"
         "profile"
-        "--scopes"
-        "groups"
         "--group-claim-name"
         "groups"
         "--admin-group"
-        "forgejo_admin"
+        "admin"
         "--skip-local-2fa"
       ];
     in
@@ -170,8 +163,8 @@ in {
   };
 
   age.secrets.openid-secret = {
-    generator.script = "alnum";
+    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-forgejo) rekeyFile;
     mode = "440";
-    inherit (config.services.gitea) group;
+    inherit (config.services.forgejo) group;
   };
 }

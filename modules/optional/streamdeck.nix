@@ -14,7 +14,15 @@
   settingsFormat = pkgs.formats.json {};
 in {
   home-manager.sharedModules = [
-    ({config, ...}: {
+    ({config, ...}: let
+      cfg = settingsFormat.generate "config.json" {
+        streamdeck_ui_version = 1;
+        state = config.programs.streamdeck-ui.settings;
+      };
+      preStart = pkgs.writeShellScript "streamdeck-setup-config" ''
+        cp "${cfg}" "$XDG_RUNTIME_DIR/streamdeck/config.json"
+      '';
+    in {
       options.programs.streamdeck-ui = {
         enable = mkEnableOption "streamdeck-ui";
         package = mkPackageOption pkgs "streamdeck-ui" {};
@@ -36,18 +44,12 @@ in {
               Service = {
                 Type = "exec";
                 ExecStart = "${pkgs.streamdeck-ui}/bin/streamdeck --no-ui";
-                Environment = "STREAMDECK_UI_CONFIG=${config.xdg.configHome}/streamdeck-ui/config.json";
+                ExecStartPre = preStart;
+                Environment = ''STREAMDECK_UI_CONFIG=%t/streamdeck/config.json'';
+                RuntimeDirectory = "streamdeck";
               };
               Install.WantedBy = ["graphical-session.target"];
             };
-          };
-        };
-
-        xdg.configFile.streamdeck-ui = {
-          target = "streamdeck-ui/config.json";
-          source = settingsFormat.generate "config.json" {
-            streamdeck_ui_version = 1;
-            state = config.programs.streamdeck-ui.settings;
           };
         };
       };

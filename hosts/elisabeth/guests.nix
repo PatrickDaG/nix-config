@@ -8,7 +8,7 @@
   ...
 }: let
   adguardhomedomain = "adguardhome.${config.secrets.secrets.global.domains.web}";
-  giteadomain = "git.${config.secrets.secrets.global.domains.web}";
+  forgejoDomain = "git.${config.secrets.secrets.global.domains.web}";
   immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
   nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
   ollamadomain = "ollama.${config.secrets.secrets.global.domains.web}";
@@ -44,19 +44,19 @@ in {
       '';
     };
 
-    upstreams.gitea = {
-      servers."${ipOf "gitea"}:3000" = {};
+    upstreams.forgejo = {
+      servers."${ipOf "forgejo"}:3000" = {};
 
       extraConfig = ''
-        zone gitea 64k ;
+        zone forgejo 64k ;
         keepalive 5 ;
       '';
     };
-    virtualHosts.${giteadomain} = {
+    virtualHosts.${forgejoDomain} = {
       forceSSL = true;
       useACMEHost = "web";
       locations."/" = {
-        proxyPass = "http://gitea";
+        proxyPass = "http://forgejo";
         proxyWebsockets = true;
       };
       extraConfig = ''
@@ -326,7 +326,7 @@ in {
     // mkContainer "paperless" {
       enableSharedPaperless = true;
     }
-    // mkContainer "gitea" {
+    // mkContainer "forgejo" {
       enablePanzer = true;
     }
     // mkMicrovm "immich" {

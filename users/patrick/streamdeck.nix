@@ -59,11 +59,12 @@
           "1" = {
             "0" = {
               icon = config.images.images."back.png";
-              switch_page = 0;
+              switch_page = 1;
               background_color = config.lib.stylix.colors.withHashtag.base0C;
             };
           };
         };
+        page = 0; # The startup page
         brightness = 99; # brighness value between 0 and 99
         display_timeout = 0; # dimmer timeout in seconds
         brightness_dimmed = 99; # dimmed brighness

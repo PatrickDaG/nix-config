@@ -16,5 +16,23 @@
           wrapProgram $out/bin/nvim --add-flags "--clean"
         '';
     });
+    kanidm = super.kanidm.overrideAttrs (old: let
+      provisionSrc = super.fetchFromGitHub {
+        owner = "oddlama";
+        repo = "kanidm-provision";
+        rev = "aa7a1c8ec04622745b385bd3b0462e1878f56b51";
+        hash = "sha256-NRolS3l2kARjkhWP7FYUG//KCEiueh48ZrADdCDb9Zg=";
+      };
+    in {
+      patches =
+        old.patches
+        ++ [
+          "${provisionSrc}/patches/${old.version}-oauth2-basic-secret-modify.patch"
+          "${provisionSrc}/patches/${old.version}-recover-account.patch"
+        ];
+      passthru.enableSecretProvisioning = true;
+      doCheck = false;
+    });
+    kanidm-provision = super.callPackage ./kanidm-provision.nix {};
   })
 ]
