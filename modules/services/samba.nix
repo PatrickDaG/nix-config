@@ -169,12 +169,10 @@
           hasPaperless = true;
         } {})
         (mkShare {
-            name = "printer";
-            user = "printer";
-            group = "printer";
-          } {
-            "write list" = "@family";
-          })
+          name = "printer";
+          user = "printer";
+          group = "printer";
+        } {})
         (mkShare {
           name = "family-data";
           user = "family";
@@ -218,7 +216,12 @@
         ${group} = {
         };
       }))
-      ++ [{family.members = ["patrick" "david" "helen" "ggr"];}]);
+      ++ [
+        {
+          family.members = ["patrick" "david" "helen" "ggr"];
+          printer.members = ["patrick" "david" "helen" "ggr"];
+        }
+      ]);
   };
 
   fileSystems = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
