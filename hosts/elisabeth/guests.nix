@@ -17,21 +17,24 @@
       paperless = "ppl";
       ttrss = "rss";
       vaultwarden = "pw";
-      spotify = "sptfy";
+      yourspotify = "sptfy";
       apispotify = "apisptfy";
       kanidm = "auth";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
-  ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
+  # TODO hard coded elisabeth nicht so schön
+  ipOf = hostName: nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in {
   services.nginx = let
     blockOf = hostName: {
       virtualHostExtraConfig ? "",
       maxBodySize ? "500M",
       port ? 3000,
+      upstream ? hostName,
+      protocol ? "http",
     }: {
       upstreams.${hostName} = {
-        servers."${ipOf hostName}:${toString port}" = {};
+        servers."${ipOf upstream}:${toString port}" = {};
         extraConfig = ''
           zone ${hostName} 64k ;
           keepalive 5 ;
@@ -41,7 +44,7 @@ in {
         forceSSL = true;
         useACMEHost = "web";
         locations."/" = {
-          proxyPass = "http://${hostName}";
+          proxyPass = "${protocol}://${hostName}";
           proxyWebsockets = true;
           X-Frame-Options = "SAMEORIGIN";
         };
@@ -53,41 +56,43 @@ in {
       };
     };
   in
-    {
-      enable = true;
-      recommendedSetup = true;
-    }
-    // blockOf "vaultwarden" {maxBodySize = "1G";}
-    // blockOf "forgejo" {maxBodySize = "1G";}
-    // blockOf "immich" {maxBodySize = "5G";}
-    // blockOf "ollama" {
-      maxBodySize = "5G";
-      virtualHostExtraConfig = ''
-        allow ${config.secrets.secrets.global.net.privateSubnetv4};
-        allow ${config.secrets.secrets.global.net.privateSubnetv6};
-        deny all ;
-      '';
-    }
-    // blockOf "adguardhome" {
-      virtualHostExtraConfig = ''
-        allow ${config.secrets.secrets.global.net.privateSubnetv4};
-        allow ${config.secrets.secrets.global.net.privateSubnetv6};
-        deny all ;
-      '';
-    }
-    // blockOf "paperless" {maxBodySize = "5G";}
-    // blockOf "ttrss" {port = 80;}
-    // blockOf "yourspotify" {port = 80;}
-    // blockOf "apispotify" {}
-    // blockOf "nextcloud" {
-      maxBodySize = "5G";
-      port = 80;
-    }
-    // blockOf "kanidm" {
-      virtualHostExtraConfig = ''
-        proxy_ssl_verify off ;
-      '';
-    };
+    lib.mkMerge [
+      {
+        enable = true;
+        recommendedSetup = true;
+      }
+      (blockOf "vaultwarden" {maxBodySize = "1G";})
+      (blockOf "forgejo" {maxBodySize = "1G";})
+      (blockOf "immich" {maxBodySize = "5G";})
+      (
+        blockOf "adguardhome"
+        {
+          virtualHostExtraConfig = ''
+            allow ${config.secrets.secrets.global.net.privateSubnetv4};
+            allow ${config.secrets.secrets.global.net.privateSubnetv6};
+            deny all ;
+          '';
+        }
+      )
+      (blockOf "paperless" {maxBodySize = "5G";})
+      (blockOf "ttrss" {port = 80;})
+      (blockOf "yourspotify" {port = 80;})
+      (blockOf "apispotify" {
+        port = 80;
+        upstream = "yourspotify";
+      })
+      (blockOf "nextcloud" {
+        maxBodySize = "5G";
+        port = 80;
+      })
+      (blockOf "kanidm"
+        {
+          protocol = "https";
+          virtualHostExtraConfig = ''
+            proxy_ssl_verify off ;
+          '';
+        })
+    ];
 
   guests = let
     mkGuest = guestName: {
@@ -128,6 +133,7 @@ in {
         ../../modules/services/${guestName}.nix
         {
           node.secretsDir = config.node.secretsDir + "/${guestName}";
+          networking.nftables.firewall.zones.untrusted.interfaces = [config.guests.${guestName}.networking.mainLinkName];
           systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
             DHCP = lib.mkForce "no";
             address = [

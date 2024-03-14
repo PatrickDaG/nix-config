@@ -41,7 +41,12 @@ in {
 
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
   services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
-  networking.firewall.allowedTCPPorts = [3000 9922];
+
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.forgejo.settings.server.HTTP_PORT];
+  };
+  networking.firewall.allowedTCPPorts = [config.services.forgejo.settings.server.SSH_PORT];
 
   environment.persistence."/panzer".directories = [
     {

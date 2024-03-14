@@ -252,6 +252,27 @@
         "type": "github"
       }
     },
+    "dependencyDagOfSubmodule": {
+      "inputs": {
+        "nixpkgs": [
+          "nixos-nftables-firewall",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1656615370,
+        "narHash": "sha256-IZDqz1aSySoqf1qtVQg+oJMHfC4IlT55Zoa7EkjvPug=",
+        "owner": "thelegy",
+        "repo": "nix-dependencyDagOfSubmodule",
+        "rev": "98eb563d80b35acafbfc1abb9ccee569c1efb19c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "nix-dependencyDagOfSubmodule",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -1162,11 +1183,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1709384560,
-        "narHash": "sha256-VZpbetW5npjZ1FWcFII81tcDBH03irTboyMVOWzdfF8=",
+        "lastModified": 1710447185,
+        "narHash": "sha256-M63b7f5dnGtLAZmgzSepQvcVA++QRJ+h8fSlyowgYcI=",
         "owner": "oddlama",
         "repo": "nixos-extra-modules",
-        "rev": "34ba92f0576a3998133310f070381563448e2b1a",
+        "rev": "a4f79d7479bf63fb99e1d19cb6502feabc2854c3",
         "type": "github"
       },
       "original": {
@@ -1208,6 +1229,27 @@
       "original": {
         "owner": "nixos",
         "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
+    "nixos-nftables-firewall": {
+      "inputs": {
+        "dependencyDagOfSubmodule": "dependencyDagOfSubmodule",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709392539,
+        "narHash": "sha256-cZ7vOO5KmvVQMHnpi1hBX+bUJlVL6cK8I3m2SPHANtg=",
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
+        "rev": "412ea84967cd087fc668ef6994f419bd16ac1174",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
         "type": "github"
       }
     },
@@ -1594,6 +1636,7 @@
         "nixos-extra-modules": "nixos-extra-modules",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
+        "nixos-nftables-firewall": "nixos-nftables-firewall",
         "nixpkgs": "nixpkgs",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nixvim": "nixvim",

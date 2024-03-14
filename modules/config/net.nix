@@ -7,14 +7,12 @@
     useNetworkd = true;
     dhcpcd.enable = false;
     useDHCP = false;
-    firewall.enable = true;
     # allow mdns port
     firewall.allowedUDPPorts = [5353];
     renameInterfacesByMac = lib.mkIf (!config.boot.isContainer) (
       lib.mapAttrs (_: v: v.mac)
       (config.secrets.secrets.local.networking.interfaces or {})
     );
-    nftables.enable = true;
   };
   systemd.network = {
     enable = true;

@@ -14,6 +14,7 @@
     ./system.nix
     ./users.nix
     ./xdg.nix
+    ./nftables.nix
 
     ../../users/root
 
@@ -34,6 +35,7 @@
     inputs.nixvim.nixosModules.nixvim
     inputs.nixos-extra-modules.nixosModules.default
     inputs.musnix.nixosModules.musnix
+    inputs.nixos-nftables-firewall.nixosModules.default
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
   boot.mode = lib.mkDefault "efi";

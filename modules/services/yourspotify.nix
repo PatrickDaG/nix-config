@@ -3,7 +3,10 @@
   pkgs,
   ...
 }: {
-  networking.firewall.allowedTCPPorts = [3000 80];
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000 80];
+  };
   imports = [./your_spotify_m.nix];
   age.secrets.spotifySecret = {
     owner = "root";

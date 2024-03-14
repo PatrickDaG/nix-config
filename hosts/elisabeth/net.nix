@@ -38,6 +38,13 @@
       };
     };
   };
+  networking.nftables.firewall.zones.untrusted.interfaces = ["lan"];
+
+  wireguard.elisabeth.server = {
+    host = lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4;
+    reservedAddresses = ["10.42.0.0/20" "fd00:1764::/112"];
+    openFirewall = true;
+  };
   # To be able to ping containers from the host, it is necessary
   # to create a macvlan on the host on the VLAN 1 network.
   networking.macvlans.lan = {

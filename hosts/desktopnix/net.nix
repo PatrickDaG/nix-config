@@ -20,4 +20,5 @@
       };
     };
   };
+  networking.nftables.firewall.zones.untrusted.interfaces = ["lan01"];
 }

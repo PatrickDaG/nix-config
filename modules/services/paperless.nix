@@ -63,7 +63,10 @@ in {
     before = ["restic-backups-main.service"];
   };
 
-  networking.firewall.allowedTCPPorts = [3000];
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.paperless.port];
+  };
   age.secrets.paperless-admin-passwd = {
     generator.script = "alnum";
     mode = "440";

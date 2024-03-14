@@ -3,7 +3,10 @@
     generator.script = "alnum";
     owner = config.services.freshrss.user;
   };
-  networking.firewall.allowedTCPPorts = [80];
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
+  };
   services.freshrss = {
     enable = true;
     passwordFile = config.age.secrets.freshrsspasswd.path;

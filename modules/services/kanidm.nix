@@ -2,8 +2,11 @@
   kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
 in {
   imports = [../kanidm.nix];
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000];
+  };
   disabledModules = ["services/security/kanidm.nix"];
-  networking.firewall.allowedTCPPorts = [3000];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/kanidm";

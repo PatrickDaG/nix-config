@@ -65,6 +65,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-nftables-firewall = {
+      url = "github:thelegy/nixos-nftables-firewall";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     #templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
     impermanence.url = "github:nix-community/impermanence";

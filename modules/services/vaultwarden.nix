@@ -105,7 +105,10 @@ in {
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
 
-  networking.firewall.allowedTCPPorts = [3000];
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.vaultwarden.config.rocketPort];
+  };
 
   # Replace uses of old name
   systemd.services.backup-vaultwarden.environment.DATA_FOLDER = lib.mkForce "/var/lib/vaultwarden";

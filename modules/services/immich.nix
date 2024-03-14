@@ -2,7 +2,6 @@
 {
   pkgs,
   nodes,
-  lib,
   config,
   ...
 }: let
@@ -216,13 +215,18 @@ in {
     mem = 1024 * 8;
     vcpu = 12;
   };
-  networking.firewall = {
-    allowedTCPPorts = [2283];
-    filterForward = true;
-    extraForwardRules = ''
-      ip saddr ${lib.net.cidr.host config.secrets.secrets.global.net.ips."elisabeth" config.secrets.secrets.global.net.privateSubnetv4} tcp dport 3001 accept
-      iifname "podman1" oifname lan accept
-    '';
+
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000];
+  };
+
+  networking.nftables.chains.forward.into-immich-container = {
+    after = ["conntrack"];
+    rules = [
+      "iifname elisabeth ip saddr ${nodes.elisabeth.config.wireguard.elisabeth.ipv4} tcp dport 3001 accept"
+      "iifname podman1 oifname lan accept"
+    ];
   };
   systemd.tmpfiles.settings = {
     "10-immich" = {

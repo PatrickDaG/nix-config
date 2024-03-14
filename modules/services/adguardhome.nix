@@ -3,10 +3,13 @@
   lib,
   ...
 }: {
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.adguardhome.settings.bind_port];
+  };
   services.adguardhome = {
     enable = true;
     mutableSettings = false;
-    openFirewall = true; # opens webinterface firewall
     settings = {
       bind_port = 3000;
       bind_host = "0.0.0.0";

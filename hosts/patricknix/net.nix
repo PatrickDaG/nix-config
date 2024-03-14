@@ -13,6 +13,7 @@
     devoloog-sae19.rekeyFile = ./secrets/iwd/devoloog-sae19.age;
     devoloog-sae20.rekeyFile = ./secrets/iwd/devoloog-sae20.age;
   };
+  networking.nftables.firewall.zones.untrusted.interfaces = ["lan01" "lan02" "wlan01"];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd = {

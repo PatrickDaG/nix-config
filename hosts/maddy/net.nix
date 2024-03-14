@@ -52,6 +52,7 @@
       };
     };
   };
+  networking.nftables.firewall.zones.untrusted.interfaces = ["lan01"];
   security.acme.certs = {
     mail_public = {
       domain = config.secrets.secrets.global.domains.mail_public;

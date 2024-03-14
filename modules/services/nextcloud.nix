@@ -104,8 +104,11 @@ in {
     "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
   ];
 
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
+  };
   networking = {
-    firewall.allowedTCPPorts = [80];
     # Use systemd-resolved inside the container
     useHostResolvConf = lib.mkForce false;
   };
