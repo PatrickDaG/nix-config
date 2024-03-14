@@ -337,7 +337,7 @@ in {
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
     ];
     ports = [
-      "2283:3001/tcp"
+      "3000:3001/tcp"
     ];
     cmd = ["start.sh" "immich"];
     dependsOn = [

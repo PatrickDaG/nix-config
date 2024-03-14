@@ -7,231 +7,88 @@
   nodes,
   ...
 }: let
-  adguardhomedomain = "adguardhome.${config.secrets.secrets.global.domains.web}";
-  forgejoDomain = "git.${config.secrets.secrets.global.domains.web}";
-  immichdomain = "immich.${config.secrets.secrets.global.domains.web}";
-  nextclouddomain = "nc.${config.secrets.secrets.global.domains.web}";
-  ollamadomain = "ollama.${config.secrets.secrets.global.domains.web}";
-  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
-  ttrssdomain = "rss.${config.secrets.secrets.global.domains.web}";
-  vaultwardendomain = "pw.${config.secrets.secrets.global.domains.web}";
-  spotifydomain = "sptfy.${config.secrets.secrets.global.domains.web}";
-  apispotifydomain = "apisptfy.${config.secrets.secrets.global.domains.web}";
-  kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
+  domainOf = hostName: let
+    domains = {
+      adguardhome = "adguardhome";
+      forgejo = "git";
+      immich = "immich";
+      nextcloud = "nc";
+      ollama = "ollama";
+      paperless = "ppl";
+      ttrss = "rss";
+      vaultwarden = "pw";
+      spotify = "sptfy";
+      apispotify = "apisptfy";
+      kanidm = "auth";
+    };
+  in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   ipOf = hostName: lib.net.cidr.host config.secrets.secrets.global.net.ips."${config.guests.${hostName}.nodeName}" config.secrets.secrets.global.net.privateSubnetv4;
 in {
-  services.nginx = {
-    enable = true;
-    recommendedSetup = true;
-    upstreams.vaultwarden = {
-      servers."${ipOf "vaultwarden"}:3000" = {};
-
-      extraConfig = ''
-        zone vaultwarden 64k ;
-        keepalive 5 ;
-      '';
-    };
-
-    virtualHosts.${vaultwardendomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://vaultwarden";
-        proxyWebsockets = true;
-        X-Frame-Options = "SAMEORIGIN";
+  services.nginx = let
+    blockOf = hostName: {
+      virtualHostExtraConfig ? "",
+      maxBodySize ? "500M",
+      port ? 3000,
+    }: {
+      upstreams.${hostName} = {
+        servers."${ipOf hostName}:${toString port}" = {};
+        extraConfig = ''
+          zone ${hostName} 64k ;
+          keepalive 5 ;
+        '';
       };
-      extraConfig = ''
-        client_max_body_size 1G ;
-      '';
-    };
-
-    upstreams.forgejo = {
-      servers."${ipOf "forgejo"}:3000" = {};
-
-      extraConfig = ''
-        zone forgejo 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${forgejoDomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://forgejo";
-        proxyWebsockets = true;
+      virtualHosts.${domainOf hostName} = {
+        forceSSL = true;
+        useACMEHost = "web";
+        locations."/" = {
+          proxyPass = "http://${hostName}";
+          proxyWebsockets = true;
+          X-Frame-Options = "SAMEORIGIN";
+        };
+        extraConfig =
+          ''
+            client_max_body_size ${maxBodySize} ;
+          ''
+          + virtualHostExtraConfig;
       };
-      extraConfig = ''
-        client_max_body_size 2G ;
-      '';
     };
-
-    upstreams.immich = {
-      servers."${ipOf "immich"}:2283" = {};
-
-      extraConfig = ''
-        zone immich 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${immichdomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://immich";
-        proxyWebsockets = true;
-      };
-      extraConfig = ''
-        client_max_body_size 5G ;
-      '';
-    };
-
-    upstreams.ollama = {
-      servers."${ipOf "ollama"}:3000" = {};
-
-      extraConfig = ''
-        zone ollama 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${ollamadomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://ollama";
-        proxyWebsockets = true;
-      };
-
-      extraConfig = ''
+  in
+    {
+      enable = true;
+      recommendedSetup = true;
+    }
+    // blockOf "vaultwarden" {maxBodySize = "1G";}
+    // blockOf "forgejo" {maxBodySize = "1G";}
+    // blockOf "immich" {maxBodySize = "5G";}
+    // blockOf "ollama" {
+      maxBodySize = "5G";
+      virtualHostExtraConfig = ''
         allow ${config.secrets.secrets.global.net.privateSubnetv4};
         allow ${config.secrets.secrets.global.net.privateSubnetv6};
-        deny all;
+        deny all ;
       '';
-    };
-
-    upstreams.adguardhome = {
-      servers."${ipOf "adguardhome"}:3000" = {};
-
-      extraConfig = ''
-        zone adguardhome 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${adguardhomedomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://adguardhome";
-        proxyWebsockets = true;
-      };
-      extraConfig = ''
+    }
+    // blockOf "adguardhome" {
+      virtualHostExtraConfig = ''
         allow ${config.secrets.secrets.global.net.privateSubnetv4};
         allow ${config.secrets.secrets.global.net.privateSubnetv6};
-        deny all;
+        deny all ;
       '';
-    };
-
-    upstreams.paperless = {
-      servers."${ipOf "paperless"}:3000" = {};
-
-      extraConfig = ''
-        zone paperless 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${paperlessdomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/" = {
-        proxyPass = "http://paperless";
-        proxyWebsockets = true;
-        X-Frame-Options = "SAMEORIGIN";
-      };
-      extraConfig = ''
-        client_max_body_size 4G ;
-      '';
-    };
-
-    upstreams.tt-rss = {
-      servers."${ipOf "ttrss"}:80" = {};
-
-      extraConfig = ''
-        zone tt-rss 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${ttrssdomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/".proxyPass = "http://tt-rss";
-      extraConfig = ''
-      '';
-    };
-
-    upstreams.spotify = {
-      servers."${ipOf "yourspotify"}:80" = {};
-
-      extraConfig = ''
-        zone spotify 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${spotifydomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/".proxyPass = "http://spotify";
-      extraConfig = ''
-      '';
-    };
-    upstreams.apispotify = {
-      servers."${ipOf "yourspotify"}:3000" = {};
-
-      extraConfig = ''
-        zone spotify 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${apispotifydomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/".proxyPass = "http://apispotify";
-      extraConfig = ''
-      '';
-    };
-
-    upstreams.nextcloud = {
-      servers."${ipOf "nextcloud"}:80" = {};
-
-      extraConfig = ''
-        zone nextcloud 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${nextclouddomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/".proxyPass = "http://nextcloud";
-      extraConfig = ''
-        client_max_body_size 4G ;
-      '';
-    };
-
-    upstreams.kanidm = {
-      servers."${ipOf "kanidm"}:3000" = {};
-
-      extraConfig = ''
-        zone kanidm 64k ;
-        keepalive 5 ;
-      '';
-    };
-    virtualHosts.${kanidmdomain} = {
-      forceSSL = true;
-      useACMEHost = "web";
-      locations."/".proxyPass = "https://kanidm";
-      extraConfig = ''
+    }
+    // blockOf "paperless" {maxBodySize = "5G";}
+    // blockOf "ttrss" {port = 80;}
+    // blockOf "yourspotify" {port = 80;}
+    // blockOf "apispotify" {}
+    // blockOf "nextcloud" {
+      maxBodySize = "5G";
+      port = 80;
+    }
+    // blockOf "kanidm" {
+      virtualHostExtraConfig = ''
         proxy_ssl_verify off ;
       '';
     };
-  };
+
   guests = let
     mkGuest = guestName: {
       enablePanzer ? false,
@@ -257,6 +114,7 @@ in {
         pool = "renaultft";
         dataset = "safe/guests/${guestName}";
       };
+      # kinda not necesarry should be removed on next reimaging
       zfs."/bunker" = lib.mkIf enableBunker {
         pool = "panzer";
         dataset = "bunker/guests/${guestName}";
