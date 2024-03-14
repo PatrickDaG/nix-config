@@ -38,6 +38,7 @@ in {
       locations."/" = {
         proxyPass = "http://vaultwarden";
         proxyWebsockets = true;
+        X-Frame-Options = "SAMEORIGIN";
       };
       extraConfig = ''
         client_max_body_size 1G ;
