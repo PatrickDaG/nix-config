@@ -67,6 +67,7 @@ in {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.paperless.port];
   };
+
   age.secrets.paperless-admin-passwd = {
     generator.script = "alnum";
     mode = "440";

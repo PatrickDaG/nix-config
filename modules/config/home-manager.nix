@@ -2,6 +2,7 @@
   stateVersion,
   inputs,
   pkgs,
+  nodes,
   ...
 }: {
   imports = [./impermanence/users.nix];
@@ -10,6 +11,7 @@
     useUserPackages = true;
     verbose = true;
     extraSpecialArgs = {
+      inherit nodes;
       spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
     };
     sharedModules = [

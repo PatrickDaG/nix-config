@@ -38,6 +38,13 @@
       ];
     };
   };
+  wireguard.samba-patrick.server = {
+    host = config.secrets.secrets.global.domains.web;
+    port = 51830;
+    reservedAddresses = ["10.43.0.0/20" "fd00:1765::/112"];
+    openFirewall = true;
+  };
+
   services.samba = {
     enable = true;
     securityType = "user";
@@ -62,7 +69,7 @@
       # Deny access to all hosts by default.
       "hosts deny = 0.0.0.0/0"
       # Allow access to local network
-      "hosts allow = 192.168.178. 127.0.0.1 10.0.0. localhost"
+      "hosts allow = 192.168.178. 127.0.0.1 10.43.0. localhost"
 
       "guest account = nobody"
       "map to guest = bad user"

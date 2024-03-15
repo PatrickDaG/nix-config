@@ -21,4 +21,5 @@
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = ["lan01"];
+  wireguard.samba-patrick.client.via = "elisabeth-samba";
 }

@@ -1,6 +1,10 @@
-{nixosConfig, ...}: {
+{
+  nixosConfig,
+  nodes,
+  ...
+}: {
   home.smb = let
-    address = "192.168.178.12";
+    address = nodes.elisabeth-samba.config.wireguard.samba-patrick.ipv4;
     credentials = nixosConfig.age.secrets.smb-creds.path;
   in [
     {
