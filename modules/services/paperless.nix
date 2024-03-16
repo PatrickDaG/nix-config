@@ -85,7 +85,7 @@ in {
       PAPERLESS_URL = "https://${paperlessdomain}";
       PAPERLESS_ALLOWED_HOSTS = paperlessdomain;
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${paperlessdomain}";
-      PAPERLESS_TRUSTED_PROXIES = lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4;
+      PAPERLESS_TRUSTED_PROXIES = nodes.elisabeth.config.wireguard.elisabeth.ipv4;
 
       PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
 
