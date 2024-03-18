@@ -40,12 +40,6 @@
       ];
       dhcp.enabled = false;
       ratelimit = 60;
-      users = [
-        {
-          name = "patrick";
-          password = "$2y$10$cmdb7U/qbtUvrcFeKQvr6.BPrm/UwCiP.gBW2jG0Aq24hnzd2co4m";
-        }
-      ];
       filters = [
         {
           name = "AdGuard DNS filter";

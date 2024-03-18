@@ -41,6 +41,11 @@ in {
       mode = "440";
       group = "kanidm";
     };
+    oauth2-proxy = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-forgejo = {
       generator.script = "alnum";
       mode = "440";
@@ -120,6 +125,21 @@ in {
       };
       groups."forgejo.admins" = {
         members = ["administrator"];
+      };
+
+      systems.oauth2.oauth2-proxy = {
+        displayName = "Oauth2-Proxy";
+        originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
+        basicSecretFile = config.age.secrets.oauth2-proxy.path;
+        scopeMaps."adguardhome.access" = ["openid" "email" "profile"];
+        preferShortUsername = true;
+        claimMaps.groups = {
+          joinType = "array";
+          valuesByGroup."adguardhome.access" = ["adguardhome_access"];
+        };
+      };
+
+      groups."adguardhome.access" = {
       };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";

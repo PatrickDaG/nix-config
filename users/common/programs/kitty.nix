@@ -13,6 +13,11 @@
       # Use xterm-256color because copying terminfo-kitty is painful.
       term = "xterm-256color";
 
+      # make kitty go brrrr
+      repaint_delay = 8;
+      input_delay = 0;
+      sync_to_monitor = "no";
+
       # Do not wait for inherited child processes.
       close_on_child_death = "yes";
 
