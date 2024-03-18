@@ -31,10 +31,12 @@
       };
     };
     fugitive.enable = true;
+    neogit.enable = true;
     notify.enable = true;
-    rust-tools = {
+    rainbow-delimiters.enable = true;
+    rustaceanvim = {
       enable = true;
-      server.check.command = "clippy";
+      server.settings.files.excludeDirs = [".direnv"];
     };
     indent-blankline = {
       enable = true;

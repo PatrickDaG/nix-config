@@ -34,6 +34,8 @@
         };
         lspBuf = {
           "gd" = "definition";
+          "gi" = "implementation";
+          "<leader>h" = "hover";
           "<leader>r" = "rename";
           "<leader>f" = "format";
           "<leader>a" = "code_action";
@@ -51,16 +53,6 @@
         pyright.enable = true;
         texlab.enable = true;
         java-language-server.enable = true;
-        rust-analyzer = {
-          enable = true;
-          settings = {
-            checkOnSave = true;
-            check.command = "clippy";
-          };
-          # cargo and rustc are managed per project with their own flakes.
-          installCargo = false;
-          installRustc = false;
-        };
         nil_ls = {
           enable = true;
           settings = {

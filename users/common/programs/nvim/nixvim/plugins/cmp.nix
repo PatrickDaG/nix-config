@@ -23,14 +23,14 @@
       enable = true;
       settings = {
         sources = [
-          {name = "luasnip";}
+          #{name = "luasnip";}
           {name = "nvim_lsp_signature_help";}
           {name = "nvim_lsp";}
-          {name = "buffer";}
+          {name = "nvim_lsp_document_symbol";}
+          {name = "treesitter";}
           {name = "path";}
           {name = "calc";}
           {name = "emoji";}
-          {name = "nvim_lua";}
         ];
         snippet.expand =
           /*
