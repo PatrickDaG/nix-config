@@ -5,6 +5,7 @@
     zsh-histdb = super.callPackage ./zsh-histdb.nix {};
     your_spotify = super.callPackage ./your_spotify.nix {};
     deploy = super.callPackage ./deploy.nix {};
+    netbird-dashboard = super.callPackage ./netbird-dashboard {};
     minify = super.callPackage ./minify {};
     mongodb-bin = super.callPackage ./mongodb-bin.nix {};
     awakened-poe-trade = super.callPackage ./awakened-poe-trade.nix {};
