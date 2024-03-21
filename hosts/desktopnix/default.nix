@@ -57,4 +57,6 @@
   nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
     "nix-2.16.2"
   ];
+
+  services.netbird.enable = true;
 }

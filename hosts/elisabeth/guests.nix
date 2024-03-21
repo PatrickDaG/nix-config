@@ -21,6 +21,7 @@
       apispotify = "apisptfy";
       kanidm = "auth";
       oauth2-proxy = "oauth2";
+      netbird = "netbird";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -61,6 +62,49 @@ in {
       {
         enable = true;
         recommendedSetup = true;
+        upstreams.netbird = {
+          servers."${ipOf "netbird"}:80" = {};
+          extraConfig = ''
+            zone netbird 64k ;
+            keepalive 5 ;
+          '';
+        };
+        upstreams.netbird-mgmt = {
+          servers."${ipOf "netbird"}:3000" = {};
+          extraConfig = ''
+            zone netbird 64k ;
+            keepalive 5 ;
+          '';
+        };
+        virtualHosts.${domainOf "netbird"} = {
+          forceSSL = true;
+          useACMEHost = "web";
+          locations = {
+            "/" = {
+              proxyPass = "http://netbird";
+              proxyWebsockets = true;
+              X-Frame-Options = "SAMEORIGIN";
+            };
+            "/signalexchange.SignalExchange/".extraConfig = ''
+              grpc_pass grpc://${ipOf "netbird"}:3001;
+              grpc_read_timeout 1d;
+              grpc_send_timeout 1d;
+              grpc_socket_keepalive on;
+            '';
+
+            "/api".proxyPass = "http://netbird-mgmt";
+
+            "/management.ManagementService/".extraConfig = ''
+              grpc_pass grpc://${ipOf "netbird"}:3000;
+              grpc_read_timeout 1d;
+              grpc_send_timeout 1d;
+              grpc_socket_keepalive on;
+            '';
+          };
+          extraConfig = ''
+            client_max_body_size 500M ;
+          '';
+        };
       }
       (blockOf "vaultwarden" {maxBodySize = "1G";})
       (blockOf "forgejo" {maxBodySize = "1G";})
@@ -154,7 +198,7 @@ in {
         }
       ])
       (blockOf "paperless" {maxBodySize = "5G";})
-      (blockOf "ttrss" {port = 80;})
+      #(blockOf "ttrss" {port = 80;})
       (blockOf "yourspotify" {port = 80;})
       (blockOf "apispotify" {
         port = 80;
@@ -262,8 +306,9 @@ in {
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
-    // mkContainer "ttrss" {}
+    #// mkContainer "ttrss" {}
     // mkContainer "yourspotify" {}
+    // mkContainer "netbird" {}
     // mkContainer "kanidm" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;

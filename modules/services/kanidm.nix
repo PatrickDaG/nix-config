@@ -119,6 +119,8 @@ in {
         scopeMaps."immich.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
       };
+      groups."netbird.access" = {
+      };
 
       groups."forgejo.access" = {
         members = ["forgejo.admins"];
