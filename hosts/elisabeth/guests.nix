@@ -103,6 +103,8 @@ in {
           };
           extraConfig = ''
             client_max_body_size 500M ;
+            client_header_timeout 1d;
+            client_body_timeout 1d;
           '';
         };
       }

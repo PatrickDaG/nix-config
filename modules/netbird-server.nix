@@ -117,10 +117,11 @@ in {
           };
           HttpConfig = {
             Address = "0.0.0.0:${toString cfg.port}";
+            AuthAudience = "netbird";
             #"AuthIssuer" = "$NETBIRD_AUTH_AUTHORITY";
             #"AuthAudience" = "$NETBIRD_AUTH_AUDIENCE";
             #"AuthKeysLocation" = "$NETBIRD_AUTH_JWT_CERTS";
-            AuthUserIDClaim = "sub";
+            AuthUserIDClaim = "preferred_username";
             #"CertFile" = "$NETBIRD_MGMT_API_CERT_FILE";
             #"CertKey" = "$NETBIRD_MGMT_API_CERT_KEY_FILE";
             #"IdpSignKeyRefreshEnabled" = "$NETBIRD_MGMT_IDP_SIGNKEY_REFRESH";
@@ -229,7 +230,7 @@ in {
             } \
               --idp-sign-key-refresh-enabled \
               --port ${builtins.toString cfg.port} \
-              --log-file consolef
+              --log-file console
           '';
           # TODO add extraCOmmandLine option
           Restart = "always";

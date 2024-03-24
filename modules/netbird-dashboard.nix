@@ -55,8 +55,8 @@ in {
           USE_AUTH0 = false; #${USE_AUTH0:-true}
           AUTH_SUPPORTED_SCOPES = "openid profile email"; #${AUTH_SUPPORTED_SCOPES:-openid profile email api offline_access email_verified}
 
-          NETBIRD_MGMT_API_ENDPOINT = config.services.netbird-server.domain; #$(echo $NETBIRD_MGMT_API_ENDPOINT | sed -E 's/(:80|:443)$//')
-          NETBIRD_MGMT_GRPC_API_ENDPOINT = config.services.netbird-server.domain; #${NETBIRD_MGMT_GRPC_API_ENDPOINT}
+          NETBIRD_MGMT_API_ENDPOINT = "https://${config.services.netbird-server.domain}"; #$(echo $NETBIRD_MGMT_API_ENDPOINT | sed -E 's/(:80|:443)$//')
+          NETBIRD_MGMT_GRPC_API_ENDPOINT = "https://${config.services.netbird-server.domain}"; #${NETBIRD_MGMT_GRPC_API_ENDPOINT}
           #NETBIRD_HOTJAR_TRACK_ID=${NETBIRD_HOTJAR_TRACK_ID}
           #NETBIRD_GOOGLE_ANALYTICS_ID=${NETBIRD_GOOGLE_ANALYTICS_ID}
           NETBIRD_TOKEN_SOURCE = "idToken";
@@ -97,9 +97,15 @@ in {
             locations = {
               "/" = {
                 root = "${deriv}/";
-                tryFiles = "$uri /index.html";
+                tryFiles = "$uri $uri.html $uri/ =404";
               };
             };
+            extraConfig = ''
+              error_page 404 /404.html;
+              location = /404.html {
+                 internal;
+              }
+            '';
           };
         };
       };

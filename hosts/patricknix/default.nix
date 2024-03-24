@@ -40,8 +40,10 @@
   };
   hidpi = true;
   services.xserver = {
-    layout = "de";
-    xkbVariant = "bone";
+    xkb = {
+      layout = "de";
+      variant = "bone";
+    };
     libinput = {
       touchpad = lib.mkForce {
         accelSpeed = "0.5";
@@ -54,4 +56,5 @@
   nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
     "nix-2.16.2"
   ];
+  services.netbird.enable = true;
 }

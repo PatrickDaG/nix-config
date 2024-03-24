@@ -25,31 +25,41 @@
     # TODO remove
     oidcConfigEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/.well-known/openid-configuration";
     singleAccountModeDomain = "netbird.patrick";
+    # todo disabel metrics
     settings = {
       HttpConfig = {
-        AuthIssuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
-        AuthKeysLocation = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/public_key.jwk";
+        #AuthIssuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
+        #AuthKeysLocation = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/public_key.jwk";
+        AuthAudience = "netbird";
       };
       # Seems to be only useful for idp that netbird supports
       IdpManagerConfig.ClientConfig = {
-        Issuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
-        TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
+        #Issuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
+        #TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
       };
-      DeviceAuthorizationFlow = {
-        Provider = "none";
-        ProviderConfig = {
-          AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
-          ClientID = "netbird";
-          #ClientSecret = "";
-          TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
-          #RedirectURLs = ["http://localhost:53000"];
-        };
-      };
+      #DeviceAuthorizationFlow = {
+      #  Provider = "none";
+      #  ProviderConfig = {
+      #    AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
+      #    ClientID = "netbird";
+      #    #ClientSecret = "";
+      #    TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
+      #    #RedirectURLs = ["http://localhost:53000"];
+      #  };
+      #};
       PKCEAuthorizationFlow.ProviderConfig = {
-        AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
+        #AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
       };
     };
   };
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/netbird-mgmt";
+      mode = "440";
+      user = "netbird";
+    }
+  ];
+  services.nginx.recommendedSetup = true;
   services.coturn = {
     enable = true;
 
