@@ -16,7 +16,6 @@
     domain = "netbird.${config.secrets.secrets.global.domains.web}";
     settings = {
       AUTH_AUTHORITY = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
-      AUTH_CLIENT_ID = "netbird";
     };
   };
   services.netbird-server = {
@@ -25,32 +24,6 @@
     # TODO remove
     oidcConfigEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/.well-known/openid-configuration";
     singleAccountModeDomain = "netbird.patrick";
-    # todo disabel metrics
-    settings = {
-      HttpConfig = {
-        #AuthIssuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
-        #AuthKeysLocation = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/public_key.jwk";
-        AuthAudience = "netbird";
-      };
-      # Seems to be only useful for idp that netbird supports
-      IdpManagerConfig.ClientConfig = {
-        #Issuer = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
-        #TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
-      };
-      #DeviceAuthorizationFlow = {
-      #  Provider = "none";
-      #  ProviderConfig = {
-      #    AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
-      #    ClientID = "netbird";
-      #    #ClientSecret = "";
-      #    TokenEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
-      #    #RedirectURLs = ["http://localhost:53000"];
-      #  };
-      #};
-      PKCEAuthorizationFlow.ProviderConfig = {
-        #AuthorizationEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2/";
-      };
-    };
   };
   environment.persistence."/persist".directories = [
     {
@@ -59,20 +32,4 @@
       user = "netbird";
     }
   ];
-  services.nginx.recommendedSetup = true;
-  services.coturn = {
-    enable = true;
-
-    realm = "netbird.${config.secrets.secrets.global.domains.web}";
-    lt-cred-mech = true;
-    no-cli = true;
-
-    extraConfig = ''
-      fingerprint
-
-      user=turn:netbird
-      no-software-attribute
-      external-ip=87.170.9.213
-    '';
-  };
 }

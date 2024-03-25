@@ -31,11 +31,17 @@ in {
       default = "localhost";
     };
     settings = mkOption {
+      description = ''
+        An attr set that will be used as environment to build the dashboard.
+        Any values that you set here will be templated into the frontend
+        and thas be freely available for anyone that can reach your website.
+        The exact values sadly aren't documented anywhere. An starting point
+        when searching for valid values is this [script](https://github.com/netbirdio/dashboard/blob/main/docker/init_react_envs.sh)
+        The only mandatory value is 'AUTH_AUTHORITY' as we cannot set a default value here.
+      '';
       type = types.submodule {
         freeformType = types.attrsOf (types.oneOf [types.str types.bool]);
         config = {
-          #AUTH_AUTHORITY = ""; #${AUTH_AUTHORITY:-https://$AUTH0_DOMAIN}
-          #AUTH_CLIENT_ID = ""; #${AUTH_CLIENT_ID:-$AUTH0_CLIENT_ID}
           # Due to how the backend and frontend work this secret will be templated into the backend
           # and then served statically from your website
           # This enables you to login without the normally needed indirection through the backend
@@ -48,19 +54,18 @@ in {
           # To actually do something one still needs to have login
           # data and this secret so this being public will not
           # suffice for anything just decreasing security
-          AUTH_CLIENT_SECRET = ""; #${AUTH_CLIENT_SECRET}
-          AUTH_AUDIENCE = "netbird"; #${AUTH_AUDIENCE:-$AUTH0_AUDIENCE}
-          #AUTH_REDIRECT_URI=${AUTH_REDIRECT_URI}
-          #AUTH_SILENT_REDIRECT_URI=${AUTH_SILENT_REDIRECT_URI}
-          USE_AUTH0 = false; #${USE_AUTH0:-true}
-          AUTH_SUPPORTED_SCOPES = "openid profile email"; #${AUTH_SUPPORTED_SCOPES:-openid profile email api offline_access email_verified}
+          AUTH_CLIENT_SECRET = "";
+          AUTH_CLIENT_ID = "netbird";
+          # AUTH_AUDIENCE must be set for your devices to be able to log in
+          AUTH_AUDIENCE = "netbird";
+          USE_AUTH0 = false;
+          AUTH_SUPPORTED_SCOPES = "openid profile email";
 
-          NETBIRD_MGMT_API_ENDPOINT = "https://${config.services.netbird-server.domain}"; #$(echo $NETBIRD_MGMT_API_ENDPOINT | sed -E 's/(:80|:443)$//')
-          NETBIRD_MGMT_GRPC_API_ENDPOINT = "https://${config.services.netbird-server.domain}"; #${NETBIRD_MGMT_GRPC_API_ENDPOINT}
-          #NETBIRD_HOTJAR_TRACK_ID=${NETBIRD_HOTJAR_TRACK_ID}
-          #NETBIRD_GOOGLE_ANALYTICS_ID=${NETBIRD_GOOGLE_ANALYTICS_ID}
+          # While you could override this to use http I would recommend to not do that
+          # as it will greatly impact the security of your application
+          NETBIRD_MGMT_API_ENDPOINT = "https://${config.services.netbird-server.domain}";
+          NETBIRD_MGMT_GRPC_API_ENDPOINT = "https://${config.services.netbird-server.domain}";
           NETBIRD_TOKEN_SOURCE = "idToken";
-          #NETBIRD_DRAG_QUERY_PARAMS=${NETBIRD_DRAG_QUERY_PARAMS:-false}
         };
       };
     };

@@ -21,6 +21,7 @@ in {
   options.services.netbird-server = {
     enable = mkEnableOption "netbird, a self hosted wireguard VPN";
     package = mkPackageOption pkgs "netbird" {};
+    enableCoturn = mkEnableOption "the coturn service for running the TURN/STUN server";
     domain = mkOption {
       description = "The domain of your netbird instance";
     };
@@ -72,6 +73,20 @@ in {
     };
     settings = mkOption {
       default = {};
+      description = ''
+        This will be converted to json and used as the management config.
+        Sadly the exact configuration is undocumented there only exists
+        this [template](https://github.com/netbirdio/netbird/blob/main/infrastructure_files/management.json.tmpl)
+        The default values are usable, for a normal setup you don't need to set anything here.
+        Be advised that any secret you set in here will be in the nix store
+        and thus world readable. For compliant setups you don't need these secrets
+        as you should use a oidc public client, some client, e.g. google do not support
+        this without a secret, which is why you sometimes need to set a secret here.
+        This is not a problem as this secret will be exposed on your server publicly and only allows
+        client to initiate a authorization flow.
+        Even though the template contains oidc values you don't need to set any except for the
+        ConfigEndpoint as netbird will fetch the rest.
+      '';
       type = types.submodule {
         freeformType = formatType.type;
         config = {
@@ -118,53 +133,24 @@ in {
           HttpConfig = {
             Address = "0.0.0.0:${toString cfg.port}";
             AuthAudience = "netbird";
-            #"AuthIssuer" = "$NETBIRD_AUTH_AUTHORITY";
-            #"AuthAudience" = "$NETBIRD_AUTH_AUDIENCE";
-            #"AuthKeysLocation" = "$NETBIRD_AUTH_JWT_CERTS";
             AuthUserIDClaim = "preferred_username";
-            #"CertFile" = "$NETBIRD_MGMT_API_CERT_FILE";
-            #"CertKey" = "$NETBIRD_MGMT_API_CERT_KEY_FILE";
-            #"IdpSignKeyRefreshEnabled" = "$NETBIRD_MGMT_IDP_SIGNKEY_REFRESH";
             OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
           };
           IdpManagerConfig = {
             ManagerType = "none";
-            ClientConfig = {
-              #"Issuer" = "$NETBIRD_AUTH_AUTHORITY";
-              #TokenEndpoint = "$NETBIRD_AUTH_TOKEN_ENDPOINT";
-              ClientID = "netbird-manager";
-              ClientSecret = lib.trace "oho wer stiehlt meine zugäneg zuerts" "$NETBIRD_IDP_MGMT_CLIENT_SECRET";
-              GrantType = "client_credentials";
-            };
-            #"ExtraConfig" = "$NETBIRD_IDP_MGMT_EXTRA_CONFIG";
-            #"Auth0ClientCredentials" = null;
-            #"AzureClientCredentials" = null;
-            #"KeycloakClientCredentials" = null;
-            #"ZitadelClientCredentials" = null;
           };
           DeviceAuthorizationFlow = {
-            #Provider = "$NETBIRD_AUTH_DEVICE_AUTH_PROVIDER";
             ProviderConfig = {
               Audience = "netbird";
-              #"AuthorizationEndpoint" = "";
-              #"Domain" = "$NETBIRD_AUTH0_DOMAIN";
-              #"ClientID" = "$NETBIRD_AUTH_DEVICE_AUTH_CLIENT_ID";
-              #"ClientSecret" = "";
-              #"TokenEndpoint" = "$NETBIRD_AUTH_TOKEN_ENDPOINT";
-              #"DeviceAuthEndpoint" = "$NETBIRD_AUTH_DEVICE_AUTH_ENDPOINT";
               Scope = "openid profile email";
-              #"UseIDToken" = "$NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN";
-              #"RedirectURLs" = null;
             };
           };
           PKCEAuthorizationFlow = {
             ProviderConfig = {
               Audience = "netbird";
               ClientID = "netbird";
-              ClientSecret = lib.trace "oho bei zo vielen sicherheitzlücken" "";
+              ClientSecret = "";
               Domain = "";
-              #AuthorizationEndpoint = "$NETBIRD_AUTH_PKCE_AUTHORIZATION_ENDPOINT";
-              #TokenEndpoint = "$NETBIRD_AUTH_TOKEN_ENDPOINT";
               Scope = "openid profile email";
               RedirectURLs = ["http://localhost:53000"];
               UseIDToken = true;
@@ -175,6 +161,24 @@ in {
     };
   };
   config = mkIf cfg.enable {
+    services.coturn = mkIf cfg.enableCoturn {
+      enable = true;
+
+      realm = cfg.dorain;
+      lt-cred-mech = true;
+      no-cli = true;
+
+      # Official documentation says that external-ip has to be
+      # an IP which is not true as [this](https://github.com/coturn/coturn/blob/9b1cca1fbe909e7cc7c7ac28865f9c190af3515b/src/client/ns_turn_ioaddr.c#L234)
+      # will resolve and dns name as well
+      extraConfig = ''
+        fingerprint
+
+        user=${cfg.turn.userName}:${cfg.turn.password}
+        no-software-attribute
+        external-ip=${cfg.domain}
+      '';
+    };
     systemd.services = {
       netbird-signal = {
         after = ["network.target"];
@@ -222,7 +226,7 @@ in {
             ${cfg.package}/bin/netbird-mgmt management \
               --config ${configFile} \
               --datadir /var/lib/netbird-mgmt/data \
-              --disable-anonymous-metrics \
+              --disable-anonymous-metrics=true \
               ${
               if cfg.singleAccountModeDomain == null
               then "--disable-single-account-mode"
