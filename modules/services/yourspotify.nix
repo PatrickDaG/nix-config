@@ -13,19 +13,14 @@
     mode = "440";
     rekeyFile = config.node.secretsDir + "/spotifySecret.age";
   };
-  age.secrets.spotifyPublic = {
-    owner = "root";
-    mode = "440";
-    rekeyFile = config.node.secretsDir + "/spotifyPublic.age";
-  };
   services.your_spotify = {
     enable = true;
     spotifySecretFile = config.age.secrets.spotifySecret.path;
-    spotifyPublicFile = config.age.secrets.spotifyPublic.path;
     settings = {
+      SPOTIFY_PUBLIC = "5397a3f2a75949459da343a5e7851bd9";
       CLIENT_ENDPOINT = "https://sptfy.${config.secrets.secrets.global.domains.web}";
       API_ENDPOINT = "https://apisptfy.${config.secrets.secrets.global.domains.web}";
-      MONGO_NO_ADMIN_RIGHTS = false;
+      MONGO_NO_ADMIN_RIGHTS = "false";
     };
     enableLocalDB = true;
     nginxVirtualHost = "sptfy.${config.secrets.secrets.global.domains.web}";

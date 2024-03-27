@@ -200,10 +200,10 @@ in {
         }
       ])
       (blockOf "paperless" {maxBodySize = "5G";})
-      #(blockOf "ttrss" {port = 80;})
+      (blockOf "ttrss" {port = 80;})
       (blockOf "yourspotify" {port = 80;})
       (blockOf "apispotify" {
-        port = 80;
+        port = 3000;
         upstream = "yourspotify";
       })
       (blockOf "nextcloud" {
@@ -308,7 +308,7 @@ in {
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
-    #// mkContainer "ttrss" {}
+    // mkContainer "ttrss" {}
     // mkContainer "yourspotify" {}
     // mkContainer "netbird" {}
     // mkContainer "kanidm" {}

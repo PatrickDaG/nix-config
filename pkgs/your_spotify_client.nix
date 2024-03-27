@@ -1,19 +1,20 @@
 {
-  mkYarnPackage,
-  makeWrapper,
+  apiEndpoint ? "http://localhost:3000",
   fetchYarnDeps,
-  apiEndpoint ? "localhost:8080",
+  your_spotify,
+  mkYarnPackage,
+  prefetch-yarn-deps,
   src,
   version,
   yarn,
-  prefetch-yarn-deps,
 }:
 mkYarnPackage rec {
   inherit version src;
   pname = "your_spotify_client";
+  name = "your_spotify_client-${version}";
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-pj6owoEPx9gdtFvXF8E89A+Thhe/7m0+OJU6Ttc6ooA=";
+    hash = "sha256-5SgknaRVzgO2Dzc8MhAaM8UERWMv+PrItzevoWHbWnA=";
   };
   configurePhase = ''
     runHook preConfigure
@@ -29,18 +30,26 @@ mkYarnPackage rec {
   buildPhase = ''
     runHook preBuild
     pushd ./apps/client/
-    pwd
     yarn --offline run build
+    export API_ENDPOINT="${apiEndpoint}"
+    substituteInPlace scripts/run/variables.sh --replace-quiet '/app/apps/client/' "./"
+
+    chmod +x ./scripts/run/variables.sh
+    patchShebangs --build ./scripts/run/variables.sh
+
+    ./scripts/run/variables.sh
+
     popd
     runHook postBuild
   '';
-  nativeBuildInputs = [makeWrapper yarn prefetch-yarn-deps];
+  nativeBuildInputs = [yarn prefetch-yarn-deps];
 
   installPhase = ''
     mkdir -p $out
     cp -r ./apps/client/build/* $out
-    substituteInPlace $out/variables-template.js --replace-quiet '__API_ENDPOINT__' "${apiEndpoint}"
-    mv $out/variables-template.js $out/variables.js
   '';
   doDist = false;
+  meta = {
+    inherit (your_spotify.meta) homepage changelog description license maintainers;
+  };
 }

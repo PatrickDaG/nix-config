@@ -17,6 +17,7 @@
     mkPackageOption
     optionalAttrs
     types
+    mkDefault
     ;
   cfg = config.services.your_spotify;
 
@@ -32,7 +33,7 @@
   configFile = pkgs.writeText "your_spotify.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 in {
   options.services.your_spotify = let
-    inherit (types) nullOr port str path bool package;
+    inherit (types) nullOr port str path package;
   in {
     enable = mkEnableOption "your_spotify";
 
@@ -51,35 +52,35 @@ in {
 
     clientPackage = mkOption {
       type = package;
-      default = cfg.package.client.override {apiEndpoint = cfg.settings.API_ENDPOINT;};
       description = "Client package to use.";
-    };
-    spotifyPublicFile = mkOption {
-      type = path;
-      description = ''
-        The public key of your Spotify application
-        [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application)
-      '';
     };
 
     spotifySecretFile = mkOption {
       type = path;
       description = ''
-        The secret key of your Spotify application
-        [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application)
-        Note that you may want to set this using the `environmentFile` config option to prevent
-        your secret from being world-readable in the nix store.
+        A file containing the secret key of your Spotify application.
+        Refer to: [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application).
       '';
     };
 
     settings = mkOption {
+      description = ''
+        Your Spotify Configuration. Refer to [Your Spotify](https://github.com/Yooooomi/your_spotify) for definitions and values.
+      '';
+      example = lib.literalExpression ''
+        {
+          CLIENT_ENDPOINT = "https://example.com";
+          API_ENDPOINT = "https://api.example.com";
+          SPOTIFY_PUBLIC = "spotify_client_id";
+        }
+      '';
       type = types.submodule {
         freeformType = types.attrsOf types.str;
         options = {
           CLIENT_ENDPOINT = mkOption {
             type = str;
             description = ''
-              The endpoint of your web application
+              The endpoint of your web application.
               Has to include a protocol Prefix (e.g. `http://`)
             '';
             example = "https://your_spotify.example.org";
@@ -93,28 +94,18 @@ in {
               internet.
               Has to include a protocol Prefix (e.g. `http://`)
             '';
-            default = "https://localhost:3000";
+            example = "https://localhost:3000";
           };
-          CORS = mkOption {
-            type = nullOr str;
-            description = ''
-              List of comma-separated origin allowed, or nothing to allow any origin
-            '';
-            default = null;
-          };
-          MAX_IMPORT_CACHESIZE = mkOption {
+          SPOTIFY_PUBLIC = mkOption {
             type = str;
             description = ''
-              The maximum element in the cache when importing data from an outside source,
-              more cache means less requests to Spotify, resulting in faster imports
+              The public client ID of your Spotify application.
+              Refer to: [Creating the Spotify Application](https://github.com/Yooooomi/your_spotify#creating-the-spotify-application)
             '';
-            default = "Infinite";
           };
           MONGO_ENDPOINT = mkOption {
             type = str;
-            description = ''
-              The endpoint of the Mongo database.
-            '';
+            description = ''The endpoint of the Mongo database.'';
             default = "mongodb://localhost:27017/your_spotify";
           };
           PORT = mkOption {
@@ -122,47 +113,19 @@ in {
             description = "The port of the api server";
             default = 3000;
           };
-          TIMEZONE = mkOption {
-            type = str;
-            description = ''
-              The timezone of your stats, only affects read requests since data is saved with UTC time
-            '';
-            default = "Europe/Paris";
-          };
-          LOG_LEVEL = mkOption {
-            type = str;
-            description = ''
-              The log level, debug is useful if you encouter any bugs
-            '';
-            default = "info";
-          };
-          COOKIE_VALIDITY_MS = mkOption {
-            type = str;
-            description = ''
-              Validity time of the authentication cookie
-            '';
-            default = "1h";
-          };
-          MONGO_NO_ADMIN_RIGHTS = mkOption {
-            type = bool;
-            description = ''
-              Do not ask for admin right on the Mongo database
-            '';
-            default = false;
-          };
         };
       };
     };
   };
 
   config = mkIf cfg.enable {
+    services.your_spotify.clientPackage = mkDefault (cfg.package.client.override {apiEndpoint = cfg.settings.API_ENDPOINT;});
     systemd.services.your_spotify = {
       after = ["network.target"];
       script = ''
-        export SPOTIFY_PUBLIC=$(< "$CREDENTIALS_DIRECTORY/SPOTIFY_PUBLIC")
         export SPOTIFY_SECRET=$(< "$CREDENTIALS_DIRECTORY/SPOTIFY_SECRET")
-        ${pkgs.your_spotify}/bin/your_spotify_migrate
-        exec ${pkgs.your_spotify}/bin/your_spotify_server
+        ${lib.getExe' cfg.package "your_spotify_migrate"}
+        exec ${lib.getExe cfg.package}
       '';
       serviceConfig = {
         User = "your_spotify";
@@ -176,26 +139,23 @@ in {
         StateDirectoryMode = "0700";
         Restart = "always";
 
-        LoadCredential = ["SPOTIFY_PUBLIC:${cfg.spotifyPublicFile}" "SPOTIFY_SECRET:${cfg.spotifySecretFile}"];
+        LoadCredential = ["SPOTIFY_SECRET:${cfg.spotifySecretFile}"];
 
         # Hardening
         CapabilityBoundingSet = "";
         LockPersonality = true;
-        #MemoryDenyWriteExecute = true;
-        #NoNewPrivileges = true; # Implied by DynamicUser
+        #MemoryDenyWriteExecute = true; # Leads to coredump because V8 does JIT
         PrivateUsers = true;
-        #PrivateTmp = true; # Implied by DynamicUser
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = false; # breaks bwrap
-        ProtectKernelLogs = false; # breaks bwrap
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
-        ProtectKernelTunables = false; # breaks bwrap
+        ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProcSubset = "all"; # Using "pid" breaks bwrap
+        ProcSubset = "pid";
         ProtectSystem = "strict";
-        #RemoveIPC = true; # Implied by DynamicUser
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -203,7 +163,6 @@ in {
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        #RestrictSUIDSGID = true; # Implied by DynamicUser
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
@@ -218,6 +177,8 @@ in {
       virtualHosts.${cfg.nginxVirtualHost} = {
         root = cfg.clientPackage;
         locations."/".extraConfig = ''
+          add_header Content-Security-Policy "frame-ancestors 'none';" ;
+          add_header X-Content-Type-Options "nosniff" ;
           try_files = $uri $uri/ /index.html ;
         '';
       };
@@ -226,4 +187,5 @@ in {
       enable = true;
     };
   };
+  meta.maintainers = with lib.maintainers; [patrickdag];
 }

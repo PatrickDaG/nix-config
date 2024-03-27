@@ -123,6 +123,34 @@
     };
   };
 
+  wireguard.scrtiny-patrick.server = {
+    host = config.secrets.secrets.global.domains.web;
+    port = 51831;
+    reservedAddresses = ["10.44.0.0/16" "fd00:1766::/112"];
+    openFirewall = true;
+  };
+  services.scrutiny = {
+    enable = true;
+    openFirewall = true;
+    collector = {
+      enable = true;
+      settings.host.id = "elisabeth";
+    };
+  };
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/influxdb2";
+      mode = "0700";
+      user = "influxdb2";
+    }
+  ];
+  environment.persistence."/state".directories = [
+    {
+      directory = "/var/lib/private/scrutiny";
+      mode = "0700";
+    }
+  ];
+
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-panzer".after = ["cryptsetup.target"];

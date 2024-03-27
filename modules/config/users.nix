@@ -32,6 +32,7 @@
     authelia-main = uidGid 222;
     kanidm = uidGid 223;
     oauth2_proxy = uidGid 224;
+    influxdb2 = uidGid 225;
     paperless = uidGid 315;
     systemd-oom = uidGid 300;
     systemd-coredump = uidGid 301;
