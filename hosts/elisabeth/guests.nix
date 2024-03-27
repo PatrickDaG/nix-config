@@ -308,6 +308,7 @@ in {
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
+    // mkContainer "murmur" {}
     // mkContainer "ttrss" {}
     // mkContainer "yourspotify" {}
     // mkContainer "netbird" {}

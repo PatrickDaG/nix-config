@@ -14,6 +14,7 @@
       python3
       jq
       osu-lazer-bin
+      mumble
     ];
   };
 }

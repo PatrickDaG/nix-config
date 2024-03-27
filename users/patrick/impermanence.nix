@@ -12,6 +12,7 @@
         "invokeai"
         ".textgen"
         ".ollama"
+        ".config/Mumble"
 
         # For nextcloud client install
         "Nextcloud"
