@@ -1,5 +1,6 @@
 {
   config,
+  nodes,
   lib,
   ...
 }: {
@@ -43,4 +44,16 @@
   fileSystems."/panzer/state".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-panzer".after = ["cryptsetup.target"];
   boot.initrd.systemd.services."zfs-import-rpool".after = ["cryptsetup.target"];
+
+  wireguard.scrtiny-patrick.client.via = "elisabeth";
+
+  services.scrutiny = {
+    collector = {
+      enable = true;
+      settings = {
+        host.id = "desktopnix";
+        api.endpoint = nodes.elisabeth.config.wireguard.scrtiny-patrick.ipv4;
+      };
+    };
+  };
 }
