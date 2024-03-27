@@ -12,7 +12,7 @@
           type = "gpt";
           partitions = {
             boot = (partEfi "0%" "2GiB") // {device = "${device}-part1";};
-            #(partSwap "swap" "2GiB" "18GiB")
+            swap = (partSwap "2GiB" "18GiB") // {device = "${device}-part2";};
             "rpool_m2-ssd" = (partLuksZfs "m2-ssd" "rpool" "18GiB" "100%") // {device = "${device}-part3";};
           };
         };
