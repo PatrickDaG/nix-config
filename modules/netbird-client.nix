@@ -28,6 +28,7 @@
     port
     str
     submodule
+    bool
     path
     ;
 
@@ -63,9 +64,16 @@ in {
                 '';
               };
 
-              autoStart = mkEnableOption ''                automatically starting this tunnel on startup.
-                              Need a setup key to work.
+              autoStart = mkEnableOption ''
+                automatically starting this tunnel on startup.
+                Needs a setup key to work.
               '';
+
+              userAccess = mkOption {
+                type = bool;
+                description = "Allow unprivileged users access to the control socket";
+                default = false;
+              };
 
               environmentFile = mkOption {
                 type = path;
@@ -143,6 +151,19 @@ in {
         cfg.tunnels
       );
 
+      systemd.tmpfiles.settings."10-netbird-access" = lib.flip lib.mapAttrs' cfg.tunnels (
+        _: {
+          stateDir,
+          userAccess,
+          ...
+        }: (nameValuePair "/run/${stateDir}" {
+          d.mode =
+            if userAccess
+            then "0755"
+            else "0750";
+        })
+      );
+
       systemd.services =
         mapAttrs'
         (
@@ -195,20 +216,20 @@ in {
                 RestrictSUIDSGID = true;
 
                 # Hardening
-                CapabilityBoundingSet = "";
-                PrivateUsers = true;
-                ProtectProc = "invisible";
-                ProcSubset = "pid";
-                RestrictAddressFamilies = [
-                  "AF_INET"
-                  "AF_INET6"
-                  "AF_NETLINK"
-                ];
-                SystemCallArchitectures = "native";
-                SystemCallFilter = [
-                  "@system-service"
-                  "@pkey"
-                ];
+                #CapabilityBoundingSet = "";
+                #PrivateUsers = true;
+                #ProtectProc = "invisible";
+                #ProcSubset = "pid";
+                #RestrictAddressFamilies = [
+                #  "AF_INET"
+                #  "AF_INET6"
+                #  "AF_NETLINK"
+                #];
+                #SystemCallArchitectures = "native";
+                #SystemCallFilter = [
+                #  "@system-service"
+                #  "@pkey"
+                #];
                 UMask = "0077";
               };
 

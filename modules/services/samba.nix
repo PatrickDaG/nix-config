@@ -17,7 +17,7 @@
 
   imports = [../netbird-client.nix];
   services.netbird.tunnels = {
-    samba = {
+    netbird-samba = {
       environment.NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
       autoStart = true;
       port = 56789;
@@ -63,6 +63,8 @@
     openFirewall = true;
   };
 
+  networking.nftables.firewall.zones.untrusted.interfaces = ["samba-patrick" "netbird-samba"];
+
   services.samba = {
     enable = true;
     securityType = "user";
@@ -84,10 +86,8 @@
       # Disable netbios support. We don't need to support browsing since all
       # clients hardcode the host and share names.
       "disable netbios = yes"
-      # Deny access to all hosts by default.
-      "hosts deny = 0.0.0.0/0"
       # Allow access to local network
-      "hosts allow = 192.168.178. 127.0.0.1 10.43.0. localhost"
+      "hosts allow = 192.168.178. 10. localhost"
 
       "guest account = nobody"
       "map to guest = bad user"
@@ -322,15 +322,27 @@
         mode = "0660";
       };
     }));
-  environment.persistence = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
-    lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
-      ${v."#persistRoot"}.directories = [
-        {
-          directory = "${v.path}";
-          user = "${v."force user"}";
-          group = "${v."force group"}";
-          mode = "0770";
-        }
-      ];
-    }));
+  environment.persistence = lib.mkMerge (lib.flatten [
+    (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
+      lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
+        ${v."#persistRoot"}.directories = [
+          {
+            directory = "${v.path}";
+            user = "${v."force user"}";
+            group = "${v."force group"}";
+            mode = "0770";
+          }
+        ];
+      }))
+    (lib.flip lib.mapAttrsToList config.services.netbird.tunnels (
+      _: v: {
+        "/state".directories = [
+          {
+            directory = "/var/lib/${v.stateDir}";
+            mode = "0770";
+          }
+        ];
+      }
+    ))
+  ]);
 }

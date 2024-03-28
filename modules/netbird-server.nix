@@ -222,20 +222,20 @@ in {
           RestrictSUIDSGID = true;
 
           # Hardening
-          CapabilityBoundingSet = "";
-          PrivateUsers = true;
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_NETLINK"
-          ];
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "@pkey"
-          ];
+          #CapabilityBoundingSet = "";
+          #PrivateUsers = true;
+          #ProtectProc = "invisible";
+          #ProcSubset = "pid";
+          #RestrictAddressFamilies = [
+          #  "AF_INET"
+          #  "AF_INET6"
+          #  "AF_NETLINK"
+          #];
+          #SystemCallArchitectures = "native";
+          #SystemCallFilter = [
+          #  "@system-service"
+          #  "@pkey"
+          #];
           UMask = "0077";
         };
         unitConfig = {
