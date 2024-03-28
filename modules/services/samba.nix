@@ -3,10 +3,28 @@
   lib,
   ...
 }: {
+  age.secrets.netbird = {
+    rekeyFile = config.node.secretsDir + "/netbird-env.age";
+    mode = "440";
+  };
+
   services.samba-wsdd = {
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;
   };
+
+  disabledModules = ["services/networking/netbird.nix"];
+
+  imports = [../netbird-client.nix];
+  services.netbird.tunnels = {
+    samba = {
+      environment.NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+      autoStart = true;
+      port = 56789;
+      environmentFile = config.age.secrets.netbird.path;
+    };
+  };
+
   age.secrets.resticpasswd = {
     generator.script = "alnum";
   };

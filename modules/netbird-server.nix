@@ -23,6 +23,7 @@ in {
     package = mkPackageOption pkgs "netbird" {};
     enableCoturn = mkEnableOption "the coturn service for running the TURN/STUN server";
     domain = mkOption {
+      type = types.str;
       description = "The domain of your netbird instance";
     };
     port = mkOption {
@@ -93,7 +94,8 @@ in {
           Stuns = [
             {
               Proto = "udp";
-              Uri = "turn:${cfg.turn.domain}:${toString cfg.turn.port}";
+              Uri = "stun:${cfg.turn.domain}:${toString cfg.turn.port}";
+              # TODO fairly certain with this config anyone can use your STUN server
               Username = "";
               Password = null;
             }
@@ -102,13 +104,14 @@ in {
             Turns = [
               {
                 Proto = "udp";
-                Uri = "stun:${cfg.turn.domain}:${toString cfg.turn.port}";
+                Uri = "turn:${cfg.turn.domain}:${toString cfg.turn.port}";
                 Username = cfg.turn.userName;
                 Password = cfg.turn.password;
               }
             ];
             CredentialsTTL = "12h";
-            Secret = lib.trace "this should probably be an option as well" "secret";
+            # This is not used with the standard coturn configuration
+            Secret = "secret";
             TimeBasedCredentials = false;
           };
 
@@ -170,7 +173,7 @@ in {
 
       # Official documentation says that external-ip has to be
       # an IP which is not true as [this](https://github.com/coturn/coturn/blob/9b1cca1fbe909e7cc7c7ac28865f9c190af3515b/src/client/ns_turn_ioaddr.c#L234)
-      # will resolve and dns name as well
+      # will resolve a dns name as well
       extraConfig = ''
         fingerprint
 
@@ -197,6 +200,43 @@ in {
           RuntimeDirectory = "netbird-mgmt";
           StateDirectory = "netbird-mgmt";
           WorkingDirectory = "/var/lib/netbird-mgmt";
+          RestartSec = "60";
+
+          # hardening
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = true;
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+
+          # Hardening
+          CapabilityBoundingSet = "";
+          PrivateUsers = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "@pkey"
+          ];
+          UMask = "0077";
         };
         unitConfig = {
           StartLimitInterval = 5;
@@ -222,6 +262,7 @@ in {
         ];
 
         serviceConfig = {
+          # Should we automatically disable metrics?
           ExecStart = ''
             ${cfg.package}/bin/netbird-mgmt management \
               --config ${configFile} \
@@ -236,7 +277,7 @@ in {
               --port ${builtins.toString cfg.port} \
               --log-file console
           '';
-          # TODO add extraCOmmandLine option
+          # TODO add extraCommandLine option
           Restart = "always";
           RuntimeDirectory = "netbird-mgmt";
           StateDirectory = [
@@ -244,6 +285,42 @@ in {
             "netbird-mgmt/data"
           ];
           WorkingDirectory = "/var/lib/netbird-mgmt";
+
+          # hardening
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = true;
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+
+          # Hardening
+          CapabilityBoundingSet = "";
+          PrivateUsers = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "@pkey"
+          ];
+          UMask = "0077";
         };
         unitConfig = {
           StartLimitInterval = 5;
