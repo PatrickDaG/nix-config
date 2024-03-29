@@ -4,6 +4,7 @@
     zsh-histdb-skim = super.callPackage ./zsh-histdb-skim.nix {};
     zsh-histdb = super.callPackage ./zsh-histdb.nix {};
     your_spotify = super.callPackage ./your_spotify.nix {};
+    actual = super.callPackage ./actual.nix {};
     deploy = super.callPackage ./deploy.nix {};
     netbird-dashboard = super.callPackage ./netbird-dashboard {};
     minify = super.callPackage ./minify {};

@@ -3,11 +3,6 @@
   lib,
   ...
 }: {
-  age.secrets.netbird = {
-    rekeyFile = config.node.secretsDir + "/netbird-env.age";
-    mode = "440";
-  };
-
   services.samba-wsdd = {
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;
@@ -18,10 +13,11 @@
   imports = [../netbird-client.nix];
   services.netbird.tunnels = {
     netbird-samba = {
-      environment.NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
-      autoStart = true;
+      environment = {
+        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_HOSTNAME = "samba";
+      };
       port = 56789;
-      environmentFile = config.age.secrets.netbird.path;
     };
   };
 

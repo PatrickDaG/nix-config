@@ -29,6 +29,7 @@
     str
     submodule
     bool
+    nullOr
     path
     ;
 
@@ -64,11 +65,6 @@ in {
                 '';
               };
 
-              autoStart = mkEnableOption ''
-                automatically starting this tunnel on startup.
-                Needs a setup key to work.
-              '';
-
               userAccess = mkOption {
                 type = bool;
                 description = "Allow unprivileged users access to the control socket";
@@ -76,7 +72,8 @@ in {
               };
 
               environmentFile = mkOption {
-                type = path;
+                type = nullOr path;
+                default = null;
                 description = "An additional environment file for this service.";
               };
               environment = mkOption {
@@ -171,7 +168,6 @@ in {
             environment,
             stateDir,
             environmentFile,
-            autoStart,
             ...
           }:
             nameValuePair "netbird-${name}" {
@@ -187,9 +183,8 @@ in {
               inherit environment;
 
               serviceConfig = {
-                EnvironmentFile = environmentFile;
+                EnvironmentFile = mkIf (environmentFile != null) environmentFile;
                 ExecStart = "${getExe cfg.package} service run";
-                ExecStartPost = mkIf autoStart "${getExe cfg.package} up";
                 Restart = "always";
                 RuntimeDirectory = stateDir;
                 StateDirectory = stateDir;
