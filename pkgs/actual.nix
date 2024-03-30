@@ -67,11 +67,5 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Single-column Fediverse client for desktop";
-    homepage = "https://whalebird.social";
-    sourceProvenance = with sourceTypes; [fromSource];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [wolfangaukang colinsane weathercold];
-    platforms = ["x86_64-linux" "aarch64-linux"];
   };
 }

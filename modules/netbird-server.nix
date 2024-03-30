@@ -167,7 +167,7 @@ in {
     services.coturn = mkIf cfg.enableCoturn {
       enable = true;
 
-      realm = cfg.dorain;
+      realm = cfg.domain;
       lt-cred-mech = true;
       no-cli = true;
 

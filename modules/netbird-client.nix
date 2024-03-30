@@ -228,11 +228,6 @@ in {
                 UMask = "0077";
               };
 
-              unitConfig = {
-                StartLimitInterval = 5;
-                StartLimitBurst = 10;
-              };
-
               stopIfChanged = false;
             }
         )

@@ -88,6 +88,8 @@ in {
         preferShortUsername = true;
       };
 
+      groups."rss.access" = {};
+
       groups."nextcloud.access" = {
         members = ["nextcloud.admins"];
       };

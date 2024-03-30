@@ -19,9 +19,9 @@
     };
   };
   services.netbird-server = {
+    enableCoturn = true;
     enable = true;
     domain = "netbird.${config.secrets.secrets.global.domains.web}";
-    # TODO remove
     oidcConfigEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/.well-known/openid-configuration";
     singleAccountModeDomain = "netbird.patrick";
   };
