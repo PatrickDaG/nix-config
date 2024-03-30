@@ -148,19 +148,6 @@ in {
         cfg.tunnels
       );
 
-      systemd.tmpfiles.settings."10-netbird-access" = lib.flip lib.mapAttrs' cfg.tunnels (
-        _: {
-          stateDir,
-          userAccess,
-          ...
-        }: (nameValuePair "/run/${stateDir}" {
-          d.mode =
-            if userAccess
-            then "0755"
-            else "0750";
-        })
-      );
-
       systemd.services =
         mapAttrs'
         (
@@ -168,6 +155,7 @@ in {
             environment,
             stateDir,
             environmentFile,
+            userAccess,
             ...
           }:
             nameValuePair "netbird-${name}" {
@@ -190,6 +178,10 @@ in {
                 StateDirectory = stateDir;
                 StateDirectoryMode = "0700";
                 WorkingDirectory = "/var/lib/${stateDir}";
+                RuntimeDirectoryMode =
+                  if userAccess
+                  then "0755"
+                  else "0750";
 
                 # hardening
                 LockPersonality = true;
