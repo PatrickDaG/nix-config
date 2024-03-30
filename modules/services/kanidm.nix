@@ -89,6 +89,7 @@ in {
       };
 
       groups."rss.access" = {};
+      groups."oauth2-proxy.access" = {};
 
       groups."nextcloud.access" = {
         members = ["nextcloud.admins"];
@@ -136,10 +137,12 @@ in {
         originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-proxy.path;
         scopeMaps."adguardhome.access" = ["openid" "email" "profile"];
+        scopeMaps."rss.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
         claimMaps.groups = {
           joinType = "array";
           valuesByGroup."adguardhome.access" = ["adguardhome_access"];
+          valuesByGroup."rss.access" = ["ttrss_access"];
         };
       };
 

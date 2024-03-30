@@ -22,6 +22,7 @@ in
       pre-commit
       rage
       nix
+      nix-diff
     ];
     commands = [
       {

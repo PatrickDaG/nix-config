@@ -67,5 +67,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    description = "A super fast privacy-focused app for managing your finances";
+    homepage = "https://actualbudget.com/";
+    license = licenses.mit;
+    mainProgram = "actual-server";
+    maintainers = with maintainers; [patrickdag];
+    platforms = ["x86_64-linux"];
   };
 }

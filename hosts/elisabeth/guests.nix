@@ -22,6 +22,7 @@
       kanidm = "auth";
       oauth2-proxy = "oauth2";
       netbird = "netbird";
+      actual = "actual";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -57,7 +58,7 @@ in {
           + virtualHostExtraConfig;
       };
     };
-    proxyProtect = hostName: cfg:
+    proxyProtect = hostName: cfg: allowedGroup:
       lib.mkMerge [
         (blockOf hostName cfg)
         {
@@ -86,7 +87,7 @@ in {
             };
 
             locations."= /oauth2/auth" = {
-              proxyPass = "http://oauth2-proxy/oauth2/auth?allowed_groups=${hostName}_access";
+              proxyPass = "http://oauth2-proxy/oauth2/auth" + lib.optionalString allowedGroup "?allowed_groups=${hostName}_access";
               extraConfig = ''
                 internal;
 
@@ -151,12 +152,13 @@ in {
         };
       }
       (blockOf "vaultwarden" {maxBodySize = "1G";})
+      (blockOf "actual" {})
       (blockOf "forgejo" {maxBodySize = "1G";})
       (blockOf "immich" {maxBodySize = "5G";})
-      (proxyProtect "adguardhome" {})
-      (proxyProtect "oauth2-proxy" {})
+      (proxyProtect "adguardhome" {} true)
+      (proxyProtect "oauth2-proxy" {} false)
       (blockOf "paperless" {maxBodySize = "5G";})
-      (proxyProtect "ttrss" {port = 80;})
+      (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
       (blockOf "apispotify" {
         port = 3000;
@@ -268,6 +270,7 @@ in {
     // mkContainer "ttrss" {}
     // mkContainer "yourspotify" {}
     // mkContainer "netbird" {}
+    // mkContainer "actual" {}
     // mkContainer "kanidm" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
