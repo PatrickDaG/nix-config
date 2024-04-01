@@ -52,7 +52,7 @@
       enable = true;
       settings = {
         host.id = "desktopnix";
-        api.endpoint = nodes.elisabeth.config.wireguard.scrtiny-patrick.ipv4;
+        api.endpoint = "http://${nodes.elisabeth.config.wireguard.scrtiny-patrick.ipv4}:8080";
       };
     };
   };

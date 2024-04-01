@@ -129,6 +129,7 @@
     reservedAddresses = ["10.44.0.0/16" "fd00:1766::/112"];
     openFirewall = true;
   };
+  networking.nftables.firewall.zones.untrusted.interfaces = ["scrtiny-patrick"];
   services.scrutiny = {
     enable = true;
     openFirewall = true;

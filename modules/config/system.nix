@@ -66,6 +66,7 @@
     unzip
     # fix pcscd
     pcscliteWithPolkit.out
+    wireguard-tools
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

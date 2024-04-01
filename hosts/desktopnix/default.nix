@@ -59,4 +59,5 @@
   ];
 
   services.netbird.enable = true;
+  nix.gc.automatic = lib.mkForce false;
 }
