@@ -16,7 +16,14 @@
       dhcpV4Config.UseDNS = false;
       ipv6AcceptRAConfig.UseDNS = false;
       networkConfig = {
-        IPv6PrivacyExtensions = "yes";
+        MulticastDNS = true;
+      };
+    };
+    "40-lan01" = {
+      dhcpV6Config.UseDNS = false;
+      dhcpV4Config.UseDNS = false;
+      ipv6AcceptRAConfig.UseDNS = false;
+      networkConfig = {
         MulticastDNS = true;
       };
     };
@@ -31,6 +38,7 @@
         matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
         dhcpV6Config.UseDNS = false;
         dhcpV4Config.UseDNS = false;
+        ipv6AcceptRAConfig.UseDNS = false;
         networkConfig = {
           IPv6PrivacyExtensions = "yes";
           MulticastDNS = true;
