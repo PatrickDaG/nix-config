@@ -23,6 +23,7 @@
       oauth2-proxy = "oauth2";
       netbird = "netbird";
       actual = "actual";
+      firefly = "money";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -152,7 +153,6 @@ in {
         };
       }
       (blockOf "vaultwarden" {maxBodySize = "1G";})
-      (blockOf "actual" {})
       (blockOf "forgejo" {maxBodySize = "1G";})
       (blockOf "immich" {maxBodySize = "5G";})
       (proxyProtect "adguardhome" {} true)
@@ -160,6 +160,7 @@ in {
       (blockOf "paperless" {maxBodySize = "5G";})
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
+      (blockOf "firefly" {port = 80;})
       (blockOf "apispotify" {
         port = 3000;
         upstream = "yourspotify";
@@ -268,9 +269,9 @@ in {
     // mkContainer "ollama" {}
     // mkContainer "murmur" {}
     // mkContainer "ttrss" {}
+    // mkContainer "firefly" {}
     // mkContainer "yourspotify" {}
     // mkContainer "netbird" {}
-    // mkContainer "actual" {}
     // mkContainer "kanidm" {}
     // mkContainer "nextcloud" {
       enablePanzer = true;
