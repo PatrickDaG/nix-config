@@ -1,0 +1,563 @@
+{
+  "attributes": null,
+  "cpuTime": 0.05694299936294556,
+  "envs": {
+    "bytes": 10040,
+    "elements": 611,
+    "number": 322
+  },
+  "functions": [
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 43,
+      "count": 4,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/flake.nix",
+      "line": 154,
+      "name": null
+    },
+    {
+      "column": 13,
+      "count": 1,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/flake.nix",
+      "line": 109,
+      "name": "outputs"
+    },
+    {
+      "column": 32,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/flake.nix",
+      "line": 18,
+      "name": null
+    },
+    {
+      "column": 7,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 248,
+      "name": "extends"
+    },
+    {
+      "column": 5,
+      "count": 2,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 244,
+      "name": "extends"
+    },
+    {
+      "column": 5,
+      "count": 2,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 242,
+      "name": "extends"
+    },
+    {
+      "column": 13,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/flake.nix",
+      "line": 6,
+      "name": "outputs"
+    },
+    {
+      "column": 12,
+      "count": 4,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 34,
+      "name": "op"
+    },
+    {
+      "column": 23,
+      "count": 24,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 37,
+      "name": "op"
+    },
+    {
+      "column": 16,
+      "count": 24,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 37,
+      "name": "op"
+    },
+    {
+      "column": 25,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/flake.nix",
+      "line": 18,
+      "name": null
+    },
+    {
+      "column": 25,
+      "count": 1,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 31,
+      "name": "eachSystem"
+    },
+    {
+      "column": 16,
+      "count": 1,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 31,
+      "name": "eachSystem"
+    },
+    {
+      "column": 13,
+      "count": 1,
+      "file": "/nix/store/yj1wxm9hh8610iyzqnz75kvs6xl8j3my-source/flake.nix",
+      "line": 5,
+      "name": "outputs"
+    },
+    {
+      "column": 19,
+      "count": 4,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/lib.nix",
+      "line": 34,
+      "name": "op"
+    },
+    {
+      "column": 16,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/default.nix",
+      "line": 11,
+      "name": "callLibs"
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 961,
+      "name": "recursiveUpdateUntil"
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 959,
+      "name": "recursiveUpdateUntil"
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 957,
+      "name": "recursiveUpdateUntil"
+    },
+    {
+      "column": 38,
+      "count": 8,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 1000,
+      "name": null
+    },
+    {
+      "column": 33,
+      "count": 8,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 1000,
+      "name": null
+    },
+    {
+      "column": 27,
+      "count": 8,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 1000,
+      "name": null
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 999,
+      "name": "recursiveUpdate"
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 997,
+      "name": "recursiveUpdate"
+    },
+    {
+      "column": 1,
+      "count": 2,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/hosts.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 25,
+      "count": 3,
+      "line": 25,
+      "name": null
+    },
+    {
+      "column": 14,
+      "count": 3,
+      "line": 25,
+      "name": null
+    },
+    {
+      "column": 23,
+      "count": 1,
+      "line": 2,
+      "name": null
+    },
+    {
+      "column": 10,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 649,
+      "name": null
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 648,
+      "name": "mapAttrsToList"
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 646,
+      "name": "mapAttrsToList"
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/lists.nix",
+      "line": 2,
+      "name": null
+    },
+    {
+      "column": 16,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/trivial.nix",
+      "line": 133,
+      "name": "flip"
+    },
+    {
+      "column": 13,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/trivial.nix",
+      "line": 133,
+      "name": "flip"
+    },
+    {
+      "column": 10,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/trivial.nix",
+      "line": 133,
+      "name": "flip"
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/trivial.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 32,
+      "count": 5,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/hosts.nix",
+      "line": 46,
+      "name": null
+    },
+    {
+      "column": 29,
+      "count": 5,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/hosts.nix",
+      "line": 46,
+      "name": null
+    },
+    {
+      "column": 13,
+      "count": 1,
+      "file": "/nix/store/na7sykizsgkzh9i3wc8m8pz5xfqib2rv-source/flake.nix",
+      "line": 7,
+      "name": "outputs"
+    },
+    {
+      "column": 13,
+      "count": 4,
+      "line": 10,
+      "name": null
+    },
+    {
+      "column": 8,
+      "count": 4,
+      "line": 10,
+      "name": null
+    },
+    {
+      "column": 26,
+      "count": 4,
+      "line": 31,
+      "name": "resolveInput"
+    },
+    {
+      "column": 38,
+      "count": 2,
+      "line": 38,
+      "name": "getInputByPath"
+    },
+    {
+      "column": 25,
+      "count": 2,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 307,
+      "name": "extend"
+    },
+    {
+      "column": 11,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 306,
+      "name": null
+    },
+    {
+      "column": 48,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 305,
+      "name": "makeExtensibleWithCustomName"
+    },
+    {
+      "column": 34,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 305,
+      "name": "makeExtensibleWithCustomName"
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 29,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 418,
+      "name": null
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 417,
+      "name": "filterAttrs"
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 415,
+      "name": "filterAttrs"
+    },
+    {
+      "column": 25,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/default.nix",
+      "line": 10,
+      "name": null
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/lists.nix",
+      "line": 138,
+      "name": "foldl'"
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/lists.nix",
+      "line": 136,
+      "name": "foldl'"
+    },
+    {
+      "column": 5,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/lists.nix",
+      "line": 134,
+      "name": "foldl'"
+    },
+    {
+      "column": 24,
+      "count": 9,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 963,
+      "name": null
+    },
+    {
+      "column": 21,
+      "count": 9,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 963,
+      "name": null
+    },
+    {
+      "column": 13,
+      "count": 13,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 962,
+      "name": "f"
+    },
+    {
+      "column": 24,
+      "count": 5,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/generate-installer-package.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 14,
+      "count": 5,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/generate-installer-package.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/k90n9mjy7v6s7m1gabx3y4pvwfgcp9zf-source/nix/generate-installer-package.nix",
+      "line": 1,
+      "name": null
+    },
+    {
+      "column": 14,
+      "count": 1,
+      "line": 2,
+      "name": null
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "line": 2,
+      "name": null
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 595,
+      "name": "nameValuePair"
+    },
+    {
+      "column": 5,
+      "count": 5,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 593,
+      "name": "nameValuePair"
+    },
+    {
+      "column": 11,
+      "count": 2,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/flake-version-info.nix",
+      "line": 12,
+      "name": null
+    },
+    {
+      "column": 1,
+      "count": 2,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/flake-version-info.nix",
+      "line": 12,
+      "name": null
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/flake-version-info.nix",
+      "line": 10,
+      "name": null
+    },
+    {
+      "column": 1,
+      "count": 1,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/attrsets.nix",
+      "line": 2,
+      "name": null
+    },
+    {
+      "column": 10,
+      "count": 3,
+      "file": "/nix/store/nra828scc8qs92b9pxra5csqzffb6hpl-source/lib/fixed-points.nix",
+      "line": 84,
+      "name": "fix'"
+    },
+    {
+      "column": 28,
+      "count": 2,
+      "line": 38,
+      "name": "getInputByPath"
+    }
+  ],
+  "gc": {
+    "heapSize": 402915328,
+    "totalBytes": 579024
+  },
+  "list": {
+    "bytes": 1480,
+    "concats": 1,
+    "elements": 185
+  },
+  "nrAvoided": 324,
+  "nrFunctionCalls": 263,
+  "nrLookups": 149,
+  "nrOpUpdateValuesCopied": 4133,
+  "nrOpUpdates": 49,
+  "nrPrimOpCalls": 112,
+  "nrThunks": 1907,
+  "primops": {
+    "attrNames": 6,
+    "concatMap": 1,
+    "elemAt": 8,
+    "fetchTree": 3,
+    "foldl'": 6,
+    "fromJSON": 1,
+    "fromTOML": 2,
+    "head": 10,
+    "import": 15,
+    "isAttrs": 16,
+    "isFunction": 4,
+    "isList": 4,
+    "length": 9,
+    "listToAttrs": 1,
+    "map": 1,
+    "mapAttrs": 5,
+    "readFile": 2,
+    "removeAttrs": 3,
+    "seq": 1,
+    "tail": 1,
+    "zipAttrsWith": 13
+  },
+  "sets": {
+    "bytes": 132800,
+    "elements": 7704,
+    "number": 596
+  },
+  "sizes": {
+    "Attr": 16,
+    "Bindings": 16,
+    "Env": 16,
+    "Value": 24
+  },
+  "symbols": {
+    "bytes": 10273,
+    "number": 1031
+  },
+  "values": {
+    "bytes": 100320,
+    "number": 4180
+  }
+}

@@ -27,7 +27,6 @@
         + ''
           rm -R $out/storage
           ln -s ${dataDir}/storage $out/storage
-          ln -fs ${dataDir}/.env $out/.env
         '';
     });
 in

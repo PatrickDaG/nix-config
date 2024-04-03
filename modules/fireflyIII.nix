@@ -75,15 +75,21 @@ in {
     ];
 
     services.phpfpm = {
+      settings = {
+        error_log = "syslog";
+        log_level = "debug";
+      };
       pools.firefly-iii = {
         phpOptions = ''
-          log_errors = on
+          log_errors = yes
+          error_reporting = E_ALL
         '';
         user = "firefly-iii";
         group = "firefly-iii";
         phpPackage = cfg.phpPackage;
         phpEnv = cfg.settings;
         settings = mapAttrs (_: mkDefault) {
+          catch_workers_output = "yes";
           "listen.mode" = "0660";
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
@@ -164,6 +170,7 @@ in {
           };
           "~* \\.php(?:$|/)" = {
             extraConfig = ''
+              include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;
               fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
               fastcgi_pass unix:${config.services.phpfpm.pools.firefly-iii.socket};
