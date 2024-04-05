@@ -17,7 +17,7 @@
     ;
 
   package = cfg.package.override {
-    dataDir = cfg.dataDir;
+    inherit (cfg) dataDir;
   };
 in {
   options.services.firefly-iii = {
@@ -77,16 +77,15 @@ in {
     services.phpfpm = {
       settings = {
         error_log = "syslog";
-        log_level = "debug";
       };
       pools.firefly-iii = {
+        inherit (cfg) phpPackage;
         phpOptions = ''
           log_errors = yes
           error_reporting = E_ALL
         '';
         user = "firefly-iii";
         group = "firefly-iii";
-        phpPackage = cfg.phpPackage;
         phpEnv = cfg.settings;
         settings = mapAttrs (_: mkDefault) {
           catch_workers_output = "yes";
@@ -117,11 +116,14 @@ in {
         Type = "oneshot";
         RemainAfterExit = true;
         User = "firefly-iii";
-        WorkingDirectory = package;
+        WorkingDirectory = cfg.dataDir;
       };
       script = ''
         set -euo pipefail
         umask 077
+        cp -f -r ${package}/* ${cfg.dataDir}
+        find ${cfg.dataDir} -perm 400 -exec chmod 444 {} \;
+        find ${cfg.dataDir} -perm 500 -exec chmod 555 {} \;
         ${lib.optionalString cfg.dbCreateLocally ''
           mkdir -p ${cfg.dataDir}/storage/database/
           touch ${cfg.dataDir}/storage/database/database.sqlite
@@ -138,7 +140,9 @@ in {
 
     # Data dir
     systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir}                            0710 firefly-iii firefly-iii - -"
+      "d ${cfg.dataDir}                            0750 firefly-iii firefly-iii - -"
+      "d ${cfg.dataDir}/bootstrap                  0700 firefly-iii firefly-iii - -"
+      "d ${cfg.dataDir}/bootstrap/cache            0700 firefly-iii firefly-iii - -"
       "d ${cfg.dataDir}/storage                    0700 firefly-iii firefly-iii - -"
       "d ${cfg.dataDir}/storage/app                0700 firefly-iii firefly-iii - -"
       "d ${cfg.dataDir}/storage/database           0700 firefly-iii firefly-iii - -"
@@ -153,22 +157,20 @@ in {
 
     services.nginx = {
       enable = mkDefault true;
-      recommendedSetup = true;
       recommendedTlsSettings = mkDefault true;
       recommendedOptimisation = mkDefault true;
       recommendedGzipSettings = mkDefault true;
       virtualHosts.${cfg.virtualHost} = {
-        root = "${package}/public";
+        root = "${cfg.dataDir}/public";
         locations = {
           "/" = {
-            index = "index.php";
             tryFiles = "$uri $uri/ /index.php?$query_string";
+            index = "index.php";
             extraConfig = ''
-              autoindex on;
               sendfile off;
             '';
           };
-          "~* \\.php(?:$|/)" = {
+          "~ \.php$" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;

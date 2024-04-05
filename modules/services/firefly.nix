@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   imports = [../fireflyIII.nix];
 
   wireguard.elisabeth = {
@@ -12,9 +16,9 @@
     settings = {
       APP_URL = "https://money.${config.secrets.secrets.global.domains.web}";
       TZ = "Europe/Berlin";
-      TRUSTED_PROXIES = "**";
+      TRUSTED_PROXIES = lib.trace "fix" "*";
       SITE_OWNER = "firefly-admin@${config.secrets.secrets.global.domains.mail_public}";
-      APP_KEY = "ctiectiectiectctiectiectiectieie";
+      APP_KEY = lib.trace "fix" "ctiectiectiectctiectiectiectieie";
     };
   };
 }
