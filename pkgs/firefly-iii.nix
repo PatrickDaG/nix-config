@@ -17,10 +17,10 @@ in
     installPhase = ''
       mkdir -p $out/storage
       cp -r ./ $out
-      rm -R $out/storage
-      #ln -fs ${dataDir}/storage $out/storage
-      #ln -fs ${dataDir}/bootstrap/cache $out/bootstrap/cache
-      #ln -fs ${dataDir}/.env $out/.env
+      rm -Rf $out/storage
+      ln -fs ${dataDir}/storage $out/storage
+      rm -Rf $out/bootstrap/cache
+      ln -fs ${dataDir}/bootstrap/cache $out/bootstrap/cache
     '';
 
     meta = with lib; {

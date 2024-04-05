@@ -116,17 +116,14 @@ in {
         Type = "oneshot";
         RemainAfterExit = true;
         User = "firefly-iii";
-        WorkingDirectory = cfg.dataDir;
+        WorkingDirectory = package;
       };
       script = ''
         set -euo pipefail
         umask 077
-        cp -f -r ${package}/* ${cfg.dataDir}
-        find ${cfg.dataDir} -perm 400 -exec chmod 444 {} \;
-        find ${cfg.dataDir} -perm 500 -exec chmod 555 {} \;
         ${lib.optionalString cfg.dbCreateLocally ''
-          mkdir -p ${cfg.dataDir}/storage/database/
-          touch ${cfg.dataDir}/storage/database/database.sqlite
+          mkdir -p ${package}/storage/database/
+          touch ${package}/storage/database/database.sqlite
         ''}
 
         # migrate db
@@ -161,7 +158,7 @@ in {
       recommendedOptimisation = mkDefault true;
       recommendedGzipSettings = mkDefault true;
       virtualHosts.${cfg.virtualHost} = {
-        root = "${cfg.dataDir}/public";
+        root = "${package}/public";
         locations = {
           "/" = {
             tryFiles = "$uri $uri/ /index.php?$query_string";
