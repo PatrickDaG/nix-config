@@ -11,7 +11,6 @@
   home = {
     packages = with pkgs; [
       zathura
-      pinentry-gnome
       feh
       mpv
     ];

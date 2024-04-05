@@ -25,7 +25,7 @@
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/firefly-iii";
-      owner = "firefly-iii";
+      user = "firefly-iii";
     }
   ];
 }

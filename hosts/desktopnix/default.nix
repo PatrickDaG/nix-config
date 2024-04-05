@@ -59,5 +59,6 @@
   ];
 
   services.netbird.enable = true;
+  # Do not cleanup nix store to prevent having to rebuild packages onca a month
   nix.gc.automatic = lib.mkForce false;
 }
