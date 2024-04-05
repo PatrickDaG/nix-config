@@ -21,4 +21,11 @@
       APP_KEY = lib.trace "fix" "ctiectiectiectctiectiectiectieie";
     };
   };
+
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/firefly-iii";
+      owner = "firefly-iii";
+    }
+  ];
 }
