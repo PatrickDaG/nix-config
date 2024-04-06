@@ -31,7 +31,4 @@
       variant = "bone";
     };
   };
-  nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
-    "nix-2.16.2"
-  ];
 }

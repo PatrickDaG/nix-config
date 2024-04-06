@@ -54,9 +54,6 @@
   '';
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];
-  nixpkgs.config.permittedInsecurePackages = lib.trace "remove when possible" [
-    "nix-2.16.2"
-  ];
 
   services.netbird.enable = true;
   # Do not cleanup nix store to prevent having to rebuild packages onca a month
