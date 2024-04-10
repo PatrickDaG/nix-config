@@ -12,9 +12,9 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "0%" "2GiB") // {device = "${device}-part1";};
-            swap = (partSwap "2GiB" "18GiB") // {device = "${device}-part2";};
-            "rpool_m2-ssd" = (partLuksZfs "m2-ssd" "rpool" "18GiB" "100%") // {device = "${device}-part3";};
+            boot = (partEfi "2GiB") // {device = "${device}-part1";};
+            swap = (partSwap "16G") // {device = "${device}-part2";};
+            rpool = (partLuksZfs "m2-ssd" "rpool" "100%") // {device = "${device}-part3";};
           };
         };
       };
@@ -24,7 +24,7 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            "panzer_sata-hdd" = (partLuksZfs "sata-hdd" "panzer" "0%" "100%") // {device = "${device}-part1";};
+            panzer = (partLuksZfs "sata-hdd" "panzer" "100%") // {device = "${device}-part1";};
           };
         };
       };

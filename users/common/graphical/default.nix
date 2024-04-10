@@ -13,6 +13,7 @@
       zathura
       feh
       mpv
+      pinentry-gnome3 # for yubikey pinentry
     ];
   };
 

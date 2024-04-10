@@ -11,9 +11,9 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            grub = (partGrub "0%" "1MiB") // {device = "${device}-part1";};
-            bios = (partEfi "1MiB" "512MiB") // {device = "${device}-part2";};
-            "rpool_rpool" = (partLuksZfs "rpool" "rpool" "512MiB" "100%") // {device = "${device}-part3";};
+            grub = partGrub // {device = "${device}-part1";};
+            bios = (partEfi "512MiB") // {device = "${device}-part2";};
+            rpool = (partLuksZfs "rpool" "rpool" "100%") // {device = "${device}-part3";};
             #(lib.attrsets.recursiveUpdate (partLuksZfs "rpool" "rpool" "17GiB" "100%") {content.extraFormatArgs = ["--pbkdf pbkdf2"];})
           };
         };

@@ -84,10 +84,6 @@ in {
     tls = {
       certificates = [
         {
-          keyPath = "${config.security.acme.certs.mail_private.directory}/key.pem";
-          certPath = "${config.security.acme.certs.mail_private.directory}/fullchain.pem";
-        }
-        {
           keyPath = "${config.security.acme.certs.mail_public.directory}/key.pem";
           certPath = "${config.security.acme.certs.mail_public.directory}/fullchain.pem";
         }

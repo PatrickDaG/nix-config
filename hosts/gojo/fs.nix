@@ -11,7 +11,7 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = partEfi "0%" "260MB";
+            boot = partEfi "260MB";
             rpool = {
               content = {
                 type = "zfs";

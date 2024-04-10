@@ -11,8 +11,8 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "0%" "1GiB") // {device = "${device}-part1";};
-            "rpool_ssd" = (partLuksZfs "ssd" "rpool" "1GiB" "100%") // {device = "${device}-part2";};
+            boot = (partEfi "1GiB") // {device = "${device}-part1";};
+            rpool = (partLuksZfs "ssd" "rpool" "100%") // {device = "${device}-part2";};
           };
         };
       };
