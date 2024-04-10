@@ -72,6 +72,7 @@ lib.optionalAttrs (!minimal) {
         ../common/programs/poe.nix
         ../common/programs/spicetify.nix
         ../common/programs/thunderbird.nix
+        ../common/shells/pager.nix
       ]
       ++ {
         "desktopnix" = [
