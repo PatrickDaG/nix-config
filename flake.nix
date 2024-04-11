@@ -60,17 +60,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    musnix = {
-      url = "github:musnix/musnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     nixos-nftables-firewall = {
       url = "github:thelegy/nixos-nftables-firewall";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
+    templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
     impermanence.url = "github:nix-community/impermanence";
 
@@ -80,6 +76,7 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -87,16 +84,10 @@
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.3.0";
-
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     stylix.url = "github:danth/stylix";
-
-    wired-notify = {
-      url = "github:Toqozz/wired-notify";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";
 
@@ -114,7 +105,6 @@
     nixos-generators,
     pre-commit-hooks,
     devshell,
-    wired-notify,
     nixvim,
     nixos-extra-modules,
     ...
@@ -166,7 +156,6 @@
             nixos-extra-modules.overlays.default
             devshell.overlays.default
             agenix-rekey.overlays.default
-            wired-notify.overlays.default
             nixvim.overlays.default
           ];
         inherit system;
@@ -177,7 +166,7 @@
         inherit pkgs;
         modules = [
           ./nix/installer-configuration.nix
-          ./modules/config/ssh.nix
+          ./config/basic/ssh.nix
         ];
         format =
           {

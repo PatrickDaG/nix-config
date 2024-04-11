@@ -11,24 +11,24 @@
     inputs.nixos-hardware.nixosModules.common-pc-hdd
     inputs.nixos-hardware.nixosModules.common-pc-ssd
 
-    ../../modules/config
-    ../../modules/dev
-    ../../modules/graphical
+    ../../config/basic
 
-    ../../modules/optional/xserver.nix
-    ../../modules/optional/secureboot.nix
+    ../../config/hardware/bluetooth.nix
+    ../../config/hardware/nintendo.nix
+    ../../config/hardware/nvidia.nix
+    ../../config/hardware/physical.nix
+    ../../config/hardware/pipewire.nix
+    ../../config/hardware/yubikey.nix
 
-    ../../modules/hardware/nintendo.nix
-    ../../modules/hardware/nvidia.nix
-    ../../modules/hardware/physical.nix
-    ../../modules/hardware/pipewire.nix
-    ../../modules/hardware/yubikey.nix
-    ../../modules/hardware/bluetooth.nix
-    ../../modules/hardware/zfs.nix
+    ../../config/optional/dev.nix
+    ../../config/optional/graphical.nix
+    ../../config/optional/printing.nix
+    ../../config/optional/secureboot.nix
+    ../../config/optional/steam.nix
+    ../../config/optional/xserver.nix
+    ../../config/optional/zfs.nix
 
-    ../../modules/optional/streamdeck.nix
-    ../../modules/optional/steam.nix
-    ../../modules/optional/printing.nix
+    ../../modules-hm/streamdeck.nix
 
     ./net.nix
     ./fs.nix

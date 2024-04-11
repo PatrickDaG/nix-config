@@ -3,7 +3,7 @@
   lib,
   ...
 }: {
-  imports = [../fireflyIII.nix];
+  imports = [../../modules/fireflyIII.nix];
 
   wireguard.elisabeth = {
     client.via = "elisabeth";

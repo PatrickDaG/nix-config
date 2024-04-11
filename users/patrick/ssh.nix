@@ -42,6 +42,7 @@
         user = "team402";
       };
       "*" = {
+        user = "root";
         identitiesOnly = true;
         inherit identityFile;
       };

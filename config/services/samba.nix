@@ -10,7 +10,7 @@
 
   disabledModules = ["services/networking/netbird.nix"];
 
-  imports = [../netbird-client.nix];
+  imports = [../../modules/netbird-client.nix];
   services.netbird.tunnels = {
     netbird-samba = {
       environment = {
@@ -214,7 +214,7 @@
   # to get this file start a smbd, add users using 'smbpasswd -a <user>'
   # then export the database using 'pdbedit -e tdbsam:<location>'
   age.secrets.smbpassdb = {
-    rekeyFile = ../../secrets/smbpassdb.tdb.age;
+    rekeyFile = config.node.secretsDir + "/smbpassdb.tdb.age";
   };
   users = let
     users = lib.unique (lib.mapAttrsToList (_: val: val."force user") config.services.samba.shares);

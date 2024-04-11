@@ -1,0 +1,38 @@
+This file contains a small overview over the contents and structure of this repository, mainly for me to remember where I put my shit.
+
+- `config/` contains shared nixos configuration
+    - `basic/` the basic system configuration, this should be applied for all systems
+        - `system.nix` a far descendant of the original `configuration.nix`
+            any global configuration should be done here first and later moved to their own file if necessary
+    - `hardware/` configuration for specific hardware
+    - `optional/` optionally includable configuration
+    - `services/` configuration for independent services
+- `hosts/` contain nixos configuration for hosts
+    - `<hostname>/` configuration for hosts
+        - `default.nix` Toplevel system definition
+        - `fs.nix` file system definiton
+        - `net.nix` network setup
+        - *`guests.nix`* optional config for guest systems
+        - `secrets/` secrets local to this hosts
+            - `secrets.nix.age` local secrets usable while evaluating
+            - `host.pub` host public key, needed for rekeying agenix secrets
+- `keys/` public keys needed for evaluating the system
+- `lib/` extra library functions
+- `modules/` extra nixos modules
+- `modules-hm/` extra home-manager modules
+- `nix/` additional nix functions
+    - `devshell.nix` Development shell
+    - `extra-builtins.nix` Extra builtin plugin file to enable repository secrets
+- `pkgs/` additional packages
+- `secrets/` global secrets
+    - `recipients.txt` rage recipient file for encrypting secrets
+        - currently containing all yubikeys and a rage backup key
+    - `secrets.nix.age` global secrets available at deploy
+- `users/` home manager user configuration
+    - `common/` shared home-manager modules
+        - `graphical/` configuration for graphical programs
+        - `programs/` configuration for miscellaneous programs
+        - `shells/` configuration for shells
+        - `default.nix` minimal setup for all users
+    - `<username>/` configuration for users
+        - `impermanence.nix` users persistence configuration

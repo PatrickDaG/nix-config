@@ -1,7 +1,7 @@
 {config, ...}: {
   imports = [
-    ../netbird-server.nix
-    ../netbird-dashboard.nix
+    ../../modules/netbird-server.nix
+    ../../modules/netbird-dashboard.nix
   ];
   wireguard.elisabeth = {
     client.via = "elisabeth";

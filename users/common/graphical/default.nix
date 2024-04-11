@@ -3,11 +3,6 @@
   config,
   ...
 }: {
-  imports = [
-    #./deadd
-    ./themes.nix
-    #./wired-notify.nix
-  ];
   home = {
     packages = with pkgs; [
       zathura

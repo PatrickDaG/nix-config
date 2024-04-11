@@ -6,36 +6,35 @@
   imports = [
     ./boot.nix
     ./home-manager.nix
+    ./impermanence.nix
     ./inputrc.nix
     ./issue.nix
     ./net.nix
+    ./nftables.nix
     ./nix.nix
     ./ssh.nix
     ./system.nix
     ./users.nix
     ./xdg.nix
-    ./nftables.nix
 
     ../../users/root
 
-    ../secrets.nix
-    ../meta.nix
-    ../smb-mounts.nix
-    ../deterministic-ids.nix
-    ../distributed-config.nix
-    ../optional/iwd.nix
-    ./impermanence
+    ../../modules/deterministic-ids.nix
+    ../../modules/distributed-config.nix
+    ../../modules/meta.nix
+    ../../modules/iwd.nix
+    ../../modules/secrets.nix
+    ../../modules/smb-mounts.nix
 
+    inputs.agenix-rekey.nixosModules.default
+    inputs.agenix.nixosModules.default
+    inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
-    inputs.agenix.nixosModules.default
-    inputs.agenix-rekey.nixosModules.default
-    inputs.disko.nixosModules.disko
     inputs.lanzaboote.nixosModules.lanzaboote
-    inputs.nixvim.nixosModules.nixvim
     inputs.nixos-extra-modules.nixosModules.default
-    inputs.musnix.nixosModules.musnix
     inputs.nixos-nftables-firewall.nixosModules.default
+    inputs.nixvim.nixosModules.nixvim
   ];
   age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
   boot.mode = lib.mkDefault "efi";

@@ -5,7 +5,10 @@
   nodes,
   ...
 }: {
-  imports = [./impermanence/users.nix];
+  imports = [
+    ../../modules-hm/impermanence.nix
+    ../../modules-hm/images.nix
+  ];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -22,7 +25,6 @@
       inputs.nixos-extra-modules.homeManagerModules.default
       inputs.nixvim.homeManagerModules.nixvim
       inputs.spicetify-nix.homeManagerModule
-      inputs.wired-notify.homeManagerModules.default
     ];
   };
   # HM zsh needs this or else the startup order is fucked

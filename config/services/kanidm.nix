@@ -1,7 +1,7 @@
 {config, ...}: let
   kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
 in {
-  imports = [../kanidm.nix];
+  imports = [../../modules/kanidm.nix];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [3000];

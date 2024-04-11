@@ -1,67 +1,73 @@
-# Meine wundervolle nix config
+# Meine wundervolle nix config  ❄️
 
-## Structure
+[Structure](./STRUCTURE.md)
 
-- `hosts/` contain nixos configuration for hosts
-    - `<hostname>/` configuration for hosts
-        - `default.nix` Toplevel system definition
-        - `fs.nix` file system definiton
-        - `net.nix` network setup
-        - `secrets/` secrets local to this hosts
-            - `secrets.nix.age` local secrets usable on deploy
-            - `host.pub` host public key, needed for rekeying agenix secrets
-- `modules/` extra nixos modules and shared configurations
-    - `secrets.nix` module to enable deploy-time secrets
-    - `config/` base configuration used on all machines
-    - `dev/` configuration options enabling developer environment
-    - `graphical/` configuration for graphical environments
-    - `hardware/` configuration for hardware components
-    - `impermanence/` impermanence modules for hosts
-- `nix/` additional nix functions
-    - `devshell.nix` Development shell
-    - `extra-builtins.nix` Extra builtin plugin file to enable repository secrets
-    - TODO
-    - `lib.nix` additional library functions
-- `secrets/` global secrets
-    - `<name>.key.pub` public key handles to decrypt secrets using yubikey
-    - `recipients.txt` rage recipient file for encrypting secrets
-        - currently containing both yubikeys and a rage backup key
-    - `secrets.nix.age` global secrets available at deploy
-- `users/` home manager user configuration
-    - `common/` shared home-manager modules
-        - `graphical/` configuration for graphical programs
-        - `programs/` configuration for miscellaneous programs
-        - `shells/` configuration for shells
-        - `default.nix` minimal setup for all users
-        - `interactive.nix` minimal setup for interactive users on a command line
-        - `graphical.nix` configuration for users utilizing a graphical interface
-    - `<username>/` configuration for users
-        - `impermanence.nix` users persistence configuration
-- `keys` collection of yubikeys public key parts for decryption
-- `img` images, encrypted to not break any copyright by redistribution
 
 ## Hosts
-- `patricknix` Patricks main laptop
-- `desktopnix` Patricks main desktop
-- `testienix` old laptop for testing
-- `gojo` Simons Laptop
+| | Name | Device | Description
+---|---|---|---
+💻 | patricknix | HP spectre x360 | Patrick's laptop, mainly used for on the go university
+🖥️ | desktopnix | Intel i5-8600K <br> NVIDIA GeForce GTX 1080 <br> 32 GiB RAM | Patrick's desktop, used for most development and gaming
+🖥️ | elisabeth | AMD Ryzen 7 5800X <br> 32 GiB RAM | Server running most cloud services
+🖥️ | maddy | Hetzner VPS | Static IP server running mail
+💻 | gojo | ? |Simons Laptop
 
-## Users
-- `patrick` my normal everyday unprivileged user
-- `root` root user imported by every host
+## User Configuration
+This showcases my end user setup, which I dailydrive on all my hosts.
 
-## Flake output structure
-- `checks` linting and other checks for this repository
-    - `pre-commit-check` automatic checks executed as pre-commit hooks
-- `nixosHosts` top level configs for hosts
-- `nodes` alias to `nixosNodes`
-- `devshell` development shell using devshell
-- `formatter` nix code formatter
-- `hosts` host meta declaration
-- `pkgs` nixpkgs
-- `packages` additional packages
-- `secretsConfig` meta configuration for secrets
-- `stateVersion` global stateversion used by nixos and home-manager to determine default config
+| | Programm | Description
+---|---|---
+🐚 Shell | [ZSH](./users/common/shells/zsh/default.nix) & [Starship](./users/common/shells/starfish.nix) | ZSH with FZF autocomplete, starship prompt, sqlite history and histdb-skim for fancy reverse search
+🪟 WM | [Sway](./users/common/graphical/wayland/sway.nix) & [i3](./users/common/graphical/Xorg/i3.nix) | Tiling window managers with similar behaviour for wayland and xorg
+🖼️ Styling | [Stylix](./modules/graphical/default.nix) | globally consistent styling 
+📝 Editor | [NeoVim](./users/common/programs/nvim/default.nix) | Extensively configured neovim
+🎮 Gaming | [Bottles](./users/common/programs/bottles.nix) & [Steam](./modules/optional/steam.nix) | Pew, Pew and such
+🌐 Browser | [Firefox](./users/patrick/firefox.nix) | Heavily configured Firefox to still my privacy and security needs
+💻 Terminal | [Kitty](./users/common/programs/kitty.nix) | fast terminal
+🎵 Music | [Spotify](./users/common/programs/spicetify.nix) | Fancy looking spotify using spicetify
+📫 Mail | [Thunderbird](./users/common/programs/thunderbird.nix) | Best email client there is
+🎛️ StreamDeck | [StreamDeck](./users/patrick/streamdeck.nix) | More hotkeys = more better
+
+## Service Configuration
+These are services I've set up
+
+| | Programm | Description
+---|---|---
+💸 Budgeting | [FireflyIII](./config/services/firefly.nix) | Self Hosted budgeting tool
+🛡️ AdBlock | [AdGuard Home](./config/services/adguardhome.nix) | DNS Adblocker
+🔨 Git | [Forgejo](./config/services/forgejo.nix) | Selfhosted GitHub alternative
+📸 Photos | [Immich](./config/services/immich.nix) | Selfhosted Google Photos equivalent
+🔒 SSO | [Kanidm](./config/services/kanidm.nix) | Secure single sign on Identity Provider
+📧 E-Mail | [Maddy](./config/services/maddy.nix) | All in one mail server
+🎧 Communication | [Murmur](./config/services/murmur.nix) | Selfhosted mumble server for secure and always available communication
+🌐 VPN | [Netbird](./config/services/netbird.nix) | Easy to use peer to peer VPN solution based on wireguard
+🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
+🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learnig supported document organizing plattform
+📁 NAS | [Samba](./config/services/samba.nix) | Local network shared storage
+📰 Feedreader | [freshRSS](./config/services/ttrss.nix) | hosted RSS feed aggregator
+🔑 Passwords | [Vaultwarden](./config/services/vaultwarden.nix) | Self hosted bitwarden server
+🎵 Music | [Your Spotify](./config/services/yourspotify.nix) | Spotify listening habits analyzer
+
+
+## External dependencies
+These are notable external flakes which this config depend upon
+
+| Name | Usage |
+---|---
+[NixVim](https://github.com/nix-community/nixvim) | NeoVim using nix
+[MicroVM](https://github.com/astro/microvm.nix) | Declarative VMs
+[Disko](https://github.com/nix-community/disko)| disk partitioning
+[nixos-generators](https://github.com/nix-community/nixos-generators) | generate installers
+[home-manager](https://github.com/nix-community/home-manager) | user config
+[agenix](https://github.com/ryantm/agenix) | secret files for nix
+[agenix-rekey](https://github.com/oddlama/agenix-rekey) | secret files that are git commitable
+[nixos-nftables-firewall](https://github.com/thelegy/nixos-nftables-firewall) | nftables based firewall
+[impermanence](https://github.com/nix-community/impermanence) | stateless filesystem
+[lanzaboote](https://github.com/nix-community/lanzaboote) | Secure Boot
+[stylix](https://github.com/danth/stylix) | theming
+[spicetify](https://github.com/the-argus/spicetify-nix) | spotify looking fancy
+
+
 
 ## How-To
 
@@ -72,8 +78,8 @@
     1. Create and fill `default.nix`
     1. Fill `net.nix`
     1. Fill `fs.nix`
-    2. Don't forget to add necesarry config for filesystems, etc.
-3. Generate ISO image with `nix build --print-out-paths --no-link .#images.<target-system>.live-iso`
+    2. Don't forget to add necessary config for filesystems, etc.
+3. Generate ISO image using `nix build --print-out-paths --no-link .#images.<target-system>.live-iso`
     - This might take multiple minutes(~10)
     - Alternatively boot an official nixos image connect with password
 3. Copy ISO to usb using dd
@@ -85,6 +91,7 @@
 5. Deploy system
 
 ### Add secureboot to new systems
+
 1. generate keys with `sbct create-keys`
 1. tar the resulting folder using `tar cvf secureboot.tar -C /etc/secureboot .`
 1. Copy the tar to local using scp and encrypt it using rage
@@ -104,10 +111,11 @@
 1. Time to reboot and pray
 
 ### Add luks encryption TPM keys
+
 `systemd-cryptenroll --tpm2-with-pin={yes/no} --tpm2-device=auto <device>`
 
 
-## Deploy
+### Deploy from new host
 
 If deploying from a host not containing the necessary nix configuration option append
 ```bash

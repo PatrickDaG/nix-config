@@ -213,8 +213,8 @@ in {
         dataset = "bunker/shared/paperless";
       };
       modules = [
-        ../../modules/config
-        ../../modules/services/${guestName}.nix
+        ../../config/basic
+        ../../config/services/${guestName}.nix
         {
           node.secretsDir = config.node.secretsDir + "/${guestName}";
           networking.nftables.firewall.zones.untrusted.interfaces = [config.guests.${guestName}.networking.mainLinkName];

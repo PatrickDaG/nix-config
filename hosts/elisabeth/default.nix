@@ -12,12 +12,13 @@
       inputs.nixos-hardware.nixosModules.common-cpu-amd
       inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
 
-      ../../modules/config
-      ../../modules/optional/initrd-ssh.nix
-      ../../modules/optional/secureboot.nix
+      ../../config/basic
 
-      ../../modules/hardware/physical.nix
-      ../../modules/hardware/zfs.nix
+      ../../config/optional/initrd-ssh.nix
+      ../../config/optional/secureboot.nix
+      ../../config/optional/zfs.nix
+
+      ../../config/hardware/physical.nix
 
       ./net.nix
       ./fs.nix

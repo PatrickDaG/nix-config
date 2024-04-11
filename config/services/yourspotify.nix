@@ -7,7 +7,7 @@
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [3000 80];
   };
-  imports = [./your_spotify_m.nix];
+  imports = [../../modules/your_spotify.nix];
   age.secrets.spotifySecret = {
     owner = "root";
     mode = "440";

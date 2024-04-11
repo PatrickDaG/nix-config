@@ -1,7 +1,4 @@
 {pkgs, ...}: {
-  home.shellAliases = {
-    commit-reuse-message = ''git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
-  };
   programs.git = {
     enable = true;
     difftastic.enable = true;
@@ -12,6 +9,8 @@
       a = "add";
       p = "push";
       rebase = "rebase --gpg-sign";
+      fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
+      crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
     };
     extraConfig = {
       core.pager = "${pkgs.delta}/bin/delta";

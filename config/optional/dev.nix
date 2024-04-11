@@ -5,19 +5,14 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
-  imports = [
-    ./docs.nix
-  ];
   environment.systemPackages = with pkgs; [
     gnumake
     pciutils
     gcc
     usbutils
+    man-pages
+    man-pages-posix
   ];
-  programs.wireshark = {
-    enable = true;
-    package = pkgs.wireshark;
-  };
 
   services.nixseparatedebuginfod.enable = true;
   environment = {
@@ -27,5 +22,10 @@ lib.optionalAttrs (!minimal) {
       export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
       umask 077
     '';
+  };
+  documentation = {
+    dev.enable = true;
+    man.enable = true;
+    info.enable = false;
   };
 }

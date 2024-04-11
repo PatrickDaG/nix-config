@@ -7,7 +7,6 @@
   # import shared sway config
   imports = [../sway3.nix];
   systemd.user.services = {
-    wired.Install.WantedBy = lib.mkForce ["i3-session.target"];
     flameshot.Install.WantedBy = lib.mkForce ["i3-session.target"];
   };
   stylix.targets.i3.enable = true;

@@ -9,20 +9,17 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
 
-    ../../modules/config
-    ../../modules/dev
-    ../../modules/graphical
-
-    ../../modules/optional/wayland.nix
-    ../../modules/optional/xserver.nix
-    ../../modules/optional/printing.nix
-
-    ../../modules/hardware/bluetooth.nix
-    ../../modules/hardware/laptop.nix
-    ../../modules/hardware/physical.nix
-    ../../modules/hardware/pipewire.nix
-    ../../modules/hardware/yubikey.nix
-    ../../modules/hardware/zfs.nix
+    ../../config/basic
+    ../../config/optional/dev.nix
+    ../../config/optional/graphical.nix
+    ../../config/optional/wayland.nix
+    ../../config/optional/xserver.nix
+    ../../config/optional/printing.nix
+    ../../config/hardware/bluetooth.nix
+    ../../config/hardware/laptop.nix
+    ../../config/hardware/physical.nix
+    ../../config/hardware/pipewire.nix
+    ../../config/hardware/yubikey.nix
 
     ./net.nix
     ./fs.nix

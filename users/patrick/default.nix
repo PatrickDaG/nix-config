@@ -68,7 +68,6 @@ lib.optionalAttrs (!minimal) {
         ../common/programs/kitty.nix
         ../common/programs/minecraft.nix
         ../common/programs/nvim
-        ../common/programs/openttd.nix
         ../common/programs/poe.nix
         ../common/programs/spicetify.nix
         ../common/programs/thunderbird.nix

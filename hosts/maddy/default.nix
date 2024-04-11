@@ -1,21 +1,13 @@
 {
-  lib,
-  minimal,
-  ...
-}: {
-  imports =
-    [
-      ../../modules/config
-      ../../modules/optional/initrd-ssh.nix
-      ../../modules/services/maddy.nix
+  imports = [
+    ../../config/basic
+    ../../config/optional/initrd-ssh.nix
+    ../../config/services/maddy.nix
+    ../../config/optional/zfs.nix
 
-      ../../modules/hardware/zfs.nix
-
-      ./net.nix
-      ./fs.nix
-    ]
-    ++ lib.lists.optionals (!minimal) [
-    ];
+    ./net.nix
+    ./fs.nix
+  ];
   services.xserver = {
     layout = "de";
     xkbVariant = "bone";
