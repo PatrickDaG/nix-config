@@ -25,6 +25,7 @@
         maim = "${pkgs.maim}/bin/maim -qs -b 1 --hidecursor";
       in {
         "Menu" = "exec ${cfg.menu}";
+        "Ctrl+F9" = "exec ${config.xsession.wallpapers.script}";
         "${cfg.modifier}+F12" =
           "exec "
           + toString (

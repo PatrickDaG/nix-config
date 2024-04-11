@@ -40,7 +40,7 @@
     };
     indent-blankline = {
       enable = true;
-      extraOptions = {
+      settings = {
         exclude.buftypes = ["help" "terminal" "nofile"];
         exclude.filetypes = ["terminal" "lsp-info"];
       };
@@ -56,7 +56,7 @@
     };
     treesitter-context.enable = true;
     vim-matchup.enable = true;
-    comment-nvim.enable = true;
+    comment.enable = true;
     # Fzf picker for arbitrary stuff
     telescope = {
       enable = true;

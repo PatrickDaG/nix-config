@@ -6,7 +6,7 @@
   exe = lib.getExe (pkgs.nixvim.makeNixvim {
     package = pkgs.neovim-clean;
 
-    options = {
+    opts = {
       buftype = "nowrite";
       backup = false;
       modeline = false;

@@ -10,7 +10,7 @@
             # button number
             "5" = {
               # keyInput to press
-              keys = "F7";
+              keys = "ctrl+F7";
               # Text shown on button
               #text = "mute";
               icon = config.images.images."mic.png";
@@ -18,8 +18,13 @@
               text_vertical_align = "middle-bottom";
               background_color = "#7289DA";
             };
+            "0" = {
+              keys = "ctrl+F9";
+              icon = config.images.images."wallpaper.png";
+              background_color = "#7289DA";
+            };
             "6" = {
-              keys = "F8";
+              keys = "ctrl+F8";
               icon = config.images.images."heads.png";
               background_color = "#7289DA";
             };

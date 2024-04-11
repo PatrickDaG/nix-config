@@ -1,5 +1,5 @@
 {
-  programs.nixvim.options = {
+  programs.nixvim.opts = {
     # Set maximum undo levels
     undolevels = 1000000;
     # Persistent Undo
