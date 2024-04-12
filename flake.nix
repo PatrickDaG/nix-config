@@ -68,6 +68,8 @@
 
     templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
 
+    nix-topology.url = "github:oddlama/nix-topology";
+
     impermanence.url = "github:nix-community/impermanence";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -107,12 +109,13 @@
     devshell,
     nixvim,
     nixos-extra-modules,
+    nix-topology,
     ...
   } @ inputs: let
     inherit (nixpkgs) lib;
     stateVersion = "23.05";
   in
-    {
+    rec {
       secretsConfig = {
         # This should be a link to one of the age public keys is './keys'
         masterIdentities = ["/run/decrypt.key.pub"];
@@ -154,12 +157,21 @@
           ++ [
             # nixpkgs-wayland.overlay
             nixos-extra-modules.overlays.default
+            nix-topology.overlays.default
             devshell.overlays.default
             agenix-rekey.overlays.default
             nixvim.overlays.default
           ];
         inherit system;
         config.allowUnfree = true;
+      };
+
+      topology = import nix-topology {
+        inherit pkgs;
+        modules = [
+          ./nix/topology.nix
+          {inherit (self) nixosConfigurations;}
+        ];
       };
 
       images.live-iso = nixos-generators.nixosGenerate {
@@ -184,6 +196,7 @@
             alejandra.enable = true;
             deadnix.enable = true;
             statix.enable = true;
+            hunspell.enable = true;
           };
         };
       devShell = import ./nix/devshell.nix inputs system;
