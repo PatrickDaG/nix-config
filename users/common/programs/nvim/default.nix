@@ -25,9 +25,27 @@
     extraConfigLuaPre = ''
       require("onedark").load()
     '';
-    extraConfigLuaPost = ''
-      vim.notify = require("notify")
-    '';
+    extraConfigLuaPost =
+      /*
+      lua
+      */
+      ''
+        vim.notify = require("notify")
+        require("window-picker").setup {
+          hint = "floating-big-letter",
+          filter_rules = {
+            bo = {
+              filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
+              buftype = { "terminal", "quickfix", "prompt" },
+            },
+          },
+          floating_big_letter = {
+            font = "ansi-shadow",
+          },
+          selection_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          show_prompt = false,
+        }
+      '';
   };
   home.sessionVariables.EDITOR = "nvim";
   home.shellAliases.vim = "nvim";
