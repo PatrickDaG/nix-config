@@ -32,6 +32,10 @@ in {
       "/var/lib/systemd"
       "/var/lib/nixos"
       {
+        directory = "/var/tmp/nix-import-encrypted/";
+        mode = "0777";
+      }
+      {
         directory = "/var/tmp/agenix-rekey";
         mode = "0777";
       }
