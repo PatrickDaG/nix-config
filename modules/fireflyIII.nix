@@ -16,9 +16,9 @@
     mkDefault
     ;
 
-  package = cfg.package.override {
+  package = "${cfg.package.override {
     inherit (cfg) dataDir;
-  };
+  }}/share/php/firefly-iii";
 in {
   options.services.firefly-iii = {
     enable = mkEnableOption "firefly-iii";

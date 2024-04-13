@@ -1,20 +1,25 @@
 {
-  stdenv,
   lib,
-  fetchurl,
   dataDir ? "/var/lib/firefly-iii",
+  php83,
+  fetchFromGitHub,
+  buildNpmPackage,
 }: let
   version = "6.1.13";
-  src = fetchurl {
-    url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
-    hash = "sha256-uQzk3pgdZ0baqmBouHfcuzrymwrsDy6b4IwSY3br6f0=";
+  src = fetchFromGitHub {
+    owner = "firefly-iii";
+    repo = "firefly-iii";
+    rev = "v${version}";
+    hash = "sha256-85zI8uCyyoCflzxDkvba6FWa9B3kh179DJfQ2Um6MGM=";
   };
-in
-  stdenv.mkDerivation rec {
+  frontend = buildNpmPackage {
     inherit src version;
     pname = "firefly-iii";
-    sourceRoot = ".";
+    npmDepsHash = "sha256-wuPUE6XuzzgKjpxZVgwh2wGut15M61WSBFG+YIZwOFM=";
     installPhase = ''
+      mkdir -p $out
+      rm -rf ./node_modules
+      cp -r ./ $out
       mkdir -p $out/storage
       cp -r ./ $out
       rm -Rf $out/storage
@@ -22,6 +27,13 @@ in
       rm -Rf $out/bootstrap/cache
       ln -fs ${dataDir}/bootstrap/cache $out/bootstrap/cache
     '';
+  };
+in
+  php83.buildComposerProject rec {
+    inherit version;
+    src = frontend;
+    pname = "firefly-iii";
+    vendorHash = "sha256-CVGKyyLp5hjjpEulDNEYfljU4OgPBaFcYQQAUf6GeGs=";
 
     meta = with lib; {
       description = "Firefly III: a personal finances manager";
