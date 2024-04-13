@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-BMy9Shy9KAx5+VbvH2WaA0wMFUNM5dqU/dssUNE1NWY=";
   postInstall = ''
     substituteInPlace zsh-histdb-skim-vendored.zsh \
-    --replace "zsh-histdb-skim" "$out/bin/zsh-histdb-skim"
+    --replace-fail "zsh-histdb-skim" "$out/bin/zsh-histdb-skim"
     cp zsh-histdb-skim-vendored.zsh $out/zsh-histdb-skim.plugin.zsh
   '';
 }

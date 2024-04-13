@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
   patchPhase = ''
     substituteInPlace "sqlite-history.zsh" "histdb-migrate" "histdb-merge" \
-    --replace "sqlite3" "${sqlite}/bin/sqlite3"
+    --replace-fail "sqlite3" "${sqlite}/bin/sqlite3"
   '';
   installPhase = ''
     mkdir -p $out

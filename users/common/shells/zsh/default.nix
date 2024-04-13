@@ -14,7 +14,7 @@
   programs.fzf.enable = true;
 
   programs.carapace = {
-    enable = true;
+    enable = false;
     # this would source all completers sadly some are worse than the builtin completers
     enableZshIntegration = false;
   };
