@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  forgejoDomain = "git.${config.secrets.secrets.global.domains.web}";
+  forgejoDomain = "forge.${config.secrets.secrets.global.domains.web}";
 in {
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -42,6 +42,14 @@ in {
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
   services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
 
+  users.groups.git = {};
+  users.users.git = {
+    isSystemUser = true;
+    useDefaultShell = true;
+    group = "git";
+    home = config.services.forgejo.stateDir;
+  };
+
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.forgejo.settings.server.HTTP_PORT];
@@ -51,15 +59,15 @@ in {
   environment.persistence."/panzer".directories = [
     {
       directory = config.services.forgejo.stateDir;
-      user = "forgejo";
-      group = "forgejo";
+      user = "git";
+      group = "git";
       mode = "0700";
     }
   ];
   age.secrets.forgejo-mailer-passwd = {
     rekeyFile = config.node.secretsDir + "/forgejo-passwd.age";
-    owner = "forgejo";
-    group = "forgejo";
+    owner = "git";
+    group = "git";
     mode = "0700";
   };
 
@@ -67,6 +75,8 @@ in {
     enable = true;
     # TODO db backups
     # dump.enable = true;
+    user = "git";
+    group = "git";
     lfs.enable = true;
     mailerPasswordFile = config.age.secrets.forgejo-mailer-passwd.path;
     settings = {

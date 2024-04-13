@@ -66,7 +66,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    templates.url = "git+https://git.lel.lol/patrick/nix-templates.git";
+    #templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
 
     nix-topology.url = "github:oddlama/nix-topology";
 

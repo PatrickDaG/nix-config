@@ -10,7 +10,7 @@
   domainOf = hostName: let
     domains = {
       adguardhome = "adguardhome";
-      forgejo = "git";
+      forgejo = "forge";
       immich = "immich";
       nextcloud = "nc";
       ollama = "ollama";

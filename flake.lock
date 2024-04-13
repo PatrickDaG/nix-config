@@ -1730,8 +1730,7 @@
         "pre-commit-hooks": "pre-commit-hooks_5",
         "spicetify-nix": "spicetify-nix",
         "stylix": "stylix",
-        "systems": "systems_13",
-        "templates": "templates"
+        "systems": "systems_13"
       }
     },
     "rust-overlay": {
@@ -2017,21 +2016,6 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
-      }
-    },
-    "templates": {
-      "locked": {
-        "lastModified": 1696855554,
-        "narHash": "sha256-9VYXESOCqGGZ8HHl4LN51k+74Kf5Nf9czoqqIN7IEo0=",
-        "ref": "refs/heads/main",
-        "rev": "a6c35c2af9f26599e81002630329054b99efbe79",
-        "revCount": 11,
-        "type": "git",
-        "url": "https://git.lel.lol/patrick/nix-templates.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.lel.lol/patrick/nix-templates.git"
       }
     },
     "treefmt-nix": {

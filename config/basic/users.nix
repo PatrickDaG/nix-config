@@ -21,7 +21,7 @@
     nextcloud = uidGid 213;
     redis-nextcloud = uidGid 214;
     radicale = uidGid 215;
-    forgejo = uidGid 215;
+    git = uidGid 215;
     vaultwarden = uidGid 215;
     redis-paperless = uidGid 216;
     microvm = uidGid 217;

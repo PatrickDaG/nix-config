@@ -150,7 +150,7 @@ in {
       };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
-        originUrl = "https://git.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://forge.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-forgejo.path;
         scopeMaps."forgejo.access" = ["openid" "email" "profile"];
         allowInsecureClientDisablePkce = true;
