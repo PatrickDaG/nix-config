@@ -1205,11 +1205,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1712845388,
-        "narHash": "sha256-dm0iA0p9rDY4UG8zA9f3+81jcjJsEeXBYbooHlo0KDk=",
+        "lastModified": 1712920175,
+        "narHash": "sha256-9Tx06/vDa8rk674G8+ySSMqvF3lV7pV4GDbswkFB1O8=",
         "owner": "oddlama",
         "repo": "nix-topology",
-        "rev": "fa88531cf068e7d11d8936705173279b5e1fbc74",
+        "rev": "eb12c632505b724a4752fd5317481350d47ef61d",
         "type": "github"
       },
       "original": {
@@ -1244,12 +1244,12 @@
         "pre-commit-hooks": "pre-commit-hooks_3"
       },
       "locked": {
+        "dirtyRev": "3ade74f7616458c38f00ee6fed73794e1a79bbf3-dirty",
+        "dirtyShortRev": "3ade74f-dirty",
         "lastModified": 1712851738,
-        "narHash": "sha256-3Hxz4ORxF2QSbRUt3YPK1MN6xbVQjRjSxSEAJ8lePz8=",
-        "owner": "oddlama",
-        "repo": "nixos-extra-modules",
-        "rev": "3ade74f7616458c38f00ee6fed73794e1a79bbf3",
-        "type": "github"
+        "narHash": "sha256-fy4D8OlrkEmJILhvWw+O7+frgtHRfbHSnhps2o6177U=",
+        "type": "git",
+        "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
       },
       "original": {
         "owner": "oddlama",

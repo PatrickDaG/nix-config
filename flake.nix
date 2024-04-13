@@ -169,8 +169,8 @@
       topology = import nix-topology {
         inherit pkgs;
         modules = [
-          ./nix/topology.nix
           {inherit (self) nixosConfigurations;}
+          ./nix/topology.nix
         ];
       };
 
