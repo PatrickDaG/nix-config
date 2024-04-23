@@ -54,7 +54,7 @@
       indent = true;
       nixvimInjections = true;
     };
-    treesitter-context.enable = true;
+    #treesitter-context.enable = true;
     vim-matchup.enable = true;
     comment.enable = true;
     # Fzf picker for arbitrary stuff
@@ -67,7 +67,6 @@
       keymaps = {
         "<leader>gf" = {
           action = "git_files";
-          desc = "Telescope Git Files";
         };
         "<leader>gg" = "live_grep";
       };

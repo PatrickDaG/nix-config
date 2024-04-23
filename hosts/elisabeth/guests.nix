@@ -230,7 +230,6 @@ in {
       ];
     };
 
-    #deadnix: skip
     mkMicrovm = guestName: cfg: {
       ${guestName} =
         mkGuest guestName cfg

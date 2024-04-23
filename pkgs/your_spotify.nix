@@ -7,6 +7,7 @@
   mkYarnPackage,
   nodejs,
   prefetch-yarn-deps,
+  fixup-yarn-lock,
   yarn,
 }: let
   version = "1.10.1";
@@ -53,7 +54,7 @@ in
 
       runHook postBuild
     '';
-    nativeBuildInputs = [makeWrapper yarn prefetch-yarn-deps];
+    nativeBuildInputs = [fixup-yarn-lock makeWrapper yarn prefetch-yarn-deps];
     installPhase = ''
       mkdir -p $out/share/your_spotify
       cp -r node_modules $out/share/your_spotify/node_modules

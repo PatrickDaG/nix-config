@@ -6,9 +6,7 @@
     your_spotify = super.callPackage ./your_spotify.nix {};
     actual = super.callPackage ./actual.nix {};
     deploy = super.callPackage ./deploy.nix {};
-    netbird-dashboard = super.callPackage ./netbird-dashboard {};
     minify = super.callPackage ./minify {};
-    firefly-iii = super.callPackage ./firefly-iii.nix {};
     mongodb-bin = super.callPackage ./mongodb-bin.nix {};
     awakened-poe-trade = super.callPackage ./awakened-poe-trade.nix {};
     neovim-clean = super.neovim-unwrapped.overrideAttrs (_neovimFinal: neovimPrev: {

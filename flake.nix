@@ -66,7 +66,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
+    templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
 
     nix-topology.url = "github:oddlama/nix-topology";
 
@@ -115,7 +115,7 @@
     inherit (nixpkgs) lib;
     stateVersion = "23.05";
   in
-    rec {
+    {
       secretsConfig = {
         # This should be a link to one of the age public keys is './keys'
         masterIdentities = ["/run/decrypt.key.pub"];

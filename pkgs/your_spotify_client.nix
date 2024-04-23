@@ -4,6 +4,7 @@
   your_spotify,
   mkYarnPackage,
   prefetch-yarn-deps,
+  fixup-yarn-lock,
   src,
   version,
   yarn,
@@ -42,7 +43,7 @@ mkYarnPackage rec {
     popd
     runHook postBuild
   '';
-  nativeBuildInputs = [yarn prefetch-yarn-deps];
+  nativeBuildInputs = [fixup-yarn-lock yarn prefetch-yarn-deps];
 
   installPhase = ''
     mkdir -p $out
