@@ -14,6 +14,9 @@
         ".ollama"
         ".config/Mumble"
 
+        ".config/xournalpp"
+        ".cache/xournalpp"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
