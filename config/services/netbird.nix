@@ -15,11 +15,13 @@
 
   age.secrets.coturnSecret = {
     generator.script = "alnum";
-    group = "netbird";
+    owner = "turnserver";
   };
 
   age.secrets.dataEnc = {
-    generator.script = "alnum";
+    generator.script = {pkgs, ...}: ''
+      ${lib.getExe pkgs.openssl} rand -base64 32
+    '';
     group = "netbird";
   };
 
