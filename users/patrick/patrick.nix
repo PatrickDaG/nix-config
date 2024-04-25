@@ -15,6 +15,7 @@
       jq
       osu-lazer-bin
       mumble
+      zotero
     ];
   };
 }

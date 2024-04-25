@@ -9,6 +9,8 @@
         "repos"
         "Downloads"
 
+        "Zotero"
+
         "invokeai"
         ".textgen"
         ".ollama"
