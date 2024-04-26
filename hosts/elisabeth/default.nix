@@ -20,6 +20,7 @@
 
       ../../config/hardware/physical.nix
 
+      ./blog.nix
       ./net.nix
       ./fs.nix
     ]
