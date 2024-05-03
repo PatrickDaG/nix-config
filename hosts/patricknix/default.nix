@@ -5,7 +5,9 @@
 }: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
-    inputs.nixos-hardware.nixosModules.common-gpu-intel
+    # for some reasons the cpu-intel includes the gpu as well
+    # for just cpu you should include cpu-intel/cpu-only.nix
+    #inputs.nixos-hardware.nixosModules.common-gpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
 
