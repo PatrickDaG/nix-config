@@ -13,19 +13,19 @@ lib.optionalAttrs (!minimal) {
     autoRepeatDelay = 235;
     autoRepeatInterval = 60;
     videoDrivers = ["modesetting"];
-    libinput = {
-      enable = true;
-      mouse = {
-        accelSpeed = "0.5";
-        accelProfile = "flat";
-        middleEmulation = false;
-      };
-      touchpad = {
-        accelProfile = "flat";
-        accelSpeed = "1";
-        naturalScrolling = true;
-        disableWhileTyping = true;
-      };
+  };
+  services.libinput = {
+    enable = true;
+    mouse = {
+      accelSpeed = "0.5";
+      accelProfile = "flat";
+      middleEmulation = false;
+    };
+    touchpad = {
+      accelProfile = "flat";
+      accelSpeed = "1";
+      naturalScrolling = true;
+      disableWhileTyping = true;
     };
   };
   services.udev.extraRules = let
