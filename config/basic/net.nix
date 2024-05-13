@@ -25,7 +25,7 @@
   services.resolved = {
     enable = true;
     # man I whish dnssec would be viable to use
-    dnssec = "allow-downgrade";
+    dnssec = "false";
     llmnr = "false";
     extraConfig = ''
       Domains=~.
