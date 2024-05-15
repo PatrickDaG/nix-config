@@ -16,6 +16,7 @@
       osu-lazer-bin
       mumble
       zotero
+      timer
     ];
   };
 }

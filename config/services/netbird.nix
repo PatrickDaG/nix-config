@@ -55,6 +55,10 @@
             # TODO I think this is broken
             Turns = [
               {
+                Proto = "udp";
+                URI = "turn:${config.networking.netbird.server.managemen.turnDomain}:${builtins.toString config.networking.netbird.server.managemen.turnPort}";
+                Username = "netbird";
+
                 Password._secret = config.age.secrets.coturnPassword.path;
               }
             ];
