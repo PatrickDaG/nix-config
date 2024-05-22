@@ -5,14 +5,15 @@
 }: {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.adguardhome.settings.bind_port];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.adguardhome.port];
   };
   services.adguardhome = {
     enable = true;
     mutableSettings = false;
+    host = "0.0.0.0";
+    port = 3000;
+
     settings = {
-      bind_port = 3000;
-      bind_host = "0.0.0.0";
       dns = {
         bind_hosts = [
           (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)

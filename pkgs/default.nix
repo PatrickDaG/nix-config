@@ -22,8 +22,8 @@
       provisionSrc = super.fetchFromGitHub {
         owner = "oddlama";
         repo = "kanidm-provision";
-        rev = "aa7a1c8ec04622745b385bd3b0462e1878f56b51";
-        hash = "sha256-NRolS3l2kARjkhWP7FYUG//KCEiueh48ZrADdCDb9Zg=";
+        rev = "v1.1.0";
+        hash = "sha256-pFOFFKh3la/sZGXj+pAM8x4SMeffvvbOvTjPeHS1XPU=";
       };
     in {
       patches =

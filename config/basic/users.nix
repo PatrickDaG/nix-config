@@ -31,7 +31,7 @@
     mongodb = uidGid 221;
     authelia-main = uidGid 222;
     kanidm = uidGid 223;
-    oauth2_proxy = uidGid 224;
+    oauth2-proxy = uidGid 224;
     influxdb2 = uidGid 225;
     firefly-iii = uidGid 226;
     paperless = uidGid 315;

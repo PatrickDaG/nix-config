@@ -56,7 +56,7 @@
             Turns = [
               {
                 Proto = "udp";
-                URI = "turn:${config.networking.netbird.server.managemen.turnDomain}:${builtins.toString config.networking.netbird.server.managemen.turnPort}";
+                URI = "turn:${config.services.netbird.server.management.turnDomain}:${builtins.toString config.services.netbird.server.management.turnPort}";
                 Username = "netbird";
 
                 Password._secret = config.age.secrets.coturnPassword.path;
