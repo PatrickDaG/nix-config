@@ -70,7 +70,7 @@ in {
 
               # pass information via X-User and X-Email headers to backend,
               # requires running with --set-xauthrequest flag
-              auth_request_set $user   $upstream_http_x_auth_request_user;
+              auth_request_set $user   $upstream_http_x_auth_request_preferred_username;
               auth_request_set $email  $upstream_http_x_auth_request_email;
               proxy_set_header X-User  $user;
               proxy_set_header X-Email $email;
@@ -160,7 +160,9 @@ in {
       (blockOf "paperless" {maxBodySize = "5G";})
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
-      (blockOf "firefly" {port = 80;})
+      ((proxyProtect "firefly" {port = 80;} true)
+        // {
+        })
       (blockOf "apispotify" {
         port = 3000;
         upstream = "yourspotify";

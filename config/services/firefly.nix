@@ -26,6 +26,9 @@
       TRUSTED_PROXIES = nodes.elisabeth.config.wireguard.elisabeth.ipv4;
       SITE_OWNER = "firefly-admin@${config.secrets.secrets.global.domains.mail_public}";
       APP_KEY_FILE = config.age.secrets.appKey.path;
+      AUTHENTICATION_GUARD = "remote_user_guard";
+      AUTHENTICATION_GUARD_HEADER = "X-User";
+      AUTHENTICATION_GUARD_EMAIL = "X-Email";
     };
   };
 
