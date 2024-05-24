@@ -88,9 +88,6 @@ in {
         preferShortUsername = true;
       };
 
-      groups."rss.access" = {};
-      groups."oauth2-proxy.access" = {};
-
       groups."nextcloud.access" = {
         members = ["nextcloud.admins"];
       };
@@ -122,16 +119,10 @@ in {
         scopeMaps."immich.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
       };
-      groups."netbird.access" = {
-      };
 
-      groups."forgejo.access" = {
-        members = ["forgejo.admins"];
+      groups."rss.access" = {};
+      groups."adguardhome.access" = {
       };
-      groups."forgejo.admins" = {
-        members = ["administrator"];
-      };
-
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
         originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
@@ -146,7 +137,11 @@ in {
         };
       };
 
-      groups."adguardhome.access" = {
+      groups."forgejo.access" = {
+        members = ["forgejo.admins"];
+      };
+      groups."forgejo.admins" = {
+        members = ["administrator"];
       };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
@@ -159,6 +154,18 @@ in {
           joinType = "array";
           valuesByGroup."forgejo.admins" = ["admin"];
         };
+      };
+
+      groups."netbird.access" = {
+      };
+      systems.oauth2.netbird = {
+        public = true;
+        displayName = "Netbird";
+        originUrl = "https://netbird.${config.secrets.secrets.global.domains.web}/";
+        preferShortUsername = true;
+        enableLocalhostRedirects = true;
+        enableLegacyCrypto = true;
+        scopeMaps."netbird.access" = ["openid" "email" "profile"];
       };
     };
   };
