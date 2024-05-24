@@ -4,6 +4,7 @@
   lib,
   ...
 }: {
+  i18n.supportedLocales = ["all"];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
