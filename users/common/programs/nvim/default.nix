@@ -42,7 +42,7 @@
           floating_big_letter = {
             font = "ansi-shadow",
           },
-          selection_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          selection_chars = "EITCAUDJÄÜVF",
           show_prompt = false,
         }
       '';
