@@ -17,6 +17,15 @@
       mumble
       zotero
       timer
+
+      ocaml
+      dune_3
+      ocamlformat # formatter
+      ocamlPackages.ocaml-lsp
+      ocamlPackages.utop
+      ocamlPackages.mparser
+      ocamlPackages.ounit2
+      ocamlPackages.qcheck
     ];
   };
 }
