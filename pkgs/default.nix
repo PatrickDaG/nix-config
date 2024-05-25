@@ -5,6 +5,7 @@
     zsh-histdb = super.callPackage ./zsh-histdb.nix {};
     your_spotify = super.callPackage ./your_spotify.nix {};
     actual = super.callPackage ./actual.nix {};
+    homebox = super.callPackage ./homebox.nix {};
     deploy = super.callPackage ./deploy.nix {};
     minify = super.callPackage ./minify {};
     j-link = super.callPackage ./jlink.nix {};
