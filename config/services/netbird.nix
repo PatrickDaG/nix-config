@@ -3,6 +3,8 @@
   lib,
   ...
 }: {
+  disabledModules = ["services/networking/netbird/server.nix"];
+  imports = [../../modules/netbird/server.nix];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [80 3000 3001];
@@ -33,7 +35,7 @@
       domain = "netbird.${config.secrets.secrets.global.domains.web}";
 
       dashboard = {
-        enableNginx = lib.mkForce true;
+        enableNginx = true;
         settings = {
           AUTH_AUTHORITY = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
         };
@@ -52,23 +54,12 @@
         settings = {
           TURNConfig = {
             Secret._secret = config.age.secrets.coturnSecret.path;
-            # TODO I think this is broken
-            Turns = [
-              {
-                Proto = "udp";
-                URI = "turn:${config.services.netbird.server.management.turnDomain}:${builtins.toString config.services.netbird.server.management.turnPort}";
-                Username = "netbird";
-
-                Password._secret = config.age.secrets.coturnPassword.path;
-              }
-            ];
           };
           DataStoreEncryptionKey._secret = config.age.secrets.dataEnc.path;
         };
       };
     };
   };
-  security.acme.certs = lib.mkForce {};
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/netbird-mgmt";
