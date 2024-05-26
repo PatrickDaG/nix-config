@@ -55,6 +55,13 @@
           TURNConfig = {
             Secret._secret = config.age.secrets.coturnSecret.path;
           };
+          HttpConfig = {
+            # This is not possible
+            # failed validating JWT token sent from peer y1ParZkbzVMQGeU/KMycYl75v90i2O6EwgO1YQZnSFs= with error rpc error: code = Internal desc = unable to fetch account with claims, err: user ID is empty
+            #AuthUserIDClaim = "preferred_username";
+            AuthAudience = "netbird";
+          };
+
           DataStoreEncryptionKey._secret = config.age.secrets.dataEnc.path;
         };
       };
