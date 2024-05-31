@@ -24,6 +24,7 @@
         maim = "${pkgs.maim}/bin/maim -qs -b 1 --hidecursor";
       in {
         "Menu" = "exec ${cfg.menu}";
+        "${cfg.modifier}+c" = "exec ${lib.getExe pkgs.scripts.clone-term}";
         "Ctrl+F9" = "exec ${config.xsession.wallpapers.script}";
         "${cfg.modifier}+F12" =
           "exec "
