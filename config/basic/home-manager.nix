@@ -29,5 +29,10 @@
   };
   # HM zsh needs this or else the startup order is fucked
   # and env variables will be loaded incorrectly
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    # prevent zsh from calling compinit twice with different fpaths
+    # This overrides compdump each time, in turn making startup very slow
+    enableCompletion = false;
+  };
 }
