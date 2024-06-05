@@ -128,5 +128,7 @@ in
     '';
 
     meta = with lib; {
+      mainProgram = "api";
+      maintainers = with maintainers; [patrickdag];
     };
   }

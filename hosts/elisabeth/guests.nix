@@ -24,6 +24,7 @@
       netbird = "netbird";
       actual = "actual";
       firefly = "money";
+      homebox = "homebox";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -160,6 +161,7 @@ in {
       (blockOf "paperless" {maxBodySize = "5G";})
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
+      (blockOf "homebox" {})
       ((proxyProtect "firefly" {port = 80;} true)
         // {
         })
@@ -269,6 +271,7 @@ in {
     // mkContainer "ddclient" {}
     // mkContainer "ollama" {}
     // mkContainer "murmur" {}
+    // mkContainer "homebox" {}
     // mkContainer "ttrss" {}
     // mkContainer "firefly" {}
     // mkContainer "yourspotify" {}
