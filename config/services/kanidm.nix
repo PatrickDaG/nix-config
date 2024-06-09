@@ -122,6 +122,7 @@ in {
 
       groups."rss.access" = {};
       groups."firefly.access" = {};
+      groups."ollama.access" = {};
       groups."adguardhome.access" = {
       };
       systems.oauth2.oauth2-proxy = {
@@ -131,12 +132,14 @@ in {
         scopeMaps."adguardhome.access" = ["openid" "email" "profile"];
         scopeMaps."rss.access" = ["openid" "email" "profile"];
         scopeMaps."firefly.access" = ["openid" "email" "profile"];
+        scopeMaps."ollama.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
         claimMaps.groups = {
           joinType = "array";
           valuesByGroup."adguardhome.access" = ["adguardhome_access"];
           valuesByGroup."rss.access" = ["ttrss_access"];
           valuesByGroup."firefly.access" = ["firefly_access"];
+          valuesByGroup."ollama.access" = ["ollama_access"];
         };
       };
 
