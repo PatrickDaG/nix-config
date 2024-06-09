@@ -129,6 +129,10 @@ in
 
     meta = with lib; {
       mainProgram = "api";
+      homepage = "https://hay-kot.github.io/homebox/";
       maintainers = with maintainers; [patrickdag];
+      license = licenses.agpl3Only;
+      description = "A inventory and organization system built for the Home User";
+      platforms = platforms.all;
     };
   }
