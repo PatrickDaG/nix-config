@@ -5,15 +5,15 @@ inputs: let
     concatMapAttrs
     filterAttrs
     flip
-    mapAttrs
+    genAttrs
     mapAttrs'
     nameValuePair
     nixosSystem
     ;
 
   # Creates a new nixosSystem with the correct specialArgs, pkgs and name definition
-  mkHost = {minimal}: name: hostCfg: let
-    pkgs = self.pkgs.${hostCfg.system};
+  mkHost = {minimal}: name: let
+    pkgs = self.pkgs.x86_64-linux;
   in
     nixosSystem {
       specialArgs = {
@@ -28,7 +28,6 @@ inputs: let
           # inputs.nixpkgs.nixosModules.readOnlyPkgs, since some nixosModules
           # like nixseparatedebuginfod depend on adding packages via nixpkgs.overlays.
           # So we just mimic the options and overlays defined by the passed pkgs set.
-          nixpkgs.hostPlatform = hostCfg.system;
           nixpkgs.overlays = pkgs.overlays;
           nixpkgs.config = pkgs.config;
           node.name = name;
@@ -41,12 +40,10 @@ inputs: let
   # Load the list of hosts that this flake defines, which
   # associates the minimum amount of metadata that is necessary
   # to instanciate hosts correctly.
-  hosts = builtins.fromTOML (builtins.readFile ../hosts.toml);
-  # Get all hosts of type "nixos"
-  nixosHosts = filterAttrs (_: x: x.type == "nixos") hosts;
+  hosts = builtins.attrNames (filterAttrs (_: type: type == "directory") (builtins.readDir ../hosts));
   # Process each nixosHosts declaration and generatea nixosSystem definitions
-  nixosConfigurations = flip mapAttrs nixosHosts (mkHost {minimal = false;});
-  minimalConfigurations = flip mapAttrs nixosHosts (mkHost {minimal = true;});
+  nixosConfigurations = genAttrs hosts (mkHost {minimal = false;});
+  minimalConfigurations = genAttrs hosts (mkHost {minimal = true;});
 
   # True NixOS nodes can define additional guest nodes that are built
   # together with it. We collect all defined guests from each node here

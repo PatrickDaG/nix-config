@@ -117,7 +117,7 @@
     {
       secretsConfig = {
         # This should be a link to one of the age public keys is './keys'
-        masterIdentities = [./keys/PatC.key];
+        masterIdentities = [./keys/PatC.pub];
         extraEncryptionPubkeys = [./secrets/recipients.txt];
       };
       agenix-rekey = agenix-rekey.configure {

@@ -1,5 +1,6 @@
 {self, ...}: nodeName: nodeAttrs: let
-  inherit (self.hosts.${nodeName}) system;
+  #FIXME inherit nodeAttrs. system;
+  system = "x86_64-linux";
   pkgs = self.pkgs.${system};
 
   disko-script = pkgs.writeShellScriptBin "disko-script" "${nodeAttrs.config.system.build.diskoScript}";

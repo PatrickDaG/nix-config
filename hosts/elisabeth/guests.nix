@@ -13,7 +13,7 @@
       forgejo = "forge";
       immich = "immich";
       nextcloud = "nc";
-      ollama = "ollama";
+      ollama = "ai";
       paperless = "ppl";
       ttrss = "rss";
       vaultwarden = "pw";
@@ -72,7 +72,8 @@ in {
               # pass information via X-User and X-Email headers to backend,
               # requires running with --set-xauthrequest flag
               auth_request_set $user   $upstream_http_x_auth_request_preferred_username;
-              auth_request_set $email  $upstream_http_x_auth_request_email;
+              # Set the email to our own domain in case user change their mail
+              auth_request_set $email  "''${upstream_http_x_auth_request_preferred_username}@${config.secrets.secrets.global.domains.web}";
               proxy_set_header X-User  $user;
               proxy_set_header X-Email $email;
 
@@ -162,9 +163,8 @@ in {
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
       (blockOf "homebox" {})
-      ((proxyProtect "firefly" {port = 80;} true)
-        // {
-        })
+      (proxyProtect "ollama" {} true)
+      (proxyProtect "firefly" {port = 80;} true)
       (blockOf "apispotify" {
         port = 3000;
         upstream = "yourspotify";
