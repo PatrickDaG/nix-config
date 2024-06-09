@@ -51,8 +51,4 @@
       };
     };
   };
-  system.activationScripts.decryptKey.text = ''
-    ln -f -s ${../../keys/PatC.key} /run/decrypt.key.pub
-  '';
-  services.netbird.enable = true;
 }

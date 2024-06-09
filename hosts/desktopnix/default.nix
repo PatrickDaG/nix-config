@@ -50,9 +50,6 @@
     dockerCompat = true;
   };
 
-  system.activationScripts.decryptKey.text = ''
-    ln -f -s ${../../keys/PatC.key} /run/decrypt.key.pub
-  '';
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];
 
