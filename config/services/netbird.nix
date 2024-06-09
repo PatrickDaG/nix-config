@@ -3,8 +3,6 @@
   lib,
   ...
 }: {
-  disabledModules = ["services/networking/netbird/server.nix"];
-  imports = [../../modules/netbird/server.nix];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [80 3000 3001];
