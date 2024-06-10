@@ -41,8 +41,8 @@
     desktop = 8;
   };
   hidpi = true;
-  services.xserver = {
-    xkb = {
+  services = {
+    xserver.xkb = {
       layout = "de";
       variant = "bone";
     };
