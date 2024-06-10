@@ -13,6 +13,7 @@ lib.optionalAttrs (!minimal) {
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
+        vaapiVdpau
         nvidia-vaapi-driver
       ];
     };
