@@ -62,6 +62,7 @@
       enable = true;
       extensions = {
         fzf-native.enable = true;
+        frecency.enable = true;
       };
       enabledExtensions = ["notify"];
       keymaps = {
@@ -70,7 +71,6 @@
         };
         "<leader>gg" = "live_grep";
       };
-      keymapsSilent = true;
     };
 
     # Undo tree
