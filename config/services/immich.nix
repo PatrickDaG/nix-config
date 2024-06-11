@@ -5,7 +5,7 @@
   config,
   ...
 }: let
-  version = "v1.98.2";
+  version = "v1.105.1";
   immichDomain = "immich.${config.secrets.secrets.global.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
