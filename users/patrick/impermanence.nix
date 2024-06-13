@@ -11,9 +11,6 @@
 
         "Zotero"
 
-        "invokeai"
-        ".textgen"
-        ".ollama"
         ".config/Mumble"
 
         ".config/xournalpp"
@@ -43,6 +40,7 @@
 
         ".config/spotify"
         ".cache/spotify"
+        ".local/share/cargo"
       ];
     };
     "/panzer/state".directories =

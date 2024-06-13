@@ -1,7 +1,6 @@
 {
   inputs,
   stateVersion,
-  pkgs,
   ...
 }: {
   nix = {

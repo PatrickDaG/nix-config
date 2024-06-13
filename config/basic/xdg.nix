@@ -11,4 +11,7 @@
     RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
     WINEPREFIX = "${XDG_DATA_HOME}/wine";
   };
+  nix.extraOptions = ''
+    use-xdg-base-directories = true
+  '';
 }

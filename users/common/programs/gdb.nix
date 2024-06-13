@@ -1,8 +1,8 @@
 {pkgs, ...}: {
   home.packages = [pkgs.pwndbg];
   home.enableDebugInfo = true;
-  home.file.gdbinit = {
-    target = ".gdbinit";
+  xdg.configFile.gdbinit = {
+    target = "gdb/gbdinit";
     text = ''
       set auto-load safe-path /
       set debuginfod enabled on
