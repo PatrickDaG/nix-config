@@ -46,6 +46,12 @@ lib.optionalAttrs (!minimal) {
       rekeyFile = ../../secrets/smb.cred.age;
     };
   };
+  age.secrets."my-gpg-yubikey-keygrip.tar" = {
+    rekeyFile = ./secrets/gpg-keygrip.tar.age;
+    group = "patrick";
+    mode = "640";
+  };
+
   programs.dconf.enable = true;
 
   home-manager.users.patrick = {
