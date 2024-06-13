@@ -1,7 +1,6 @@
 {
   config,
   nodes,
-  lib,
   ...
 }: {
   i18n.supportedLocales = ["all"];
@@ -22,7 +21,7 @@
     enableNginx = true;
     virtualHost = "money.${config.secrets.secrets.global.domains.web}";
     settings = {
-      APP_URL = lib.mkForce "https://money.${config.secrets.secrets.global.domains.web}";
+      APP_URL = "https://money.${config.secrets.secrets.global.domains.web}";
       TZ = "Europe/Berlin";
       TRUSTED_PROXIES = nodes.elisabeth.config.wireguard.elisabeth.ipv4;
       SITE_OWNER = "firefly-admin@${config.secrets.secrets.global.domains.mail_public}";
