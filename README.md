@@ -10,7 +10,6 @@
 🖥️ | desktopnix | Intel i5-8600K <br> NVIDIA GeForce GTX 1080 <br> 32 GiB RAM | Patrick's desktop, used for most development and gaming
 🖥️ | elisabeth | AMD Ryzen 7 5800X <br> 32 GiB RAM | Server running most cloud services
 🖥️ | maddy | Hetzner VPS | Static IP server running mail
-💻 | gojo | ? |Simons Laptop
 
 ## User Configuration
 This showcases my end user setup, which I dailydrive on all my hosts.
