@@ -89,6 +89,9 @@ in {
         SQLITE_JOURNAL_MODE = "WAL";
         LOG_SQL = false; # Leaks secrets
       };
+      indexer = {
+        REPO_INDEXER_ENABLED = true;
+      };
       # federation.ENABLED = true;
       mailer = {
         ENABLED = true;
