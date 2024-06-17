@@ -3,13 +3,18 @@
   ps,
   procps,
   xdotool,
+  jq,
 }:
 writeShellApplication {
   name = "clone-term";
-  runtimeInputs = [ps procps xdotool];
+  runtimeInputs = [ps procps xdotool jq];
   text = ''
 
-    PAREN=$(xdotool getwindowfocus getwindowpid)
+    if [[ $XDG_CURRENT_DESKTOP == sway ]]; then
+      PAREN=$(swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true).pid')
+    else
+      PAREN=$(xdotool getwindowfocus getwindowpid)
+    fi
 
     MAXDEPTH=0
     SELECTED=0
