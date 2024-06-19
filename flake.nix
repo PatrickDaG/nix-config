@@ -164,6 +164,7 @@
         inherit system;
         config.allowUnfree = true;
       };
+      packages = pkgs;
 
       topology = import nix-topology {
         inherit pkgs;

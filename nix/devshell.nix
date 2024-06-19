@@ -23,7 +23,7 @@ in
       rage
       nix
       nix-diff
-      nixpkgs-update
+      nix-update
     ];
     commands = [
       {

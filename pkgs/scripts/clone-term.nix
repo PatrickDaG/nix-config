@@ -10,7 +10,7 @@ writeShellApplication {
   runtimeInputs = [ps procps xdotool jq];
   text = ''
 
-    if [[ $XDG_CURRENT_DESKTOP == sway ]]; then
+    if [[ ''${XDG_CURRENT_DESKTOP-} == sway ]]; then
       PAREN=$(swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true).pid')
     else
       PAREN=$(xdotool getwindowfocus getwindowpid)
