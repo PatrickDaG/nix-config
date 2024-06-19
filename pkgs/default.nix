@@ -7,7 +7,6 @@
     actual = super.callPackage ./actual.nix {};
     homebox = super.callPackage ./homebox.nix {};
     deploy = super.callPackage ./deploy.nix {};
-    minify = super.callPackage ./minify {};
     j-link = super.callPackage ./jlink.nix {};
     firefly-iii = super.callPackage ./firefly-iii.nix {};
     mongodb-bin = super.callPackage ./mongodb-bin.nix {};

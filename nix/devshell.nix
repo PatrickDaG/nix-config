@@ -23,14 +23,11 @@ in
       rage
       nix
       nix-diff
+      nixpkgs-update
     ];
     commands = [
       {
         package = pkgs.deploy;
-        help = "build and deploy nix configurations";
-      }
-      {
-        package = pkgs.minify;
         help = "build and deploy nix configurations";
       }
       {
