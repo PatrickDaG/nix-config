@@ -1,44 +1,15 @@
 # Don't insert tabs when there is no completion (e.g. beginning of line)
 zstyle ':completion:*' insert-tab false
 
-# match uppercase from lowercase
-zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
-
-# separate matches into groups
-zstyle ':completion:*:matches'         group 'yes'
-zstyle ':completion:*'                 group-name ''
-
-zstyle ':completion:*:messages'        format '%d'
-zstyle ':completion:*:options'         auto-description '%d'
-
-# describe options in full
-zstyle ':completion:*:options'         description 'yes'
-
-# on processes completion complete all user processes
-zstyle ':completion:*:processes'       command 'ps -au$USER'
 
 # provide verbose completion information
 zstyle ':completion:*'                 verbose true
 
-# Ignore completion functions for commands you don't have:
-zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'
-
-# Provide more processes in completion of programs like killall:
-zstyle ':completion:*:processes-names' command 'ps c -u ${USER} -o command | uniq'
-
-# complete manual by their section
-zstyle ':completion:*:manuals'    separate-sections true
-zstyle ':completion:*:manuals.*'  insert-sections   true
-zstyle ':completion:*:man:*'      menu yes select
-
-# provide .. as a completion
-zstyle ':completion:*' special-dirs ..
-
-# No correction
-zstyle ':completion:*' completer _oldlist _expand _complete _files _ignored
-
 # treat multiple slash as one
 zstyle ':completion:*' squeeze-slashes true
+
+# start menu completion also if it could find unambiguous initial string
+zstyle ':completion:*' insert-unambiguous false
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
@@ -46,6 +17,8 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 # set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh to show completion menu, so common prefixes are not expanded first
+zstyle ':completion:*' menu yes
 # preview directory's content with ls when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -lhF --group-directories-first --show-control-chars --quoting-style=escape --color=auto $realpath';
 # preview windown min size

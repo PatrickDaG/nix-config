@@ -35,4 +35,8 @@
     # This overrides compdump each time, in turn making startup very slow
     enableCompletion = false;
   };
+
+  # But still link all completions from all packages so they
+  # can be found by zsh
+  environment.pathsToLink = ["/share/zsh"];
 }
