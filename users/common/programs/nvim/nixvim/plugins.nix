@@ -36,7 +36,7 @@
     rainbow-delimiters.enable = true;
     rustaceanvim = {
       enable = true;
-      server.settings.files.excludeDirs = [".direnv"];
+      settings.server.settings.files.excludeDirs = [".direnv"];
     };
     indent-blankline = {
       enable = true;

@@ -12,7 +12,7 @@
   };
   environment.persistence."/persist".directories = [
     {
-      directory = "/var/lib/private/homebox/";
+      directory = "/var/lib/homebox";
       user = "homebox";
       group = "homebox";
       mode = "750";

@@ -43,7 +43,6 @@
   };
   services.xserver.xkb = {
     layout = "de";
-    variant = "bone";
   };
   virtualisation.podman = {
     enable = true;

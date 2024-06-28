@@ -10,7 +10,6 @@
   ];
   services.xserver = {
     layout = "de";
-    xkbVariant = "bone";
   };
   boot.mode = "bios";
   boot.initrd.availableKernelModules = ["virtio_pci" "virtio_net" "virtio_scsi" "virtio_blk"];

@@ -78,7 +78,7 @@ in {
     user = "git";
     group = "git";
     lfs.enable = true;
-    mailerPasswordFile = config.age.secrets.forgejo-mailer-passwd.path;
+    secrets.mailer.PASSWD = config.age.secrets.forgejo-mailer-passwd.path;
     settings = {
       DEFAULT.APP_NAME = "Patricks tolles git"; # tungsten inert gas?
       actions = {

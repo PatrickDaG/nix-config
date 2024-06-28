@@ -54,7 +54,7 @@
         texlab.enable = true;
         ocamllsp.enable = true;
         java-language-server.enable = true;
-        nil_ls = {
+        nil-ls = {
           enable = true;
           settings = {
             formatting.command = [(lib.getExe pkgs.alejandra) "--quiet"];

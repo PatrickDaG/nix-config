@@ -163,7 +163,7 @@ in {
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
       (blockOf "homebox" {})
-      (proxyProtect "ollama" {} true)
+      #(proxyProtect "ollama" {} true)
       (proxyProtect "firefly" {port = 80;} true)
       (blockOf "apispotify" {
         port = 3000;
@@ -269,7 +269,7 @@ in {
     // mkContainer "oauth2-proxy" {}
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
-    // mkContainer "ollama" {}
+    #// mkContainer "ollama" {}
     // mkContainer "murmur" {}
     // mkContainer "homebox" {}
     // mkContainer "ttrss" {}

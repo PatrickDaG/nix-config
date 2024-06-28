@@ -112,6 +112,7 @@ in {
       };
     };
     stylix = {
+      enable = true;
       autoEnable = false;
       polarity = "dark";
       image = config.lib.stylix.pixel "base00";

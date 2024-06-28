@@ -8,7 +8,6 @@
     homebox = super.callPackage ./homebox.nix {};
     deploy = super.callPackage ./deploy.nix {};
     j-link = super.callPackage ./jlink.nix {};
-    firefly-iii = super.callPackage ./firefly-iii.nix {};
     mongodb-bin = super.callPackage ./mongodb-bin.nix {};
     awakened-poe-trade = super.callPackage ./awakened-poe-trade.nix {};
     neovim-clean = super.neovim-unwrapped.overrideAttrs (_neovimFinal: neovimPrev: {
@@ -36,6 +35,13 @@
       passthru.enableSecretProvisioning = true;
       doCheck = false;
     });
+    pythonPackagesExtensions =
+      super.pythonPackagesExtensions
+      ++ [
+        (pythonFinal: _pythonPrev: {
+          jaxlib = pythonFinal.callPackage ./jaxlib.nix {};
+        })
+      ];
     kanidm-provision = super.callPackage ./kanidm-provision.nix {};
   })
 ]

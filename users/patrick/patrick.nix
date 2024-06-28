@@ -26,6 +26,8 @@
       ocamlPackages.mparser
       ocamlPackages.ounit2
       ocamlPackages.qcheck
+
+      via
     ];
   };
 }

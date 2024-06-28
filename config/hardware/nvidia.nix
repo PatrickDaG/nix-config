@@ -8,10 +8,9 @@ lib.optionalAttrs (!minimal) {
   services.xserver.videoDrivers = lib.mkForce ["nvidia"];
 
   hardware = {
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
       extraPackages = with pkgs; [
         vaapiVdpau
         nvidia-vaapi-driver
