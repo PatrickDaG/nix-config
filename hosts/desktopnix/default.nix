@@ -9,7 +9,6 @@
     inputs.nixos-hardware.nixosModules.common-cpu-intel-cpu-only
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc
-    inputs.nixos-hardware.nixosModules.common-pc-hdd
     inputs.nixos-hardware.nixosModules.common-pc-ssd
 
     ../../config/basic
@@ -48,6 +47,7 @@
     enable = true;
     dockerCompat = true;
   };
+  services.logkeys.enable = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];

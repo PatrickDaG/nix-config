@@ -5,6 +5,9 @@ zstyle ':completion:*' insert-tab false
 # provide verbose completion information
 zstyle ':completion:*'                 verbose true
 
+# provide .. as a completion
+zstyle ':completion:*' special-dirs ..
+
 # treat multiple slash as one
 zstyle ':completion:*' squeeze-slashes true
 
