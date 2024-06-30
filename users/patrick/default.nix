@@ -48,6 +48,11 @@ lib.optionalAttrs (!minimal) {
   };
 
   programs.dconf.enable = true;
+  age.secrets."my-gpg-yubikey-keygrip.tar" = {
+    rekeyFile = ./secrets/gpg-keygrip.tar.age;
+    group = "patrick";
+    mode = "640";
+  };
 
   home-manager.users.patrick = {
     imports =

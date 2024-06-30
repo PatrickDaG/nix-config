@@ -116,6 +116,7 @@ in {
         originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
+        enableLegacyCrypto = true;
         scopeMaps."immich.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
       };

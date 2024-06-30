@@ -36,6 +36,7 @@ in {
       config = {
         common.default = [
           "gtk"
+          "hyprland"
         ];
         sway.default = [
           "wlr"

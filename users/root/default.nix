@@ -19,9 +19,4 @@
   home-manager.users.root.imports = lib.lists.optionals (!minimal) [
     ../common
   ];
-  age.secrets."my-gpg-yubikey-keygrip.tar" = {
-    rekeyFile = ./secrets/gpg-keygrip.tar.age;
-    group = "patrick";
-    mode = "640";
-  };
 }

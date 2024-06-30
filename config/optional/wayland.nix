@@ -14,7 +14,6 @@ lib.optionalAttrs (!minimal) {
     enable = true;
     xdgOpenUsePortal = true;
     config.common = {
-      default = ["gtk" "hyprland"];
       "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
       "org.freedesktop.impl.portal.ScreenCast" = ["hyprland"];
       "org.freedesktop.impl.portal.Screenshot" = ["hyprland"];
