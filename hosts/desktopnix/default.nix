@@ -47,7 +47,10 @@
     enable = true;
     dockerCompat = true;
   };
-  services.logkeys.enable = true;
+  services.logkeys = {
+    enable = true;
+    device = "/dev/input/event15";
+  };
 
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];

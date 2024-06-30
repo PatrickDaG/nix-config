@@ -4,6 +4,7 @@
     packages = with pkgs; [
       nextcloud-client
       discord
+      webcord
       netflix
       xournalpp
       galaxy-buds-client

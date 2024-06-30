@@ -10,7 +10,8 @@
     zone = config.secrets.secrets.global.domains.web;
     protocol = "Cloudflare";
     username = "token";
-    #apparently this module has a default config for both v4 and v6 now
+    usev4 = "webv4, webv4='https://cloudflare.com/cdn-cgi/trace', webv4-skip='ip='";
+    usev6 = "";
     passwordFile = config.age.secrets.cloudflare_token_dns.path;
     domains = [config.secrets.secrets.global.domains.web];
   };
