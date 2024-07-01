@@ -34,6 +34,10 @@
       ocamlPackages.qcheck
 
       via
+
+      figlet
+      cowsay
+      cmatrix
     ];
   };
   # Make sure the keygrips exist, otherwise we'd need to run `gpg --card-status`
