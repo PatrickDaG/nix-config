@@ -16,7 +16,7 @@ in {
   home-manager.sharedModules = [
     ({config, ...}: let
       cfg = settingsFormat.generate "config.json" {
-        streamdeck_ui_version = 1;
+        streamdeck_ui_version = 2;
         state = config.programs.streamdeck-ui.settings;
       };
       preStart = pkgs.writeShellScript "streamdeck-setup-config" ''
