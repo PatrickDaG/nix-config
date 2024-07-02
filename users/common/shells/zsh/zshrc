@@ -5,6 +5,9 @@ zstyle ':completion:*' insert-tab false
 # provide verbose completion information
 zstyle ':completion:*'                 verbose true
 
+# match uppercase from lowercase
+zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
+
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
 
