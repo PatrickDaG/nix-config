@@ -84,6 +84,7 @@ lib.optionalAttrs (!minimal) {
           ../common/graphical/Xorg
           ./streamdeck.nix
           ../common/programs/obs.nix
+          ../common/graphical/wayland
           ./smb.nix
         ];
         "patricknix" = [

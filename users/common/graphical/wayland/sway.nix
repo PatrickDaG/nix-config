@@ -1,14 +1,10 @@
 {
   config,
-  pkgs,
   nixosConfig,
   ...
 }: {
   # import shared i3 config
   imports = [../sway3.nix];
-  home.packages = [
-    pkgs.wdisplays
-  ];
   stylix.targets.sway.enable = true;
   wayland.windowManager.sway = {
     enable = true;
