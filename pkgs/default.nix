@@ -35,13 +35,6 @@
       passthru.enableSecretProvisioning = true;
       doCheck = false;
     });
-    pythonPackagesExtensions =
-      super.pythonPackagesExtensions
-      ++ [
-        (pythonFinal: _pythonPrev: {
-          jaxlib = pythonFinal.callPackage ./jaxlib.nix {};
-        })
-      ];
     kanidm-provision = super.callPackage ./kanidm-provision.nix {};
   })
 ]

@@ -162,8 +162,8 @@ in {
       (blockOf "paperless" {maxBodySize = "5G";})
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
-      (blockOf "homebox" {})
-      #(proxyProtect "ollama" {} true)
+      #(blockOf "homebox" {})
+      (proxyProtect "ollama" {} true)
       (proxyProtect "firefly" {port = 80;} true)
       (blockOf "apispotify" {
         port = 3000;
@@ -269,9 +269,9 @@ in {
     // mkContainer "oauth2-proxy" {}
     // mkContainer "vaultwarden" {}
     // mkContainer "ddclient" {}
-    #// mkContainer "ollama" {}
+    // mkContainer "ollama" {}
     // mkContainer "murmur" {}
-    // mkContainer "homebox" {}
+    #// mkContainer "homebox" {}
     // mkContainer "ttrss" {}
     // mkContainer "firefly" {}
     // mkContainer "yourspotify" {}
