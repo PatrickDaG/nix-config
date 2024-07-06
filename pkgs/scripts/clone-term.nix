@@ -12,6 +12,8 @@ writeShellApplication {
 
     if [[ ''${XDG_CURRENT_DESKTOP-} == sway ]]; then
       PAREN=$(swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true).pid')
+    elif [[ ''${XDG_CURRENT_DESKTOP-} == Hyprland ]]; then
+      PAREN=$(hyprctl activewindow -j | jq '.pid')
     else
       PAREN=$(xdotool getwindowfocus getwindowpid)
     fi

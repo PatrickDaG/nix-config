@@ -41,7 +41,7 @@ in {
         };
 
         general = {
-          gaps_in = 1;
+          gaps_in = 0;
           gaps_out = 0;
           allow_tearing = true;
         };
@@ -52,10 +52,10 @@ in {
             "3" = "u";
             "4" = "a";
             "5" = "x";
-            "6" = "c";
-            "7" = "t";
-            "8" = "i";
-            "9" = "e";
+            "6" = "F1";
+            "7" = "F2";
+            "8" = "F3";
+            "9" = "F4";
           };
         in
           [
@@ -63,9 +63,10 @@ in {
             "SUPER,return,fullscreen,"
             "SUPER + SHIFT,return,fakefullscreen,"
             "SUPER,f,togglefloating"
+            "SUPER,g,togglegroup"
             "SUPER,tab,cyclenext,"
             "ALT,tab,cyclenext,"
-            "SUPER+SHIFT,r,submap,resize"
+            "SUPER+CTRL,r,submap,resize"
 
             "SUPER,left,movefocus,l"
             "SUPER,right,movefocus,r"
@@ -77,22 +78,33 @@ in {
             "SUPER,l,movefocus,u"
             "SUPER,r,movefocus,d"
 
-            "SUPER + SHIFT,left,movewindow,l"
-            "SUPER + SHIFT,right,movewindow,r"
-            "SUPER + SHIFT,up,movewindow,u"
-            "SUPER + SHIFT,down,movewindow,d"
+            "SUPER,h,changegroupactive,b"
+            "SUPER,m,changegroupactive,f"
 
-            "SUPER + SHIFT,n,movewindow,l"
-            "SUPER + SHIFT,s,movewindow,r"
-            "SUPER + SHIFT,l,movewindow,u"
-            "SUPER + SHIFT,r,movewindow,d"
+            "SUPER + SHIFT,left,movewindoworgroup,l"
+            "SUPER + SHIFT,right,movewindoworgroup,r"
+            "SUPER + SHIFT,up,movewindoworgroup,u"
+            "SUPER + SHIFT,down,movewindoworgroup,d"
+
+            "SUPER + SHIFT,n,movewindoworgroup,l"
+            "SUPER + SHIFT,s,movewindoworgroup,r"
+            "SUPER + SHIFT,l,movewindoworgroup,u"
+            "SUPER + SHIFT,r,movewindoworgroup,d"
 
             "SUPER,comma,workspace,-1"
             "SUPER,period,workspace,+1"
+            "SUPER + SHIFT,comma,movetoworkspace,-1"
+            "SUPER + SHIFT,period,movetoworkspace,+1"
 
             "SUPER,b,exec,firefox"
+            "SUPER,m,exec,thunderbird"
             "SUPER,t,exec,kitty"
             ",Menu,exec,fuzzel"
+            "SUPER,,exec,${lib.getExe pkgs.scripts.clone-term}"
+
+            "CTRL,F7,sendshortcut,SHIFT+CTRL,m,WebCord"
+            "CTRL,F8,sendshortcut,CTRL+SHIFT,d,WebCord"
+            "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
             "SUPER + SHIFT,q,exit"
           ]
@@ -154,6 +166,10 @@ in {
           disable_hyprland_logo = true;
           mouse_move_focuses_monitor = false;
         };
+        windowrulev2 = [
+          "immediate, class:^(cs2)$"
+          "float,class:(firefox),title:^(.*)(Bitwarden)(.*)$"
+        ];
       }
       (mkIf (nixosConfig.node.name == "desktopnix") {
         monitor = [
@@ -167,13 +183,14 @@ in {
 
         windowrulev2 = [
           "workspace 2,class:^(firefox)$"
+          "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
           "workspace 4,class:^(steam)$"
           "workspace 4,class:^(prismlauncher)$"
-          "workspace 8,class:^(discord)$"
-          "workspace 8,class:^(WebCord)$"
-          "workspace 9,class:^(Signal)$"
-          "workspace 9,class:^(TelegramDesktop)$"
+          "workspace 6,class:^(discord)$"
+          "workspace 6,class:^(WebCord)$"
+          "workspace 7,class:^(Signal)$"
+          "workspace 7,class:^(TelegramDesktop)$"
         ];
 
         workspace = [
@@ -209,7 +226,6 @@ in {
       bind=,escape,submap,reset
       submap=reset
 
-      windowrulev2 = immediate, class:^(cs2)$
       exec-once = ${pkgs.xorg.xprop}/bin/xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
       env = XCURSOR_SIZE,48
 

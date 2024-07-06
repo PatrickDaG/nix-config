@@ -21,7 +21,7 @@
         "backlight"
         "battery"
         "clock"
-        "custom/notifications"
+        "custom/notification"
         "tray"
       ];
 
@@ -69,6 +69,7 @@
         format = "{icon} {volume}%";
         on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
         on-click-middle = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float;pin;move 80% 50%;size 20% 50%;noborder]\" ${lib.getExe pkgs.pwvucontrol}";
+        on-click-right = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float]\" ${lib.getExe pkgs.helvum}";
         on-scroll-up = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
         on-scroll-down = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
         format-muted = "󰖁";
@@ -80,6 +81,11 @@
         format-icons.urgent = "";
         all-outputs = false;
         sort-by = "id";
+        persistent-workspaces = {
+          "DP-3" = [1 2 3 4 5];
+          "DVI-D-1" = [6 7];
+          "HDMI-A-1" = [8 9];
+        };
       };
 
       "hyprland/window" = {

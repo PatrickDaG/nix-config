@@ -21,7 +21,7 @@
       control-center-margin-right = 0;
       control-center-margin-left = 0;
 
-      notification-window-width = 800;
+      notification-window-width = 500;
       notification-2fa-action = true;
       notification-inline-replies = false;
       notification-icon-size = 64;

@@ -20,7 +20,7 @@ in {
         state = config.programs.streamdeck-ui.settings;
       };
       preStart = pkgs.writeShellScript "streamdeck-setup-config" ''
-        cp "${cfg}" "$XDG_RUNTIME_DIR/streamdeck/config.json"
+        ${pkgs.coreutils}/bin/cp "${cfg}" "$XDG_RUNTIME_DIR/streamdeck/config.json"
       '';
     in {
       options.programs.streamdeck-ui = {

@@ -131,7 +131,7 @@
 
 .notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
   /* Notification summary/title */
-  font-size: 1.75rem;
+  font-size: 1rem;
   font-weight: bold;
   background: transparent;
   color: @text-color;
@@ -141,7 +141,7 @@
 
 .notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time {
   /* Notification time-ago */
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   background: transparent;
   color: @text-color-muted;
@@ -151,7 +151,7 @@
 
 .notification-row .notification-background .notification .notification-default-action .notification-content .text-box .body {
   /* Notification body */
-  font-size: 1.5rem;
+  font-size: 1rem;
   background: transparent;
   color: @text-color;
   text-shadow: none;
@@ -184,7 +184,7 @@
 }
 
 .notification-row .notification-background .notification .notification-default-action .notification-content .inline-reply .inline-reply-button {
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin-left: 4px;
   background: @noti-bg;
   border: 1px solid @noti-border-color;
@@ -205,7 +205,7 @@
 
 .notification-row .notification-background .notification .notification-action {
   /* The alternative actions below the default action */
-  font-size: 1.25rem;
+  font-size: 1rem;
   border-top: 1px solid @noti-border-color;
   border-radius: 0px;
   border-right: 1px solid @noti-border-color;
@@ -254,7 +254,7 @@
 
 .notification-group .notification-group-headers .notification-group-header {
   color: @text-color;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .notification-group .notification-group-buttons {

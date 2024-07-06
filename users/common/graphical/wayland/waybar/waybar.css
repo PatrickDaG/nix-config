@@ -23,7 +23,6 @@ button {
 }
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-#clock:hover,
 #custom-notification:hover,
 #custom-pick_color:hover,
 #custom-scan_qr:hover,
