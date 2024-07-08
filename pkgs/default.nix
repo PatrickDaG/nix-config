@@ -7,7 +7,6 @@
     actual = super.callPackage ./actual.nix {};
     homebox = super.callPackage ./homebox.nix {};
     deploy = super.callPackage ./deploy.nix {};
-    j-link = super.callPackage ./jlink.nix {};
     mongodb-bin = super.callPackage ./mongodb-bin.nix {};
     awakened-poe-trade = super.callPackage ./awakened-poe-trade.nix {};
     neovim-clean = super.neovim-unwrapped.overrideAttrs (_neovimFinal: neovimPrev: {

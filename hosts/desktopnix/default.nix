@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  pkgs,
   ...
 }: {
   imports = [
@@ -54,10 +53,6 @@
 
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];
-
-  # for embedded
-  services.udev.packages = [pkgs.j-link];
-  environment.systemPackages = [pkgs.j-link];
 
   services.netbird.enable = true;
   # Do not cleanup nix store to prevent having to rebuild packages onca a month

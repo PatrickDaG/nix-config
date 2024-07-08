@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  pkgs,
   ...
 }: {
   imports = [
@@ -54,7 +53,4 @@
   };
   nixpkgs.hostPlatform = "x86_64-linux";
   nix.settings.system-features = ["kvm" "nixos-test"];
-  # for embedded
-  services.udev.packages = [pkgs.j-link];
-  environment.systemPackages = [pkgs.j-link];
 }
