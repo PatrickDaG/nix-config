@@ -38,7 +38,7 @@ lib.optionalAttrs (!minimal) {
 
   environment.systemPackages = with pkgs; [
     # xournalpp needs this or else it will crash
-    gnome3.adwaita-icon-theme
+    adwaita-icon-theme
   ];
   age.secrets = {
     smb-creds = {

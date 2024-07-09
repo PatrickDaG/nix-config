@@ -6,6 +6,9 @@
 }:
 lib.optionalAttrs (!minimal) {
   environment.systemPackages = with pkgs; [
+    python3
+    jq
+    nix-update
     gnumake
     pciutils
     gcc

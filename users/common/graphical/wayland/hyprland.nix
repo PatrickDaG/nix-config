@@ -28,21 +28,21 @@
           window_title=$(echo "$window_info" | ${pkgs.jq}/bin/jq '.title')
 
           # Check if the title matches the characteristics of the Bitwarden popup window
-          if [[ "$window_title" == *"(Bitwarden - Free Password Manager) - Bitwarden"* ]]; then
+          if [[ "$window_title" == '"Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox"' ]]; then
 
             # echo $window_id, $window_title
             # hyprctl dispatch togglefloating address:0x$window_id
             # hyprctl dispatch resizewindowpixel exact 20% 40%,address:0x$window_id
             # hyprctl dispatch movewindowpixel exact 40% 30%,address:0x$window_id
 
-            hyprctl --batch "dispatch togglefloating address:0x$window_id ; dispatch resizewindowpixel exact 20% 40%,address:0x$window_id ; dispatch movewindowpixel exact 40% 30%,address:0x$window_id"
+            hyprctl --batch "dispatch togglefloating address:0x$window_id ; dispatch resizewindowpixel exact "512 768",address:0x$window_id ; dispatch movewindowpixel exact "3800 -400",address:0x$window_id"
           fi
           ;;
       esac
     }
 
     # Listen to the Hyprland socket for events and process each line with the handle function
-    ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
+    ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
   '';
 in {
   wayland.windowManager.hyprland = {
@@ -128,13 +128,12 @@ in {
             "SUPER + SHIFT,period,movetoworkspace,+1"
 
             "SUPER,b,exec,firefox"
-            "SUPER,m,exec,thunderbird"
             "SUPER,t,exec,kitty"
             ",Menu,exec,fuzzel"
             "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
-            "CTRL,F7,sendshortcut,SHIFT+CTRL,m,WebCord"
-            "CTRL,F8,sendshortcut,CTRL+SHIFT,d,WebCord"
+            "CTRL,F7,pass,discord"
+            "CTRL,F8,pass,discord"
             "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
             "SUPER + SHIFT,q,exit"
