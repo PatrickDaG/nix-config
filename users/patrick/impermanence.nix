@@ -11,7 +11,7 @@
 
         "Zotero"
 
-        ".local/share/TeamSpeak 3"
+        ".config/ts3client"
 
         ".config/xournalpp"
         ".cache/xournalpp"

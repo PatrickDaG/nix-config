@@ -10,6 +10,7 @@
     CUDA_CACHE_PATH = "${XDG_CACHE_HOME}/nv";
     RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
     WINEPREFIX = "${XDG_DATA_HOME}/wine";
+    TS3_CONFIG_DIR = "${XDG_CONFIG_HOME}/ts3client";
   };
   nix.extraOptions = ''
     use-xdg-base-directories = true
