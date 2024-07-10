@@ -38,7 +38,7 @@ These are services I've set up
 📸 Photos | [Immich](./config/services/immich.nix) | Selfhosted Google Photos equivalent
 🔒 SSO | [Kanidm](./config/services/kanidm.nix) | Secure single sign on Identity Provider
 📧 E-Mail | [Maddy](./config/services/maddy.nix) | All in one mail server
-🎧 Communication | [Murmur](./config/services/murmur.nix) | Selfhosted mumble server for secure and always available communication
+🎧 Communication | [Teamspeak](./config/services/murmur.nix) | Selfhosted teamspeak server for secure and always available communication
 🌐 VPN | [Netbird](./config/services/netbird.nix) | Easy to use peer to peer VPN solution based on wireguard
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
 🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learnig supported document organizing plattform

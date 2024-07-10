@@ -1,12 +1,14 @@
 {config, ...}: {
-  services.murmur = {
+  networking.firewall.allowedUDPPorts = [config.services.teamspeak3.defaultVoicePort];
+  services.teamspeak3 = {
     enable = true;
-    welcometext = ''
-      hurensohn
-    '';
-    registerHostname = "mumble.${config.secrets.secrets.global.domains.web}";
-    registerName = "patrick ist der tollste";
-    inherit (config.secrets.secrets.local) password;
-    openFirewall = true;
   };
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/teamspeak3-server/";
+      user = "teamspeak";
+      group = "teamspeak";
+      mode = "750";
+    }
+  ];
 }

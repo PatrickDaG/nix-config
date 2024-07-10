@@ -11,7 +11,7 @@
 
         "Zotero"
 
-        ".config/Mumble"
+        ".local/share/TeamSpeak 3"
 
         ".config/xournalpp"
         ".cache/xournalpp"

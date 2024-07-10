@@ -18,7 +18,7 @@
       telegram-desktop
       chromium
       osu-lazer-bin
-      mumble
+      teamspeak_client
       zotero
       timer
 
