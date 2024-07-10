@@ -76,6 +76,10 @@ in {
           gaps_out = 0;
           allow_tearing = true;
         };
+        binds = {
+          focus_preferred_method = 1;
+          workspace_center_on = 1;
+        };
         bind = let
           monitor_binds = {
             "1" = "j";
@@ -196,6 +200,7 @@ in {
           disable_hyprland_logo = true;
           mouse_move_focuses_monitor = false;
         };
+        xwayland.force_zero_scaling = true;
         windowrulev2 = [
           "immediate, class:^(cs2)$"
         ];
@@ -259,9 +264,6 @@ in {
       exec-once = ${float_script}
       env = XCURSOR_SIZE,48
 
-      binds {
-        focus_preferred_method = 1
-      }
     '';
   };
 }
