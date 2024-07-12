@@ -3,7 +3,6 @@
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.open-webui.port];
   };
-  networking.firewall.allowedTCPPorts = [config.services.open-webui.port];
   services.ollama = {
     host = "localhost";
     port = 3001;

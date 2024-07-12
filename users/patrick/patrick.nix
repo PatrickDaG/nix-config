@@ -21,6 +21,7 @@
       teamspeak_client
       zotero
       timer
+      orca-slicer
 
       ocaml
       dune_3

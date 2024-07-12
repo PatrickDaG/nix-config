@@ -25,10 +25,14 @@
       actual = "actual";
       firefly = "money";
       homebox = "homebox";
+      octoprint = "print";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
-  ipOf = hostName: nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
+  ipOf = hostName:
+    if nodes ? hostName
+    then nodes.${hostName}.config.wireguard.elisabeth.ipv4
+    else nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in {
   services.nginx = let
     blockOf = hostName: {
@@ -164,6 +168,7 @@ in {
       (blockOf "yourspotify" {port = 80;})
       #(blockOf "homebox" {})
       (proxyProtect "ollama" {} true)
+      (proxyProtect "octoprint" {} true)
       (proxyProtect "firefly" {port = 80;} true)
       (blockOf "apispotify" {
         port = 3000;

@@ -16,6 +16,8 @@
         ".config/xournalpp"
         ".cache/xournalpp"
 
+        ".config/OrcaSlicer"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"

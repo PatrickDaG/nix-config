@@ -124,8 +124,9 @@ in {
       groups."rss.access" = {};
       groups."firefly.access" = {};
       groups."ollama.access" = {};
-      groups."adguardhome.access" = {
-      };
+      groups."adguardhome.access" = {};
+      groups."octoprint.access" = {};
+
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
         originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
@@ -134,6 +135,7 @@ in {
         scopeMaps."rss.access" = ["openid" "email" "profile"];
         scopeMaps."firefly.access" = ["openid" "email" "profile"];
         scopeMaps."ollama.access" = ["openid" "email" "profile"];
+        scopeMaps."octoprint.access" = ["openid" "email" "profile"];
         preferShortUsername = true;
         claimMaps.groups = {
           joinType = "array";
@@ -141,6 +143,7 @@ in {
           valuesByGroup."rss.access" = ["ttrss_access"];
           valuesByGroup."firefly.access" = ["firefly_access"];
           valuesByGroup."ollama.access" = ["ollama_access"];
+          valuesByGroup."octoprint.access" = ["octoprint_access"];
         };
       };
 

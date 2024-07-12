@@ -1,9 +1,3 @@
-* {
-	/* `otf-font-awesome` is required to be installed for icons */
-	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
-	font-size: 13px;
-	transition-duration: .1s;
-}
 
 window#waybar {
 	background-color: #000000;

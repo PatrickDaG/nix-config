@@ -3,10 +3,6 @@
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
-  age.secrets.simonWlan = {
-    rekeyFile = ./. + "/secrets/iwd/=467269747a21426f78373539302048616e7373656e.psk.age";
-    path = "/var/lib/=467269747a21426f78373539302048616e7373656e.psk";
-  };
   age.secrets = {
     devoloog-psk.rekeyFile = ./secrets/iwd/devoloog-psk.age;
     devoloog-pass.rekeyFile = ./secrets/iwd/devoloog-pass.age;

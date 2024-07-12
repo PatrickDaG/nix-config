@@ -1,29 +1,66 @@
 {
   pkgs,
   lib,
+  nixosConfig,
   ...
 }: {
   programs.waybar = {
     enable = true;
     systemd.enable = false;
-    style = ./waybar.css;
+    style =
+      ({
+          desktopnix = ''
+            * {
+            	/* `otf-font-awesome` is required to be installed for icons */
+            	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
+            	font-size: 13px;
+            	transition-duration: .1s;
+            }
+          '';
+          patricknix = ''
+            * {
+            	/* `otf-font-awesome` is required to be installed for icons */
+            	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
+            	font-size: 10px;
+            	transition-duration: .1s;
+            }
+          '';
+        }
+        .${nixosConfig.node.name}
+        or "")
+      + builtins.readFile ./waybar.css;
     settings.main = {
       layer = "top";
       position = "bottom";
       modules-left = ["privacy" "hyprland/submap" "hyprland/window"];
       modules-center = ["hyprland/workspaces"];
-      modules-right = [
-        "cpu"
-        "memory"
-        "wireplumber"
-        "network"
-        #"bluetooth"
-        "backlight"
-        "battery"
-        "clock"
-        "custom/notification"
-        "tray"
-      ];
+      modules-right =
+        {
+          desktopnix = [
+            "cpu"
+            "memory"
+            "wireplumber"
+            "network"
+            "battery"
+            "clock"
+            "custom/notification"
+            "tray"
+          ];
+          patricknix = [
+            "cpu"
+            "memory"
+            "wireplumber"
+            "network"
+            "bluetooth"
+            "backlight"
+            "battery"
+            "clock"
+            "custom/notification"
+            "tray"
+          ];
+        }
+        .${nixosConfig.node.name}
+        or [];
 
       battery = {
         format = "{icon}  {capacity}%";

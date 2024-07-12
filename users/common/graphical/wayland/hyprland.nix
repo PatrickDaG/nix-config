@@ -136,8 +136,10 @@ in {
             ",Menu,exec,fuzzel"
             "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
-            "CTRL,F7,pass,discord"
-            "CTRL,F8,pass,discord"
+            "CTRL,F7,pass,class:^(discord)$"
+            "CTRL,F8,pass,class:^(discord)$"
+            "CTRL,F7,pass,class:^(TeamSpeak 3)$"
+            "CTRL,F8,pass,class:^(TeamSpeak 3)$"
             "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
             "SUPER + SHIFT,q,exit"
@@ -151,24 +153,16 @@ in {
 
         cursor.no_warps = true;
         debug.disable_logs = false;
-        env =
-          optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
-            # See https://wiki.hyprland.org/Nvidia/
-            "LIBVA_DRIVER_NAME,nvidia"
-            "XDG_SESSION_TYPE,wayland"
-            "GBM_BACKEND,nvidia-drm"
-            "__GLX_VENDOR_LIBRARY_NAME,nvidia"
-          ]
-          ++ [
-            "NIXOS_OZONE_WL,1"
-            "MOZ_ENABLE_WAYLAND,1"
-            "_JAVA_AWT_WM_NONREPARENTING,1"
-            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-            "QT_QPA_PLATFORM,wayland"
-            "SDL_VIDEODRIVER,wayland"
-            "GDK_BACKEND,wayland"
-            "WLR_DRM_NO_ATOMIC,1" #retest on newest nvidia driver
-          ];
+        env = [
+          "NIXOS_OZONE_WL,1"
+          "MOZ_ENABLE_WAYLAND,1"
+          "_JAVA_AWT_WM_NONREPARENTING,1"
+          "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+          "QT_QPA_PLATFORM,wayland"
+          "SDL_VIDEODRIVER,wayland"
+          "GDK_BACKEND,wayland"
+          "WLR_DRM_NO_ATOMIC,1" #retest on newest nvidia driver
+        ];
         bindm = [
           # mouse movements
           "SUPER, mouse:272, movewindow"
@@ -214,7 +208,13 @@ in {
           # doesn't exist and crashes yoru session sometimes when moving a window to it.
           "Unknown-1, disable"
         ];
-
+        env = optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
+          # See https://wiki.hyprland.org/Nvidia/
+          "LIBVA_DRIVER_NAME,nvidia"
+          "XDG_SESSION_TYPE,wayland"
+          "GBM_BACKEND,nvidia-drm"
+          "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+        ];
         windowrulev2 = [
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
@@ -223,7 +223,8 @@ in {
           "workspace 4,class:^(prismlauncher)$"
           "workspace 6,class:^(discord)$"
           "workspace 6,class:^(WebCord)$"
-          "workspace 7,class:^(Signal)$"
+          "workspace 6,class:^(TeamSpeak 3)$"
+          "workspace 7,class:^(signal)$"
           "workspace 7,class:^(TelegramDesktop)$"
         ];
 
@@ -241,6 +242,10 @@ in {
       })
       (mkIf (nixosConfig.node.name == "patricknix") {
         monitor = [
+          "eDP-1,preferred,0x0,2"
+          # Thank you NVIDIA for this generous, free-of-charge, extra monitor that
+          # doesn't exist and crashes yoru session sometimes when moving a window to it.
+          "Unknown-1, disable"
         ];
         workspace = [
         ];
