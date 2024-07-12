@@ -30,7 +30,7 @@
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
   ipOf = hostName:
-    if nodes ? hostName
+    if nodes ? ${hostName}
     then nodes.${hostName}.config.wireguard.elisabeth.ipv4
     else nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in {

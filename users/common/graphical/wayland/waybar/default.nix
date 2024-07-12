@@ -66,7 +66,7 @@
         format = "{icon}  {capacity}%";
         format-icons = ["" "" "" "" "" "" "" "" ""];
         states = {
-          critical = 15;
+          critical = 10;
           warning = 20;
         };
       };

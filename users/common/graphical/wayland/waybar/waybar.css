@@ -96,13 +96,20 @@ button:hover {
 		color: #000000;
 	}
 }
+#battery {
+	color: #ffffff;
+	background-color: #000000;
+}
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
+/* I would like for this to just blink sadly I don't think thats possible*/
+/* you cannot have step with 'jump-none' so you will always be not fully red or black*/
+/* and the animation delay is only applied once not in every iteration*/
 #battery.critical:not(.charging) {
 	background-color: #e05f65;
 	animation-name: blink;
 	animation-duration: 0.5s;
-	animation-timing-function: steps(12);
+	animation-timing-function: steps(2);
 	animation-iteration-count: infinite;
 	animation-direction: alternate;
 }

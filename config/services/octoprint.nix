@@ -3,14 +3,15 @@
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.octoprint.port];
   };
-  networking.firewall.allowedTCPPorts = [3000];
   services.octoprint = {
     port = 3000;
     enable = true;
+    plugins = ps: with ps; [ender3v2tempfix costestimation themeify dashboard];
     extraConfig = {
       accessControl = {
         addRemoteUser = true;
         trustRemoteUser = true;
+        remoteUserHeader = "X-User";
       };
     };
   };

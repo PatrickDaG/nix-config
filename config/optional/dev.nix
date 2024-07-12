@@ -28,7 +28,9 @@ lib.optionalAttrs (!minimal) {
   };
   documentation = {
     dev.enable = true;
+    doc.enable = false;
     man.enable = true;
     info.enable = false;
+    nixos.enable = false;
   };
 }
