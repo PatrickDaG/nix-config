@@ -6,8 +6,58 @@
 }: let
   onlyHost =
     lib.mkIf (!config.boot.isContainer);
+  prune = folder:
+    pkgs.writers.writePython3Bin "impermanence-prune" {} ''
+      import os
+      import sys
+      mounts = [${
+        lib.concatStringsSep ", "
+        ((map (x:
+            "\""
+            + (
+              if x.home != null
+              then x.home + "/"
+              else ""
+            )
+            + x.directory
+            + "\"")
+          config.environment.persistence.${folder}.directories)
+          ++ (map (x:
+            "\""
+            + (
+              if x.home != null
+              then x.home + "/"
+              else ""
+            )
+            + x.file
+            + "\"")
+          config.environment.persistence.${folder}.files))
+      }]  # noqa: E501
+      mounts = [os.path.normpath(x) for x in mounts]
+      mounts.sort()
+      real_mounts = mounts[:1]
+      for i in mounts[1:]:
+          if i.startswith(real_mounts[-1] + "/"):
+              continue
+          real_mounts.append(i)
+      erg = set()
+      for i in real_mounts:
+          dir = os.path.dirname(i)
+          try:
+              content = [dir + "/" + x for x in os.listdir("${folder}" + dir)]
+              for j in content:
+                  if not any([x.startswith(j) for x in real_mounts]):
+                      erg.add("${folder}" + j)
+          except PermissionError:
+              print(f"{dir} could not be accessed. Try running as root",
+                    file=sys.stderr)
+      print("\n".join(erg))
+    '';
 in {
   # to allow all users to access hm managed persistent folders
+  lib.scripts.impermanence.pruneScripts =
+    lib.mapAttrs (k: _: prune k)
+    config.environment.persistence;
   programs.fuse.userAllowOther = true;
   services.openssh.hostKeys = lib.mkForce [
     {

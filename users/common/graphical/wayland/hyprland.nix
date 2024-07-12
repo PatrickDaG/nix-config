@@ -197,6 +197,16 @@ in {
         xwayland.force_zero_scaling = true;
         windowrulev2 = [
           "immediate, class:^(cs2)$"
+          "workspace 2,class:^(firefox)$"
+          "workspace 3,class:^(thunderbird)$"
+          "workspace 4,class:^(bottles)$"
+          "workspace 4,class:^(steam)$"
+          "workspace 4,class:^(prismlauncher)$"
+          "workspace 6,class:^(discord)$"
+          "workspace 6,class:^(WebCord)$"
+          "workspace 6,class:^(TeamSpeak 3)$"
+          "workspace 7,class:^(signal)$"
+          "workspace 7,class:^(TelegramDesktop)$"
         ];
       }
       (mkIf (nixosConfig.node.name == "desktopnix") {
@@ -215,19 +225,6 @@ in {
           "GBM_BACKEND,nvidia-drm"
           "__GLX_VENDOR_LIBRARY_NAME,nvidia"
         ];
-        windowrulev2 = [
-          "workspace 2,class:^(firefox)$"
-          "workspace 3,class:^(thunderbird)$"
-          "workspace 4,class:^(bottles)$"
-          "workspace 4,class:^(steam)$"
-          "workspace 4,class:^(prismlauncher)$"
-          "workspace 6,class:^(discord)$"
-          "workspace 6,class:^(WebCord)$"
-          "workspace 6,class:^(TeamSpeak 3)$"
-          "workspace 7,class:^(signal)$"
-          "workspace 7,class:^(TelegramDesktop)$"
-        ];
-
         workspace = [
           "1, monitor:DP-3, default:true"
           "2, monitor:DP-3"
@@ -248,6 +245,15 @@ in {
           "Unknown-1, disable"
         ];
         workspace = [
+          "1, monitor:eDP-1, default:true"
+          "2, monitor:eDP-1"
+          "3, monitor:eDP-1"
+          "4, monitor:eDP-1"
+          "5, monitor:eDP-1"
+          "6, monitor:eDP-1"
+          "7, monitor:eDP-1"
+          "8, monitor:eDP-1"
+          "9, monitor:eDP-1"
         ];
       })
     ];
