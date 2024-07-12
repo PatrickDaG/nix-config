@@ -41,7 +41,6 @@
             "memory"
             "wireplumber"
             "network"
-            "battery"
             "clock"
             "custom/notification"
             "tray"
@@ -63,8 +62,13 @@
         or [];
 
       battery = {
+        interval = 1;
         format = "{icon}  {capacity}%";
         format-icons = ["" "" "" "" "" "" "" "" ""];
+        states = {
+          critical = 15;
+          warning = 20;
+        };
       };
 
       backlight = {
@@ -95,7 +99,7 @@
           dnd-inhibited-none = "";
         };
         return-type = "json";
-        exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
+
         on-click = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
         on-click-right = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
         on-click-middle = "${pkgs.swaynotificationcenter}/bin/swaync-client --close-all";
