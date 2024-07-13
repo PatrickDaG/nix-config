@@ -31,7 +31,7 @@
   systemd.network.networks = {
     "01-lan1" = {
       DHCP = "yes";
-      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan01.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
@@ -42,7 +42,7 @@
     };
     "02-lan1" = {
       DHCP = "yes";
-      matchConfig.MACAddress = config.secrets.secrets.local.networking.lan02.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan02.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
@@ -53,7 +53,7 @@
     };
     "01-wlan1" = {
       DHCP = "yes";
-      matchConfig.MACAddress = config.secrets.secrets.local.networking.wlan01.mac;
+      matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.wlan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;

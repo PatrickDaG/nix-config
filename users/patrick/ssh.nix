@@ -18,11 +18,6 @@
         user = "root";
       };
 
-      "gojo" = {
-        hostname = "gojo.local";
-        user = "root";
-      };
-
       "patricknix" = {
         hostname = "patricknix.local";
         user = "root";
@@ -36,10 +31,6 @@
       "desktopnix" = {
         hostname = "desktopnix.local";
         user = "root";
-      };
-      "binex" = {
-        hostname = "praksrv.sec.in.tum.de";
-        user = "team402";
       };
       "*" = {
         user = "root";
