@@ -96,12 +96,18 @@ button:hover {
 
 @keyframes blink {
 
-	0%,
+	0% {
+		background-color: #000000;
+	}
+
 	49% {
 		background-color: #000000;
 	}
 
-	50%,
+	50% {
+		background-color: #e05f65;
+	}
+
 	100% {
 		background-color: #e05f65;
 	}
