@@ -84,6 +84,7 @@
         "browser.eme.ui.enabled" = false;
         "browser.urlbar.speculativeConnect.enabled" = false;
         "dom.battery.enabled" = false; # no battery for you
+        "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
       };
       search = {
         force = true;
