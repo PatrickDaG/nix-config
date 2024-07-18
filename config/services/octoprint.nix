@@ -6,7 +6,7 @@
   services.octoprint = {
     port = 3000;
     enable = true;
-    plugins = ps: with ps; [ender3v2tempfix costestimation themeify dashboard displaylayerprogress];
+    plugins = ps: with ps; [ender3v2tempfix];
     extraConfig = {
       accessControl = {
         addRemoteUser = true;
