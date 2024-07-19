@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "patrickdag";
     repo = "pr-tracker";
-    rev = "54d47f277df81bfe82339ec3d2ceabd9c371aa91";
-    hash = "sha256-C3dGaxxEH2acM1Ozvk5BcU+Gq6vPjSEzBVWZcRKMSzk=";
+    rev = "4cd2e8216f8c98441c74a883833ee73123fb1042";
+    hash = "sha256-OOohIvqPsCBtMXbg3D3GUdZYsTR13YPyWERGPCGZwa4=";
   };
 
   cargoHash = "sha256-pcIbL/mWhvQpQcVgyeNccW5cnHGKPKBpY9f2eeSrcjk=";

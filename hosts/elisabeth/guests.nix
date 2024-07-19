@@ -172,7 +172,7 @@ in {
       {
         virtualHosts.${domainOf "pr-tracker"} = {
           locations."/update" = {
-            deny = "all";
+            extraConfig = "deny all;";
           };
         };
       }

@@ -6,11 +6,16 @@
   ...
 }: let
   prestart = pkgs.writeShellScript "pr-tracker-pre" ''
-    if [ ! -d "$DIRECTORY" ]; then
+    if [ ! -d ./nixpkgs ]; then
       ${lib.getExe pkgs.git} clone https://github.com/NixOS/nixpkgs.git
     fi
   '';
 in {
+  wireguard.elisabeth = {
+    client.via = "elisabeth";
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000];
+  };
+  networking.firewall.allowedTCPPorts = [3000];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/pr-tracker";
@@ -24,11 +29,11 @@ in {
     owner = "pr-tracker";
   };
   age.secrets.prTrackerEnv = {
-    rekeyFile = config.node.secretsDir + "/pr-tracker-env.age";
+    rekeyFile = config.node.secretsDir + "/env.age";
     owner = "pr-tracker";
   };
   age.secrets.prTrackerWhiteList = {
-    rekeyFile = config.node.secretsDir + "/pr-tracker-white-list.age";
+    rekeyFile = config.node.secretsDir + "/white-list.age";
     owner = "pr-tracker";
   };
   nodes.maddy = {
@@ -38,20 +43,15 @@ in {
       mode = "640";
     };
     services.maddy.ensureCredentials = {
-      "pr-tracker@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.vaultwardenPasswd.path;
+      "pr-tracker@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.pr-trackerPasswd.path;
     };
   };
   systemd.sockets.pr-tracker = {
-    listenStreams = "0.0.0.0:300";
+    listenStreams = ["0.0.0.0:3000"];
+    wantedBy = ["sockets.target"];
   };
   systemd.services.pr-tracker = {
-    after = ["network.target"];
-    script = ''
-      ${lib.getExe pkgs.pr-tracker} --url pr-tracker.${config.secrets.secrets.gloab.domain}\
-        --user-agent "Patricks pr-tracker"\
-        --path nixpks --remote origin\
-        --white-list ${config.age.secrets.prTrackerEnv.path};
-    '';
+    path = [pkgs.git];
     serviceConfig = {
       User = "pr-tracker";
       Group = "pr-tracker";
@@ -63,6 +63,12 @@ in {
       StateDirectoryMode = "0700";
       Restart = "always";
       ExecStartPre = prestart;
+      ExecStart = ''
+        ${lib.getExe pkgs.pr-tracker} --url pr-tracker.${config.secrets.secrets.global.domains.web}\
+          --user-agent "Patricks pr-tracker"\
+          --path nixpkgs --remote origin\
+          --email-white-list ${config.age.secrets.prTrackerWhiteList.path}
+      '';
       EnvironmentFile = config.age.secrets.prTrackerEnv.path;
 
       # Hardening
@@ -94,7 +100,6 @@ in {
       ];
       UMask = "0077";
     };
-    wantedBy = ["multi-user.target"];
   };
   systemd.timers.pr-tracker-update = {
     wantedBy = ["timers.target"];
@@ -102,6 +107,12 @@ in {
       OnBootSec = "30m";
       OnUnitActiveSec = "30m";
     };
+  };
+  users.groups.pr-tracker = {};
+  users.users.pr-tracker = {
+    isSystemUser = true;
+    group = "pr-tracker";
+    home = "/var/lib/pr-tracker";
   };
 
   systemd.services.pr-tracker-update = {
@@ -121,7 +132,6 @@ in {
       PrivateTmp = true;
       PrivateDevices = true;
       StateDirectoryMode = "0700";
-      Restart = "always";
       ExecStartPre = prestart;
       EnvironmentFile = config.age.secrets.prTrackerEnv.path;
     };

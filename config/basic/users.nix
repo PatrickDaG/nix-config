@@ -44,5 +44,6 @@
     ggr = uidGid 2002;
     family = uidGid 2003;
     printer = uidGid 2005;
+    pr-tracker = uidGid 2006;
   };
 }
