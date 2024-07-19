@@ -26,6 +26,7 @@
       firefly = "money";
       homebox = "homebox";
       octoprint = "print";
+      pr-tracker = "tracker";
     };
   in "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -167,6 +168,14 @@ in {
       (proxyProtect "ttrss" {port = 80;} true)
       (blockOf "yourspotify" {port = 80;})
       #(blockOf "homebox" {})
+      (blockOf "pr-tracker" {})
+      {
+        virtualHosts.${domainOf "pr-tracker"} = {
+          locations."/update" = {
+            deny = "all";
+          };
+        };
+      }
       (proxyProtect "ollama" {} true)
       (proxyProtect "octoprint" {} true)
       (proxyProtect "firefly" {port = 80;} true)
@@ -277,6 +286,7 @@ in {
     // mkContainer "ollama" {}
     // mkContainer "murmur" {}
     #// mkContainer "homebox" {}
+    // mkContainer "pr-tracker" {}
     // mkContainer "ttrss" {}
     // mkContainer "firefly" {}
     // mkContainer "yourspotify" {}

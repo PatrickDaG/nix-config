@@ -17,11 +17,6 @@ in {
       mode = "0770";
     };
   };
-  age.secrets.pr-tracker = {
-    generator.script = "alnum";
-    inherit (config.services.maddy) group;
-    mode = "640";
-  };
 
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -95,7 +90,6 @@ in {
     };
     ensureCredentials = {
       "patrick@${domain}".passwordFile = config.age.secrets.patrickPasswd.path;
-      "pr-tracker@${domain}".passwordFile = config.age.secrets.pr-tracker.path;
     };
     ensureAccounts = [
       "patrick@${domain}"
