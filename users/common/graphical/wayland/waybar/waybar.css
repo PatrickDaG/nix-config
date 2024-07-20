@@ -83,12 +83,6 @@ button:hover {
 	color: #000000;
 }
 
-
-#battery {
-	color: #ffffff;
-	background-color: #000000;
-}
-
 #battery.charging,
 #battery.plugged {
 	background-color: #26A65B;
