@@ -10,7 +10,7 @@
 
   age.secrets.coturnPassword = {
     generator.script = "alnum";
-    group = "netbird";
+    owner = "turnserver";
   };
 
   age.secrets.coturnSecret = {
@@ -64,6 +64,10 @@
         };
       };
     };
+  };
+  systemd.services.netbird-management.serviceConfig = {
+    Restart = "always";
+    RestartSec = 60;
   };
   environment.persistence."/persist".directories = [
     {
