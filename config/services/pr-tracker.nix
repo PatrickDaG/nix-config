@@ -64,7 +64,7 @@ in {
       Restart = "always";
       ExecStartPre = prestart;
       ExecStart = ''
-        ${lib.getExe pkgs.pr-tracker} --url pr-tracker.${config.secrets.secrets.global.domains.web}\
+        ${lib.getExe pkgs.pr-tracker} --url "https://pr-tracker.${config.secrets.secrets.global.domains.web}"\
           --user-agent "Patricks pr-tracker"\
           --path nixpkgs --remote origin\
           --email-white-list ${config.age.secrets.prTrackerWhiteList.path}

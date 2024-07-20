@@ -1,6 +1,6 @@
 {spicePkgs, ...}: {
   programs.spicetify = {
-    enable = true;
+    #enable = true;
     theme = spicePkgs.themes.RetroBlur;
     colorScheme = "Purple";
 

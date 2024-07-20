@@ -44,7 +44,7 @@
         ".config/spotify"
         ".cache/spotify"
         ".local/share/cargo"
-        ".local/share/wallpapers"
+        #".local/share/wallpapers"
       ];
     };
     "/panzer/state".directories =

@@ -32,6 +32,4 @@ lib.optionalAttrs (!minimal) {
       192000
     ];
   };
-
-  sound.enable = false;
 }
