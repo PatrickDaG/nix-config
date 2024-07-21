@@ -254,7 +254,7 @@
 
 .notification-group .notification-group-headers .notification-group-header {
   color: @text-color;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .notification-group .notification-group-buttons {
@@ -329,7 +329,7 @@
 .widget-title {
   color: @text-color;
   margin: 8px;
-  font-size: 1.5rem;
+  font-size: 0.5rem;
 }
 
 .widget-title > button {
@@ -350,7 +350,7 @@
 .widget-dnd {
   color: @text-color;
   margin: 8px;
-  font-size: 1.5rem;
+  font-size: 0.5rem;
   padding: 8px 16px;
 }
 

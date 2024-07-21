@@ -53,6 +53,7 @@
 
   boot.binfmt.emulatedSystems = ["aarch64-linux" "riscv64-linux"];
   nix.settings.system-features = ["kvm" "nixos-test"];
+  boot.kernelParams = lib.mkForce ["rd.luks.options=timeout=0" "rootflags=x-systemd.device-timeout=0" "nohibernate" "root=fstab" "loglevel=4" "nvidia-drm.modeset=1" "nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
 
   services.netbird.enable = true;
   # Do not cleanup nix store to prevent having to rebuild packages onca a month
