@@ -1,7 +1,7 @@
 {spicePkgs, ...}: {
   programs.spicetify = {
-    #enable = true;
-    theme = spicePkgs.themes.RetroBlur;
+    enable = true;
+    theme = spicePkgs.themes.retroBlur;
     colorScheme = "Purple";
 
     enabledExtensions = with spicePkgs.extensions; [

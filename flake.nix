@@ -90,7 +90,10 @@
 
     stylix.url = "github:danth/stylix";
 
-    spicetify-nix.url = "github:the-argus/spicetify-nix";
+    spicetify-nix = {
+      url = "github:Gerg-l/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixvim = {
       url = "github:nix-community/nixvim";

@@ -15,7 +15,7 @@
     verbose = true;
     extraSpecialArgs = {
       inherit nodes;
-      spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     };
     sharedModules = [
       {
@@ -24,7 +24,7 @@
       inputs.nix-index-database.hmModules.nix-index
       inputs.nixos-extra-modules.homeManagerModules.default
       inputs.nixvim.homeManagerModules.nixvim
-      inputs.spicetify-nix.homeManagerModule
+      inputs.spicetify-nix.homeManagerModules.default
     ];
   };
   # HM zsh needs this or else the startup order is fucked
