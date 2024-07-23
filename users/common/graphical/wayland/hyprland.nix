@@ -159,7 +159,7 @@ in {
           "_JAVA_AWT_WM_NONREPARENTING,1"
           "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
           "QT_QPA_PLATFORM,wayland"
-          "SDL_VIDEODRIVER,wayland"
+          "SDL_VIDEODRIVER,'wayland,x11,windows'"
           "GDK_BACKEND,wayland"
           "WLR_DRM_NO_ATOMIC,1" #retest on newest nvidia driver
         ];
@@ -197,6 +197,7 @@ in {
         xwayland.force_zero_scaling = true;
         windowrulev2 = [
           "immediate, class:^(cs2)$"
+          "immediate, class:^(steam_app_1172470)$"
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
