@@ -35,7 +35,9 @@
             # hyprctl dispatch resizewindowpixel exact 20% 40%,address:0x$window_id
             # hyprctl dispatch movewindowpixel exact 40% 30%,address:0x$window_id
 
-            hyprctl --batch "dispatch togglefloating address:0x$window_id ; dispatch resizewindowpixel exact "512 768",address:0x$window_id ; dispatch movewindowpixel exact "3800 -400",address:0x$window_id"
+            hyprctl dispatch togglefloating address:0x$window_id
+            hyprctl dispatch resizewindowpixel exact "512 768",address:0x$window_id
+            hyprctl dispatch movewindowpixel exact "3800 -400",address:0x$window_id
           fi
           ;;
       esac
@@ -197,7 +199,9 @@ in {
         xwayland.force_zero_scaling = true;
         windowrulev2 = [
           "immediate, class:^(cs2)$"
+          # apex legends
           "immediate, class:^(steam_app_1172470)$"
+          "float, class:^(steam)$, title:^(?!S)"
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
