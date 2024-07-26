@@ -13,7 +13,6 @@
           protolint.enable = true;
         };
         formatting = {
-          nixfmt.enable = true;
           markdownlint.enable = true;
           shfmt.enable = true;
         };
