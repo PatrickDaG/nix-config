@@ -1,8 +1,5 @@
+{ inputs, lib, ... }:
 {
-  inputs,
-  lib,
-  ...
-}: {
   imports = [
     ../../config/basic
     ../../config/services/octoprint.nix

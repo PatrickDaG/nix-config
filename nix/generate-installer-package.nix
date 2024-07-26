@@ -1,11 +1,15 @@
-{self, ...}: nodeName: nodeAttrs: let
+{ self, ... }:
+nodeName: nodeAttrs:
+let
   #FIXME inherit nodeAttrs. system;
   system = "x86_64-linux";
   pkgs = self.pkgs.${system};
 
-  disko-script = pkgs.writeShellScriptBin "disko-script" "${nodeAttrs.config.system.build.diskoScript}";
+  disko-script = pkgs.writeShellScriptBin "disko-script" "${nodeAttrs.config.system.build.diskoScript
+  }";
   disko-mount = pkgs.writeShellScriptBin "disko-mount" "${nodeAttrs.config.system.build.mountScript}";
-  disko-format = pkgs.writeShellScriptBin "disko-format" "${nodeAttrs.config.system.build.formatScript}";
+  disko-format = pkgs.writeShellScriptBin "disko-format" "${nodeAttrs.config.system.build.formatScript
+  }";
 
   install-system = pkgs.writeShellScriptBin "install-system" ''
     set -euo pipefail
@@ -28,7 +32,8 @@
       install-system
     ];
   };
-in {
+in
+{
   # Everything required for the installer as a single package,
   # so it can be used from an existing live system by copying the derivation.
   packages.${system}.installer-package.${nodeName} = installer-package;

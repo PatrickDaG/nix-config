@@ -1,14 +1,9 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   stylix.targets.kitty.enable = true;
   programs.kitty = {
     enable = true;
-    package = pkgs.kitty.overrideAttrs (_finalAttrs: _prevAttrs: {
-      doCheck = false;
-    });
+    package = pkgs.kitty.overrideAttrs (_finalAttrs: _prevAttrs: { doCheck = false; });
     settings = {
       # Use xterm-256color because copying terminfo-kitty is painful.
       term = "xterm-256color";

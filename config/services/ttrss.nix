@@ -1,7 +1,8 @@
-{config, ...}: {
+{ config, ... }:
+{
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
   };
   services.freshrss = {
     enable = true;

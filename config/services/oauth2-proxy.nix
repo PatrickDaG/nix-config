@@ -1,11 +1,8 @@
+{ config, nodes, ... }:
 {
-  config,
-  nodes,
-  ...
-}: {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
   };
 
   age.secrets.oauth2-cookie-secret = {
@@ -46,7 +43,7 @@
     redeemURL = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
     validateURL = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/oauth2-proxy/userinfo";
     clientID = "oauth2-proxy";
-    email.domains = ["*"];
+    email.domains = [ "*" ];
   };
 
   systemd.services.oauth2-proxy.serviceConfig = {
@@ -72,18 +69,18 @@
   # it includes the newline terminating the file which
   # makes kanidm reject the secret
   age.secrets.oauth2-client-secret-env = {
-    generator.dependencies = [
-      nodes.elisabeth-kanidm.config.age.secrets.oauth2-proxy
-    ];
-    generator.script = {
-      lib,
-      decrypt,
-      deps,
-      ...
-    }: ''
-      echo -n "OAUTH2_PROXY_CLIENT_SECRET="
-      ${decrypt} ${lib.escapeShellArg (lib.head deps).file}
-    '';
+    generator.dependencies = [ nodes.elisabeth-kanidm.config.age.secrets.oauth2-proxy ];
+    generator.script =
+      {
+        lib,
+        decrypt,
+        deps,
+        ...
+      }:
+      ''
+        echo -n "OAUTH2_PROXY_CLIENT_SECRET="
+        ${decrypt} ${lib.escapeShellArg (lib.head deps).file}
+      '';
     mode = "440";
     group = "oauth2-proxy";
   };

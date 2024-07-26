@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };
@@ -20,6 +21,6 @@
       };
     };
   };
-  networking.nftables.firewall.zones.untrusted.interfaces = ["lan01"];
+  networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
   wireguard.samba-patrick.client.via = "elisabeth-samba";
 }

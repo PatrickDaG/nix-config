@@ -8,26 +8,44 @@
   programs.nixvim.plugins = {
     lualine = {
       enable = true;
-      extensions = ["fzf" "nvim-dap-ui" "symbols-outline" "trouble" "neo-tree" "quickfix" "fugitive"];
+      extensions = [
+        "fzf"
+        "nvim-dap-ui"
+        "symbols-outline"
+        "trouble"
+        "neo-tree"
+        "quickfix"
+        "fugitive"
+      ];
       componentSeparators.left = "";
       componentSeparators.right = "";
       sectionSeparators.left = "";
       sectionSeparators.right = "";
       sections = {
-        lualine_a = ["mode"];
-        lualine_b = ["branch" "filename"];
-        lualine_c = ["diff" "diagnostics"];
-        lualine_x = ["encoding" "fileformat" "filetype"];
-        lualine_y = ["progress"];
-        lualine_z = ["location"];
+        lualine_a = [ "mode" ];
+        lualine_b = [
+          "branch"
+          "filename"
+        ];
+        lualine_c = [
+          "diff"
+          "diagnostics"
+        ];
+        lualine_x = [
+          "encoding"
+          "fileformat"
+          "filetype"
+        ];
+        lualine_y = [ "progress" ];
+        lualine_z = [ "location" ];
       };
       inactiveSections = {
-        lualine_a = ["filename"];
-        lualine_b = [];
-        lualine_c = ["diagnostics"];
-        lualine_x = [];
-        lualine_y = [];
-        lualine_z = ["location"];
+        lualine_a = [ "filename" ];
+        lualine_b = [ ];
+        lualine_c = [ "diagnostics" ];
+        lualine_x = [ ];
+        lualine_y = [ ];
+        lualine_z = [ "location" ];
       };
     };
     fugitive.enable = true;
@@ -36,13 +54,20 @@
     rainbow-delimiters.enable = true;
     rustaceanvim = {
       enable = true;
-      settings.server.settings.files.excludeDirs = [".direnv"];
+      settings.server.settings.files.excludeDirs = [ ".direnv" ];
     };
     indent-blankline = {
       enable = true;
       settings = {
-        exclude.buftypes = ["help" "terminal" "nofile"];
-        exclude.filetypes = ["terminal" "lsp-info"];
+        exclude.buftypes = [
+          "help"
+          "terminal"
+          "nofile"
+        ];
+        exclude.filetypes = [
+          "terminal"
+          "lsp-info"
+        ];
       };
     };
     gitsigns = {
@@ -64,7 +89,7 @@
         fzf-native.enable = true;
         frecency.enable = true;
       };
-      enabledExtensions = ["notify"];
+      enabledExtensions = [ "notify" ];
       keymaps = {
         "<leader>gf" = {
           action = "git_files";

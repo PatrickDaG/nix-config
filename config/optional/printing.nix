@@ -1,7 +1,11 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.printing = {
     enable = true;
-    drivers = [pkgs.hplipWithPlugin pkgs.hplip];
+    drivers = [
+      pkgs.hplipWithPlugin
+      pkgs.hplip
+    ];
   };
   environment.persistence."/state".directories = [
     {

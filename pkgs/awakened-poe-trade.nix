@@ -1,7 +1,5 @@
-{
-  pkgs,
-  fetchurl,
-}: let
+{ pkgs, fetchurl }:
+let
   name = "awakened-poe-trade";
   version = "3.22.10003";
   description = "Path of Exile trading app for price checking";
@@ -23,17 +21,17 @@
     sha256 = "sha256-fZ3PU+yE1n/RytkPFAXQhU85KNQStYcSrdgw+OYfJRg=";
   };
 in
-  pkgs.appimageTools.wrapType2 {
-    name = "awakened-poe-trade";
-    src = fetchurl {
-      url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v${version}/${file}";
-      hash = "sha256-b+cDOmU0s0MqP5ZgCacmAon8UqDejG4HcOqi+Uf2dEM=";
-    };
+pkgs.appimageTools.wrapType2 {
+  name = "awakened-poe-trade";
+  src = fetchurl {
+    url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v${version}/${file}";
+    hash = "sha256-b+cDOmU0s0MqP5ZgCacmAon8UqDejG4HcOqi+Uf2dEM=";
+  };
 
-    extraInstallCommands = ''
-      mkdir -p $out/share/applications
-      cp ${icon} $out/share/applications/awakened-poe-trade.png
-      cp ${desktopEntry} $out/share/applications/${name}.desktop
-      substituteInPlace $out/share/applications/awakened-poe-trade.desktop --replace /share/ $out/share/
-    '';
-  }
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    cp ${icon} $out/share/applications/awakened-poe-trade.png
+    cp ${desktopEntry} $out/share/applications/${name}.desktop
+    substituteInPlace $out/share/applications/awakened-poe-trade.desktop --replace /share/ $out/share/
+  '';
+}

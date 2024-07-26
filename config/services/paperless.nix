@@ -4,10 +4,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   paperlessBackupDir = "/var/cache/backups/paperless";
-in {
+in
+{
   systemd.tmpfiles.settings = {
     "10-paperless".${paperlessBackupDir}.d = {
       inherit (config.services.paperless) user;
@@ -36,7 +38,7 @@ in {
         inherit (config.secrets.secrets.global.hetzner.users.paperless) subUid path;
         sshAgeSecret = "paperlessHetznerSsh";
       };
-      paths = [paperlessBackupDir];
+      paths = [ paperlessBackupDir ];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -45,27 +47,26 @@ in {
       ];
     };
   };
-  systemd.services.paperless-backup = let
-    cfg = config.systemd.services.paperless-consumer;
-  in {
-    description = "Paperless document backup";
-    serviceConfig =
-      lib.recursiveUpdate
-      cfg.serviceConfig
-      {
+  systemd.services.paperless-backup =
+    let
+      cfg = config.systemd.services.paperless-consumer;
+    in
+    {
+      description = "Paperless document backup";
+      serviceConfig = lib.recursiveUpdate cfg.serviceConfig {
         ExecStart = "${config.services.paperless.package}/bin/paperless-ngx document_exporter -na -nt -f -d ${paperlessBackupDir}";
-        ReadWritePaths = cfg.serviceConfig.ReadWritePaths ++ [paperlessBackupDir];
+        ReadWritePaths = cfg.serviceConfig.ReadWritePaths ++ [ paperlessBackupDir ];
         Restart = "no";
         Type = "oneshot";
       };
-    inherit (cfg) environment;
-    requiredBy = ["restic-backups-main.service"];
-    before = ["restic-backups-main.service"];
-  };
+      inherit (cfg) environment;
+      requiredBy = [ "restic-backups-main.service" ];
+      before = [ "restic-backups-main.service" ];
+    };
 
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.paperless.port];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
   age.secrets.paperless-admin-passwd = {

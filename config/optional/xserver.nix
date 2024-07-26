@@ -12,7 +12,7 @@ lib.optionalAttrs (!minimal) {
     displayManager.startx.enable = true;
     autoRepeatDelay = 235;
     autoRepeatInterval = 60;
-    videoDrivers = ["modesetting"];
+    videoDrivers = [ "modesetting" ];
   };
   services.libinput = {
     enable = true;
@@ -28,10 +28,9 @@ lib.optionalAttrs (!minimal) {
       disableWhileTyping = true;
     };
   };
-  services.udev.extraRules = let
-    exe =
-      pkgs.writeShellScript "set-key-repeat"
-      ''
+  services.udev.extraRules =
+    let
+      exe = pkgs.writeShellScript "set-key-repeat" ''
         if [ -d "/tmp/.X11-unix" ]; then
         	for D in /tmp/.X11-unix/*; do
         	file=$(${pkgs.coreutils}/bin/basename $D)
@@ -43,7 +42,8 @@ lib.optionalAttrs (!minimal) {
         	done
         fi
       '';
-  in ''
-    ACTION=="add", SUBSYSTEM=="input", ATTRS{bInterfaceClass}=="03", RUN+="${exe}"
-  '';
+    in
+    ''
+      ACTION=="add", SUBSYSTEM=="input", ATTRS{bInterfaceClass}=="03", RUN+="${exe}"
+    '';
 }

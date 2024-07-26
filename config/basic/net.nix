@@ -1,17 +1,13 @@
+{ lib, config, ... }:
 {
-  lib,
-  config,
-  ...
-}: {
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;
     useDHCP = false;
     # allow mdns port
-    firewall.allowedUDPPorts = [5353];
+    firewall.allowedUDPPorts = [ 5353 ];
     renameInterfacesByMac = lib.mkIf (!config.boot.isContainer) (
-      lib.mapAttrs (_: v: v.mac)
-      (config.secrets.secrets.local.networking.interfaces or {})
+      lib.mapAttrs (_: v: v.mac) (config.secrets.secrets.local.networking.interfaces or { })
     );
   };
   systemd.network = {
@@ -19,8 +15,8 @@
     wait-online.anyInterface = true;
   };
   system.nssDatabases.hosts = lib.mkMerge [
-    (lib.mkBefore ["mdns_minimal [NOTFOUND=return]"])
-    (lib.mkAfter ["mdns"])
+    (lib.mkBefore [ "mdns_minimal [NOTFOUND=return]" ])
+    (lib.mkAfter [ "mdns" ])
   ];
   services.resolved = {
     enable = true;

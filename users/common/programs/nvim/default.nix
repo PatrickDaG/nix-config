@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./nixvim/keybinds.nix
     ./nixvim/options.nix
@@ -26,9 +27,7 @@
       require("onedark").load()
     '';
     extraConfigLuaPost =
-      /*
-      lua
-      */
+      # lua
       ''
         vim.notify = require("notify")
         require("window-picker").setup {

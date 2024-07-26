@@ -1,7 +1,8 @@
-{config, ...}: {
+{ config, ... }:
+{
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.open-webui.port];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.open-webui.port ];
   };
   services.ollama = {
     host = "localhost";

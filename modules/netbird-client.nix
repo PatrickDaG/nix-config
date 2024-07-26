@@ -3,9 +3,9 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     attrNames
     getExe
     literalExpression
@@ -22,8 +22,7 @@
     versionOlder
     ;
 
-  inherit
-    (lib.types)
+  inherit (lib.types)
     attrsOf
     port
     str
@@ -36,7 +35,8 @@
   kernel = config.boot.kernelPackages;
 
   cfg = config.services.netbird;
-in {
+in
+{
   meta.maintainers = with maintainers; [
     misuzu
     thubrecht
@@ -46,16 +46,13 @@ in {
 
   options.services.netbird = {
     enable = mkEnableOption (lib.mdDoc "Netbird daemon");
-    package = mkPackageOption pkgs "netbird" {};
+    package = mkPackageOption pkgs "netbird" { };
 
     tunnels = mkOption {
       type = attrsOf (
         submodule (
+          { name, config, ... }:
           {
-            name,
-            config,
-            ...
-          }: {
             options = {
               port = mkOption {
                 type = port;
@@ -111,7 +108,7 @@ in {
           }
         )
       );
-      default = {};
+      default = { };
       description = ''
         Attribute set of Netbird tunnels, each one will spawn a daemon listening on ...
       '';
@@ -124,106 +121,99 @@ in {
       services.netbird.tunnels.wt0.stateDir = "netbird";
     })
 
-    (mkIf (cfg.tunnels != {}) {
+    (mkIf (cfg.tunnels != { }) {
       boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
 
-      environment.systemPackages = [cfg.package];
+      environment.systemPackages = [ cfg.package ];
 
       networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
-        mapAttrs'
-        (
+        mapAttrs' (
           name: _:
-            nameValuePair "50-netbird-${name}" {
-              matchConfig = {
-                Name = name;
-              };
-              linkConfig = {
-                Unmanaged = true;
-                ActivationPolicy = "manual";
-              };
-            }
-        )
-        cfg.tunnels
+          nameValuePair "50-netbird-${name}" {
+            matchConfig = {
+              Name = name;
+            };
+            linkConfig = {
+              Unmanaged = true;
+              ActivationPolicy = "manual";
+            };
+          }
+        ) cfg.tunnels
       );
 
-      systemd.services =
-        mapAttrs'
-        (
-          name: {
-            environment,
-            stateDir,
-            environmentFile,
-            userAccess,
-            ...
-          }:
-            nameValuePair "netbird-${name}" {
-              description = "A WireGuard-based mesh network that connects your devices into a single private network";
+      systemd.services = mapAttrs' (
+        name:
+        {
+          environment,
+          stateDir,
+          environmentFile,
+          userAccess,
+          ...
+        }:
+        nameValuePair "netbird-${name}" {
+          description = "A WireGuard-based mesh network that connects your devices into a single private network";
 
-              documentation = ["https://netbird.io/docs/"];
+          documentation = [ "https://netbird.io/docs/" ];
 
-              after = ["network.target"];
-              wantedBy = ["multi-user.target"];
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
 
-              path = with pkgs; [openresolv];
+          path = with pkgs; [ openresolv ];
 
-              inherit environment;
+          inherit environment;
 
-              serviceConfig = {
-                EnvironmentFile = mkIf (environmentFile != null) environmentFile;
-                ExecStart = "${getExe cfg.package} service run";
-                Restart = "always";
-                RuntimeDirectory = stateDir;
-                StateDirectory = stateDir;
-                StateDirectoryMode = "0700";
-                WorkingDirectory = "/var/lib/${stateDir}";
-                RuntimeDirectoryMode =
-                  if userAccess
-                  then "0755"
-                  else "0750";
+          serviceConfig = {
+            EnvironmentFile = mkIf (environmentFile != null) environmentFile;
+            ExecStart = "${getExe cfg.package} service run";
+            Restart = "always";
+            RuntimeDirectory = stateDir;
+            StateDirectory = stateDir;
+            StateDirectoryMode = "0700";
+            WorkingDirectory = "/var/lib/${stateDir}";
+            RuntimeDirectoryMode = if userAccess then "0755" else "0750";
 
-                # hardening
-                LockPersonality = true;
-                MemoryDenyWriteExecute = true;
-                NoNewPrivileges = true;
-                PrivateMounts = true;
-                PrivateTmp = true;
-                ProtectClock = true;
-                ProtectControlGroups = true;
-                ProtectHome = true;
-                ProtectHostname = true;
-                ProtectKernelLogs = true;
-                ProtectKernelModules = false; # needed to load wg module for kernel-mode WireGuard
-                ProtectKernelTunables = false;
-                ProtectSystem = true;
-                RemoveIPC = true;
-                RestrictNamespaces = true;
-                RestrictRealtime = true;
-                RestrictSUIDSGID = true;
+            # hardening
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            NoNewPrivileges = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = false; # needed to load wg module for kernel-mode WireGuard
+            ProtectKernelTunables = false;
+            ProtectSystem = true;
+            RemoveIPC = true;
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
 
-                # Hardening
-                #CapabilityBoundingSet = "";
-                #PrivateUsers = true;
-                #ProtectProc = "invisible";
-                #ProcSubset = "pid";
-                #RestrictAddressFamilies = [
-                #  "AF_INET"
-                #  "AF_INET6"
-                #  "AF_NETLINK"
-                #];
-                #SystemCallArchitectures = "native";
-                #SystemCallFilter = [
-                #  "@system-service"
-                #  "@pkey"
-                #];
-                UMask = "0077";
-              };
+            # Hardening
+            #CapabilityBoundingSet = "";
+            #PrivateUsers = true;
+            #ProtectProc = "invisible";
+            #ProcSubset = "pid";
+            #RestrictAddressFamilies = [
+            #  "AF_INET"
+            #  "AF_INET6"
+            #  "AF_NETLINK"
+            #];
+            #SystemCallArchitectures = "native";
+            #SystemCallFilter = [
+            #  "@system-service"
+            #  "@pkey"
+            #];
+            UMask = "0077";
+          };
 
-              stopIfChanged = false;
-            }
-        )
-        cfg.tunnels;
+          stopIfChanged = false;
+        }
+      ) cfg.tunnels;
     })
   ];
 }

@@ -1,4 +1,5 @@
-{spicePkgs, ...}: {
+{ spicePkgs, ... }:
+{
   programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.retroBlur;

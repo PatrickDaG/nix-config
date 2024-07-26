@@ -1,11 +1,11 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [3000 80];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [
+      3000
+      80
+    ];
   };
   age.secrets.spotifySecret = {
     owner = "root";

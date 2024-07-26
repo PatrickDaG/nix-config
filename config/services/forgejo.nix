@@ -4,9 +4,11 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   forgejoDomain = "forge.${config.secrets.secrets.global.domains.web}";
-in {
+in
+{
   age.secrets.resticpasswd = {
     generator.script = "alnum";
   };
@@ -29,7 +31,7 @@ in {
         inherit (config.secrets.secrets.global.hetzner.users.forgejo) subUid path;
         sshAgeSecret = "forgejoHetznerSsh";
       };
-      paths = [config.services.forgejo.stateDir];
+      paths = [ config.services.forgejo.stateDir ];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -42,7 +44,7 @@ in {
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
   services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
 
-  users.groups.git = {};
+  users.groups.git = { };
   users.users.git = {
     isSystemUser = true;
     useDefaultShell = true;
@@ -52,9 +54,11 @@ in {
 
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.forgejo.settings.server.HTTP_PORT];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [
+      config.services.forgejo.settings.server.HTTP_PORT
+    ];
   };
-  networking.firewall.allowedTCPPorts = [config.services.forgejo.settings.server.SSH_PORT];
+  networking.firewall.allowedTCPPorts = [ config.services.forgejo.settings.server.SSH_PORT ];
 
   environment.persistence."/panzer".directories = [
     {
@@ -145,30 +149,31 @@ in {
   # see https://github.com/go-gitea/gitea/issues/21376.
   systemd.services.forgejo = {
     serviceConfig.RestartSec = "60"; # Retry every minute
-    preStart = let
-      exe = lib.getExe config.services.forgejo.package;
-      providerName = "kanidm";
-      clientId = "forgejo";
-      args = lib.escapeShellArgs [
-        "--name"
-        providerName
-        "--provider"
-        "openidConnect"
-        "--key"
-        clientId
-        "--auto-discover-url"
-        "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
-        "--scopes"
-        "email"
-        "--scopes"
-        "profile"
-        "--group-claim-name"
-        "groups"
-        "--admin-group"
-        "admin"
-        "--skip-local-2fa"
-      ];
-    in
+    preStart =
+      let
+        exe = lib.getExe config.services.forgejo.package;
+        providerName = "kanidm";
+        clientId = "forgejo";
+        args = lib.escapeShellArgs [
+          "--name"
+          providerName
+          "--provider"
+          "openidConnect"
+          "--key"
+          clientId
+          "--auto-discover-url"
+          "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
+          "--scopes"
+          "email"
+          "--scopes"
+          "profile"
+          "--group-claim-name"
+          "groups"
+          "--admin-group"
+          "admin"
+          "--skip-local-2fa"
+        ];
+      in
       lib.mkAfter ''
         provider_id=$(${exe} admin auth list | ${pkgs.gnugrep}/bin/grep -w '${providerName}' | cut -f1)
           SECRET="$(< ${config.age.secrets.openid-secret.path})"

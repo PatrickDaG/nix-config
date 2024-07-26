@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   age.secrets.eduroam = {
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
@@ -10,7 +11,11 @@
     devoloog-sae20.rekeyFile = ./secrets/iwd/devoloog-sae20.age;
   };
   wireguard.samba-patrick.client.via = "elisabeth-samba";
-  networking.nftables.firewall.zones.untrusted.interfaces = ["lan01" "lan02" "wlan01"];
+  networking.nftables.firewall.zones.untrusted.interfaces = [
+    "lan01"
+    "lan02"
+    "wlan01"
+  ];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd = {
@@ -36,7 +41,7 @@
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
-      dns = ["1.1.1.1"];
+      dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 10;
       dhcpV6Config.RouteMetric = 10;
     };
@@ -47,7 +52,7 @@
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
-      dns = ["1.1.1.1"];
+      dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 10;
       dhcpV6Config.RouteMetric = 10;
     };
@@ -58,7 +63,7 @@
         IPv6PrivacyExtensions = "yes";
         MulticastDNS = true;
       };
-      dns = ["1.1.1.1"];
+      dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 40;
       dhcpV6Config.RouteMetric = 40;
     };

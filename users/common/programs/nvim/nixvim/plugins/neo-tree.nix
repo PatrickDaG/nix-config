@@ -48,7 +48,7 @@
       useLibuvFileWatcher = true;
       filteredItems = {
         hideDotfiles = false;
-        hideByName = [".git"];
+        hideByName = [ ".git" ];
       };
     };
   };

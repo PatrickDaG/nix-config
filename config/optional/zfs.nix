@@ -3,15 +3,16 @@
   config,
   lib,
   ...
-}: {
-  boot.supportedFilesystems = ["zfs"];
+}:
+{
+  boot.supportedFilesystems = [ "zfs" ];
   boot.kernelPackages = lib.mkDefault config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # The root pool should never be imported forcefully.
   # Failure to import is important to notice!
   boot.zfs.forceImportRoot = false;
 
-  environment.systemPackages = with pkgs; [zfs];
+  environment.systemPackages = with pkgs; [ zfs ];
 
   # Might help with hangs mainly atuin
   #boot.kernelPatches = [
@@ -40,5 +41,5 @@
     };
   };
   # TODO remove once this is upstreamed
-  boot.initrd.systemd.services."zfs-import-rpool".after = ["cryptsetup.target"];
+  boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
 }

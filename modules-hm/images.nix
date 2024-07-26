@@ -1,10 +1,6 @@
-{
-  lib,
-  config,
-  ...
-}: let
-  inherit
-    (lib)
+{ lib, config, ... }:
+let
+  inherit (lib)
     mkEnableOption
     mkMerge
     attrNames
@@ -18,7 +14,8 @@
     mapAttrs'
     listToAttrs
     ;
-in {
+in
+{
   home-manager.sharedModules = [
     {
       options.images = {
@@ -39,26 +36,25 @@ in {
 
   imports = [
     (
-      {config, ...}: {
+      { config, ... }:
+      {
         age.secrets = mkMerge (
-          flip map
-          (attrNames config.home-manager.users)
-          (
+          flip map (attrNames config.home-manager.users) (
             user:
-              mkIf config.home-manager.users.${user}.images.enable (
-                listToAttrs (flip map (attrNames (filterAttrs (_: type: type == "regular") (builtins.readDir ../secrets/img)))
-                  (
-                    file: {
-                      name = "images-${user}-${file}";
-                      value = {
-                        name = removeSuffix ".age" file;
-                        rekeyFile = ../secrets/img/${file};
-                        owner = user;
-                        group = user;
-                      };
-                    }
-                  ))
+            mkIf config.home-manager.users.${user}.images.enable (
+              listToAttrs (
+                flip map (attrNames (filterAttrs (_: type: type == "regular") (builtins.readDir ../secrets/img)))
+                  (file: {
+                    name = "images-${user}-${file}";
+                    value = {
+                      name = removeSuffix ".age" file;
+                      rekeyFile = ../secrets/img/${file};
+                      owner = user;
+                      group = user;
+                    };
+                  })
               )
+            )
           )
         );
       }

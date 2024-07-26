@@ -1,11 +1,12 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [80 3000 3001];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [
+      80
+      3000
+      3001
+    ];
   };
 
   age.secrets.coturnPassword = {
@@ -19,14 +20,20 @@
   };
 
   age.secrets.dataEnc = {
-    generator.script = {pkgs, ...}: ''
-      ${lib.getExe pkgs.openssl} rand -base64 32
-    '';
+    generator.script =
+      { pkgs, ... }:
+      ''
+        ${lib.getExe pkgs.openssl} rand -base64 32
+      '';
     group = "netbird";
   };
 
-  networking.firewall.allowedTCPPorts = [80 3000 3001];
-  networking.firewall.allowedUDPPorts = [3478];
+  networking.firewall.allowedTCPPorts = [
+    80
+    3000
+    3001
+  ];
+  networking.firewall.allowedUDPPorts = [ 3478 ];
   services.netbird = {
     server = {
       enable = true;

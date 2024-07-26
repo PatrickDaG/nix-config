@@ -3,20 +3,21 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.homebox;
-  inherit
-    (lib)
+  inherit (lib)
     mkEnableOption
     mkPackageOption
     mkDefault
     types
     mkIf
     ;
-in {
+in
+{
   options.services.homebox = {
     enable = mkEnableOption "homebox";
-    package = mkPackageOption pkgs "homebox" {};
+    package = mkPackageOption pkgs "homebox" { };
     settings = lib.mkOption {
       type = types.attrsOf types.str;
       defaultText = ''
@@ -39,7 +40,7 @@ in {
       HBOX_MODE = mkDefault "production";
     };
     systemd.services.homebox = {
-      after = ["network.target"];
+      after = [ "network.target" ];
       environment = cfg.settings;
       serviceConfig = {
         User = "homebox";
@@ -86,8 +87,8 @@ in {
         # System Call Filtering
         UMask = "0077";
       };
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
     };
   };
-  meta.maintainers = with lib.maintainers; [patrickdag];
+  meta.maintainers = with lib.maintainers; [ patrickdag ];
 }

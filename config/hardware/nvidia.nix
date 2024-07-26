@@ -5,7 +5,7 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
-  services.xserver.videoDrivers = lib.mkForce ["nvidia"];
+  services.xserver.videoDrivers = lib.mkForce [ "nvidia" ];
 
   hardware = {
     graphics = {

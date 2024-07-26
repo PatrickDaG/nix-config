@@ -1,11 +1,8 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.adguardhome.port];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.adguardhome.port ];
   };
   services.adguardhome = {
     enable = true;
@@ -16,8 +13,12 @@
     settings = {
       dns = {
         bind_hosts = [
-          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv4)
-          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name} config.secrets.secrets.global.net.privateSubnetv6)
+          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name}
+            config.secrets.secrets.global.net.privateSubnetv4
+          )
+          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name}
+            config.secrets.secrets.global.net.privateSubnetv6
+          )
         ];
         anonymize_client_ip = false;
         upstream_dns = [
@@ -61,8 +62,8 @@
     };
   };
   networking.firewall = {
-    allowedTCPPorts = [53];
-    allowedUDPPorts = [53];
+    allowedTCPPorts = [ 53 ];
+    allowedUDPPorts = [ 53 ];
   };
   environment.persistence."/persist".directories = [
     {

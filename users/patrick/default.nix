@@ -34,7 +34,7 @@ lib.optionalAttrs (!minimal) {
       }
     ];
   };
-  users.groups.patrick = {};
+  users.groups.patrick = { };
 
   environment.systemPackages = with pkgs; [
     # xournalpp needs this or else it will crash
@@ -87,11 +87,8 @@ lib.optionalAttrs (!minimal) {
           ../common/graphical/wayland
           ./smb.nix
         ];
-        "patricknix" = [
-          ../common/graphical/wayland
-        ];
+        "patricknix" = [ ../common/graphical/wayland ];
       }
-      .${config.node.name}
-      or [];
+      .${config.node.name} or [ ];
   };
 }

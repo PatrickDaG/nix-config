@@ -1,5 +1,5 @@
-{writers}:
-writers.writePython3Bin "find-orphaned" {} ''
+{ writers }:
+writers.writePython3Bin "find-orphaned" { } ''
   import sys
   import os
   if len(sys.argv) != 2:

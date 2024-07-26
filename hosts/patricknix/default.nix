@@ -1,8 +1,5 @@
+{ inputs, lib, ... }:
 {
-  inputs,
-  lib,
-  ...
-}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     # for some reasons the cpu-intel includes the gpu as well
@@ -45,11 +42,12 @@
       layout = "de";
     };
     libinput = {
-      touchpad = lib.mkForce {
-        accelSpeed = "0.5";
-      };
+      touchpad = lib.mkForce { accelSpeed = "0.5"; };
     };
   };
   nixpkgs.hostPlatform = "x86_64-linux";
-  nix.settings.system-features = ["kvm" "nixos-test"];
+  nix.settings.system-features = [
+    "kvm"
+    "nixos-test"
+  ];
 }

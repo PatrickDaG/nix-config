@@ -3,7 +3,8 @@
   nodes,
   lib,
   ...
-}: {
+}:
+{
   disko.devices = {
     disk = {
       m2-ssd = rec {
@@ -12,9 +13,15 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "2GiB") // {device = "${device}-part1";};
-            swap = (partSwap "16G") // {device = "${device}-part2";};
-            rpool = (partLuksZfs "m2-ssd" "rpool" "100%") // {device = "${device}-part3";};
+            boot = (partEfi "2GiB") // {
+              device = "${device}-part1";
+            };
+            swap = (partSwap "16G") // {
+              device = "${device}-part2";
+            };
+            rpool = (partLuksZfs "m2-ssd" "rpool" "100%") // {
+              device = "${device}-part3";
+            };
           };
         };
       };
@@ -24,13 +31,15 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            panzer = (partLuksZfs "sata-hdd" "panzer" "100%") // {device = "${device}-part1";};
+            panzer = (partLuksZfs "sata-hdd" "panzer" "100%") // {
+              device = "${device}-part1";
+            };
           };
         };
       };
     };
     zpool = with lib.disko.zfs; {
-      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
+      rpool = mkZpool { datasets = impermanenceZfsDatasets; };
       panzer = mkZpool {
         datasets = {
           "local" = unmountable;
@@ -42,8 +51,8 @@
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
-  boot.initrd.systemd.services."zfs-import-panzer".after = ["cryptsetup.target"];
-  boot.initrd.systemd.services."zfs-import-rpool".after = ["cryptsetup.target"];
+  boot.initrd.systemd.services."zfs-import-panzer".after = [ "cryptsetup.target" ];
+  boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
 
   wireguard.scrtiny-patrick.client.via = "elisabeth";
 

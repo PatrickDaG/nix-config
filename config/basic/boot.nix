@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   boot = lib.mkIf (!config.boot.isContainer) {
     initrd.systemd = {
       enable = true;
@@ -11,12 +12,23 @@
       extraBin.ip = "${pkgs.iproute}/bin/ip";
       extraBin.cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
       users.root.shell = "${pkgs.bashInteractive}/bin/bash";
-      storePaths = ["${pkgs.bashInteractive}/bin/bash"];
+      storePaths = [ "${pkgs.bashInteractive}/bin/bash" ];
     };
 
-    initrd.availableKernelModules = ["xhci_pci" "nvme" "r8169" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" "ahci" "uas" "tpm_crb"];
-    supportedFilesystems = ["ntfs"];
-    kernelModules = ["kvm-intel"];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "nvme"
+      "r8169"
+      "usb_storage"
+      "usbhid"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+      "ahci"
+      "uas"
+      "tpm_crb"
+    ];
+    supportedFilesystems = [ "ntfs" ];
+    kernelModules = [ "kvm-intel" ];
     kernelParams = [
       "rd.luks.options=timeout=0"
       "rootflags=x-systemd.device-timeout=0"

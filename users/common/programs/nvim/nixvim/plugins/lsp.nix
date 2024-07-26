@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   programs.nixvim.plugins = {
     none-ls = {
       enable = true;
@@ -57,7 +54,10 @@
         nil-ls = {
           enable = true;
           settings = {
-            formatting.command = [(lib.getExe pkgs.nixfmt-rfc-style) "--quiet"];
+            formatting.command = [
+              (lib.getExe pkgs.nixfmt-rfc-style)
+              "--quiet"
+            ];
           };
         };
         nixd.enable = true;

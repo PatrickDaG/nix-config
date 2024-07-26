@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   nix.extraOptions = ''
     experimental-features = nix-command flakes recursive-nix
   '';

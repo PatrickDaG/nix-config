@@ -3,9 +3,9 @@
   lib,
   nixosConfig,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     mkMerge
     optionals
     elem
@@ -46,7 +46,8 @@
     # Listen to the Hyprland socket for events and process each line with the handle function
     ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
   '';
-in {
+in
+{
   wayland.windowManager.hyprland = {
     enable = true;
     settings = mkMerge [
@@ -82,19 +83,20 @@ in {
           focus_preferred_method = 1;
           workspace_center_on = 1;
         };
-        bind = let
-          monitor_binds = {
-            "1" = "j";
-            "2" = "d";
-            "3" = "u";
-            "4" = "a";
-            "5" = "x";
-            "6" = "F1";
-            "7" = "F2";
-            "8" = "F3";
-            "9" = "F4";
-          };
-        in
+        bind =
+          let
+            monitor_binds = {
+              "1" = "j";
+              "2" = "d";
+              "3" = "u";
+              "4" = "a";
+              "5" = "x";
+              "6" = "F1";
+              "7" = "F2";
+              "8" = "F3";
+              "9" = "F4";
+            };
+          in
           [
             "SUPER,q,killactive,"
             "SUPER,return,fullscreen,"
@@ -146,12 +148,10 @@ in {
 
             "SUPER + SHIFT,q,exit"
           ]
-          ++ flip concatMap (map toString (lib.lists.range 1 9)) (
-            x: [
-              "SUPER,${monitor_binds."${x}"},workspace,${x}"
-              "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
-            ]
-          );
+          ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
+            "SUPER,${monitor_binds."${x}"},workspace,${x}"
+            "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
+          ]);
 
         cursor.no_warps = true;
         debug.disable_logs = false;
@@ -163,7 +163,7 @@ in {
           "QT_QPA_PLATFORM,wayland"
           "SDL_VIDEODRIVER,'wayland,x11,windows'"
           "GDK_BACKEND,wayland"
-          "WLR_DRM_NO_ATOMIC,1" #retest on newest nvidia driver
+          "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
         ];
         bindm = [
           # mouse movements

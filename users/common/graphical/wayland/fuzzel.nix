@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   stylix.targets.fuzzel.enable = true;
   home.packages = with pkgs; [
     (writeShellScriptBin "fuzzel" ''

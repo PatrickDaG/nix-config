@@ -3,9 +3,11 @@
   lib,
   nodes,
   ...
-}: let
+}:
+let
   vaultwardenDomain = "pw.${config.secrets.secrets.global.domains.web}";
-in {
+in
+{
   age.secrets.vaultwarden-env = {
     rekeyFile = config.node.secretsDir + "/vaultwarden-env.age";
     mode = "440";
@@ -43,7 +45,7 @@ in {
         inherit (config.secrets.secrets.global.hetzner.users.vaultwarden) subUid path;
         sshAgeSecret = "vaultwardenHetznerSsh";
       };
-      paths = [config.services.vaultwarden.backupDir];
+      paths = [ config.services.vaultwarden.backupDir ];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -64,17 +66,18 @@ in {
       mode = "640";
     };
     services.maddy.ensureCredentials = {
-      "vaultwarden@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.vaultwardenPasswd.path;
+      "vaultwarden@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
+        nodes.maddy.config.age.secrets.vaultwardenPasswd.path;
     };
   };
   system.activationScripts.systemd_env_smtp_passwd = {
     text = ''
       echo "SMTP_PASSWORD=$(< ${lib.escapeShellArg config.age.secrets.maddyPasswd.path})" > /run/vaultwarden_smtp_passwd
     '';
-    deps = ["agenix"];
+    deps = [ "agenix" ];
   };
 
-  systemd.services.vaultwarden.serviceConfig.EnvironmentFile = ["/run/vaultwarden_smtp_passwd"];
+  systemd.services.vaultwarden.serviceConfig.EnvironmentFile = [ "/run/vaultwarden_smtp_passwd" ];
 
   services.vaultwarden = {
     enable = true;
@@ -107,7 +110,7 @@ in {
 
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.vaultwarden.config.rocketPort];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.vaultwarden.config.rocketPort ];
   };
 
   # Replace uses of old name

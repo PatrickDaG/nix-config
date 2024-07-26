@@ -3,12 +3,14 @@
   lib,
   nixosConfig,
   ...
-}: {
+}:
+{
   programs.waybar = {
     enable = true;
     systemd.enable = false;
     style =
-      ({
+      (
+        {
           desktopnix = ''
             * {
             	/* `otf-font-awesome` is required to be installed for icons */
@@ -26,14 +28,18 @@
             }
           '';
         }
-        .${nixosConfig.node.name}
-        or "")
+        .${nixosConfig.node.name} or ""
+      )
       + builtins.readFile ./waybar.css;
     settings.main = {
       layer = "top";
       position = "bottom";
-      modules-left = ["privacy" "hyprland/submap" "hyprland/window"];
-      modules-center = ["hyprland/workspaces"];
+      modules-left = [
+        "privacy"
+        "hyprland/submap"
+        "hyprland/window"
+      ];
+      modules-center = [ "hyprland/workspaces" ];
       modules-right =
         {
           desktopnix = [
@@ -58,13 +64,22 @@
             "tray"
           ];
         }
-        .${nixosConfig.node.name}
-        or [];
+        .${nixosConfig.node.name} or [ ];
 
       battery = {
         interval = 1;
         format = "{icon}  {capacity}%";
-        format-icons = ["" "" "" "" "" "" "" "" ""];
+        format-icons = [
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+          ""
+        ];
         states = {
           critical = 10;
           warning = 20;
@@ -74,7 +89,18 @@
       backlight = {
         device = "intel_backlight";
         format = "{icon} {percent}%";
-        format-icons = ["󱩎" "󱩏" "󱩐" "󱩑" "󱩒" "󱩓" "󱩔" "󱩕" "󱩖" "󰛨"];
+        format-icons = [
+          "󱩎"
+          "󱩏"
+          "󱩐"
+          "󱩑"
+          "󱩒"
+          "󱩓"
+          "󱩔"
+          "󱩕"
+          "󱩖"
+          "󰛨"
+        ];
         on-scroll-up = "${pkgs.acpilight}/bin/xbacklight +5";
         on-scroll-down = "${pkgs.acpilight}/bin/xbacklight -5";
       };
@@ -114,7 +140,11 @@
         on-scroll-up = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
         on-scroll-down = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
         format-muted = "󰖁";
-        format-icons = ["󰕿" "󰖀" "󰕾"];
+        format-icons = [
+          "󰕿"
+          "󰖀"
+          "󰕾"
+        ];
       };
 
       "hyprland/workspaces" = {
@@ -123,9 +153,21 @@
         all-outputs = false;
         sort-by = "id";
         persistent-workspaces = {
-          "DP-3" = [1 2 3 4 5];
-          "DVI-D-1" = [6 7];
-          "HDMI-A-1" = [8 9];
+          "DP-3" = [
+            1
+            2
+            3
+            4
+            5
+          ];
+          "DVI-D-1" = [
+            6
+            7
+          ];
+          "HDMI-A-1" = [
+            8
+            9
+          ];
         };
       };
 

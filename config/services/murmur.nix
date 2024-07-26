@@ -1,5 +1,6 @@
-{config, ...}: {
-  networking.firewall.allowedUDPPorts = [config.services.teamspeak3.defaultVoicePort];
+{ config, ... }:
+{
+  networking.firewall.allowedUDPPorts = [ config.services.teamspeak3.defaultVoicePort ];
   services.teamspeak3 = {
     enable = true;
   };

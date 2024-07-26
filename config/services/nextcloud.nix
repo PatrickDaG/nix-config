@@ -4,9 +4,11 @@
   config,
   nodes,
   ...
-}: let
+}:
+let
   hostName = "nc.${config.secrets.secrets.global.domains.web}";
-in {
+in
+{
   age.secrets.maddyPasswd = {
     generator.script = "alnum";
     mode = "440";
@@ -20,7 +22,8 @@ in {
       mode = "640";
     };
     services.maddy.ensureCredentials = {
-      "nextcloud@${config.secrets.secrets.global.domains.mail_public}".passwordFile = nodes.maddy.config.age.secrets.nextcloudPasswd.path;
+      "nextcloud@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
+        nodes.maddy.config.age.secrets.nextcloudPasswd.path;
     };
   };
   environment.persistence."/persist".directories = [
@@ -54,7 +57,15 @@ in {
     config.adminpassFile = config.age.secrets.ncpasswd.path; # Kinda ok just remember to instanly change after first setup
     config.adminuser = "admin";
     extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit contacts calendar tasks notes maps phonetrack user_oidc;
+      inherit
+        contacts
+        calendar
+        tasks
+        notes
+        maps
+        phonetrack
+        user_oidc
+        ;
     };
     maxUploadSize = "4G";
     extraAppsEnable = true;
@@ -62,7 +73,7 @@ in {
     phpOptions."opcache.interned_strings_buffer" = "32";
     settings = {
       default_phone_region = "DE";
-      trusted_proxies = [nodes.elisabeth.config.wireguard.elisabeth.ipv4];
+      trusted_proxies = [ nodes.elisabeth.config.wireguard.elisabeth.ipv4 ];
       overwriteprotocol = "https";
       maintenance_window_start = 2;
       enabledPreviewProviders = [
@@ -93,20 +104,22 @@ in {
       dbtype = "pgsql";
     };
   };
-  systemd.tmpfiles.rules = let
-    mailer-passwd-conf = pkgs.writeText "nextcloud-config.php" ''
-      <?php
-        $CONFIG = [
-        'mail_smtppassword' => trim(file_get_contents('${config.age.secrets.maddyPasswd.path}')),
-        ];
-    '';
-  in [
-    "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
-  ];
+  systemd.tmpfiles.rules =
+    let
+      mailer-passwd-conf = pkgs.writeText "nextcloud-config.php" ''
+        <?php
+          $CONFIG = [
+          'mail_smtppassword' => trim(file_get_contents('${config.age.secrets.maddyPasswd.path}')),
+          ];
+      '';
+    in
+    [
+      "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
+    ];
 
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
   };
   networking = {
     # Use systemd-resolved inside the container

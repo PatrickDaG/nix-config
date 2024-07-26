@@ -1,8 +1,5 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   age.secrets.initrd_host_ed25519_key.generator.script = "ssh-ed25519";
 
   boot.initrd.network.enable = true;
@@ -14,7 +11,7 @@
     # need two activations to change as well as that to enable this
     # module you need to set hostKeys to a dummy value and generate
     # and invalid initrd once
-    hostKeys = [config.age.secrets.initrd_host_ed25519_key.path];
+    hostKeys = [ config.age.secrets.initrd_host_ed25519_key.path ];
   };
 
   # Make sure that there is always a valid initrd hostkey available that can be installed into
@@ -30,7 +27,10 @@
         ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -N "" -f "${config.age.secrets.initrd_host_ed25519_key.path}"
       fi
     '';
-    deps = ["agenixInstall" "users"];
+    deps = [
+      "agenixInstall"
+      "users"
+    ];
   };
-  system.activationScripts.agenixChown.deps = ["agenixEnsureInitrdHostkey"];
+  system.activationScripts.agenixChown.deps = [ "agenixEnsureInitrdHostkey" ];
 }

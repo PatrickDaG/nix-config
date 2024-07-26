@@ -3,9 +3,9 @@
   pkgs,
   config,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     types
     mkEnableOption
     mkPackageOption
@@ -15,13 +15,14 @@
   cfg = config.services.actual;
   configFile = formatType.generate "config.json" cfg.settings;
 
-  formatType = pkgs.formats.json {};
-in {
+  formatType = pkgs.formats.json { };
+in
+{
   options.services.actual = {
     enable = mkEnableOption "actual, a privacy focused app for managing your finances";
-    package = mkPackageOption pkgs "actual" {};
+    package = mkPackageOption pkgs "actual" { };
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = formatType.type;
         config = {
@@ -33,7 +34,7 @@ in {
     };
   };
   config.systemd.services.actual = {
-    after = ["network.target"];
+    after = [ "network.target" ];
     environment.ACTUAL_CONFIG_PATH = configFile;
     serviceConfig = {
       ExecStartPre = "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/migrations /var/lib/actual/";
@@ -78,6 +79,6 @@ in {
       ];
       UMask = "0077";
     };
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
   };
 }

@@ -1,8 +1,5 @@
+{ nixosConfig, lib, ... }:
 {
-  nixosConfig,
-  lib,
-  ...
-}: {
   home.persistence = {
     "/state" = {
       directories = [
@@ -47,10 +44,8 @@
         #".local/share/wallpapers"
       ];
     };
-    "/panzer/state".directories =
-      lib.lists.optionals (nixosConfig.disko.devices.zpool ? "panzer")
-      [
-        ".local/share/SteamPanzer"
-      ];
+    "/panzer/state".directories = lib.lists.optionals (nixosConfig.disko.devices.zpool ? "panzer") [
+      ".local/share/SteamPanzer"
+    ];
   };
 }

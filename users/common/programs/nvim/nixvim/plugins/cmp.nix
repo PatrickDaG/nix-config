@@ -24,28 +24,28 @@
       settings = {
         sources = [
           #{name = "luasnip";}
-          {name = "nvim_lsp_signature_help";}
-          {name = "nvim_lsp";}
-          {name = "nvim_lsp_document_symbol";}
-          {name = "treesitter";}
-          {name = "path";}
-          {name = "calc";}
-          {name = "emoji";}
+          { name = "nvim_lsp_signature_help"; }
+          { name = "nvim_lsp"; }
+          { name = "nvim_lsp_document_symbol"; }
+          { name = "treesitter"; }
+          { name = "path"; }
+          { name = "calc"; }
+          { name = "emoji"; }
         ];
         snippet.expand =
-          /*
-          lua
-          */
+          # lua
           ''
             function(args)
               require('luasnip').lsp_expand(args.body)
             end
           '';
-        formatting.fields = ["abbr" "kind" "menu"];
+        formatting.fields = [
+          "abbr"
+          "kind"
+          "menu"
+        ];
         formatting.format =
-          /*
-          lua
-          */
+          # lua
           ''
             function(_, vim_item)
             local icons = {
@@ -98,9 +98,7 @@
           "<CR>" = "cmp.mapping.confirm({ select = false })";
           "<C-Space>" = "cmp.mapping(cmp.mapping.complete(), { \"i\", \"c\" })";
           "<Tab>" =
-            /*
-            lua
-            */
+            # lua
             ''
               function(fallback)
               	if cmp.visible() then
@@ -116,9 +114,7 @@
               end
             '';
           "<S-Tab>" =
-            /*
-            lua
-            */
+            # lua
             ''
               function(fallback)
               	if cmp.visible() then

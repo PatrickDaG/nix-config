@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   programs.streamdeck-ui = {
     enable = true;
     settings = {

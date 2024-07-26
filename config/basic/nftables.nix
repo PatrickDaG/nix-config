@@ -1,8 +1,5 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   networking.nftables = {
     stopRuleset = lib.mkDefault ''
       table inet filter {
@@ -36,20 +33,31 @@
         nnf-ssh.enable = true;
         nnf-icmp = {
           enable = true;
-          ipv6Types = ["echo-request" "destination-unreachable" "packet-too-big" "time-exceeded" "parameter-problem" "nd-router-advert" "nd-neighbor-solicit" "nd-neighbor-advert"];
-          ipv4Types = ["echo-request" "destination-unreachable" "router-advertisement" "time-exceeded" "parameter-problem"];
+          ipv6Types = [
+            "echo-request"
+            "destination-unreachable"
+            "packet-too-big"
+            "time-exceeded"
+            "parameter-problem"
+            "nd-router-advert"
+            "nd-neighbor-solicit"
+            "nd-neighbor-advert"
+          ];
+          ipv4Types = [
+            "echo-request"
+            "destination-unreachable"
+            "router-advertisement"
+            "time-exceeded"
+            "parameter-problem"
+          ];
         };
       };
 
       rules.untrusted-to-local = {
-        from = ["untrusted"];
-        to = ["local"];
+        from = [ "untrusted" ];
+        to = [ "local" ];
 
-        inherit
-          (config.networking.firewall)
-          allowedTCPPorts
-          allowedUDPPorts
-          ;
+        inherit (config.networking.firewall) allowedTCPPorts allowedUDPPorts;
       };
     };
   };

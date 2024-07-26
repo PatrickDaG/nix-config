@@ -1,8 +1,5 @@
+{ inputs, lib, ... }:
 {
-  inputs,
-  lib,
-  ...
-}: {
   imports = [
     ./boot.nix
     ./home-manager.nix
@@ -37,6 +34,6 @@
     inputs.nixos-nftables-firewall.nixosModules.default
     inputs.nixvim.nixosModules.nixvim
   ];
-  age.identityPaths = ["/state/etc/ssh/ssh_host_ed25519_key"];
+  age.identityPaths = [ "/state/etc/ssh/ssh_host_ed25519_key" ];
   boot.mode = lib.mkDefault "efi";
 }

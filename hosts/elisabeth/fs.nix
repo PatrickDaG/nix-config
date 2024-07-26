@@ -1,8 +1,5 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   disko.devices = {
     disk = {
       internal-ssd = rec {
@@ -11,8 +8,12 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "1GiB") // {device = "${device}-part1";};
-            rpool = (partLuksZfs "ssd" "rpool" "100%") // {device = "${device}-part2";};
+            boot = (partEfi "1GiB") // {
+              device = "${device}-part1";
+            };
+            rpool = (partLuksZfs "ssd" "rpool" "100%") // {
+              device = "${device}-part2";
+            };
           };
         };
       };
@@ -49,7 +50,7 @@
     };
 
     zpool = with lib.disko.zfs; {
-      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
+      rpool = mkZpool { datasets = impermanenceZfsDatasets; };
       panzer = mkZpool {
         datasets = {
           "safe/guests" = unmountable;
@@ -128,10 +129,13 @@
   wireguard.scrtiny-patrick.server = {
     host = config.secrets.secrets.global.domains.web;
     port = 51831;
-    reservedAddresses = ["10.44.0.0/16" "fd00:1766::/112"];
+    reservedAddresses = [
+      "10.44.0.0/16"
+      "fd00:1766::/112"
+    ];
     openFirewall = true;
   };
-  networking.nftables.firewall.zones.untrusted.interfaces = ["scrtiny-patrick"];
+  networking.nftables.firewall.zones.untrusted.interfaces = [ "scrtiny-patrick" ];
   services.scrutiny = {
     enable = true;
     openFirewall = true;
@@ -156,6 +160,6 @@
 
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-  boot.initrd.systemd.services."zfs-import-panzer".after = ["cryptsetup.target"];
-  boot.initrd.systemd.services."zfs-import-renaultft".after = ["cryptsetup.target"];
+  boot.initrd.systemd.services."zfs-import-panzer".after = [ "cryptsetup.target" ];
+  boot.initrd.systemd.services."zfs-import-renaultft".after = [ "cryptsetup.target" ];
 }

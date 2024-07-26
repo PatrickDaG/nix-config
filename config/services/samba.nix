@@ -1,16 +1,13 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   services.samba-wsdd = {
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;
   };
 
-  disabledModules = ["services/networking/netbird.nix"];
+  disabledModules = [ "services/networking/netbird.nix" ];
 
-  imports = [../../modules/netbird-client.nix];
+  imports = [ ../../modules/netbird-client.nix ];
   services.netbird.tunnels = {
     netbird-samba = {
       environment = {
@@ -43,7 +40,7 @@
         inherit (config.secrets.secrets.global.hetzner.users.smb) subUid path;
         sshAgeSecret = "resticHetznerSsh";
       };
-      paths = ["/bunker"];
+      paths = [ "/bunker" ];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -55,11 +52,17 @@
   wireguard.samba-patrick.server = {
     host = config.secrets.secrets.global.domains.web;
     port = 51830;
-    reservedAddresses = ["10.43.0.0/20" "fd00:1765::/112"];
+    reservedAddresses = [
+      "10.43.0.0/20"
+      "fd00:1765::/112"
+    ];
     openFirewall = true;
   };
 
-  networking.nftables.firewall.zones.untrusted.interfaces = ["samba-patrick" "netbird-samba"];
+  networking.nftables.firewall.zones.untrusted.interfaces = [
+    "samba-patrick"
+    "netbird-samba"
+  ];
 
   services.samba = {
     enable = true;
@@ -106,53 +109,49 @@
       "disable spoolss = yes"
       "show add printer wizard = no"
     ];
-    shares = let
-      mkShare = {
-        name,
-        user ? "smb",
-        group ? "smb",
-        hasBunker ? false,
-        hasPaperless ? false,
-        persistRoot ? "/panzer",
-      }: cfg: let
-        config =
+    shares =
+      let
+        mkShare =
           {
-            "#persistRoot" = persistRoot;
-            "#user" = user;
-            "#group" = group;
-            "read only" = "no";
-            "guest ok" = "no";
-            "create mask" = "0740";
-            "directory mask" = "0750";
-            "force user" = user;
-            "force group" = group;
-            "valid users" = "${user} @${group}";
-            "force create mode" = "0660";
-            "force directory mode" = "0770";
-            # Might be necessary for windows user to be able to open thing in smb
-            "acl allow execute always" = "no";
+            name,
+            user ? "smb",
+            group ? "smb",
+            hasBunker ? false,
+            hasPaperless ? false,
+            persistRoot ? "/panzer",
+          }:
+          cfg:
+          let
+            config = {
+              "#persistRoot" = persistRoot;
+              "#user" = user;
+              "#group" = group;
+              "read only" = "no";
+              "guest ok" = "no";
+              "create mask" = "0740";
+              "directory mask" = "0750";
+              "force user" = user;
+              "force group" = group;
+              "valid users" = "${user} @${group}";
+              "force create mode" = "0660";
+              "force directory mode" = "0770";
+              # Might be necessary for windows user to be able to open thing in smb
+              "acl allow execute always" = "no";
+            } // cfg;
+          in
+          {
+            "${name}" = config // {
+              "path" = "/media/smb/${name}";
+            };
           }
-          // cfg;
-      in
-        {
-          "${name}" =
-            config
-            // {"path" = "/media/smb/${name}";};
-        }
-        // lib.optionalAttrs hasBunker
-        {
-          "${name}-important" =
-            config
-            // {
+          // lib.optionalAttrs hasBunker {
+            "${name}-important" = config // {
               "path" = "/media/smb/${name}-important";
               "#persistRoot" = "/bunker";
             };
-        }
-        // lib.optionalAttrs hasPaperless
-        {
-          "${name}-paperless" =
-            config
-            // {
+          }
+          // lib.optionalAttrs hasPaperless {
+            "${name}-paperless" = config // {
               "path" = "/media/smb/${name}-paperless";
               "#paperless" = true;
               "force user" = "paperless";
@@ -160,46 +159,47 @@
               # Empty to prevent imperamence setting a persistence folder
               "#persistRoot" = "";
             };
-        };
-    in
+          };
+      in
       lib.mkMerge [
         (mkShare {
           name = "ggr-data";
           user = "ggr";
           group = "ggr";
           hasBunker = true;
-        } {})
+        } { })
         (mkShare {
           name = "patri";
           user = "patrick";
           group = "patrick";
           hasBunker = true;
           hasPaperless = true;
-        } {})
+        } { })
         (mkShare {
           name = "helen-data";
           user = "helen";
           group = "helen";
           hasBunker = true;
-        } {})
+        } { })
         (mkShare {
           name = "david";
           user = "david";
           group = "david";
           hasBunker = true;
           hasPaperless = true;
-        } {})
+        } { })
         (mkShare {
           name = "printer";
           user = "printer";
           group = "printer";
-        } {})
+        } { })
         (mkShare {
           name = "family-data";
           user = "family";
           group = "family";
-        } {})
-        (mkShare {
+        } { })
+        (mkShare
+          {
             name = "media";
             user = "family";
             group = "family";
@@ -208,7 +208,8 @@
           {
             "read only" = "yes";
             "write list" = "@family";
-          })
+          }
+        )
       ];
   };
   # to get this file start a smbd, add users using 'smbpasswd -a <user>'
@@ -216,129 +217,162 @@
   age.secrets.smbpassdb = {
     rekeyFile = config.node.secretsDir + "/smbpassdb.tdb.age";
   };
-  users = let
-    users = lib.unique (lib.mapAttrsToList (_: val: val."force user") config.services.samba.shares);
-    groups = lib.unique (users ++ (lib.mapAttrsToList (_: val: val."force group") config.services.samba.shares));
-  in {
-    users = lib.mkMerge ((lib.flip map users (user: {
-        ${user} = {
-          isNormalUser = true;
-          home = "/var/empty";
-          createHome = false;
-          useDefaultShell = false;
-          autoSubUidGidRange = false;
-          group = "${user}";
-        };
-      }))
-      ++ [
-        {paperless.isNormalUser = lib.mkForce false;}
-      ]);
-    groups = lib.mkMerge ((lib.flip map groups (group: {
-        ${group} = {
-        };
-      }))
-      ++ [
-        {
-          family.members = ["patrick" "david" "helen" "ggr"];
-          printer.members = ["patrick" "david" "helen" "ggr"];
-        }
-      ]);
-  };
-
-  fileSystems = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
-    lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
-      "${v.path}/consume" = {
-        fsType = "none";
-        options = ["bind"];
-        device = "/paperless/consume/${v."#user"}";
-      };
-      "${v.path}/media/archive" = {
-        fsType = "none  ";
-        options = ["bind" "ro"];
-        device = "/paperless/media/documents/archive/${v."#user"}";
-      };
-      "${v.path}/media/originals" = {
-        fsType = "none  ";
-        options = ["bind" "ro"];
-        device = "/paperless/media/documents/originals/${v."#user"}";
-      };
-    }));
-
-  systemd.tmpfiles.settings = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
-    lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
-      "10-smb-paperless"."/paperless/consume/".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/consume/${v."#user"}".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/documents/".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-
-      "10-smb-paperless"."/paperless/media/documents/archive/".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}/.keep".f = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0660";
-      };
-      "10-smb-paperless"."/paperless/media/documents/originals/".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}".d = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0770";
-      };
-      "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}/.keep".f = {
-        user = "paperless";
-        group = "paperless";
-        mode = "0660";
-      };
-    }));
-  environment.persistence = lib.mkMerge (lib.flatten [
-    (lib.flip lib.mapAttrsToList config.services.samba.shares (_: v:
-      lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
-        ${v."#persistRoot"}.directories = [
+  users =
+    let
+      users = lib.unique (lib.mapAttrsToList (_: val: val."force user") config.services.samba.shares);
+      groups = lib.unique (
+        users ++ (lib.mapAttrsToList (_: val: val."force group") config.services.samba.shares)
+      );
+    in
+    {
+      users = lib.mkMerge (
+        (lib.flip map users (user: {
+          ${user} = {
+            isNormalUser = true;
+            home = "/var/empty";
+            createHome = false;
+            useDefaultShell = false;
+            autoSubUidGidRange = false;
+            group = "${user}";
+          };
+        }))
+        ++ [ { paperless.isNormalUser = lib.mkForce false; } ]
+      );
+      groups = lib.mkMerge (
+        (lib.flip map groups (group: {
+          ${group} = { };
+        }))
+        ++ [
           {
-            directory = "${v.path}";
-            user = "${v."force user"}";
-            group = "${v."force group"}";
-            mode = "0770";
+            family.members = [
+              "patrick"
+              "david"
+              "helen"
+              "ggr"
+            ];
+            printer.members = [
+              "patrick"
+              "david"
+              "helen"
+              "ggr"
+            ];
           }
-        ];
-      }))
-    (lib.flip lib.mapAttrsToList config.services.netbird.tunnels (
-      _: v: {
-        "/state".directories = [
-          {
-            directory = "/var/lib/${v.stateDir}";
-            mode = "0770";
-          }
-        ];
+        ]
+      );
+    };
+
+  fileSystems = lib.mkMerge (
+    lib.flip lib.mapAttrsToList config.services.samba.shares (
+      _: v:
+      lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+        "${v.path}/consume" = {
+          fsType = "none";
+          options = [ "bind" ];
+          device = "/paperless/consume/${v."#user"}";
+        };
+        "${v.path}/media/archive" = {
+          fsType = "none  ";
+          options = [
+            "bind"
+            "ro"
+          ];
+          device = "/paperless/media/documents/archive/${v."#user"}";
+        };
+        "${v.path}/media/originals" = {
+          fsType = "none  ";
+          options = [
+            "bind"
+            "ro"
+          ];
+          device = "/paperless/media/documents/originals/${v."#user"}";
+        };
       }
-    ))
-  ]);
+    )
+  );
+
+  systemd.tmpfiles.settings = lib.mkMerge (
+    lib.flip lib.mapAttrsToList config.services.samba.shares (
+      _: v:
+      lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+        "10-smb-paperless"."/paperless/consume/".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/consume/${v."#user"}".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/documents/".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+
+        "10-smb-paperless"."/paperless/media/documents/archive/".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}/.keep".f = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0660";
+        };
+        "10-smb-paperless"."/paperless/media/documents/originals/".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}".d = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0770";
+        };
+        "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}/.keep".f = {
+          user = "paperless";
+          group = "paperless";
+          mode = "0660";
+        };
+      }
+    )
+  );
+  environment.persistence = lib.mkMerge (
+    lib.flatten [
+      (lib.flip lib.mapAttrsToList config.services.samba.shares (
+        _: v:
+        lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
+          ${v."#persistRoot"}.directories = [
+            {
+              directory = "${v.path}";
+              user = "${v."force user"}";
+              group = "${v."force group"}";
+              mode = "0770";
+            }
+          ];
+        }
+      ))
+      (lib.flip lib.mapAttrsToList config.services.netbird.tunnels (
+        _: v: {
+          "/state".directories = [
+            {
+              directory = "/var/lib/${v.stateDir}";
+              mode = "0770";
+            }
+          ];
+        }
+      ))
+    ]
+  );
 }

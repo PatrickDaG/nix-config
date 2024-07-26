@@ -13,7 +13,10 @@ lib.optionalAttrs (!minimal) {
   #    packages = pkgs.linuxPackages_6_6_rt;
   #  };
   #};
-  environment.systemPackages = with pkgs; [pulseaudio pulsemixer];
+  environment.systemPackages = with pkgs; [
+    pulseaudio
+    pulsemixer
+  ];
 
   hardware.pulseaudio.enable = lib.mkForce false;
   security.rtkit.enable = true;

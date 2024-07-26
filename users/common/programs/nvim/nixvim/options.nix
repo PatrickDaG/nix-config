@@ -12,7 +12,10 @@
     wildignore = "*.o,*~";
     # Only complete the longest common prefix and list all results.
     # You can use the cursor keys to select an item in this list
-    wildmode = ["list" "full"];
+    wildmode = [
+      "list"
+      "full"
+    ];
 
     # set case handling
     ignorecase = true;

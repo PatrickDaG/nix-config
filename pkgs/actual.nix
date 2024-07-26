@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://actualbudget.com/";
     license = licenses.mit;
     mainProgram = "actual-server";
-    maintainers = with maintainers; [patrickdag];
-    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ patrickdag ];
+    platforms = [ "x86_64-linux" ];
   };
 }

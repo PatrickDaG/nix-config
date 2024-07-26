@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   age.secrets.cloudflare_token_dns = {
     rekeyFile = config.node.secretsDir + "/cloudflare_api_token.age";
     mode = "440";
@@ -13,6 +14,6 @@
     usev4 = "webv4, webv4='https://cloudflare.com/cdn-cgi/trace', webv4-skip='ip='";
     usev6 = "";
     passwordFile = config.age.secrets.cloudflare_token_dns.path;
-    domains = [config.secrets.secrets.global.domains.web];
+    domains = [ config.secrets.secrets.global.domains.web ];
   };
 }

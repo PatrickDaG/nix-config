@@ -1,11 +1,6 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
-  imports = [
-    ../starfish.nix
-  ];
+  imports = [ ../starfish.nix ];
 
   # save history in xdg data home
   home.sessionVariables.HISTDB_FILE = "${config.xdg.dataHome}/zsh/history.db";

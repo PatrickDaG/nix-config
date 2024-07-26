@@ -3,7 +3,8 @@
   writeShellApplication,
   nvd,
   nix-output-monitor,
-}: let
+}:
+let
   deploy = writeShellApplication {
     name = "deploy";
     text = ''
@@ -166,7 +167,10 @@
     '';
   };
 in
-  symlinkJoin {
-    name = "deploy and build";
-    paths = [deploy build];
-  }
+symlinkJoin {
+  name = "deploy and build";
+  paths = [
+    deploy
+    build
+  ];
+}

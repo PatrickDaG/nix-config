@@ -1,10 +1,7 @@
+{ config, nixosConfig, ... }:
 {
-  config,
-  nixosConfig,
-  ...
-}: {
   # import shared i3 config
-  imports = [../sway3.nix];
+  imports = [ ../sway3.nix ];
   stylix.targets.sway.enable = true;
   wayland.windowManager.sway = {
     enable = true;
@@ -42,11 +39,13 @@
             map_to_output = "eDP-1";
           };
         };
-        keybindings = let
-          cfg = config.wayland.windowManager.sway.config;
-        in {
-          "Menu" = "exec ${cfg.menu}";
-        };
+        keybindings =
+          let
+            cfg = config.wayland.windowManager.sway.config;
+          in
+          {
+            "Menu" = "exec ${cfg.menu}";
+          };
       }
       // {
         desktopnix = {
@@ -80,15 +79,16 @@
           };
         };
       }
-      .${nixosConfig.node.name}
-      or {};
-    extraConfig = let
-      cfg = config.wayland.windowManager.sway.config;
-    in ''
-      bindgesture swipe:3:left workpace next
-      bindgesture swipe:3:right workpace prev
-      bindgesture pinch:4:outward exec ${cfg.menu}
-    '';
+      .${nixosConfig.node.name} or { };
+    extraConfig =
+      let
+        cfg = config.wayland.windowManager.sway.config;
+      in
+      ''
+        bindgesture swipe:3:left workpace next
+        bindgesture swipe:3:right workpace prev
+        bindgesture pinch:4:outward exec ${cfg.menu}
+      '';
   };
   # Cursor invisible
   home.sessionVariables = {

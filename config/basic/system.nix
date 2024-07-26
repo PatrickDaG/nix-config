@@ -5,24 +5,24 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   system.stateVersion = stateVersion;
 
   age.rekey = {
-    inherit
-      (inputs.self.secretsConfig)
-      masterIdentities
-      extraEncryptionPubkeys
-      ;
+    inherit (inputs.self.secretsConfig) masterIdentities extraEncryptionPubkeys;
 
     storageMode = "derivation";
 
     forceRekeyOnSystem = builtins.extraBuiltins.unsafeCurrentSystem;
-    hostPubkey = let
-      pubkeyPath = config.node.secretsDir + "/host.pub";
-    in
-      lib.mkIf (lib.pathExists pubkeyPath || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false)
-      pubkeyPath;
+    hostPubkey =
+      let
+        pubkeyPath = config.node.secretsDir + "/host.pub";
+      in
+      lib.mkIf (
+        lib.pathExists pubkeyPath
+        || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false
+      ) pubkeyPath;
     generatedSecretsDir = config.node.secretsDir + "/generated/";
     cacheDir = "/var/tmp/agenix-rekey/\"$UID\"";
   };
@@ -38,16 +38,16 @@
   # to create a link called /run/agenix. Agenix should probably fail in this case,
   # but doesn't and instead puts the generation link into the existing directory.
   # TODO See https://github.com/ryantm/agenix/pull/187.
-  system.activationScripts = lib.mkIf (config.age.secrets != {}) {
+  system.activationScripts = lib.mkIf (config.age.secrets != { }) {
     removeAgenixLink.text = "[[ ! -L /run/agenix ]] && [[ -d /run/agenix ]] && rm -rf /run/agenix";
-    agenixNewGeneration.deps = ["removeAgenixLink"];
+    agenixNewGeneration.deps = [ "removeAgenixLink" ];
   };
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
   i18n.defaultLocale = "C.UTF-8";
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-v28n.psf.gz";
-    packages = with pkgs; [terminus_font];
+    packages = with pkgs; [ terminus_font ];
     useXkbConfig = true; # use xkbOptions in tty.
     keyMap = lib.mkDefault "de-latin1-nodeadkeys";
   };
@@ -71,11 +71,12 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  secrets.secretFiles = let
-    local = config.node.secretsDir + "/secrets.nix.age";
-  in
+  secrets.secretFiles =
+    let
+      local = config.node.secretsDir + "/secrets.nix.age";
+    in
     {
       global = ../../secrets/secrets.nix.age;
     }
-    // lib.optionalAttrs (config.node.name != null && lib.pathExists local) {inherit local;};
+    // lib.optionalAttrs (config.node.name != null && lib.pathExists local) { inherit local; };
 }

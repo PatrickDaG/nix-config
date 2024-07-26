@@ -1,7 +1,7 @@
-inputs: let
+inputs:
+let
   inherit (inputs) self;
-  inherit
-    (inputs.nixpkgs.lib)
+  inherit (inputs.nixpkgs.lib)
     concatMapAttrs
     filterAttrs
     flip
@@ -12,9 +12,12 @@ inputs: let
     ;
 
   # Creates a new nixosSystem with the correct specialArgs, pkgs and name definition
-  mkHost = {minimal}: name: let
-    pkgs = self.pkgs.x86_64-linux;
-  in
+  mkHost =
+    { minimal }:
+    name:
+    let
+      pkgs = self.pkgs.x86_64-linux;
+    in
     nixosSystem {
       specialArgs = {
         # Use the correct instance lib that has our overlays
@@ -42,22 +45,30 @@ inputs: let
   # to instanciate hosts correctly.
   hosts = builtins.attrNames (filterAttrs (_: type: type == "directory") (builtins.readDir ../hosts));
   # Process each nixosHosts declaration and generatea nixosSystem definitions
-  nixosConfigurations = genAttrs hosts (mkHost {minimal = false;});
-  minimalConfigurations = genAttrs hosts (mkHost {minimal = true;});
+  nixosConfigurations = genAttrs hosts (mkHost {
+    minimal = false;
+  });
+  minimalConfigurations = genAttrs hosts (mkHost {
+    minimal = true;
+  });
 
   # True NixOS nodes can define additional guest nodes that are built
   # together with it. We collect all defined guests from each node here
   # to allow accessing any node via the unified attribute `nodes`.
-  guestConfigurations = flip concatMapAttrs self.nixosConfigurations (_: node:
-    flip mapAttrs' (node.config.guests or {}) (
+  guestConfigurations = flip concatMapAttrs self.nixosConfigurations (
+    _: node:
+    flip mapAttrs' (node.config.guests or { }) (
       guestName: guestDef:
-        nameValuePair guestDef.nodeName (
-          if guestDef.backend == "microvm"
-          then node.config.microvm.vms.${guestName}.config
-          else node.config.containers.${guestName}.nixosConfiguration
-        )
-    ));
-in {
+      nameValuePair guestDef.nodeName (
+        if guestDef.backend == "microvm" then
+          node.config.microvm.vms.${guestName}.config
+        else
+          node.config.containers.${guestName}.nixosConfiguration
+      )
+    )
+  );
+in
+{
   inherit
     hosts
     nixosConfigurations

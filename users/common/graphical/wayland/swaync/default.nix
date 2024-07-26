@@ -1,8 +1,5 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   services.swaync = {
     enable = true;
     settings = {
@@ -88,5 +85,5 @@
   };
 
   # Started via hyprland to ensure it restarts properly with hyprland
-  systemd.user.services.swaync.Install.WantedBy = lib.mkForce [];
+  systemd.user.services.swaync.Install.WantedBy = lib.mkForce [ ];
 }

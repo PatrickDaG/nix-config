@@ -4,7 +4,8 @@
   pkgs,
   nodes,
   ...
-}: {
+}:
+{
   imports = [
     ../../modules-hm/impermanence.nix
     ../../modules-hm/images.nix
@@ -18,9 +19,7 @@
       spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     };
     sharedModules = [
-      {
-        home.stateVersion = stateVersion;
-      }
+      { home.stateVersion = stateVersion; }
       inputs.nix-index-database.hmModules.nix-index
       inputs.nixos-extra-modules.homeManagerModules.default
       inputs.nixvim.homeManagerModules.nixvim
@@ -38,5 +37,5 @@
 
   # But still link all completions from all packages so they
   # can be found by zsh
-  environment.pathsToLink = ["/share/zsh"];
+  environment.pathsToLink = [ "/share/zsh" ];
 }

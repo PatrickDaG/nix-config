@@ -1,8 +1,5 @@
+{ config, lib, ... }:
 {
-  config,
-  lib,
-  ...
-}: {
   disko.devices = {
     disk = {
       m2-ssd = rec {
@@ -11,15 +8,21 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "1GiB") // {device = "${device}-part1";};
-            swap = (partSwap "16GiB") // {device = "${device}-part2";};
-            rpool = (partLuksZfs "rpool" "rpool" "100%") // {device = "${device}-part3";};
+            boot = (partEfi "1GiB") // {
+              device = "${device}-part1";
+            };
+            swap = (partSwap "16GiB") // {
+              device = "${device}-part2";
+            };
+            rpool = (partLuksZfs "rpool" "rpool" "100%") // {
+              device = "${device}-part3";
+            };
           };
         };
       };
     };
     zpool = with lib.disko.zfs; {
-      rpool = mkZpool {datasets = impermanenceZfsDatasets;};
+      rpool = mkZpool { datasets = impermanenceZfsDatasets; };
     };
   };
   fileSystems."/state".neededForBoot = true;

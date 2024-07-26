@@ -1,12 +1,9 @@
+{ config, nodes, ... }:
 {
-  config,
-  nodes,
-  ...
-}: {
-  i18n.supportedLocales = ["all"];
+  i18n.supportedLocales = [ "all" ];
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [80];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
   };
 
   age.secrets.appKey = {

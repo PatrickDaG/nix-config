@@ -3,35 +3,23 @@
   lib,
   pkgs,
   ...
-}: let
-  onlyHost =
-    lib.mkIf (!config.boot.isContainer);
-  prune = folder:
-    pkgs.writers.writePython3Bin "impermanence-prune" {} ''
+}:
+let
+  onlyHost = lib.mkIf (!config.boot.isContainer);
+  prune =
+    folder:
+    pkgs.writers.writePython3Bin "impermanence-prune" { } ''
       import os
       import sys
       mounts = [${
-        lib.concatStringsSep ", "
-        ((map (x:
-            "\""
-            + (
-              if x.home != null
-              then x.home + "/"
-              else ""
-            )
-            + x.directory
-            + "\"")
-          config.environment.persistence.${folder}.directories)
-          ++ (map (x:
-            "\""
-            + (
-              if x.home != null
-              then x.home + "/"
-              else ""
-            )
-            + x.file
-            + "\"")
-          config.environment.persistence.${folder}.files))
+        lib.concatStringsSep ", " (
+          (map (
+            x: "\"" + (if x.home != null then x.home + "/" else "") + x.directory + "\""
+          ) config.environment.persistence.${folder}.directories)
+          ++ (map (
+            x: "\"" + (if x.home != null then x.home + "/" else "") + x.file + "\""
+          ) config.environment.persistence.${folder}.files)
+        )
       }]  # noqa: E501
       mounts = [os.path.normpath(x) for x in mounts]
       mounts.sort()
@@ -53,11 +41,10 @@
                     file=sys.stderr)
       print("\n".join(erg))
     '';
-in {
+in
+{
   # to allow all users to access hm managed persistent folders
-  lib.scripts.impermanence.pruneScripts =
-    lib.mapAttrs (k: _: prune k)
-    config.environment.persistence;
+  lib.scripts.impermanence.pruneScripts = lib.mapAttrs (k: _: prune k) config.environment.persistence;
   programs.fuse.userAllowOther = true;
   services.openssh.hostKeys = lib.mkForce [
     {
@@ -68,15 +55,10 @@ in {
   environment.persistence."/state" = {
     hideMounts = true;
 
-    files =
-      [
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-      ]
-      ++ lib.lists.optionals (!config.boot.isContainer)
-      [
-        "/etc/machine-id"
-      ];
+    files = [
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+    ] ++ lib.lists.optionals (!config.boot.isContainer) [ "/etc/machine-id" ];
     directories = [
       "/var/log"
       "/var/lib/systemd"
@@ -93,22 +75,20 @@ in {
   };
   environment.persistence."/persist" = {
     hideMounts = true;
-    directories = [];
+    directories = [ ];
   };
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/state".neededForBoot = true;
 
   # After importing the rpool, rollback the root system to be empty.
-  boot.initrd.systemd.services.impermanence-root =
-    onlyHost
-    {
-      wantedBy = ["initrd.target"];
-      after = ["zfs-import-rpool.service"];
-      before = ["sysroot.mount"];
-      unitConfig.DefaultDependencies = "no";
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.zfs}/bin/zfs rollback -r rpool/local/root@blank";
-      };
+  boot.initrd.systemd.services.impermanence-root = onlyHost {
+    wantedBy = [ "initrd.target" ];
+    after = [ "zfs-import-rpool.service" ];
+    before = [ "sysroot.mount" ];
+    unitConfig.DefaultDependencies = "no";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.zfs}/bin/zfs rollback -r rpool/local/root@blank";
     };
+  };
 }

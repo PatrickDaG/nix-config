@@ -4,7 +4,8 @@
   lib,
   minimal,
   ...
-}: {
+}:
+{
   users.users.root = {
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
@@ -16,7 +17,5 @@
     ];
     hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
   };
-  home-manager.users.root.imports = lib.lists.optionals (!minimal) [
-    ../common
-  ];
+  home-manager.users.root.imports = lib.lists.optionals (!minimal) [ ../common ];
 }

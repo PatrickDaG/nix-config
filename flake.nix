@@ -101,27 +101,29 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    agenix-rekey,
-    nixos-generators,
-    pre-commit-hooks,
-    devshell,
-    nixvim,
-    nixos-extra-modules,
-    nix-topology,
-    ...
-  } @ inputs: let
-    inherit (nixpkgs) lib;
-    stateVersion = "23.05";
-  in
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      agenix-rekey,
+      nixos-generators,
+      pre-commit-hooks,
+      devshell,
+      nixvim,
+      nixos-extra-modules,
+      nix-topology,
+      ...
+    }@inputs:
+    let
+      inherit (nixpkgs) lib;
+      stateVersion = "23.05";
+    in
     {
       secretsConfig = {
         # This should be a link to one of the age public keys is './keys'
-        masterIdentities = [./keys/PatC.pub];
-        extraEncryptionPubkeys = [./secrets/recipients.txt];
+        masterIdentities = [ ./keys/PatC.pub ];
+        extraEncryptionPubkeys = [ ./secrets/recipients.txt ];
       };
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
@@ -129,8 +131,7 @@
       };
 
       inherit stateVersion;
-      inherit
-        (import ./nix/hosts.nix inputs)
+      inherit (import ./nix/hosts.nix inputs)
         hosts
         nixosConfigurations
         minimalConfigurations
@@ -139,19 +140,20 @@
       nodes = self.nixosConfigurations // self.guestConfigurations;
 
       inherit
-        (lib.foldl' lib.recursiveUpdate {}
-          (lib.mapAttrsToList
-            (import ./nix/generate-installer-package.nix inputs)
-            self.minimalConfigurations))
+        (lib.foldl' lib.recursiveUpdate { } (
+          lib.mapAttrsToList (import ./nix/generate-installer-package.nix inputs) self.minimalConfigurations
+        ))
         packages
         ;
     }
     // flake-utils.lib.eachDefaultSystem (system: rec {
-      apps.setupHetznerStorageBoxes = import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix") {
-        inherit pkgs;
-        nixosConfigurations = self.nodes;
-        decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
-      };
+      apps.setupHetznerStorageBoxes =
+        import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
+          {
+            inherit pkgs;
+            nixosConfigurations = self.nodes;
+            decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+          };
       pkgs = import nixpkgs {
         overlays =
           import ./lib inputs
@@ -172,7 +174,7 @@
       topology = import nix-topology {
         inherit pkgs;
         modules = [
-          {inherit (self) nixosConfigurations;}
+          { inherit (self) nixosConfigurations; }
           ./nix/topology.nix
         ];
       };
@@ -191,19 +193,17 @@
           .${system};
       };
 
-      checks.pre-commit-check =
-        pre-commit-hooks.lib.${system}.run
-        {
-          src = lib.cleanSource ./.;
-          hooks = {
-            nixfmt = {
-              enable = true;
-              package = pkgs.nixfmt-rfc-style;
-            };
-            deadnix.enable = true;
-            statix.enable = true;
+      checks.pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        src = lib.cleanSource ./.;
+        hooks = {
+          nixfmt = {
+            enable = true;
+            package = pkgs.nixfmt-rfc-style;
           };
+          deadnix.enable = true;
+          statix.enable = true;
         };
+      };
       devShell = import ./nix/devshell.nix inputs system;
       formatter = pkgs.nixfmt-rfc-style;
     });

@@ -8,10 +8,7 @@
 lib.optionalAttrs (!minimal) {
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
-    (pkgs.sbctl.override
-      {
-        databasePath = "/run/secureboot";
-      })
+    (pkgs.sbctl.override { databasePath = "/run/secureboot"; })
   ];
   age.secrets.secureboot.rekeyFile = ../../hosts/${config.node.name}/secrets/secureboot.tar.age;
   system.activationScripts.securebootuntar = {
@@ -21,7 +18,7 @@ lib.optionalAttrs (!minimal) {
       chmod 700 /run/secureboot
          ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /run/secureboot || true
     '';
-    deps = ["agenix"];
+    deps = [ "agenix" ];
   };
 
   # Lanzaboote currently replaces the systemd-boot module.

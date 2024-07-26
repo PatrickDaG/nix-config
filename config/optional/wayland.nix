@@ -14,10 +14,10 @@ lib.optionalAttrs (!minimal) {
     enable = true;
     xdgOpenUsePortal = true;
     config.common = {
-      "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
-      "org.freedesktop.impl.portal.ScreenCast" = ["hyprland"];
-      "org.freedesktop.impl.portal.Screenshot" = ["hyprland"];
-      "org.freedesktop.portal.FileChooser" = ["xdg-desktop-portal-gtk"];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+      "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+      "org.freedesktop.portal.FileChooser" = [ "xdg-desktop-portal-gtk" ];
     };
     extraPortals = [
       pkgs.xdg-desktop-portal-hyprland

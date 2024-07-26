@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd = {

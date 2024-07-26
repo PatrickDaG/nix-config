@@ -7,7 +7,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-}: let
+}:
+let
   pname = "homebox";
   version = "0.10.3";
   src = "${fetchFromGitHub {
@@ -101,38 +102,38 @@
     outputHash = "sha256-BVZSdc8e6v+paMzMYazEdnKSNw+OnCpjSzGSEKxVl24=";
   };
 in
-  buildGoModule {
-    inherit pname version;
-    src = "${src}/backend";
+buildGoModule {
+  inherit pname version;
+  src = "${src}/backend";
 
-    vendorHash = "sha256-TtFz+dDpoMs3PAQjiYQm1+Q6prn4Hiaf7xqWt41oY7w=";
+  vendorHash = "sha256-TtFz+dDpoMs3PAQjiYQm1+Q6prn4Hiaf7xqWt41oY7w=";
 
-    CGO_ENABLED = 0;
-    GOOS = "linux";
-    doCheck = false;
+  CGO_ENABLED = 0;
+  GOOS = "linux";
+  doCheck = false;
 
-    # options used by upstream:
-    # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml
-    ldflags = [
-      "-s"
-      "-w"
-      "-extldflags=-static"
-      "-X main.version=${version}"
-    ];
+  # options used by upstream:
+  # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags=-static"
+    "-X main.version=${version}"
+  ];
 
-    preBuild = ''
-      ldflags+=" -X main.commit=$(cat COMMIT)"
-      ldflags+=" -X main.date=$(cat SOURCE_DATE)"
-      mkdir -p ./app/api/static/public
-      cp -r ${frontend}/* ./app/api/static/public
-    '';
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+    ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+    mkdir -p ./app/api/static/public
+    cp -r ${frontend}/* ./app/api/static/public
+  '';
 
-    meta = with lib; {
-      mainProgram = "api";
-      homepage = "https://hay-kot.github.io/homebox/";
-      maintainers = with maintainers; [patrickdag];
-      license = licenses.agpl3Only;
-      description = "A inventory and organization system built for the Home User";
-      platforms = platforms.all;
-    };
-  }
+  meta = with lib; {
+    mainProgram = "api";
+    homepage = "https://hay-kot.github.io/homebox/";
+    maintainers = with maintainers; [ patrickdag ];
+    license = licenses.agpl3Only;
+    description = "A inventory and organization system built for the Home User";
+    platforms = platforms.all;
+  };
+}

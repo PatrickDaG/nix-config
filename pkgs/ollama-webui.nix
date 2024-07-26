@@ -56,7 +56,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/ollama-webui/ollama-webui";
     license = licenses.mit;
     mainProgram = pname;
-    maintainers = with maintainers; [malteneuss];
+    maintainers = with maintainers; [ malteneuss ];
     platforms = platforms.all;
   };
 }

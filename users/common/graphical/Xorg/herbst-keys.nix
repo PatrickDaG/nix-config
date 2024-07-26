@@ -79,13 +79,15 @@ MOD: TAGS: pkgs:
   "${MOD}-m 	" = "spawn ${pkgs.thunderbird}/bin/thunderbird";
   "Menu" = "spawn rofi -show drun";
 }
-// builtins.listToAttrs (map (x: {
+// builtins.listToAttrs (
+  map (x: {
     name = "${MOD}-${x}";
     value = "use_index ${x}";
-  })
-  TAGS)
-// builtins.listToAttrs (map (x: {
+  }) TAGS
+)
+// builtins.listToAttrs (
+  map (x: {
     name = "${MOD}-Shift-${x}";
     value = "move_index ${x}";
-  })
-  TAGS)
+  }) TAGS
+)

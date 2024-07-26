@@ -32,63 +32,108 @@ let
         trayOutput = "primary";
       }
     ];
-    floating.criteria = [
-      {class = "Pavucontrol";}
-    ];
+    floating.criteria = [ { class = "Pavucontrol"; } ];
 
     assigns = {
-      "2:d" = [
-        {class = "^firefox$";}
-      ];
-      "2:2" = [
-        {class = "^spotify$";}
-      ];
-      "3:u" = [
-        {class = "^thunderbird$";}
-      ];
+      "2:d" = [ { class = "^firefox$"; } ];
+      "2:2" = [ { class = "^spotify$"; } ];
+      "3:u" = [ { class = "^thunderbird$"; } ];
       "4:a" = [
-        {class = "^bottles$";}
-        {class = "^steam$";}
-        {class = "^prismlauncher$";}
+        { class = "^bottles$"; }
+        { class = "^steam$"; }
+        { class = "^prismlauncher$"; }
       ];
-      "1:F1" = [
-        {class = "^discord$";}
-      ];
+      "1:F1" = [ { class = "^discord$"; } ];
       "2:F2" = [
-        {class = "^Signal$";}
-        {class = "^TelegramDesktop$";}
+        { class = "^Signal$"; }
+        { class = "^TelegramDesktop$"; }
       ];
     };
 
-    workspaceOutputAssign = let
-      output = out:
-        lib.lists.imap1 (i: x: {
-          workspace = "${toString i}:${x}";
-          output = out;
-        });
-    in
+    workspaceOutputAssign =
+      let
+        output =
+          out:
+          lib.lists.imap1 (
+            i: x: {
+              workspace = "${toString i}:${x}";
+              output = out;
+            }
+          );
+      in
       {
         "desktopnix" =
-          output "HDMI-0" ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
-          ++ output "DP-4" ["j" "d" "u" "a" "x" "p"]
-          ++ output "DVI-D-0" ["F1" "F2" "F3" "F4"];
+          output "HDMI-0" [
+            "1"
+            "2"
+            "3"
+            "4"
+            "5"
+            "6"
+            "7"
+            "8"
+            "9"
+          ]
+          ++ output "DP-4" [
+            "j"
+            "d"
+            "u"
+            "a"
+            "x"
+            "p"
+          ]
+          ++ output "DVI-D-0" [
+            "F1"
+            "F2"
+            "F3"
+            "F4"
+          ];
         "patricknix" =
-          output "eDP-1" ["1" "2" "3" "4" "5" "6" "7" "8" "9"]
-          ++ output "DP-1" ["j" "d" "u" "a" "x" "p"];
-        "gojo" =
-          output "eDP-1" ["1" "2" "3" "4" "5" "6"];
+          output "eDP-1" [
+            "1"
+            "2"
+            "3"
+            "4"
+            "5"
+            "6"
+            "7"
+            "8"
+            "9"
+          ]
+          ++ output "DP-1" [
+            "j"
+            "d"
+            "u"
+            "a"
+            "x"
+            "p"
+          ];
+        "gojo" = output "eDP-1" [
+          "1"
+          "2"
+          "3"
+          "4"
+          "5"
+          "6"
+        ];
       }
-      .${nixosConfig.node.name}
-      or [];
+      .${nixosConfig.node.name} or [ ];
 
     keybindings =
-      (lib.attrsets.mergeAttrsList (map (x: (let
-          key = lib.elemAt (lib.strings.splitString ":" x.workspace) 1;
-        in {
-          "${modifier}+${key}" = "workspace ${x.workspace}";
-          "${modifier}+Shift+${key}" = "move container to workspace ${x.workspace}";
-        }))
-        cfg.workspaceOutputAssign))
+      (lib.attrsets.mergeAttrsList (
+        map (
+          x:
+          (
+            let
+              key = lib.elemAt (lib.strings.splitString ":" x.workspace) 1;
+            in
+            {
+              "${modifier}+${key}" = "workspace ${x.workspace}";
+              "${modifier}+Shift+${key}" = "move container to workspace ${x.workspace}";
+            }
+          )
+        ) cfg.workspaceOutputAssign
+      ))
       // {
         "${modifier}+t" = "exec ${terminal}";
         "${modifier}+b" = "exec firefox";
@@ -137,7 +182,8 @@ let
         "${modifier}+period" = "workspace next_on_output";
       };
   };
-in {
+in
+{
   wayland.windowManager.sway.config = cfg;
   xsession.windowManager.i3.config = cfg;
 
@@ -146,9 +192,7 @@ in {
     bars.main = {
       blocks =
         [
-          {
-            block = "net";
-          }
+          { block = "net"; }
           {
             block = "cpu";
             format = " $icon  $utilization ";
@@ -158,7 +202,10 @@ in {
             format = " $icon  $utilization $memory $temperature ";
           }
         ]
-        ++ {"patricknix" = [{block = "battery";}];}.${nixosConfig.node.name} or []
+        ++ {
+          "patricknix" = [ { block = "battery"; } ];
+        }
+        .${nixosConfig.node.name} or [ ]
         ++ [
           {
             block = "sound";

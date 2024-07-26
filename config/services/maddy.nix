@@ -5,12 +5,17 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   priv_domain = config.secrets.secrets.global.domains.mail_private;
   domain = config.secrets.secrets.global.domains.mail_public;
-  mailDomains = [priv_domain domain];
+  mailDomains = [
+    priv_domain
+    domain
+  ];
   maddyBackupDir = "/var/cache/backups/maddy";
-in {
+in
+{
   systemd.tmpfiles.settings = {
     "10-maddy".${maddyBackupDir}.d = {
       inherit (config.services.maddy) user group;
@@ -40,7 +45,10 @@ in {
         inherit (config.secrets.secrets.global.hetzner.users.maddy) subUid path;
         sshAgeSecret = "maddyHetznerSsh";
       };
-      paths = ["/var/lib/maddy/messages" maddyBackupDir];
+      paths = [
+        "/var/lib/maddy/messages"
+        maddyBackupDir
+      ];
       pruneOpts = [
         "--keep-daily 10"
         "--keep-weekly 7"
@@ -49,22 +57,21 @@ in {
       ];
     };
   };
-  systemd.services.maddy-backup = let
-    cfg = config.systemd.services.maddy;
-  in {
-    description = "Maddy db backup";
-    serviceConfig =
-      lib.recursiveUpdate
-      cfg.serviceConfig
-      {
+  systemd.services.maddy-backup =
+    let
+      cfg = config.systemd.services.maddy;
+    in
+    {
+      description = "Maddy db backup";
+      serviceConfig = lib.recursiveUpdate cfg.serviceConfig {
         ExecStart = "${pkgs.sqlite}/bin/sqlite3 /var/lib/maddy/imapsql.db \".backup '${maddyBackupDir}/imapsql.sqlite3'\"";
         Restart = "no";
         Type = "oneshot";
       };
-    inherit (cfg) environment;
-    requiredBy = ["restic-backups-main.service"];
-    before = ["restic-backups-main.service"];
-  };
+      inherit (cfg) environment;
+      requiredBy = [ "restic-backups-main.service" ];
+      before = [ "restic-backups-main.service" ];
+    };
 
   age.secrets.patrickPasswd = {
     generator.script = "alnum";
@@ -73,7 +80,10 @@ in {
   };
   # Opening ports for additional TLS listeners. This is not yet
   # implemented in the module.
-  networking.firewall.allowedTCPPorts = [993 465];
+  networking.firewall.allowedTCPPorts = [
+    993
+    465
+  ];
   services.maddy = {
     enable = true;
     hostname = "mx1." + domain;
@@ -91,9 +101,7 @@ in {
     ensureCredentials = {
       "patrick@${domain}".passwordFile = config.age.secrets.patrickPasswd.path;
     };
-    ensureAccounts = [
-      "patrick@${domain}"
-    ];
+    ensureAccounts = [ "patrick@${domain}" ];
     openFirewall = true;
     config = ''
       ## Maddy Mail Server - default configuration file (2022-06-18)
@@ -288,33 +296,31 @@ in {
       useACMEWildcardHost = true;
       locations."=/mail/config-v1.1.xml".alias =
         pkgs.writeText "autoconfig.${domain}.xml"
-        /*
-        xml
-        */
-        ''
-          <?xml version="1.0" encoding="UTF-8"?>
-          <clientConfig version="1.1">
-            <emailProvider id="${domain}">
-              <domain>${domain}</domain>
-              <displayName>%EMAILADDRESS%</displayName>
-              <displayShortName>%EMAILLOCALPART%</displayShortName>
-              <incomingServer type="imap">
-                <hostname>mail.${domain}</hostname>
-                <port>993</port>
-                <socketType>SSL</socketType>
-                <authentication>password-cleartext</authentication>
-                <username>%EMAILADDRESS%</username>
-              </incomingServer>
-              <outgoingServer type="smtp">
-                <hostname>mail.${domain}</hostname>
-                <port>465</port>
-                <socketType>SSL</socketType>
-                <authentication>password-cleartext</authentication>
-                <username>%EMAILADDRESS%</username>
-              </outgoingServer>
-            </emailProvider>
-          </clientConfig>
-        '';
+          # xml
+          ''
+            <?xml version="1.0" encoding="UTF-8"?>
+            <clientConfig version="1.1">
+              <emailProvider id="${domain}">
+                <domain>${domain}</domain>
+                <displayName>%EMAILADDRESS%</displayName>
+                <displayShortName>%EMAILLOCALPART%</displayShortName>
+                <incomingServer type="imap">
+                  <hostname>mail.${domain}</hostname>
+                  <port>993</port>
+                  <socketType>SSL</socketType>
+                  <authentication>password-cleartext</authentication>
+                  <username>%EMAILADDRESS%</username>
+                </incomingServer>
+                <outgoingServer type="smtp">
+                  <hostname>mail.${domain}</hostname>
+                  <port>465</port>
+                  <socketType>SSL</socketType>
+                  <authentication>password-cleartext</authentication>
+                  <username>%EMAILADDRESS%</username>
+                </outgoingServer>
+              </emailProvider>
+            </clientConfig>
+          '';
     }))
   ];
   environment.persistence."/persist".directories = [

@@ -1,14 +1,15 @@
+{ inputs, stateVersion, ... }:
 {
-  inputs,
-  stateVersion,
-  ...
-}: {
   nix = {
     settings = {
       auto-optimise-store = true;
-      allowed-users = ["@wheel"];
-      trusted-users = ["root"];
-      system-features = ["recursive-nix" "repl-flake" "big-parallel"];
+      allowed-users = [ "@wheel" ];
+      trusted-users = [ "root" ];
+      system-features = [
+        "recursive-nix"
+        "repl-flake"
+        "big-parallel"
+      ];
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org"
@@ -24,7 +25,7 @@
       cores = 0;
       max-jobs = "auto";
       # make agenix rekey find the secrets even without trusted user
-      extra-sandbox-paths = ["/var/tmp/agenix-rekey?"];
+      extra-sandbox-paths = [ "/var/tmp/agenix-rekey?" ];
     };
     daemonCPUSchedPolicy = "batch";
     daemonIOSchedPriority = 5;
@@ -34,7 +35,7 @@
       experimental-features = nix-command flakes recursive-nix
       flake-registry = /etc/nix/registry.json
     '';
-    nixPath = ["nixpkgs=/run/current-system/nixpkgs"];
+    nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];
     optimise.automatic = true;
     gc = {
       automatic = true;

@@ -18,8 +18,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-9bhKtg2g5H4zGn7yVCjTazeXfeoKjtAKAlzkLkCraiw=";
 
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [openssl systemd];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+    systemd
+  ];
 
   meta = with lib; {
     description = "Nixpkgs pull request channel tracker";
@@ -29,7 +32,7 @@ rustPlatform.buildRustPackage {
     '';
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [patrickdag];
+    maintainers = with maintainers; [ patrickdag ];
     mainProgram = "pr-tracker";
   };
 }

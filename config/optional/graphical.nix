@@ -4,13 +4,11 @@
   pkgs,
   lib,
   ...
-}: let
-  inherit
-    (lib)
-    mkOption
-    types
-    ;
-in {
+}:
+let
+  inherit (lib) mkOption types;
+in
+{
   options.hidpi = mkOption {
     default = false;
     type = types.bool;
@@ -18,14 +16,10 @@ in {
   };
 
   # stylix acceses stylix options on import meaning you can only import this module when you're actually setting stylix options
-  imports = [
-    inputs.stylix.nixosModules.stylix
-  ];
+  imports = [ inputs.stylix.nixosModules.stylix ];
 
   config = {
-    environment.systemPackages = with pkgs; [
-      xdg-utils
-    ];
+    environment.systemPackages = with pkgs; [ xdg-utils ];
     xdg.portal = {
       xdgOpenUsePortal = true;
       enable = true;
@@ -38,13 +32,11 @@ in {
           "gtk"
           "hyprland"
         ];
-        sway.default = [
-          "wlr"
-        ];
+        sway.default = [ "wlr" ];
       };
     };
     # needed for gnome pinentry
-    services.dbus.packages = [pkgs.gcr];
+    services.dbus.packages = [ pkgs.gcr ];
     fonts = {
       enableGhostscriptFonts = false;
       fontDir.enable = false;
@@ -75,7 +67,7 @@ in {
         '';
       };
       packages = with pkgs; [
-        (nerdfonts.override {fonts = ["FiraCode"];})
+        (nerdfonts.override { fonts = [ "FiraCode" ]; })
         ibm-plex
         dejavu_fonts
         unifont
@@ -160,71 +152,73 @@ in {
     };
 
     home-manager.sharedModules = [
-      ({
-        pkgs,
-        config,
-        nixosConfig,
-        ...
-      }: {
-        stylix = {
-          cursor = {
-            package = pkgs.openzone-cursors;
-            name = "OpenZone_White_Slim";
-            size =
-              if nixosConfig.hidpi
-              then 48
-              else 18;
-          };
-          inherit (nixosConfig.stylix) polarity;
-          targets = {
-            gtk.enable = true;
-            bat.enable = true;
-            dunst.enable = true;
-            zathura.enable = true;
-            xresources.enable = true;
-          };
-        };
-
-        xresources.properties = {
-          "Xft.hinting" = true;
-          "Xft.antialias" = true;
-          "Xft.autohint" = false;
-          "Xft.lcdfilter" = "lcddefault";
-          "Xft.hintstyle" = "hintfull";
-          "Xft.rgba" = "rgb";
-        };
-
-        gtk = let
-          gtk34extraConfig = {
-            gtk-application-prefer-dark-theme = 1;
-            gtk-cursor-theme-size = 18;
-            gtk-enable-animations = true;
-            gtk-xft-antialias = 1;
-            gtk-xft-dpi = 96; # XXX: delete for wayland?
-            gtk-xft-hinting = 1;
-            gtk-xft-hintstyle = "hintfull";
-            gtk-xft-rgba = "rgb";
-          };
-        in {
-          enable = true;
-          iconTheme = {
-            name = "Vimix-Doder";
-            package = pkgs.vimix-icon-theme;
+      (
+        {
+          pkgs,
+          config,
+          nixosConfig,
+          ...
+        }:
+        {
+          stylix = {
+            cursor = {
+              package = pkgs.openzone-cursors;
+              name = "OpenZone_White_Slim";
+              size = if nixosConfig.hidpi then 48 else 18;
+            };
+            inherit (nixosConfig.stylix) polarity;
+            targets = {
+              gtk.enable = true;
+              bat.enable = true;
+              dunst.enable = true;
+              zathura.enable = true;
+              xresources.enable = true;
+            };
           };
 
-          gtk2.extraConfig = "gtk-application-prefer-dark-theme = true";
-          gtk3.extraConfig = gtk34extraConfig;
-          gtk4.extraConfig = gtk34extraConfig;
-        };
+          xresources.properties = {
+            "Xft.hinting" = true;
+            "Xft.antialias" = true;
+            "Xft.autohint" = false;
+            "Xft.lcdfilter" = "lcddefault";
+            "Xft.hintstyle" = "hintfull";
+            "Xft.rgba" = "rgb";
+          };
 
-        home.sessionVariables.GTK_THEME = config.gtk.theme.name;
+          gtk =
+            let
+              gtk34extraConfig = {
+                gtk-application-prefer-dark-theme = 1;
+                gtk-cursor-theme-size = 18;
+                gtk-enable-animations = true;
+                gtk-xft-antialias = 1;
+                gtk-xft-dpi = 96; # XXX: delete for wayland?
+                gtk-xft-hinting = 1;
+                gtk-xft-hintstyle = "hintfull";
+                gtk-xft-rgba = "rgb";
+              };
+            in
+            {
+              enable = true;
+              iconTheme = {
+                name = "Vimix-Doder";
+                package = pkgs.vimix-icon-theme;
+              };
 
-        qt = {
-          enable = true;
-          platformTheme.name = "adwaita";
-          style.name = "Adwaita-Dark";
-        };
-      })
+              gtk2.extraConfig = "gtk-application-prefer-dark-theme = true";
+              gtk3.extraConfig = gtk34extraConfig;
+              gtk4.extraConfig = gtk34extraConfig;
+            };
+
+          home.sessionVariables.GTK_THEME = config.gtk.theme.name;
+
+          qt = {
+            enable = true;
+            platformTheme.name = "adwaita";
+            style.name = "Adwaita-Dark";
+          };
+        }
+      )
     ];
   };
 }

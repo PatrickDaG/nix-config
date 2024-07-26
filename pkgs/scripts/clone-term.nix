@@ -7,7 +7,12 @@
 }:
 writeShellApplication {
   name = "clone-term";
-  runtimeInputs = [ps procps xdotool jq];
+  runtimeInputs = [
+    ps
+    procps
+    xdotool
+    jq
+  ];
   text = ''
 
     if [[ ''${XDG_CURRENT_DESKTOP-} == sway ]]; then

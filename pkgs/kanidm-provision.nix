@@ -19,8 +19,11 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A small utility to help with kanidm provisioning";
     homepage = "https://github.com/oddlama/kanidm-provision";
-    license = with licenses; [asl20 mit];
-    maintainers = with maintainers; [oddlama];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ oddlama ];
     mainProgram = "kanidm-provision";
   };
 }

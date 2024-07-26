@@ -13,7 +13,8 @@
   pkgs,
   nixosConfig,
   ...
-}: let
+}:
+let
   color = {
     shade1 = "#311B92";
     shade2 = "#4527A0";
@@ -58,7 +59,8 @@
   };
 
   fontsize = "9";
-in {
+in
+{
   services.polybar = {
     enable = true;
 
@@ -89,9 +91,24 @@ in {
           };
 
           modules = with lib; {
-            left = concatStringsSep " " ["left1" "title" "left2"];
-            center = concatStringsSep " " ["workspaces"];
-            right = concatStringsSep " " ["right5" "alsa" "right4" "battery" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
+            left = concatStringsSep " " [
+              "left1"
+              "title"
+              "left2"
+            ];
+            center = concatStringsSep " " [ "workspaces" ];
+            right = concatStringsSep " " [
+              "right5"
+              "alsa"
+              "right4"
+              "battery"
+              "right3"
+              "network"
+              "right2"
+              "date"
+              "right1"
+              "keyboardswitcher"
+            ];
           };
 
           tray = {
@@ -108,9 +125,22 @@ in {
             dpi = 96;
             height = 22;
             modules = with lib; {
-              left = concatStringsSep " " ["left1" "title" "left2"];
-              center = concatStringsSep " " ["workspaces"];
-              right = concatStringsSep " " ["right5" "alsa" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
+              left = concatStringsSep " " [
+                "left1"
+                "title"
+                "left2"
+              ];
+              center = concatStringsSep " " [ "workspaces" ];
+              right = concatStringsSep " " [
+                "right5"
+                "alsa"
+                "right3"
+                "network"
+                "right2"
+                "date"
+                "right1"
+                "keyboardswitcher"
+              ];
             };
           };
           patricknix = {
@@ -120,14 +150,28 @@ in {
             dpi = 144;
             height = 33;
             modules = with lib; {
-              left = concatStringsSep " " ["left1" "title" "left2"];
-              center = concatStringsSep " " ["workspaces"];
-              right = concatStringsSep " " ["right5" "alsa" "right4" "battery" "right3" "network" "right2" "date" "right1" "keyboardswitcher"];
+              left = concatStringsSep " " [
+                "left1"
+                "title"
+                "left2"
+              ];
+              center = concatStringsSep " " [ "workspaces" ];
+              right = concatStringsSep " " [
+                "right5"
+                "alsa"
+                "right4"
+                "battery"
+                "right3"
+                "network"
+                "right2"
+                "date"
+                "right1"
+                "keyboardswitcher"
+              ];
             };
           };
         }
-        .${nixosConfig.node.name}
-        or {};
+        .${nixosConfig.node.name} or { };
 
       # Functional MODULES
 
@@ -296,8 +340,7 @@ in {
             interface = "wlan0";
           };
         }
-        .${nixosConfig.node.name}
-        or {};
+        .${nixosConfig.node.name} or { };
 
       "module/keyboardswitcher" = {
         type = "custom/menu";

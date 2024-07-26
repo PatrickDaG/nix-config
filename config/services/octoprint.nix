@@ -1,12 +1,13 @@
-{config, ...}: {
+{ config, ... }:
+{
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [config.services.octoprint.port];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.octoprint.port ];
   };
   services.octoprint = {
     port = 3000;
     enable = true;
-    plugins = ps: with ps; [ender3v2tempfix];
+    plugins = ps: with ps; [ ender3v2tempfix ];
     extraConfig = {
       accessControl = {
         addRemoteUser = true;

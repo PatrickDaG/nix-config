@@ -1,18 +1,14 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{ pkgs, lib, ... }:
+let
   # set the modifier key to WIN
   MOD = "Super";
   #set the default resize step for herbstluft
   TAGS = map toString (lib.lists.range 1 9);
-in {
+in
+{
   xsession.windowManager.herbstluftwm = {
     enable = true;
-    package = pkgs.herbstluftwm.overrideAttrs (_finalAttrs: _previousAttrs: {
-      doCheck = false;
-    });
+    package = pkgs.herbstluftwm.overrideAttrs (_finalAttrs: _previousAttrs: { doCheck = false; });
     extraConfig = ''
       herbstclient set auto_detect_monitors 1
       killall polybar

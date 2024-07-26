@@ -3,7 +3,8 @@
   lib,
   nixosConfig,
   ...
-}: {
+}:
+{
   images.enable = true;
   home = {
     packages = with pkgs; [
@@ -41,8 +42,10 @@
   };
   # Make sure the keygrips exist, otherwise we'd need to run `gpg --card-status`
   # before being able to use the yubikey.
-  home.activation.installKeygrips = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.installKeygrips = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "$HOME/.gnupg/private-keys-v1.d"
-    run ${lib.getExe pkgs.gnutar} xvf ${lib.escapeShellArg nixosConfig.age.secrets."my-gpg-yubikey-keygrip.tar".path} -C "$HOME/.gnupg/private-keys-v1.d/"
+    run ${lib.getExe pkgs.gnutar} xvf ${
+      lib.escapeShellArg nixosConfig.age.secrets."my-gpg-yubikey-keygrip.tar".path
+    } -C "$HOME/.gnupg/private-keys-v1.d/"
   '';
 }
