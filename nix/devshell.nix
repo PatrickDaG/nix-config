@@ -1,7 +1,5 @@
 {
   self,
-  devshell,
-  agenix-rekey,
   ...
 }: system: let
   pkgs = self.pkgs.${system};
@@ -11,11 +9,6 @@ in
     packages = with pkgs; [
       # Nix
       nil
-
-      # Lua
-      stylua
-      (luajit.withPackages (p: with p; [luacheck]))
-      lua-language-server
 
       # Misc
       shellcheck
@@ -35,7 +28,7 @@ in
         help = "Edit and rekey repository secrets";
       }
       {
-        package = pkgs.alejandra;
+        package = pkgs.nixfmt-rfc-style;
         help = "Format nix code";
       }
       {

@@ -12,11 +12,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "patrickdag";
     repo = "pr-tracker";
-    rev = "71547ae3abbfd331a890ca2d5f3572bd92c0cecc";
-    hash = "sha256-Nq60EQz2TINtA4rkUsgVE4rvZ5O9otD8GXWJYPkiAhs=";
+    rev = "1be91285705bfdb55656db0835820cb034fe5010";
+    hash = "sha256-lPhp3Jq6YM8fi0WS/fJrCHdfdQFs5vdErdE5X80WAHE=";
   };
 
-  cargoHash = "sha256-pcIbL/mWhvQpQcVgyeNccW5cnHGKPKBpY9f2eeSrcjk=";
+  cargoHash = "sha256-9bhKtg2g5H4zGn7yVCjTazeXfeoKjtAKAlzkLkCraiw=";
 
   nativeBuildInputs = [pkg-config];
   buildInputs = [openssl systemd];

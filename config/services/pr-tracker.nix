@@ -65,9 +65,11 @@ in {
       ExecStartPre = prestart;
       ExecStart = ''
         ${lib.getExe pkgs.pr-tracker} --url "https://pr-tracker.${config.secrets.secrets.global.domains.web}"\
-          --user-agent "Patricks pr-tracker"\
-          --path nixpkgs --remote origin\
-          --email-white-list ${config.age.secrets.prTrackerWhiteList.path}
+          --user-agent "Patricks pr-tracker" \
+          --path nixpkgs --remote origin \
+          --email-white-list ${config.age.secrets.prTrackerWhiteList.path} \
+          --email-address pr-tracker@${config.secrets.secrets.global.domains.mail_public} \
+          --email-server smtp.${config.secrets.secrets.global.domains.mail_public} \
       '';
       EnvironmentFile = config.age.secrets.prTrackerEnv.path;
 
