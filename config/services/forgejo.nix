@@ -68,11 +68,21 @@ in
       mode = "0700";
     }
   ];
-  age.secrets.forgejo-mailer-passwd = {
-    rekeyFile = config.node.secretsDir + "/forgejo-passwd.age";
-    owner = "git";
+  age.secrets.maddyPasswd = {
+    generator.script = "alnum";
     group = "git";
-    mode = "0700";
+    mode = "0750";
+  };
+  nodes.maddy = {
+    age.secrets.forgejoPasswd = {
+      inherit (config.age.secrets.maddyPasswd) rekeyFile;
+      inherit (nodes.maddy.config.services.maddy) group;
+      mode = "640";
+    };
+    services.maddy.ensureCredentials = {
+      "forgec@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
+        nodes.maddy.config.age.secrets.forgejoPasswd.path;
+    };
   };
 
   services.forgejo = {
@@ -82,9 +92,9 @@ in
     user = "git";
     group = "git";
     lfs.enable = true;
-    secrets.mailer.PASSWD = config.age.secrets.forgejo-mailer-passwd.path;
+    secrets.mailer.PASSWD = config.age.secrets.maddyPasswd.path;
     settings = {
-      DEFAULT.APP_NAME = "Patricks tolles git"; # tungsten inert gas?
+      DEFAULT.APP_NAME = "Patricks tolles git";
       actions = {
         ENABLED = true;
         DEFAULT_ACTIONS_URL = "github";
@@ -99,9 +109,9 @@ in
       # federation.ENABLED = true;
       mailer = {
         ENABLED = true;
-        SMTP_ADDR = config.secrets.secrets.local.forgejo.mail.host;
-        FROM = config.secrets.secrets.local.forgejo.mail.from;
-        USER = config.secrets.secrets.local.forgejo.mail.user;
+        SMTP_ADDR = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+        FROM = "forge@${config.secrets.secrets.global.domains.mail_public}";
+        USER = "forge@${config.secrets.secrets.global.domains.mail_public}";
         SEND_AS_PLAIN_TEXT = true;
       };
       oauth2_client = {
@@ -124,9 +134,6 @@ in
         ROOT_URL = "https://${forgejoDomain}/";
         LANDING_PAGE = "login";
         SSH_PORT = 9922;
-        # TODO
-        # port forwarding in fritz box
-        # port forwarding in elisabeth
       };
       service = {
         DISABLE_REGISTRATION = false;
