@@ -5,6 +5,7 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  programs.gpu-screen-recorder.enable = true;
   programs.steam = {
     enable = true;
     package = pkgs.steam.override {

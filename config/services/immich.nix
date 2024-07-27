@@ -55,6 +55,15 @@ let
         enabled = true;
         level = "log";
       };
+      notifications.smtp = {
+        enabled = true;
+        from = "immich@${config.secrets.secrets.global.domains.mail_public}";
+        transport = {
+          username = "immich@${config.secrets.secrets.global.domains.mail_public}";
+          host = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+          port = 465;
+        };
+      };
       machineLearning = {
         clip = {
           enabled = true;
@@ -104,12 +113,6 @@ let
         template = "{{y}}/{{MM}}/{{filename}}";
       };
       theme.customCss = "";
-      thumbnail = {
-        colorspace = "p3";
-        jpegSize = 1440;
-        quality = 80;
-        webpSize = 250;
-      };
       trash = {
         days = 30;
         enabled = true;
@@ -145,6 +148,23 @@ let
   processedConfigFile = "/run/agenix/immich.config.json";
 in
 {
+  age.secrets.maddyPasswd = {
+    generator.script = "alnum";
+    mode = "440";
+    group = "root";
+  };
+
+  nodes.maddy = {
+    age.secrets.immichPasswd = {
+      inherit (config.age.secrets.maddyPasswd) rekeyFile;
+      inherit (nodes.maddy.config.services.maddy) group;
+      mode = "640";
+    };
+    services.maddy.ensureCredentials = {
+      "immich@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
+        nodes.maddy.config.age.secrets.immichPasswd.path;
+    };
+  };
   age.secrets.resticpasswd = {
     generator.script = "alnum";
   };
@@ -203,7 +223,12 @@ in
     deps = [ "agenix" ];
     text = ''
       immichClientSecret=$(< ${config.age.secrets.immich-oauth2-client-secret.path})
-      ${pkgs.jq}/bin/jq --arg immichClientSecret "$immichClientSecret" '.oauth.clientSecret = $immichClientSecret' ${configFile} > ${processedConfigFile}
+      immichEmailSecret=$(< ${config.age.secrets.maddyPasswd.path})
+      ${pkgs.jq}/bin/jq \
+        --arg immichClientSecret "$immichClientSecret" \
+        --arg immichEmailSecret "$immichEmailSecret" \
+        '.oauth.clientSecret = $immichClientSecret | .notifications.smtp.transport.password = $immichEmailSecret' \
+        ${configFile} > ${processedConfigFile}
       chmod 444 ${processedConfigFile}
     '';
   };
