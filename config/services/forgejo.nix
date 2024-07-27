@@ -80,7 +80,7 @@ in
       mode = "640";
     };
     services.maddy.ensureCredentials = {
-      "forgec@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
+      "forge@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
         nodes.maddy.config.age.secrets.forgejoPasswd.path;
     };
   };
