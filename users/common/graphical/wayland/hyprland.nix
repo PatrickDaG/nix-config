@@ -201,6 +201,7 @@ in
           "immediate, class:^(cs2)$"
           # apex legends
           "immediate, class:^(steam_app_1172470)$"
+          "immediate, class:^(steam_app_238960)$"
           "float, class:^(steam)$, title:^(?!S)"
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"

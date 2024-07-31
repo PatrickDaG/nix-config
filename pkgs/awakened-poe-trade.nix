@@ -18,7 +18,7 @@ let
 
   icon = pkgs.fetchurl {
     url = "https://web.poecdn.com/image/Art/2DItems/Currency/TransferOrb.png";
-    sha256 = "sha256-fZ3PU+yE1n/RytkPFAXQhU85KNQStYcSrdgw+OYfJRg=";
+    sha256 = "sha256-llr7i9D8zaEN+P8894MQvnUwQrysxhOLcLH73FPLHtY=";
   };
 in
 pkgs.appimageTools.wrapType2 {

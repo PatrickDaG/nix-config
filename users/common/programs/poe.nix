@@ -5,7 +5,7 @@
   home.persistence."/persist".directories = [ ".local/share/pobfrontend" ];
 
   home.packages = [
-    #pkgs.awakened-poe-trade
+    pkgs.awakened-poe-trade
     pkgs.path-of-building
   ];
 }
