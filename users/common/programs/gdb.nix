@@ -16,10 +16,10 @@ in
   home.packages = [ pwndbgWithDebuginfod ];
   home.enableDebugInfo = true;
   xdg.configFile.gdbinit = {
-    target = "gdb/gbdinit";
+    target = "gdb/gdbinit";
     text = ''
-      set auto-load safe-path /
       set debuginfod enabled on
+      set auto-load safe-path /
 
       set history save on
       set history filename ~/.local/share/gdb/history

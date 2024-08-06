@@ -87,6 +87,7 @@ in
                     "file_mode=0600"
                     "dir_mode=0700"
                     "credentials=${cfg.credentials}"
+                    "x-systemd.after=network-online.target"
                   ]
                   ++ (optional (!cfg.automatic) "noauto");
               in
