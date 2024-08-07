@@ -7,6 +7,7 @@
     pr-tracker = final.callPackage ./pr-tracker.nix { };
     homebox = final.callPackage ./homebox.nix { };
     deploy = final.callPackage ./deploy.nix { };
+    minion = final.callPackage ./minion.nix { };
     mongodb-bin = final.callPackage ./mongodb-bin.nix { };
     awakened-poe-trade = final.callPackage ./awakened-poe-trade.nix { };
     neovim-clean = final.neovim-unwrapped.overrideAttrs (

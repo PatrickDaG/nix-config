@@ -62,6 +62,7 @@ lib.optionalAttrs (!minimal) {
         ./firefox.nix
         ./gpg
         ./impermanence.nix
+        ./minion.nix
 
         ../common
         ../common/impermanence.nix
