@@ -87,7 +87,7 @@ in
                     "file_mode=0600"
                     "dir_mode=0700"
                     "credentials=${cfg.credentials}"
-                    "x-systemd.after=network-online.target"
+                    "x-systemd.after=sys-devices-virtual-net-samba\\x2dpatrick.device"
                   ]
                   ++ (optional (!cfg.automatic) "noauto");
               in
