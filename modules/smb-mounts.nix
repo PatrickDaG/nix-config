@@ -88,6 +88,9 @@ in
                     "dir_mode=0700"
                     "credentials=${cfg.credentials}"
                     "x-systemd.after=sys-devices-virtual-net-samba\\x2dpatrick.device"
+                    "x-systemd.automount"
+                    "x-systemd.mount-timeout=30"
+                    "_netdev"
                   ]
                   ++ (optional (!cfg.automatic) "noauto");
               in

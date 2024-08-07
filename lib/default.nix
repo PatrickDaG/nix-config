@@ -1,1 +1,1 @@
-inputs: [ (import ./misc.nix inputs) ]
+_inputs: [ ]

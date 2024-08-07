@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 let
   # addon-path is base64 encode path
-  cfgFile = lib.writeText ''
+  cfgFile = pkgs.writeText "mimion.xml" ''
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <minion>
         <config-version>2</config-version>
@@ -30,6 +30,7 @@ in
   # yet another program that uses the config file as a live state file
   # Why?
   home.activation.installMinionConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p .minion
     run cp -f ${cfgFile} .minion/minion.xml
   '';
 }
