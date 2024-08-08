@@ -43,6 +43,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
     # Bin zu faul des zu kopieren
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
@@ -104,107 +106,50 @@
   outputs =
     {
       self,
-      nixpkgs,
-      flake-utils,
-      agenix-rekey,
       nixos-generators,
-      pre-commit-hooks,
-      devshell,
-      nixvim,
       nixos-extra-modules,
       nix-topology,
       ...
     }@inputs:
-    let
-      inherit (nixpkgs) lib;
-      stateVersion = "23.05";
-    in
-    {
-      secretsConfig = {
-        # This should be a link to one of the age public keys is './keys'
-        masterIdentities = [ ./keys/PatC.pub ];
-        extraEncryptionPubkeys = [ ./secrets/recipients.txt ];
-      };
-      agenix-rekey = agenix-rekey.configure {
-        userFlake = self;
-        inherit (self) nodes pkgs;
-      };
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        ./nix/agenix-rekey.nix
+        ./nix/devshell.nix
+        ./nix/hosts.nix
+        ./nix/pkgs.nix
+        nix-topology.flakeModule
+      ];
 
-      inherit stateVersion;
-      inherit (import ./nix/hosts.nix inputs)
-        hosts
-        nixosConfigurations
-        minimalConfigurations
-        guestConfigurations
-        ;
-      nodes = self.nixosConfigurations // self.guestConfigurations;
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
-      inherit
-        (lib.foldl' lib.recursiveUpdate { } (
-          lib.mapAttrsToList (import ./nix/generate-installer-package.nix inputs) self.minimalConfigurations
-        ))
-        packages
-        ;
-    }
-    // flake-utils.lib.eachDefaultSystem (system: rec {
-      apps.setupHetznerStorageBoxes =
-        import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
-          {
+      perSystem =
+        { pkgs, system, ... }:
+        {
+          topology.modules = [ ./nix/topology.nix ];
+          apps.setupHetznerStorageBoxes =
+            import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
+              {
+                inherit pkgs;
+                nixosConfigurations = inputs.self.nodes;
+                decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+              };
+          packages.live-iso = nixos-generators.nixosGenerate {
             inherit pkgs;
-            nixosConfigurations = self.nodes;
-            decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+            modules = [
+              ./nix/installer-configuration.nix
+              ./config/basic/ssh.nix
+            ];
+            format =
+              {
+                x86_64-linux = "install-iso";
+                aarch64-linux = "sd-aarch64-installer";
+              }
+              .${system};
           };
-      pkgs = import nixpkgs {
-        overlays =
-          import ./lib inputs
-          ++ import ./pkgs
-          ++ [
-            # nixpkgs-wayland.overlay
-            nixos-extra-modules.overlays.default
-            nix-topology.overlays.default
-            devshell.overlays.default
-            agenix-rekey.overlays.default
-            nixvim.overlays.default
-          ];
-        inherit system;
-        config.allowUnfree = true;
-      };
-      packages = pkgs;
 
-      topology = import nix-topology {
-        inherit pkgs;
-        modules = [
-          { inherit (self) nixosConfigurations; }
-          ./nix/topology.nix
-        ];
-      };
-
-      images.live-iso = nixos-generators.nixosGenerate {
-        inherit pkgs;
-        modules = [
-          ./nix/installer-configuration.nix
-          ./config/basic/ssh.nix
-        ];
-        format =
-          {
-            x86_64-linux = "install-iso";
-            aarch64-linux = "sd-aarch64-installer";
-          }
-          .${system};
-      };
-
-      checks.pre-commit-check = pre-commit-hooks.lib.${system}.run {
-        src = lib.cleanSource ./.;
-        hooks = {
-          nixfmt = {
-            enable = true;
-            package = pkgs.nixfmt-rfc-style;
-          };
-          deadnix.enable = true;
-          statix.enable = true;
         };
-      };
-      devShell = import ./nix/devshell.nix inputs system;
-      formatter = pkgs.nixfmt-rfc-style;
-    });
+    };
 }

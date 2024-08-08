@@ -1,69 +1,80 @@
-{ self, ... }:
-system:
-let
-  pkgs = self.pkgs.${system};
-in
-pkgs.devshell.mkShell {
-  name = "nix-config";
-  packages = with pkgs; [
-    # Nix
-    nil
-
-    # Misc
-    shellcheck
-    pre-commit
-    rage
-    nix
-    nix-diff
-    nix-update
-  ];
-  commands = [
-    {
-      package = pkgs.deploy;
-      help = "build and deploy nix configurations";
-    }
-    {
-      package = pkgs.agenix-rekey;
-      help = "Edit and rekey repository secrets";
-    }
-    {
-      package = pkgs.nixfmt-rfc-style;
-      help = "Format nix code";
-    }
-    {
-      package = pkgs.statix;
-      help = "Linter for nix";
-    }
-    {
-      package = pkgs.deadnix;
-      help = "Remove dead nix code";
-    }
-    {
-      package = pkgs.nix-tree;
-      help = "Show nix closure tree";
-    }
-    {
-      package = pkgs.update-nix-fetchgit;
-      help = "Update fetcher inside nix files";
-    }
-    {
-      package = pkgs.nvd;
-      help = "List package differences between systems";
-    }
-    {
-      package = pkgs.vulnix;
-      help = "List vulnerabilities found in your system";
-    }
-  ];
-  env = [
-    {
-      name = "NIX_CONFIG";
-      value = ''
-        plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-        extra-builtins-file = ${../nix}/extra-builtins.nix
-      '';
-    }
+{ inputs, ... }:
+{
+  imports = [
+    inputs.devshell.flakeModule
+    inputs.pre-commit-hooks.flakeModule
   ];
 
-  devshell.startup.pre-commit.text = self.checks.${system}.pre-commit-check.shellHook;
+  perSystem =
+    { config, pkgs, ... }:
+    {
+      pre-commit.settings.hooks = {
+        nixfmt = {
+          enable = true;
+          package = pkgs.nixfmt-rfc-style;
+        };
+        deadnix.enable = true;
+        statix.enable = true;
+      };
+      formatter = pkgs.nixfmt-rfc-style;
+      devshells.default = {
+        packages = with pkgs; [
+          # Nix
+          nil
+
+          # Misc
+          shellcheck
+          pre-commit
+          rage
+          nix
+          nix-diff
+          nix-update
+        ];
+        commands = [
+          {
+            package = pkgs.deploy;
+            help = "build and deploy nix configurations";
+          }
+          {
+            package = pkgs.nixfmt-rfc-style;
+            help = "Format nix code";
+          }
+          {
+            package = pkgs.statix;
+            help = "Linter for nix";
+          }
+          {
+            package = pkgs.deadnix;
+            help = "Remove dead nix code";
+          }
+          {
+            package = pkgs.nix-tree;
+            help = "Show nix closure tree";
+          }
+          {
+            package = pkgs.update-nix-fetchgit;
+            help = "Update fetcher inside nix files";
+          }
+          {
+            package = pkgs.nvd;
+            help = "List package differences between systems";
+          }
+          {
+            package = pkgs.vulnix;
+            help = "List vulnerabilities found in your system";
+          }
+        ];
+        env = [
+          {
+            name = "NIX_CONFIG";
+            value = ''
+              plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+              extra-builtins-file = ${../nix}/extra-builtins.nix
+            '';
+          }
+        ];
+
+        devshell.startup.pre-commit.text = config.pre-commit.installationScript;
+      };
+    };
 }
