@@ -46,12 +46,12 @@ in
         sshAgeSecret = "vaultwardenHetznerSsh";
       };
       paths = [ config.services.vaultwarden.backupDir ];
-      pruneOpts = [
-        "--keep-daily 10"
-        "--keep-weekly 7"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
+      #pruneOpts = [
+      #  "--keep-daily 10"
+      #  "--keep-weekly 7"
+      #  "--keep-monthly 12"
+      #  "--keep-yearly 75"
+      #];
     };
   };
   age.secrets.maddyPasswd = {

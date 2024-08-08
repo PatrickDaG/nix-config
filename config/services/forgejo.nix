@@ -32,12 +32,12 @@ in
         sshAgeSecret = "forgejoHetznerSsh";
       };
       paths = [ config.services.forgejo.stateDir ];
-      pruneOpts = [
-        "--keep-daily 10"
-        "--keep-weekly 7"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
+      #pruneOpts = [
+      #  "--keep-daily 10"
+      #  "--keep-weekly 7"
+      #  "--keep-monthly 12"
+      #  "--keep-yearly 75"
+      #];
     };
   };
 

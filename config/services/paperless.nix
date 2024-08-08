@@ -39,12 +39,12 @@ in
         sshAgeSecret = "paperlessHetznerSsh";
       };
       paths = [ paperlessBackupDir ];
-      pruneOpts = [
-        "--keep-daily 10"
-        "--keep-weekly 7"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
+      #pruneOpts = [
+      #  "--keep-daily 10"
+      #  "--keep-weekly 7"
+      #  "--keep-monthly 12"
+      #  "--keep-yearly 75"
+      #];
     };
   };
   systemd.services.paperless-backup =

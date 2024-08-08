@@ -49,12 +49,12 @@ in
         "/var/lib/maddy/messages"
         maddyBackupDir
       ];
-      pruneOpts = [
-        "--keep-daily 10"
-        "--keep-weekly 7"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
+      #pruneOpts = [
+      #  "--keep-daily 10"
+      #  "--keep-weekly 7"
+      #  "--keep-monthly 12"
+      #  "--keep-yearly 75"
+      #];
     };
   };
   systemd.services.maddy-backup =

@@ -12,7 +12,7 @@
   services.open-webui = {
     host = "0.0.0.0";
     port = 3000;
-    enable = true;
+    #enable = true;
     environment = {
       ENV = "prod";
       OLLAMA_BASE_URL = "http://localhost:3001";

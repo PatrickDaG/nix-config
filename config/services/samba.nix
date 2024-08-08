@@ -41,12 +41,12 @@
         sshAgeSecret = "resticHetznerSsh";
       };
       paths = [ "/bunker" ];
-      pruneOpts = [
-        "--keep-daily 10"
-        "--keep-weekly 7"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
+      ##pruneOpts = [
+      ##  "--keep-daily 10"
+      ##  "--keep-weekly 7"
+      ##  "--keep-monthly 12"
+      ##  "--keep-yearly 75"
+      ##];
     };
   };
   wireguard.samba-patrick.server = {
