@@ -35,6 +35,7 @@
           # nvidia hardware video decode
           # https:#github.com/elFarto/nvidia-vaapi-driver
           "media.ffmpeg.vaapi.enabled" = true;
+          "gfx.webrender.all" = true;
           "media.rdd-ffmpeg.enabled" = true;
           "gfx.x11-egl.force-enabled" = true;
           # enable if grapics card support av1

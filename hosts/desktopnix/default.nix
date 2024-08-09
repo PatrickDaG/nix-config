@@ -65,6 +65,7 @@
     "nvidia-drm.modeset=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
+  zramSwap.enable = true;
 
   services.netbird.enable = true;
   # Do not cleanup nix store to prevent having to rebuild packages onca a month
