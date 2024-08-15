@@ -36,8 +36,8 @@ let
   # TODO hard coded elisabeth nicht so schön
   ipOf =
     hostName:
-    if nodes ? ${hostName} then
-      nodes.${hostName}.config.wireguard.elisabeth.ipv4
+    if hostName == "octoprint" then
+      nodes.patricknix.config.wireguard.elisabeth.ipv4
     else
       nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in

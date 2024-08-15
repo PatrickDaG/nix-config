@@ -4,6 +4,14 @@
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.octoprint.port ];
   };
+  environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/octoprint/";
+      user = "octoprint";
+      group = "octoprint";
+      mode = "750";
+    }
+  ];
   services.octoprint = {
     port = 3000;
     enable = true;
