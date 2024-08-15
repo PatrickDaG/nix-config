@@ -20,7 +20,7 @@ let
         </game-configs>
         <drive-configs never-ask-about-scanning="true"/>
         <games>
-            <game addon-path="L2hvbWUvcGF0cmljay8ubG9jYWwvc2hhcmUvU3RlYW1QYW56ZXIvc3RlYW1hcHBzL2NvbXBhdGRhdGEvMzA2MTMwL3BmeC9kcml2ZV9jL3VzZXJzL3N0ZWFtdXNlci9Eb2N1bWVudHMvRWxkZXIgU2Nyb2xscyBPbmxpbmUvbGl2ZS9BZGRPbnM=" auto-update="false" display-name="Elder Scrolls Online" game-id="ESO" unique-game-id="ESO-1"/>
+            <game addon-path="L2hvbWUvcGF0cmljay8ubG9jYWwvc2hhcmUvU3RlYW0vc3RlYW1hcHBzL2NvbXBhdGRhdGEvMzA2MTMwL3BmeC9kcml2ZV9jL3VzZXJzL3N0ZWFtdXNlci9Eb2N1bWVudHMvRWxkZXIgU2Nyb2xscyBPbmxpbmUvbGl2ZS9BZGRPbnM=" auto-update="false" display-name="Elder Scrolls Online" game-id="ESO" unique-game-id="ESO-1"/>
         </games>
     </minion>
   '';
@@ -32,5 +32,6 @@ in
   home.activation.installMinionConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p .minion
     run cp -f ${cfgFile} .minion/minion.xml
+    run chmod 640 .minion/minion.xml
   '';
 }

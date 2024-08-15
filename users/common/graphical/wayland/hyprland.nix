@@ -202,11 +202,13 @@ in
           # apex legends
           "immediate, class:^(steam_app_1172470)$"
           "immediate, class:^(steam_app_238960)$"
-          "float, class:^(SDL Application)$, title:^(Friends List)"
+          #baldur
+          "immediate, class:^(steam_app_1086940)$"
+          "float, class:^(steam)$, title:^(Friends List)"
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
-          "workspace 4,class:^(SDL Application)$, title:^(Steam)"
+          "workspace 4,class:^(steam)$, title:^(Steam)"
           "workspace 4,class:^(prismlauncher)$"
           "workspace 6,class:^(discord)$"
           "workspace 6,class:^(WebCord)$"
