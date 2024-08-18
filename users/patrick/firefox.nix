@@ -5,8 +5,8 @@
       betterfox = pkgs.fetchFromGitHub {
         owner = "yokoffing";
         repo = "Betterfox";
-        rev = "116.1";
-        hash = "sha256-Ai8Szbrk/4FhGhS4r5gA2DqjALFRfQKo2a/TwWCIA6g=";
+        rev = "128.0";
+        hash = "sha256-Xbe9gHO8Kf9C+QnWhZr21kl42rXUQzqSDIn99thO1kE=";
       };
     in
     {

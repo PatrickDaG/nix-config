@@ -24,22 +24,29 @@
       timer
       orca-slicer
 
-      ocaml
-      dune_3
-      ocamlformat # formatter
-      ocamlPackages.ocaml-lsp
-      ocamlPackages.utop
-      ocamlPackages.mparser
-      ocamlPackages.ounit2
-      ocamlPackages.qcheck
-
       via
+
+      streamlink
+      streamlink-twitch-gui-bin
+
+      yt-dlp
 
       figlet
       cowsay
       cmatrix
     ];
   };
+  xdg.configFile."streamlink/config".text = ''
+    player=mpv
+  '';
+  xdg.configFile."mpv/mpv.conf".text = ''
+    vo=gpu-next
+    hwdec=auto-safe
+  '';
+  xdg.configFile."mpv/input.conf".text = ''
+    UP add volume 2
+    DOWN add volume -2
+  '';
   # Make sure the keygrips exist, otherwise we'd need to run `gpg --card-status`
   # before being able to use the yubikey.
   home.activation.installKeygrips = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

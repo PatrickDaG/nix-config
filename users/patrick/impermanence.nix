@@ -21,6 +21,7 @@
 
         # for electron signal app state
         ".config/Signal"
+        ".config/streamlink-twitch-gui"
         ".config/discord"
         ".config/WebCord"
         ".local/share/TelegramDesktop"
