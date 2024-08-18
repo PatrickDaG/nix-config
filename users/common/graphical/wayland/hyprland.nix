@@ -155,16 +155,22 @@ in
 
         cursor.no_warps = true;
         debug.disable_logs = false;
-        env = [
-          "NIXOS_OZONE_WL,1"
-          "MOZ_ENABLE_WAYLAND,1"
-          "_JAVA_AWT_WM_NONREPARENTING,1"
-          "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-          "QT_QPA_PLATFORM,wayland"
-          "SDL_VIDEODRIVER,'wayland,x11,windows'"
-          "GDK_BACKEND,wayland"
-          "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
-        ];
+        env =
+          [
+            "NIXOS_OZONE_WL,1"
+            "MOZ_ENABLE_WAYLAND,1"
+            "_JAVA_AWT_WM_NONREPARENTING,1"
+            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+            "QT_QPA_PLATFORM,wayland"
+            "GDK_BACKEND,wayland"
+            "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
+            "XDG_SESSION_TYPE,wayland"
+          ]
+          ++ optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
+            # See https://wiki.hyprland.org/Nvidia/
+            "LIBVA_DRIVER_NAME,nvidia"
+            "GBM_BACKEND,nvidia-drm"
+          ];
         bindm = [
           # mouse movements
           "SUPER, mouse:272, movewindow"
@@ -225,13 +231,6 @@ in
           # Thank you NVIDIA for this generous, free-of-charge, extra monitor that
           # doesn't exist and crashes yoru session sometimes when moving a window to it.
           "Unknown-1, disable"
-        ];
-        env = optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
-          # See https://wiki.hyprland.org/Nvidia/
-          "LIBVA_DRIVER_NAME,nvidia"
-          "XDG_SESSION_TYPE,wayland"
-          "GBM_BACKEND,nvidia-drm"
-          "__GLX_VENDOR_LIBRARY_NAME,nvidia"
         ];
         workspace = [
           "1, monitor:DP-3, default:true"
