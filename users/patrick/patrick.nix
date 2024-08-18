@@ -28,6 +28,7 @@
 
       streamlink
       streamlink-twitch-gui-bin
+      chatterino2
 
       yt-dlp
 
@@ -42,6 +43,7 @@
   xdg.configFile."mpv/mpv.conf".text = ''
     vo=gpu-next
     hwdec=auto-safe
+    volume=30
   '';
   xdg.configFile."mpv/input.conf".text = ''
     UP add volume 2

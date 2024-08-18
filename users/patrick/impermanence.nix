@@ -26,6 +26,8 @@
         ".config/WebCord"
         ".local/share/TelegramDesktop"
 
+        ".cache/mpv"
+
         # Folders for steam
         ".local/share/Steam"
         ".steam"
