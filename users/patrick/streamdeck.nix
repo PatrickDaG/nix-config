@@ -1,7 +1,7 @@
 { config, ... }:
 {
   programs.streamdeck-ui = {
-    enable = true;
+    #enable = true;
     settings = {
       # Device ID
       "AL31H1B01852" = {

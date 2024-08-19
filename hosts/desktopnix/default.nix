@@ -1,4 +1,9 @@
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
@@ -73,4 +78,7 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   nixpkgs.config.cudaSupport = true;
+
+  environment.systemPackages = [ pkgs.streamlink ];
+  services.udev.packages = [ pkgs.streamlink ];
 }
