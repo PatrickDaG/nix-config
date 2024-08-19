@@ -1,9 +1,8 @@
-{
-  inputs,
-  lib,
-  pkgs,
-  ...
-}:
+{ inputs, lib, ... }:
+let
+  nixp = import inputs.nixpkgs-streamcontroller { system = "x86_64-linux"; };
+  inherit (nixp) streamcontroller;
+in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
@@ -79,6 +78,6 @@
 
   nixpkgs.config.cudaSupport = true;
 
-  environment.systemPackages = [ pkgs.streamlink ];
-  services.udev.packages = [ pkgs.streamlink ];
+  environment.systemPackages = [ streamcontroller ];
+  services.udev.packages = [ streamcontroller ];
 }
