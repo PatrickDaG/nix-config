@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-octoprint.url = "github:patrickdag/nixpkgs/octoprint-update";
+    nixpkgs-streamcontroller.url = "github:sifmelcara/nixpkgs/streamcontroller";
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";

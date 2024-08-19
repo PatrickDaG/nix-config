@@ -1,4 +1,4 @@
-[
+inputs: [
   (import ./scripts)
   (_final: prev: {
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
@@ -10,6 +10,9 @@
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
+    streamcontroller =
+      prev.callPackage "${inputs.nixpgkgs-streamcontroller}/pkgs/by-name/st/streamcontroller/package.nix"
+        { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
@@ -49,7 +52,12 @@
     );
     kanidm-provision = prev.callPackage ./kanidm-provision.nix { };
     pythonPackagesExtension = prev.pythonPackagesExtension ++ [
-      (_pythonFinal: pythonPrev: { usb-monitor = pythonPrev.callPackage ./usb-monitor.nix { }; })
+      (_pythonFinal: pythonPrev: {
+        usb-monitor =
+          pythonPrev.callPackage
+            "${inputs.nixpkgs-streamcontroller}/pkgs/development/python-modules/usb-monitor/default.nix"
+            { };
+      })
     ];
   })
 ]

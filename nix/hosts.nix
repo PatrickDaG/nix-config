@@ -35,7 +35,7 @@
               # So we just mimic the options and overlays defined by the passed pkgs set.
               node.name = name;
               node.secretsDir = ../. + "/hosts/${name}/secrets";
-              nixpkgs.overlays = (import ../pkgs) ++ [
+              nixpkgs.overlays = (import ../pkgs inputs) ++ [
                 # nixpkgs-wayland.overlay
                 inputs.nixos-extra-modules.overlays.default
                 inputs.nix-topology.overlays.default
