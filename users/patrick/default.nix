@@ -78,6 +78,7 @@ lib.optionalAttrs (!minimal) {
         ../common/programs/poe.nix
         ../common/programs/spicetify.nix
         ../common/programs/thunderbird.nix
+        ../common/programs/gpu-screen-recorder.nix
         ../common/shells/pager.nix
       ]
       ++ {
