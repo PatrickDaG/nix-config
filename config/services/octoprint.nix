@@ -1,5 +1,8 @@
-{ config, ... }:
+{ config, inputs, ... }:
 {
+
+  disabledModules = [ "services/misc/octoprint.nix" ];
+  imports = [ "${inputs.nixpkgs-octoprint}/nixos/modules/services/misc/octoprint.nix" ];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.octoprint.port ];
@@ -16,9 +19,9 @@
     port = 3000;
     enable = true;
     plugins = ps: with ps; [ ender3v2tempfix ];
-    extraConfig = {
+    settings = {
       accessControl = {
-        addRemoteUser = true;
+        addRemoteUsers = true;
         trustRemoteUser = true;
         remoteUserHeader = "X-User";
       };

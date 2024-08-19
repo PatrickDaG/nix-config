@@ -1339,6 +1339,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-octoprint": {
+      "locked": {
+        "lastModified": 1724074482,
+        "narHash": "sha256-yYJ+Tatu1+Mv98MmX5SxlB75XOLhjj7LjH5ipS+xy3A=",
+        "owner": "patrickdag",
+        "repo": "nixpkgs",
+        "rev": "c56804b205f94edeb066cc8460a64cfcd52d798f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "patrickdag",
+        "ref": "octoprint-update",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1685801374,
@@ -1697,6 +1713,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-nftables-firewall": "nixos-nftables-firewall",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-octoprint": "nixpkgs-octoprint",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nixvim": "nixvim",
         "pre-commit-hooks": "pre-commit-hooks_4",

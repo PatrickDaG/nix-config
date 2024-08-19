@@ -2,11 +2,14 @@
   description = "patricks tolle nix config";
 
   inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    nixpkgs-octoprint.url = "github:patrickdag/nixpkgs/octoprint-update";
+
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-extra-modules = {
       url = "github:oddlama/nixos-extra-modules";
