@@ -52,6 +52,7 @@
     };
     "/panzer/state".directories = lib.lists.optionals (nixosConfig.disko.devices.zpool ? "panzer") [
       ".local/share/SteamPanzer"
+      "videos"
     ];
   };
 }
