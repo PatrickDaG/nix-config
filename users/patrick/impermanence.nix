@@ -15,6 +15,9 @@
 
         ".config/OrcaSlicer"
 
+        ".config/streamcontroller"
+        ".local/share/streamcontroller"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"

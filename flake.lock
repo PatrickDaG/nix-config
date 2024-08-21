@@ -1437,11 +1437,11 @@
     },
     "nixpkgs-streamcontroller": {
       "locked": {
-        "lastModified": 1724014496,
-        "narHash": "sha256-2+fJJtJ2BEkiIUl//7ysrMRW/whuw4/oX/xL/CFfSDM=",
+        "lastModified": 1724230610,
+        "narHash": "sha256-9CtPvclJqe+ugCIB95xB+ncJtVg4uSFtSYgeIGzFNWQ=",
         "owner": "sifmelcara",
         "repo": "nixpkgs",
-        "rev": "1e6aa887f401957d4d3fd01934e6e176eea9aa9a",
+        "rev": "c64fa0f66ccf338831f5034573db7f2ae6e37dc9",
         "type": "github"
       },
       "original": {
