@@ -15,7 +15,7 @@
     enable = true;
     cookie.domain = ".${config.secrets.secrets.global.domains.web}";
     cookie.secure = true;
-    cookie.expire = "300m";
+    cookie.expire = "900m";
     cookie.secret = null;
 
     clientSecret = null;

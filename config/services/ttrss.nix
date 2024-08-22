@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   wireguard.elisabeth = {
     client.via = "elisabeth";
@@ -10,6 +10,7 @@
     baseUrl = "https://rss.lel.lol";
     virtualHost = "rss.lel.lol";
     authType = "none";
+    extensions = [ pkgs.freshrss-extensions.youtube ];
   };
   environment.persistence."/persist".directories = [
     {

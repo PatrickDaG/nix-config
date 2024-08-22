@@ -18,6 +18,9 @@
         ".config/streamcontroller"
         ".local/share/streamcontroller"
 
+        # for netflix
+        ".config/google-chrome"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
