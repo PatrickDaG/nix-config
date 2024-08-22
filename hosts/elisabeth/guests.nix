@@ -30,6 +30,7 @@ let
         homebox = "homebox";
         octoprint = "print";
         pr-tracker = "tracker";
+        invidious = "yt";
       };
     in
     "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
@@ -180,6 +181,7 @@ in
       (proxyProtect "oauth2-proxy" { } false)
       (blockOf "paperless" { maxBodySize = "5G"; })
       (proxyProtect "ttrss" { port = 80; } true)
+      (proxyProtect "invidious" { } true)
       (blockOf "yourspotify" { port = 80; })
       #(blockOf "homebox" {})
       (blockOf "pr-tracker" { })
@@ -310,6 +312,7 @@ in
     // mkContainer "murmur" { }
     #// mkContainer "homebox" {}
     // mkContainer "pr-tracker" { }
+    // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }
     // mkContainer "yourspotify" { }

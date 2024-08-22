@@ -39,7 +39,8 @@
           "media.rdd-ffmpeg.enabled" = true;
           "gfx.x11-egl.force-enabled" = true;
           # enable if grapics card support av1
-          "media.av1.enabled" = false;
+          # invidious kinda depends on av1
+          "media.av1.enabled" = true;
           "widget.dmabuf.force-enabled" = true;
           # General
           "browser.toolbars.bookmarks.visibility" = "never"; # Never show the bookmark toolbar

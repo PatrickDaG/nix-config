@@ -18,7 +18,7 @@
         name:
         let
           pkgs = config.pkgs.x86_64-linux;
-          stateVersion = "23.05";
+          stateVersion = "24.05";
         in
         inputs.nixpkgs.lib.nixosSystem {
           specialArgs = {

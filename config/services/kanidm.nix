@@ -140,6 +140,7 @@ in
       groups."ollama.access" = { };
       groups."adguardhome.access" = { };
       groups."octoprint.access" = { };
+      groups."invidious.access" = { };
 
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
@@ -170,6 +171,11 @@ in
           "email"
           "profile"
         ];
+        scopeMaps."invidious.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
         preferShortUsername = true;
         claimMaps.groups = {
           joinType = "array";
@@ -178,6 +184,7 @@ in
           valuesByGroup."firefly.access" = [ "firefly_access" ];
           valuesByGroup."ollama.access" = [ "ollama_access" ];
           valuesByGroup."octoprint.access" = [ "octoprint_access" ];
+          valuesByGroup."invidious.access" = [ "invidious_access" ];
         };
       };
 
