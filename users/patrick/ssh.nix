@@ -24,6 +24,11 @@
           user = "root";
         };
 
+        "testienix" = {
+          hostname = "testienix.local";
+          user = "root";
+        };
+
         "patricknix" = {
           hostname = "patricknix.local";
           user = "root";

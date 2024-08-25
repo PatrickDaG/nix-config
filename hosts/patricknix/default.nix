@@ -18,8 +18,6 @@
     ../../config/hardware/prime-offload.nix
     ../../config/hardware/yubikey.nix
 
-    ../../config/services/octoprint.nix
-
     ../../config/optional/dev.nix
     ../../config/optional/graphical.nix
     ../../config/optional/printing.nix

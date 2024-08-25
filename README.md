@@ -82,9 +82,9 @@ These are notable external flakes which this config depend upon
     - This might take multiple minutes(~10)
     - Alternatively boot an official nixos image connect with password
 3. Copy ISO to usb using dd
-3. After booting copy the installer to the live system using `nix copy --to <target> .#packages.<target-system>.installer-package.<target>`
+3. After booting copy the installer to the live system using `nix copy --to <target> .#nodes.<target-system>.config.system.build.installFromLive`
 4. Run the installer script from the nix store of the live system
-    - you can get the path using `nix path-info .#packages.<target-system>.installer-package.<target>`
+    - you can get the path using `nix path-info .#nodes.<target-system>.config.system.build.installFromLive`
 4. Export all zpools and reboot into system
 6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub`
 5. Deploy system

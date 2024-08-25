@@ -2,6 +2,7 @@
 {
   imports = [
     ./boot.nix
+    ./generate-installer-package.nix
     ./home-manager.nix
     ./impermanence.nix
     ./inputrc.nix

@@ -38,7 +38,7 @@ let
   ipOf =
     hostName:
     if hostName == "octoprint" then
-      nodes.patricknix.config.wireguard.elisabeth.ipv4
+      nodes.testienix.config.wireguard.elisabeth.ipv4
     else
       nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in
