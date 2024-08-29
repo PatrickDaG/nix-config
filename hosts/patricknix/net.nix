@@ -1,5 +1,6 @@
 { config, ... }:
 {
+  environment.persistence."/state".directories = [ "/var/lib/iwd" ];
   age.secrets.eduroam = {
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";

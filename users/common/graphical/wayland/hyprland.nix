@@ -100,7 +100,6 @@ in
           [
             "SUPER,q,killactive,"
             "SUPER,return,fullscreen,"
-            "SUPER + SHIFT,return,fakefullscreen,"
             "SUPER,f,togglefloating"
             "SUPER,g,togglegroup"
             "SUPER,tab,cyclenext,"
