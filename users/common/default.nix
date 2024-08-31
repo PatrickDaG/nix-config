@@ -1,11 +1,11 @@
+{ minimal, lib, ... }:
 {
   imports = [
     ./shells/alias.nix
     ./shells/zsh
 
     ./programs/gpg.nix
-    ./programs/htop.nix
-  ];
+  ] ++ lib.optional (!minimal) ./programs/htop.nix;
 
   programs.bat.enable = true;
   nixpkgs.config = {

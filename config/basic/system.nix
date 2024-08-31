@@ -62,7 +62,6 @@
     fd
     kitty.terminfo
     nvd
-    htop
     unzip
     # fix pcscd
     pcscliteWithPolkit.out

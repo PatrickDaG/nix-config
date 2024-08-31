@@ -15,11 +15,9 @@
     ../../config/hardware/physical.nix
     ../../config/optional/zfs.nix
 
-    ../../config/services/octoprint.nix
-
     ./net.nix
     ./fs.nix
-  ] ++ lib.lists.optionals (!minimal) [ ];
+  ] ++ lib.lists.optionals (!minimal) [ ../../config/services/octoprint.nix ];
   services.xserver.xkb = {
     layout = "de";
   };

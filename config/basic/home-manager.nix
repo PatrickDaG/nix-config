@@ -3,6 +3,7 @@
   inputs,
   pkgs,
   nodes,
+  minimal,
   ...
 }:
 {
@@ -15,7 +16,7 @@
     useUserPackages = true;
     verbose = true;
     extraSpecialArgs = {
-      inherit nodes;
+      inherit nodes minimal;
       spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     };
     sharedModules = [
