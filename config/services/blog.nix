@@ -1,16 +1,14 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 let
-  prestart = pkgs.writeShellScript "pr-tracker-pre" ''
-    if [ ! -f ./ssh_key ]; then
-      ssh-keygen -t ed25519 -N "" -f ssh_key
+  prestart = pkgs.writeShellScript "blog-pre" ''
+    if [ ! -d ./.ssh ]; then
+      mkdir .ssh
     fi
-    ${lib.getExe pkgs.git} config core.sshCommand 'ssh -i ~/ssh_key'
+    if [ ! -f ./.ssh/id_ed25519 ]; then
+      ssh-keygen -t ed25519 -N "" -f .ssh/id_ed25519
+    fi
     if [ ! -d ./blog ]; then
-      ${lib.getExe pkgs.git} clone ssh://git@forge.lel.lol:9922/patrick/blog.git |\
+      ${lib.getExe pkgs.git} clone --recurse-submodules ssh://git@forge.lel.lol:9922/patrick/blog.git |\
       echo "failed to clone the repository did you forget to add the ssh key?"
     fi
   '';
@@ -18,14 +16,17 @@ in
 {
   wireguard.elisabeth = {
     client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
   };
   services.nginx = {
     enable = true;
     user = "blog";
     virtualHosts."blog.lel.lol" = {
-      root = "/var/lib/blog/blog/public";
+      root = "/var/lib/blog/blog/public/public";
     };
+  };
+  programs.ssh.knownHosts = {
+    "[forge.lel.lol]:9922".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOWoGqHwkLVFXJwYcKs3CjQognvlZmROUIgkvvUgNalx";
   };
   environment.persistence."/persist".directories = [
     {
