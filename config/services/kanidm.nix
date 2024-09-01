@@ -1,14 +1,12 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
 in
 {
-  imports = [ ../../modules/kanidm.nix ];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
   };
-  disabledModules = [ "services/security/kanidm.nix" ];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/kanidm";
@@ -55,6 +53,7 @@ in
     };
   };
   services.kanidm = {
+    package = pkgs.kanidm.withSecretProvisioning;
     enableServer = true;
     serverSettings = {
       domain = kanidmdomain;
@@ -85,6 +84,7 @@ in
       systems.oauth2.paperless = {
         displayName = "paperless";
         originUrl = "https://ppl.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://ppl.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-paperless.path;
         scopeMaps."paperless.access" = [
           "openid"
@@ -104,6 +104,7 @@ in
       systems.oauth2.nextcloud = {
         displayName = "nextcloud";
         originUrl = "https://nc.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://nc.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-nextcloud.path;
         allowInsecureClientDisablePkce = true;
         scopeMaps."nextcloud.access" = [
@@ -124,6 +125,7 @@ in
       systems.oauth2.immich = {
         displayName = "Immich";
         originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://immich.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
         enableLegacyCrypto = true;
@@ -145,6 +147,7 @@ in
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
         originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-proxy.path;
         scopeMaps."adguardhome.access" = [
           "openid"
@@ -197,6 +200,7 @@ in
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
         originUrl = "https://forge.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://forge.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-forgejo.path;
         scopeMaps."forgejo.access" = [
           "openid"
@@ -216,6 +220,7 @@ in
         public = true;
         displayName = "Netbird";
         originUrl = "https://netbird.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://netbird.${config.secrets.secrets.global.domains.web}/";
         preferShortUsername = true;
         enableLocalhostRedirects = true;
         enableLegacyCrypto = true;

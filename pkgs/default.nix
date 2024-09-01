@@ -28,26 +28,6 @@ _inputs: [
             --set QT_QPA_PLATFORM xcb
         '';
     });
-    kanidm = prev.kanidm.overrideAttrs (
-      old:
-      let
-        provisionSrc = prev.fetchFromGitHub {
-          owner = "oddlama";
-          repo = "kanidm-provision";
-          rev = "v1.1.0";
-          hash = "sha256-pFOFFKh3la/sZGXj+pAM8x4SMeffvvbOvTjPeHS1XPU=";
-        };
-      in
-      {
-        patches = old.patches ++ [
-          "${provisionSrc}/patches/1.2.0-oauth2-basic-secret-modify.patch"
-          "${provisionSrc}/patches/1.2.0-recover-account.patch"
-        ];
-        passthru.enableSecretProvisioning = true;
-        doCheck = false;
-      }
-    );
-    kanidm-provision = prev.callPackage ./kanidm-provision.nix { };
     #pythonPackagesExtension = prev.pythonPackagesExtension ++ [
     #  (_pythonFinal: pythonPrev: {
     #    usb-monitor =

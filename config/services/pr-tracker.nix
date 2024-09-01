@@ -122,7 +122,6 @@ in
 
   systemd.services.pr-tracker-update = {
     script = ''
-      set -eu
       ${lib.getExe pkgs.git} -C nixpkgs fetch
       ${lib.getExe pkgs.curl} http://localhost:3000/update
     '';
