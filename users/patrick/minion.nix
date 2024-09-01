@@ -26,7 +26,7 @@ let
   '';
 in
 {
-  #home.packages = [ pkgs.minion ];
+  home.packages = [ pkgs.minion ];
   # yet another program that uses the config file as a live state file
   # Why?
   home.activation.installMinionConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

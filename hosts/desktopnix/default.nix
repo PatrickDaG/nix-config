@@ -88,7 +88,7 @@ in
   nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  nixpkgs.config.cudaSupport = true;
+  #nixpkgs.config.cudaSupport = true;
 
   environment.systemPackages = [ streamcontroller ];
   services.udev.packages = [ streamcontroller ];
