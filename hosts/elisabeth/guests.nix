@@ -185,7 +185,7 @@ in
       (proxyProtect "invidious" { } true)
       (blockOf "yourspotify" { port = 80; })
       (blockOf "blog" { port = 80; })
-      #(blockOf "homebox" {})
+      (blockOf "homebox" { })
       (blockOf "pr-tracker" { })
       {
         virtualHosts.${domainOf "pr-tracker"} = {
@@ -312,7 +312,7 @@ in
     // mkContainer "ddclient" { }
     // mkContainer "ollama" { }
     // mkContainer "murmur" { }
-    #// mkContainer "homebox" {}
+    // mkContainer "homebox" { }
     // mkContainer "pr-tracker" { }
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }

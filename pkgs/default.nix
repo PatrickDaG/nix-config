@@ -5,7 +5,6 @@ _inputs: [
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
     actual = prev.callPackage ./actual.nix { };
     pr-tracker = prev.callPackage ./pr-tracker.nix { };
-    homebox = prev.callPackage ./homebox.nix { };
     deploy = prev.callPackage ./deploy.nix { };
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };

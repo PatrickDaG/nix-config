@@ -36,6 +36,8 @@
       oauth2-proxy = uidGid 224;
       influxdb2 = uidGid 225;
       firefly-iii = uidGid 226;
+      homebox = uidGid 227;
+      signal = uidGid 228;
       paperless = uidGid 315;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
@@ -48,6 +50,5 @@
       printer = uidGid 2005;
       pr-tracker = uidGid 2006;
       blog = uidGid 2007;
-      signald = uidGid 2008;
     };
 }

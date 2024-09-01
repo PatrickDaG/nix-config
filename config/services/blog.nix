@@ -18,6 +18,10 @@ in
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
   };
+  environment.systemPackages = [
+    pkgs.signal-cli
+    pkgs.cargo
+  ];
   services.nginx = {
     enable = true;
     user = "blog";
@@ -36,9 +40,9 @@ in
       mode = "0700";
     }
     {
-      directory = "/var/lib/signald";
-      user = "signald";
-      group = "signald";
+      directory = "/var/lib/signal";
+      user = "signal";
+      group = "signal";
       mode = "0700";
     }
   ];
@@ -48,6 +52,12 @@ in
       OnBootSec = "1m";
       OnUnitActiveSec = "1m";
     };
+  };
+  users.groups.signal = { };
+  users.users.signal = {
+    isSystemUser = true;
+    group = "signal";
+    home = "/var/lib/signal";
   };
   users.groups.blog = { };
   users.users.blog = {
@@ -77,8 +87,4 @@ in
     };
   };
 
-  services.signald = {
-    enable = true;
-    group = "blog";
-  };
 }

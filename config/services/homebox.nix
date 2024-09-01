@@ -1,5 +1,4 @@
 {
-  imports = [ ../../modules/homebox.nix ];
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
