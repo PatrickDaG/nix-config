@@ -47,5 +47,7 @@
       family = uidGid 2003;
       printer = uidGid 2005;
       pr-tracker = uidGid 2006;
+      blog = uidGid 2007;
+      signald = uidGid 2008;
     };
 }

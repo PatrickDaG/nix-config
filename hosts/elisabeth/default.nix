@@ -19,7 +19,6 @@
 
     ../../config/hardware/physical.nix
 
-    ./blog.nix
     ./net.nix
     ./fs.nix
   ] ++ lib.lists.optionals (!minimal) [ ./guests.nix ];

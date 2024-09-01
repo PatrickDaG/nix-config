@@ -31,6 +31,7 @@ let
         octoprint = "print";
         pr-tracker = "tracker";
         invidious = "yt";
+        blog = "blog";
       };
     in
     "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
@@ -183,6 +184,7 @@ in
       (proxyProtect "ttrss" { port = 80; } true)
       (proxyProtect "invidious" { } true)
       (blockOf "yourspotify" { port = 80; })
+      (blockOf "blog" { port = 80; })
       #(blockOf "homebox" {})
       (blockOf "pr-tracker" { })
       {
@@ -317,6 +319,7 @@ in
     // mkContainer "firefly" { }
     // mkContainer "yourspotify" { }
     // mkContainer "netbird" { }
+    // mkContainer "blog" { }
     // mkContainer "kanidm" { }
     // mkContainer "nextcloud" { enablePanzer = true; }
     // mkContainer "paperless" { enableSharedPaperless = true; }
