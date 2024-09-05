@@ -39,12 +39,6 @@ in
       group = "blog";
       mode = "0700";
     }
-    {
-      directory = "/var/lib/signal";
-      user = "signal";
-      group = "signal";
-      mode = "0700";
-    }
   ];
   systemd.timers.blog-update = {
     wantedBy = [ "timers.target" ];
@@ -52,12 +46,6 @@ in
       OnBootSec = "1m";
       OnUnitActiveSec = "1m";
     };
-  };
-  users.groups.signal = { };
-  users.users.signal = {
-    isSystemUser = true;
-    group = "signal";
-    home = "/var/lib/signal";
   };
   users.groups.blog = { };
   users.users.blog = {

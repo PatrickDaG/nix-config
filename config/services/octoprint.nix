@@ -21,8 +21,8 @@
     plugins = ps: with ps; [ ender3v2tempfix ];
     settings = {
       accessControl = {
-        addRemoteUsers = true;
-        trustRemoteUser = true;
+        #addRemoteUsers = true;
+        #trustRemoteUser = true;
         remoteUserHeader = "X-User";
       };
     };
