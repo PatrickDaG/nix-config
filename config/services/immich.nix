@@ -6,7 +6,7 @@
   ...
 }:
 let
-  version = "v1.106.4";
+  version = "v1.113.1";
   immichDomain = "immich.${config.secrets.secrets.global.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
@@ -67,7 +67,7 @@ let
       machineLearning = {
         clip = {
           enabled = true;
-          modelName = "ViT-B-32__openai";
+          modelName = "ViT-B-16-SigLIP-384__webli";
         };
         enabled = true;
         facialRecognition = {
