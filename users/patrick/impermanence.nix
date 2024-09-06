@@ -20,6 +20,7 @@
 
         # for netflix
         ".config/google-chrome"
+        ".cache/google-chrome"
 
         # For nextcloud client install
         "Nextcloud"
