@@ -62,7 +62,7 @@
     };
 
     pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -108,13 +108,7 @@
   };
 
   outputs =
-    {
-      self,
-      nixos-generators,
-      nixos-extra-modules,
-      nix-topology,
-      ...
-    }@inputs:
+    { self, nixos-generators, nixos-extra-modules, nix-topology, ... }@inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./nix/agenix-rekey.nix
@@ -124,36 +118,26 @@
         nix-topology.flakeModule
       ];
 
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
 
-      perSystem =
-        { pkgs, system, ... }:
-        {
-          topology.modules = [ ./nix/topology.nix ];
-          apps.setupHetznerStorageBoxes =
-            import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
-              {
-                inherit pkgs;
-                nixosConfigurations = inputs.self.nodes;
-                decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
-              };
-          packages.live-iso = nixos-generators.nixosGenerate {
+      perSystem = { pkgs, system, ... }: {
+        topology.modules = [ ./nix/topology.nix ];
+        apps.setupHetznerStorageBoxes = import
+          (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix") {
             inherit pkgs;
-            modules = [
-              ./nix/installer-configuration.nix
-              ./config/basic/ssh.nix
-            ];
-            format =
-              {
-                x86_64-linux = "install-iso";
-                aarch64-linux = "sd-aarch64-installer";
-              }
-              .${system};
+            nixosConfigurations = inputs.self.nodes;
+            decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
           };
-
+        packages.live-iso = nixos-generators.nixosGenerate {
+          inherit pkgs;
+          modules =
+            [ ./nix/installer-configuration.nix ./config/basic/ssh.nix ];
+          format = {
+            x86_64-linux = "install-iso";
+            aarch64-linux = "sd-aarch64-installer";
+          }.${system};
         };
+
+      };
     };
 }
