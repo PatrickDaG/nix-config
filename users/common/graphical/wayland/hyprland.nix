@@ -1,20 +1,8 @@
-{
-  pkgs,
-  lib,
-  nixosConfig,
-  ...
-}:
+{ pkgs, lib, nixosConfig, ... }:
 let
-  inherit (lib)
-    mkMerge
-    optionals
-    elem
-    mkIf
-    flip
-    concatMap
-    ;
+  inherit (lib) mkMerge optionals elem mkIf flip concatMap;
   #from https://github.com/hyprwm/Hyprland/issues/3835
-  float_script = pkgs.writeShellScript "hyprland-bitwarden-resize" ''
+  float_script = pkgs.writeShellScript "hyprland-bitwarden-float" ''
     handle() {
       case $1 in
         windowtitle*)
@@ -37,7 +25,7 @@ let
 
             hyprctl dispatch togglefloating address:0x$window_id
             hyprctl dispatch resizewindowpixel exact "512 768",address:0x$window_id
-            hyprctl dispatch movewindowpixel exact "3800 -400",address:0x$window_id
+            hyprctl dispatch movewindowpixel exact "$HYPRLAND_FLOAT_LOCATION",address:0x$window_id
           fi
           ;;
       esac
@@ -46,8 +34,7 @@ let
     # Listen to the Hyprland socket for events and process each line with the handle function
     ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
   '';
-in
-{
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     settings = mkMerge [
@@ -70,9 +57,7 @@ in
             scroll_factor = 0.7;
           };
         };
-        gestures = {
-          workspace_swipe = true;
-        };
+        gestures = { workspace_swipe = true; };
 
         general = {
           gaps_in = 0;
@@ -83,89 +68,85 @@ in
           focus_preferred_method = 1;
           workspace_center_on = 1;
         };
-        bind =
-          let
-            monitor_binds = {
-              "1" = "j";
-              "2" = "d";
-              "3" = "u";
-              "4" = "a";
-              "5" = "x";
-              "6" = "F1";
-              "7" = "F2";
-              "8" = "F3";
-              "9" = "F4";
-            };
-          in
-          [
-            "SUPER,q,killactive,"
-            "SUPER,return,fullscreen,"
-            "SUPER,f,togglefloating"
-            "SUPER,g,togglegroup"
-            "SUPER,tab,cyclenext,"
-            "ALT,tab,cyclenext,"
-            "SUPER+CTRL,r,submap,resize"
+        bind = let
+          monitor_binds = {
+            "1" = "j";
+            "2" = "d";
+            "3" = "u";
+            "4" = "a";
+            "5" = "x";
+            "6" = "F1";
+            "7" = "F2";
+            "8" = "F3";
+            "9" = "F4";
+          };
+        in [
+          "SUPER,q,killactive,"
+          "SUPER,return,fullscreen,"
+          "SUPER,f,togglefloating"
+          "SUPER,g,togglegroup"
+          "SUPER,tab,cyclenext,"
+          "ALT,tab,cyclenext,"
+          "SUPER+CTRL,r,submap,resize"
 
-            "SUPER,left,movefocus,l"
-            "SUPER,right,movefocus,r"
-            "SUPER,up,movefocus,u"
-            "SUPER,down,movefocus,d"
+          "SUPER,left,movefocus,l"
+          "SUPER,right,movefocus,r"
+          "SUPER,up,movefocus,u"
+          "SUPER,down,movefocus,d"
 
-            "SUPER,n,movefocus,l"
-            "SUPER,s,movefocus,r"
-            "SUPER,l,movefocus,u"
-            "SUPER,r,movefocus,d"
+          "SUPER,n,movefocus,l"
+          "SUPER,s,movefocus,r"
+          "SUPER,l,movefocus,u"
+          "SUPER,r,movefocus,d"
 
-            "SUPER,h,changegroupactive,b"
-            "SUPER,m,changegroupactive,f"
+          "SUPER,h,changegroupactive,b"
+          "SUPER,m,changegroupactive,f"
 
-            "SUPER + SHIFT,left,movewindoworgroup,l"
-            "SUPER + SHIFT,right,movewindoworgroup,r"
-            "SUPER + SHIFT,up,movewindoworgroup,u"
-            "SUPER + SHIFT,down,movewindoworgroup,d"
+          "SUPER + SHIFT,left,movewindoworgroup,l"
+          "SUPER + SHIFT,right,movewindoworgroup,r"
+          "SUPER + SHIFT,up,movewindoworgroup,u"
+          "SUPER + SHIFT,down,movewindoworgroup,d"
 
-            "SUPER + SHIFT,n,movewindoworgroup,l"
-            "SUPER + SHIFT,s,movewindoworgroup,r"
-            "SUPER + SHIFT,l,movewindoworgroup,u"
-            "SUPER + SHIFT,r,movewindoworgroup,d"
+          "SUPER + SHIFT,n,movewindoworgroup,l"
+          "SUPER + SHIFT,s,movewindoworgroup,r"
+          "SUPER + SHIFT,l,movewindoworgroup,u"
+          "SUPER + SHIFT,r,movewindoworgroup,d"
 
-            "SUPER,comma,workspace,-1"
-            "SUPER,period,workspace,+1"
-            "SUPER + SHIFT,comma,movetoworkspace,-1"
-            "SUPER + SHIFT,period,movetoworkspace,+1"
+          "SUPER,comma,workspace,-1"
+          "SUPER,period,workspace,+1"
+          "SUPER + SHIFT,comma,movetoworkspace,-1"
+          "SUPER + SHIFT,period,movetoworkspace,+1"
 
-            "SUPER,b,exec,firefox"
-            "SUPER,t,exec,kitty"
-            ",Menu,exec,fuzzel"
-            "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
+          "SUPER,b,exec,firefox"
+          "SUPER,t,exec,kitty"
+          ",Menu,exec,fuzzel"
+          "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
-            "CTRL,F7,pass,class:^(discord)$"
-            "CTRL,F8,pass,class:^(discord)$"
-            "CTRL,F7,pass,class:^(TeamSpeak 3)$"
-            "CTRL,F8,pass,class:^(TeamSpeak 3)$"
-            "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
+          "CTRL,F7,pass,class:^(discord)$"
+          "CTRL,F8,pass,class:^(discord)$"
+          "CTRL,F7,pass,class:^(TeamSpeak 3)$"
+          "CTRL,F8,pass,class:^(TeamSpeak 3)$"
+          "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
-            "SUPER + SHIFT,q,exit"
-          ]
-          ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
-            "SUPER,${monitor_binds."${x}"},workspace,${x}"
-            "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
-          ]);
+          "SUPER + SHIFT,q,exit"
+        ] ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
+          "SUPER,${monitor_binds."${x}"},workspace,${x}"
+          "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
+        ]);
 
         cursor.no_warps = true;
         debug.disable_logs = false;
-        env =
-          [
-            "NIXOS_OZONE_WL,1"
-            "MOZ_ENABLE_WAYLAND,1"
-            "_JAVA_AWT_WM_NONREPARENTING,1"
-            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-            "QT_QPA_PLATFORM,wayland"
-            "GDK_BACKEND,wayland"
-            "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
-            "XDG_SESSION_TYPE,wayland"
-          ]
-          ++ optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
+        env = [
+          "NIXOS_OZONE_WL,1"
+          "MOZ_ENABLE_WAYLAND,1"
+          "_JAVA_AWT_WM_NONREPARENTING,1"
+          "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+          "QT_QPA_PLATFORM,wayland"
+          "GDK_BACKEND,wayland"
+          "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
+          "XDG_SESSION_TYPE,wayland"
+        ] ++ optionals
+          (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
             # See https://wiki.hyprland.org/Nvidia/
             "LIBVA_DRIVER_NAME,nvidia"
             "GBM_BACKEND,nvidia-drm"
@@ -242,6 +223,7 @@ in
           "8, monitor:HDMI-A-1, default: true"
           "9, monitor:HDMI-A-1"
         ];
+        env = [ "HYPRLAND_FLOAT_LOCATION,3800 -400" ];
       })
       (mkIf (nixosConfig.node.name == "patricknix") {
         monitor = [
@@ -261,6 +243,7 @@ in
           "8, monitor:eDP-1"
           "9, monitor:eDP-1"
         ];
+        env = [ "HYPRLAND_FLOAT_LOCATION,1400 200" ];
       })
     ];
     extraConfig = ''
