@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
@@ -23,4 +23,8 @@
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
   wireguard.samba-patrick.client.via = "elisabeth-samba";
+  services.mullvad-vpn = {
+    enable = true;
+    package = pkgs.mullvad-vpn;
+  };
 }
