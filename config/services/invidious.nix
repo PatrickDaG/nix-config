@@ -3,6 +3,7 @@
   services.invidious = {
     enable = true;
     domain = "yt.${config.secrets.secrets.global.domains.web}";
+    sig-helper.enable = true;
     settings = {
       external_port = 443;
       https_only = true;

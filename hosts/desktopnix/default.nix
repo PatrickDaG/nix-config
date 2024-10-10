@@ -4,17 +4,6 @@
   pkgs,
   ...
 }:
-let
-  nixp = import inputs.nixpkgs-streamcontroller { system = "x86_64-linux"; };
-  streamcontroller = nixp.streamcontroller.overrideAttrs (_prev: {
-    src = pkgs.fetchFromGitHub {
-      owner = "patrickdag";
-      repo = "streamcontroller";
-      rev = "392d1696b2157c35de0c8e177c9f158371df9ec2";
-      hash = "sha256-e6MbqS2Iq/Pe7U8qvxFPENBJX55fHcdgfSw5QgoUt54=";
-    };
-  });
-in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
@@ -90,6 +79,6 @@ in
 
   #nixpkgs.config.cudaSupport = true;
 
-  environment.systemPackages = [ streamcontroller ];
-  services.udev.packages = [ streamcontroller ];
+  environment.systemPackages = [ pkgs.streamcontroller ];
+  services.udev.packages = [ pkgs.streamcontroller ];
 }

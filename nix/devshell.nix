@@ -9,9 +9,8 @@
     { config, pkgs, ... }:
     {
       pre-commit.settings.hooks = {
-        nixfmt = {
+        nixfmt-rfc-style = {
           enable = true;
-          package = pkgs.nixfmt-rfc-style;
         };
         deadnix.enable = true;
         statix.enable = true;

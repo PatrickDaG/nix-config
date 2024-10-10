@@ -5,7 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-octoprint.url = "github:patrickdag/nixpkgs/octoprint-update";
-    nixpkgs-streamcontroller.url = "github:sifmelcara/nixpkgs/streamcontroller";
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
@@ -94,7 +93,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix.url = "github:danth/stylix";
+    #stylix.url = "github:danth/stylix";
+    # https://github.com/danth/stylix/pull/589
+    stylix.url = "github:danth/stylix/ed91a20c84a80a525780dcb5ea3387dddf6cd2de";
 
     spicetify-nix = {
       url = "github:Gerg-l/spicetify-nix";
@@ -108,7 +109,13 @@
   };
 
   outputs =
-    { self, nixos-generators, nixos-extra-modules, nix-topology, ... }@inputs:
+    {
+      self,
+      nixos-generators,
+      nixos-extra-modules,
+      nix-topology,
+      ...
+    }@inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./nix/agenix-rekey.nix
@@ -118,26 +125,36 @@
         nix-topology.flakeModule
       ];
 
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
-      perSystem = { pkgs, system, ... }: {
-        topology.modules = [ ./nix/topology.nix ];
-        apps.setupHetznerStorageBoxes = import
-          (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix") {
+      perSystem =
+        { pkgs, system, ... }:
+        {
+          topology.modules = [ ./nix/topology.nix ];
+          apps.setupHetznerStorageBoxes =
+            import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
+              {
+                inherit pkgs;
+                nixosConfigurations = inputs.self.nodes;
+                decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+              };
+          packages.live-iso = nixos-generators.nixosGenerate {
             inherit pkgs;
-            nixosConfigurations = inputs.self.nodes;
-            decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+            modules = [
+              ./nix/installer-configuration.nix
+              ./config/basic/ssh.nix
+            ];
+            format =
+              {
+                x86_64-linux = "install-iso";
+                aarch64-linux = "sd-aarch64-installer";
+              }
+              .${system};
           };
-        packages.live-iso = nixos-generators.nixosGenerate {
-          inherit pkgs;
-          modules =
-            [ ./nix/installer-configuration.nix ./config/basic/ssh.nix ];
-          format = {
-            x86_64-linux = "install-iso";
-            aarch64-linux = "sd-aarch64-installer";
-          }.${system};
-        };
 
-      };
+        };
     };
 }
