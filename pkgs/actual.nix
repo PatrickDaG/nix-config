@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "actual-server";
-  version = "24.3.0";
+  version = "24.10.1";
 
   src = fetchFromGitHub {
     owner = "actualbudget";
     repo = "actual-server";
     rev = "v${version}";
-    hash = "sha256-y51Dhdn84AWR/gM4LnAzvBIBpvKwUiclnPnwzkRoJ0I=";
+    hash = "sha256-VJAD+lNamwuYmiPJLXkum6piGi5zLOHBp8cUeZagb4s=";
   };
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
   offlineCache = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
 
     outputHashMode = "recursive";
-    outputHash = "sha256-ViIIk7l+m0k0K7AaZ6cnCFc7SVNPzW6hPRdEfceO5mc=";
+    outputHash = "sha256-siq3JnM0FFmXj5iX48E1A8X0lbdHM9NNCjOcg0Pwg5I=";
   };
 
   nativeBuildInputs = [
