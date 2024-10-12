@@ -6,46 +6,49 @@
     ./plugins/neo-tree.nix
   ];
   programs.nixvim.plugins = {
+    web-devicons.enable = true;
     lualine = {
       enable = true;
-      extensions = [
-        "fzf"
-        "nvim-dap-ui"
-        "symbols-outline"
-        "trouble"
-        "neo-tree"
-        "quickfix"
-        "fugitive"
-      ];
-      componentSeparators.left = "";
-      componentSeparators.right = "";
-      sectionSeparators.left = "";
-      sectionSeparators.right = "";
-      sections = {
-        lualine_a = [ "mode" ];
-        lualine_b = [
-          "branch"
-          "filename"
+      settings = {
+        extensions = [
+          "fzf"
+          "nvim-dap-ui"
+          "symbols-outline"
+          "trouble"
+          "neo-tree"
+          "quickfix"
+          "fugitive"
         ];
-        lualine_c = [
-          "diff"
-          "diagnostics"
-        ];
-        lualine_x = [
-          "encoding"
-          "fileformat"
-          "filetype"
-        ];
-        lualine_y = [ "progress" ];
-        lualine_z = [ "location" ];
-      };
-      inactiveSections = {
-        lualine_a = [ "filename" ];
-        lualine_b = [ ];
-        lualine_c = [ "diagnostics" ];
-        lualine_x = [ ];
-        lualine_y = [ ];
-        lualine_z = [ "location" ];
+        component_separators.left = "";
+        component_separators.right = "";
+        section_separators.left = "";
+        section_separators.right = "";
+        sections = {
+          lualine_a = [ "mode" ];
+          lualine_b = [
+            "branch"
+            "filename"
+          ];
+          lualine_c = [
+            "diff"
+            "diagnostics"
+          ];
+          lualine_x = [
+            "encoding"
+            "fileformat"
+            "filetype"
+          ];
+          lualine_y = [ "progress" ];
+          lualine_z = [ "location" ];
+        };
+        inactiveSections = {
+          lualine_a = [ "filename" ];
+          lualine_b = [ ];
+          lualine_c = [ "diagnostics" ];
+          lualine_x = [ ];
+          lualine_y = [ ];
+          lualine_z = [ "location" ];
+        };
       };
     };
     fugitive.enable = true;
@@ -54,7 +57,7 @@
     rainbow-delimiters.enable = true;
     rustaceanvim = {
       enable = true;
-      settings.server.settings.files.excludeDirs = [ ".direnv" ];
+      settings.server.default_settings.files.excludeDirs = [ ".direnv" ];
     };
     indent-blankline = {
       enable = true;
@@ -76,7 +79,7 @@
     diffview.enable = true;
     treesitter = {
       enable = true;
-      indent = true;
+      settings.indent.enable = true;
       nixvimInjections = true;
     };
     #treesitter-context.enable = true;

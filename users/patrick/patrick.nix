@@ -32,6 +32,8 @@
 
       yt-dlp
 
+      hyperfine
+
       figlet
       cowsay
       cmatrix

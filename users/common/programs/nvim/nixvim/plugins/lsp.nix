@@ -49,8 +49,8 @@
         pyright.enable = true;
         texlab.enable = true;
         ocamllsp.enable = true;
-        java-language-server.enable = true;
-        nil-ls = {
+        java_language_server.enable = true;
+        nil_ls = {
           enable = true;
           settings = {
             formatting.command = [

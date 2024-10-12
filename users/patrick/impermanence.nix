@@ -22,6 +22,8 @@
         ".config/google-chrome"
         ".cache/google-chrome"
 
+        ".config/Mullvad VPN"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"

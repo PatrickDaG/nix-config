@@ -1,6 +1,18 @@
-{ pkgs, lib, nixosConfig, ... }:
+{
+  pkgs,
+  lib,
+  nixosConfig,
+  ...
+}:
 let
-  inherit (lib) mkMerge optionals elem mkIf flip concatMap;
+  inherit (lib)
+    mkMerge
+    optionals
+    elem
+    mkIf
+    flip
+    concatMap
+    ;
   #from https://github.com/hyprwm/Hyprland/issues/3835
   float_script = pkgs.writeShellScript "hyprland-bitwarden-float" ''
     handle() {
@@ -34,7 +46,8 @@ let
     # Listen to the Hyprland socket for events and process each line with the handle function
     ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
   '';
-in {
+in
+{
   wayland.windowManager.hyprland = {
     enable = true;
     settings = mkMerge [
@@ -53,100 +66,110 @@ in {
           touchpad = {
             natural_scroll = true;
             disable_while_typing = true;
-            clickfinger_behavior = true;
             scroll_factor = 0.7;
           };
         };
-        gestures = { workspace_swipe = true; };
+        gestures = {
+          workspace_swipe = true;
+        };
 
         general = {
           gaps_in = 0;
           gaps_out = 0;
           allow_tearing = true;
         };
+        render = {
+          explicit_sync = 0;
+          direct_scanout = false;
+        };
         binds = {
           focus_preferred_method = 1;
           workspace_center_on = 1;
         };
-        bind = let
-          monitor_binds = {
-            "1" = "j";
-            "2" = "d";
-            "3" = "u";
-            "4" = "a";
-            "5" = "x";
-            "6" = "F1";
-            "7" = "F2";
-            "8" = "F3";
-            "9" = "F4";
-          };
-        in [
-          "SUPER,q,killactive,"
-          "SUPER,return,fullscreen,"
-          "SUPER,f,togglefloating"
-          "SUPER,g,togglegroup"
-          "SUPER,tab,cyclenext,"
-          "ALT,tab,cyclenext,"
-          "SUPER+CTRL,r,submap,resize"
+        bind =
+          let
+            monitor_binds = {
+              "1" = "j";
+              "2" = "d";
+              "3" = "u";
+              "4" = "a";
+              "5" = "x";
+              "6" = "F1";
+              "7" = "F2";
+              "8" = "F3";
+              "9" = "F4";
+            };
+          in
+          [
+            "SUPER,q,killactive,"
+            "SUPER,return,fullscreen,"
+            "SUPER + SHIFT,return,fullscreenstate,2,0,"
+            "SUPER,f,togglefloating"
+            "SUPER,g,togglegroup"
+            "SUPER,tab,cyclenext,"
+            "ALT,tab,cyclenext,"
+            "SUPER+CTRL,r,submap,resize"
 
-          "SUPER,left,movefocus,l"
-          "SUPER,right,movefocus,r"
-          "SUPER,up,movefocus,u"
-          "SUPER,down,movefocus,d"
+            "SUPER,left,movefocus,l"
+            "SUPER,right,movefocus,r"
+            "SUPER,up,movefocus,u"
+            "SUPER,down,movefocus,d"
 
-          "SUPER,n,movefocus,l"
-          "SUPER,s,movefocus,r"
-          "SUPER,l,movefocus,u"
-          "SUPER,r,movefocus,d"
+            "SUPER,n,movefocus,l"
+            "SUPER,s,movefocus,r"
+            "SUPER,l,movefocus,u"
+            "SUPER,r,movefocus,d"
 
-          "SUPER,h,changegroupactive,b"
-          "SUPER,m,changegroupactive,f"
+            "SUPER,h,changegroupactive,b"
+            "SUPER,m,changegroupactive,f"
 
-          "SUPER + SHIFT,left,movewindoworgroup,l"
-          "SUPER + SHIFT,right,movewindoworgroup,r"
-          "SUPER + SHIFT,up,movewindoworgroup,u"
-          "SUPER + SHIFT,down,movewindoworgroup,d"
+            "SUPER + SHIFT,left,movewindoworgroup,l"
+            "SUPER + SHIFT,right,movewindoworgroup,r"
+            "SUPER + SHIFT,up,movewindoworgroup,u"
+            "SUPER + SHIFT,down,movewindoworgroup,d"
 
-          "SUPER + SHIFT,n,movewindoworgroup,l"
-          "SUPER + SHIFT,s,movewindoworgroup,r"
-          "SUPER + SHIFT,l,movewindoworgroup,u"
-          "SUPER + SHIFT,r,movewindoworgroup,d"
+            "SUPER + SHIFT,n,movewindoworgroup,l"
+            "SUPER + SHIFT,s,movewindoworgroup,r"
+            "SUPER + SHIFT,l,movewindoworgroup,u"
+            "SUPER + SHIFT,r,movewindoworgroup,d"
 
-          "SUPER,comma,workspace,-1"
-          "SUPER,period,workspace,+1"
-          "SUPER + SHIFT,comma,movetoworkspace,-1"
-          "SUPER + SHIFT,period,movetoworkspace,+1"
+            "SUPER,comma,workspace,-1"
+            "SUPER,period,workspace,+1"
+            "SUPER + SHIFT,comma,movetoworkspace,-1"
+            "SUPER + SHIFT,period,movetoworkspace,+1"
 
-          "SUPER,b,exec,firefox"
-          "SUPER,t,exec,kitty"
-          ",Menu,exec,fuzzel"
-          "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
+            "SUPER,b,exec,firefox"
+            "SUPER,t,exec,kitty"
+            ",Menu,exec,fuzzel"
+            "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
-          "CTRL,F7,pass,class:^(discord)$"
-          "CTRL,F8,pass,class:^(discord)$"
-          "CTRL,F7,pass,class:^(TeamSpeak 3)$"
-          "CTRL,F8,pass,class:^(TeamSpeak 3)$"
-          "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
+            "CTRL,F7,pass,class:^(discord)$"
+            "CTRL,F8,pass,class:^(discord)$"
+            "CTRL,F7,pass,class:^(TeamSpeak 3)$"
+            "CTRL,F8,pass,class:^(TeamSpeak 3)$"
+            "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
-          "SUPER + SHIFT,q,exit"
-        ] ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
-          "SUPER,${monitor_binds."${x}"},workspace,${x}"
-          "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
-        ]);
+            "SUPER + SHIFT,q,exit"
+          ]
+          ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
+            "SUPER,${monitor_binds."${x}"},workspace,${x}"
+            "SUPER + SHIFT,${monitor_binds."${x}"},movetoworkspacesilent,${x}"
+          ]);
 
         cursor.no_warps = true;
         debug.disable_logs = false;
-        env = [
-          "NIXOS_OZONE_WL,1"
-          "MOZ_ENABLE_WAYLAND,1"
-          "_JAVA_AWT_WM_NONREPARENTING,1"
-          "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-          "QT_QPA_PLATFORM,wayland"
-          "GDK_BACKEND,wayland"
-          "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
-          "XDG_SESSION_TYPE,wayland"
-        ] ++ optionals
-          (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
+        env =
+          [
+            "NIXOS_OZONE_WL,1"
+            "MOZ_ENABLE_WAYLAND,1"
+            "_JAVA_AWT_WM_NONREPARENTING,1"
+            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+            "QT_QPA_PLATFORM,wayland"
+            "GDK_BACKEND,wayland"
+            "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
+            "XDG_SESSION_TYPE,wayland"
+          ]
+          ++ optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
             # See https://wiki.hyprland.org/Nvidia/
             "LIBVA_DRIVER_NAME,nvidia"
             "GBM_BACKEND,nvidia-drm"
@@ -191,6 +214,7 @@ in {
           #baldur
           "immediate, class:^(steam_app_1086940)$"
           "float, class:^(steam)$, title:^(Friends List)"
+          "float, class:^(steam)$, title:(Chat)"
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
@@ -205,9 +229,9 @@ in {
       }
       (mkIf (nixosConfig.node.name == "desktopnix") {
         monitor = [
-          "DVI-D-1,preferred,0x-1080,1"
-          "HDMI-A-1,preferred,0x0,1"
-          "DP-3,2560x1440@144.00Hz,1920x-540,1"
+          "DVI-D-1,preferred,0x0,1"
+          "HDMI-A-1,preferred,0x1080,1"
+          "DP-3,2560x1440@144.00Hz,1920x540,1"
           # Thank you NVIDIA for this generous, free-of-charge, extra monitor that
           # doesn't exist and crashes yoru session sometimes when moving a window to it.
           "Unknown-1, disable"
@@ -223,7 +247,7 @@ in {
           "8, monitor:HDMI-A-1, default: true"
           "9, monitor:HDMI-A-1"
         ];
-        env = [ "HYPRLAND_FLOAT_LOCATION,3800 -400" ];
+        env = [ "HYPRLAND_FLOAT_LOCATION,3800 680" ];
       })
       (mkIf (nixosConfig.node.name == "patricknix") {
         monitor = [
