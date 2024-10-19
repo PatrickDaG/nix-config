@@ -78,10 +78,10 @@ in
           gaps_out = 0;
           allow_tearing = true;
         };
-        render = {
-          explicit_sync = 0;
-          direct_scanout = false;
-        };
+        #render = {
+        #  explicit_sync = 0;
+        #  direct_scanout = false;
+        #};
         binds = {
           focus_preferred_method = 1;
           workspace_center_on = 1;
@@ -207,14 +207,19 @@ in
         };
         xwayland.force_zero_scaling = true;
         windowrulev2 = [
-          "immediate, class:^(cs2)$"
+          # fix these once nvidia gets their shit together
+          #"immediate, class:^(cs2)$"
           # apex legends
           "immediate, class:^(steam_app_1172470)$"
+          #???
           "immediate, class:^(steam_app_238960)$"
           #baldur
-          "immediate, class:^(steam_app_1086940)$"
+          #"immediate, class:^(steam_app_1086940)$"
           "float, class:^(steam)$, title:^(Friends List)"
           "float, class:^(steam)$, title:(Chat)"
+
+          "float, class:^(streamlink-twitch-gui)$"
+
           "workspace 2,class:^(firefox)$"
           "workspace 3,class:^(thunderbird)$"
           "workspace 4,class:^(bottles)$"
