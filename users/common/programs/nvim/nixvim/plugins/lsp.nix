@@ -48,7 +48,6 @@
         zls.enable = true;
         pyright.enable = true;
         texlab.enable = true;
-        ocamllsp.enable = true;
         java_language_server.enable = true;
         nil_ls = {
           enable = true;

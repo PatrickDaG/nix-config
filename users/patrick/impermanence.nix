@@ -17,6 +17,8 @@
 
         ".config/streamcontroller"
         ".local/share/streamcontroller"
+        #TODO: remove once merged
+        ".var/app/com.core447.StreamController/"
 
         # for netflix
         ".config/google-chrome"

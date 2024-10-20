@@ -4,7 +4,10 @@
     settings = {
       auto-optimise-store = true;
       allowed-users = [ "@wheel" ];
-      trusted-users = [ "root" ];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
       system-features = [
         "recursive-nix"
         "repl-flake"

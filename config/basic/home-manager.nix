@@ -9,7 +9,6 @@
 {
   imports = [
     ../../modules-hm/impermanence.nix
-    ../../modules-hm/images.nix
   ];
   home-manager = {
     useGlobalPkgs = true;

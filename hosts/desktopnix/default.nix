@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -28,8 +27,6 @@
     ../../config/optional/steam.nix
     ../../config/optional/xserver.nix
     ../../config/optional/zfs.nix
-
-    ../../modules-hm/streamdeck.nix
 
     ./net.nix
     ./fs.nix
@@ -79,6 +76,5 @@
 
   #nixpkgs.config.cudaSupport = true;
 
-  environment.systemPackages = [ pkgs.streamcontroller ];
-  services.udev.packages = [ pkgs.streamcontroller ];
+  programs.streamcontroller.enable = true;
 }
