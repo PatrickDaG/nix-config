@@ -69,10 +69,9 @@ in
 
   services.samba = {
     enable = true;
-    securityType = "user";
     openFirewall = true;
-    enableWinbindd = false;
-    enableNmbd = false;
+    winbindd.enable = false;
+    nmbd.enable = false;
     settings =
       let
         mkShare =
@@ -129,6 +128,7 @@ in
         {
           global = {
             logging = "systemd";
+            security = "user";
             "log level" = "0 auth:2 passdb:2";
             "passdb backend" = "tdbsam:${config.age.secrets.smbpassdb.path}";
             "server role" = "standalone";
@@ -267,27 +267,27 @@ in
   fileSystems = lib.mkMerge (
     lib.flip lib.mapAttrsToList shares (
       _: v:
-      lib.optionalAttrs ((v ? "#paperless") && lib.head v."#paperless") {
-        "${lib.head v.path}/consume" = {
+      lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
+        "${v.path}/consume" = {
           fsType = "none";
           options = [ "bind" ];
-          device = "/paperless/consume/${lib.head v."#user"}";
+          device = "/paperless/consume/${v."#user"}";
         };
-        "${lib.head v.path}/media/archive" = {
+        "${v.path}/media/archive" = {
           fsType = "none  ";
           options = [
             "bind"
             "ro"
           ];
-          device = "/paperless/media/documents/archive/${lib.head v."#user"}";
+          device = "/paperless/media/documents/archive/${v."#user"}";
         };
-        "${lib.head v.path}/media/originals" = {
+        "${v.path}/media/originals" = {
           fsType = "none  ";
           options = [
             "bind"
             "ro"
           ];
-          device = "/paperless/media/documents/originals/${lib.head v."#user"}";
+          device = "/paperless/media/documents/originals/${v."#user"}";
         };
       }
     )
@@ -296,13 +296,13 @@ in
   systemd.tmpfiles.settings = lib.mkMerge (
     lib.flip lib.mapAttrsToList shares (
       _: v:
-      lib.optionalAttrs ((v ? "#paperless") && lib.head v."#paperless") {
+      lib.optionalAttrs ((v ? "#paperless") && v."#paperless") {
         "10-smb-paperless"."/paperless/consume/".d = {
           user = "paperless";
           group = "paperless";
           mode = "0770";
         };
-        "10-smb-paperless"."/paperless/consume/${lib.head v."#user"}".d = {
+        "10-smb-paperless"."/paperless/consume/${v."#user"}".d = {
           user = "paperless";
           group = "paperless";
           mode = "0770";
@@ -323,12 +323,12 @@ in
           group = "paperless";
           mode = "0770";
         };
-        "10-smb-paperless"."/paperless/media/documents/archive/${lib.head v."#user"}".d = {
+        "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}".d = {
           user = "paperless";
           group = "paperless";
           mode = "0770";
         };
-        "10-smb-paperless"."/paperless/media/documents/archive/${lib.head v."#user"}/.keep".f = {
+        "10-smb-paperless"."/paperless/media/documents/archive/${v."#user"}/.keep".f = {
           user = "paperless";
           group = "paperless";
           mode = "0660";
@@ -338,12 +338,12 @@ in
           group = "paperless";
           mode = "0770";
         };
-        "10-smb-paperless"."/paperless/media/documents/originals/${lib.head v."#user"}".d = {
+        "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}".d = {
           user = "paperless";
           group = "paperless";
           mode = "0770";
         };
-        "10-smb-paperless"."/paperless/media/documents/originals/${lib.head v."#user"}/.keep".f = {
+        "10-smb-paperless"."/paperless/media/documents/originals/${v."#user"}/.keep".f = {
           user = "paperless";
           group = "paperless";
           mode = "0660";
@@ -355,12 +355,12 @@ in
     lib.flatten [
       (lib.flip lib.mapAttrsToList shares (
         _: v:
-        lib.optionalAttrs ((v ? "#persistRoot") && (lib.head v."#persistRoot" != "")) {
-          ${lib.head v."#persistRoot"}.directories = [
+        lib.optionalAttrs ((v ? "#persistRoot") && (v."#persistRoot" != "")) {
+          ${v."#persistRoot"}.directories = [
             {
-              directory = "${lib.head v.path}";
-              user = "${lib.head v."force user"}";
-              group = "${lib.head v."force group"}";
+              directory = "${v.path}";
+              user = "${v."force user"}";
+              group = "${v."force group"}";
               mode = "0770";
             }
           ];
