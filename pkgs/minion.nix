@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
-  openjdk17,
+  openjdk22,
   makeDesktopItem,
   javaPackages,
   gsettings-desktop-schemas,
@@ -10,8 +10,8 @@
 }:
 
 let
-  openjfx = javaPackages.openjfx17.override { withWebKit = true; };
-  jdk = openjdk17.override (
+  openjfx = javaPackages.openjfx22.override { withWebKit = true; };
+  jdk = openjdk22.override (
     prev:
     prev
     // {
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "minion";
 
   src = fetchzip {
-    url = "https://cdn.mmoui.com/minion/v3/Minion3.0.12-java.zip";
+    url = "https://cdn.mmoui.com/minion/v3/Minion${version}-java.zip";
     hash = "sha256-KjSj3TBMY3y5kgIywtIDeil0L17dau/Rb2HuXAulSO8=";
     stripRoot = false;
   };
@@ -40,7 +40,12 @@ stdenvNoCC.mkDerivation rec {
     #!${stdenvNoCC.shell}
     CLASSPATH="$out/lib"
     XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:XDG_DATA_DIRS"
-    exec ${lib.getExe jdk} -cp "$CLASSPATH ./lib" -jar "$out/lib/${pname}/Minion-jfx.jar" "\$@"
+    exec ${lib.getExe jdk} \
+    --add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED \
+    --add-exports=javafx.graphics/javafx.scene.image=ALL-UNNAMED \
+    --add-opens=javafx.graphics/javafx.scene.image=ALL-UNNAMED \
+    --add-opens=java.base/java.lang=ALL-UNNAMED \
+    -cp "$CLASSPATH ./lib" -jar "$out/lib/${pname}/Minion-jfx.jar" "\$@"
     EOF
 
     chmod a+x "$out/bin/${pname}"
@@ -58,8 +63,11 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "MMO Addon manager";
-    homepage = "https://www.mmoui.com/";
-    platforms = platforms.linux ++ platforms.darwin;
+    description = "Addon manager for World of Warcraft and The Elder Scrolls Online";
+    homepage = "https://minion.mmoui.com/";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.all;
+    mainProgram = minion;
+    maintainers = with lib.maintainers; [ patrickdag ];
   };
 }
