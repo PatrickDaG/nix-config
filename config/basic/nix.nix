@@ -6,7 +6,6 @@
       allowed-users = [ "@wheel" ];
       trusted-users = [
         "root"
-        "@wheel"
       ];
       system-features = [
         "recursive-nix"

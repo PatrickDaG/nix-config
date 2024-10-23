@@ -26,6 +26,10 @@
 
         ".config/Mullvad VPN"
 
+        ".local/share/osu"
+
+        ".config/obs-studio"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"

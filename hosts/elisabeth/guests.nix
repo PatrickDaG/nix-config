@@ -177,7 +177,13 @@ in
       }
       (blockOf "vaultwarden" { maxBodySize = "1G"; })
       (blockOf "forgejo" { maxBodySize = "1G"; })
-      (blockOf "immich" { maxBodySize = "5G"; })
+      (blockOf "immich" {
+        maxBodySize = "5G";
+        virtualHostExtraConfig = ''
+          proxy_buffering off;
+          proxy_request_buffering off;
+        '';
+      })
       (proxyProtect "adguardhome" { } true)
       (proxyProtect "oauth2-proxy" { } false)
       (blockOf "paperless" { maxBodySize = "5G"; })

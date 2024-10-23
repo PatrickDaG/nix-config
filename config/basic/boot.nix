@@ -9,7 +9,7 @@
     initrd.systemd = {
       enable = true;
       emergencyAccess = config.secrets.secrets.global.users.root.passwordHash;
-      extraBin.ip = "${pkgs.iproute}/bin/ip";
+      extraBin.ip = "${pkgs.iproute2}/bin/ip";
       extraBin.cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
       users.root.shell = "${pkgs.bashInteractive}/bin/bash";
       storePaths = [ "${pkgs.bashInteractive}/bin/bash" ];

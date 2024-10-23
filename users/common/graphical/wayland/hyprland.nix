@@ -69,6 +69,10 @@ in
             scroll_factor = 0.7;
           };
         };
+        device = {
+          name = "xp-pen-g430s-pen";
+          active_area_size = "48 27";
+        };
         gestures = {
           workspace_swipe = true;
         };
@@ -233,6 +237,9 @@ in
         ];
       }
       (mkIf (nixosConfig.node.name == "desktopnix") {
+        input.tablet = {
+          output = "DP-3";
+        };
         monitor = [
           "DVI-D-1,preferred,0x0,1"
           "HDMI-A-1,preferred,0x1080,1"

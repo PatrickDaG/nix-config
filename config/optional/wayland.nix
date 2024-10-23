@@ -9,6 +9,7 @@ lib.optionalAttrs (!minimal) {
   environment.systemPackages = with pkgs; [
     wdisplays
     wl-clipboard
+    wev
   ];
   xdg.portal = {
     enable = true;
