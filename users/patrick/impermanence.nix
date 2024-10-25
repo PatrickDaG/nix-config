@@ -24,8 +24,6 @@
         ".config/google-chrome"
         ".cache/google-chrome"
 
-        ".config/Mullvad VPN"
-
         ".local/share/osu"
 
         ".config/obs-studio"

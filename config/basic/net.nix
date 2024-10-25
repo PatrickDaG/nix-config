@@ -38,4 +38,7 @@
     enable = true;
     package = pkgs.mullvad-vpn;
   };
+  environment.persistence."/state".directories = [
+    "/etc/mullvad-vpn"
+  ];
 }
