@@ -40,8 +40,9 @@
     nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];
     optimise.automatic = true;
     gc = {
+      # collect garbage(oddlama for example)
       automatic = true;
-      dates = "monthly";
+      dates = "weekly";
     };
 
     registry = {
