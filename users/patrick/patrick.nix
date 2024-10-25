@@ -58,4 +58,11 @@
       lib.escapeShellArg nixosConfig.age.secrets."my-gpg-yubikey-keygrip.tar".path
     } -C "$HOME/.gnupg/private-keys-v1.d/"
   '';
+  # Autostart hyprland if on tty1 (once, don't restart after logout)
+  programs.zsh.initExtra = lib.mkOrder 9999 ''
+    if [[ -t 0 && "$(tty || true)" == /dev/tty1 && -z "$DISPLAY" && -z "$WAYLAND_DISPLAY" ]]; then
+      echo "Login shell detected. Starting hyprland..."
+      dbus-run-session Hyprland
+    fi
+  '';
 }
