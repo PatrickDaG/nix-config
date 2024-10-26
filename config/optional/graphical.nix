@@ -67,7 +67,7 @@ in
         '';
       };
       packages = with pkgs; [
-        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+        (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
         ibm-plex
         dejavu_fonts
         unifont
