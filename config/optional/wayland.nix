@@ -5,7 +5,10 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
-  services.dbus.enable = true;
+  services.dbus = {
+    enable = true;
+    implementation = "broker";
+  };
   environment.systemPackages = with pkgs; [
     wdisplays
     wl-clipboard

@@ -22,6 +22,8 @@
       zotero
       timer
       orca-slicer
+      hexyl
+      gh
 
       via
 
