@@ -8,7 +8,7 @@
 
   programs.gpg = {
     enable = true;
-    #scdaemonSettings.disable-ccid = true;
+    scdaemonSettings.disable-ccid = true;
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
       # https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html
