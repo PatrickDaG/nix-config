@@ -70,11 +70,11 @@
     smartindent = true;
 
     # Only wait 20 milliseconds for characters to arrive (see :help timeout)
-    timeoutlen = 20;
+    timeoutlen = 500; # wait for whichkey
     ttimeoutlen = 20;
 
     # Disable timeout, set ttimeout (only timeout on keycodes)
-    timeout = false;
+    timeout = true;
     ttimeout = true;
 
     # replace grep with ripgrep
