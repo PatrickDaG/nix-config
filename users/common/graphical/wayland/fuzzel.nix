@@ -1,9 +1,13 @@
-{ pkgs, ... }:
+{ lib, ... }:
 {
   stylix.targets.fuzzel.enable = true;
-  home.packages = with pkgs; [
-    (writeShellScriptBin "fuzzel" ''
-      ${lib.getExe fuzzel} --background-color=000000ff
-    '')
-  ];
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      main = {
+        launch-prefix = "uwsm app --";
+      };
+      colors.background = lib.mkForce "000000ff";
+    };
+  };
 }

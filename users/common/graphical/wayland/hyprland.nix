@@ -142,9 +142,9 @@ in
             "SUPER + SHIFT,comma,movetoworkspace,-1"
             "SUPER + SHIFT,period,movetoworkspace,+1"
 
-            "SUPER,b,exec,firefox"
-            "SUPER,t,exec,kitty"
-            ",Menu,exec,fuzzel"
+            "SUPER,b,exec,uwsm app -- firefox"
+            "SUPER,t,exec,uwsm app -- kitty"
+            ",Menu,exec,uwsm app -- fuzzel"
             "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
             "CTRL,F7,pass,class:^(discord)$"
@@ -153,7 +153,7 @@ in
             "CTRL,F8,pass,class:^(TeamSpeak 3)$"
             "CTRL,F9,exec,systemctl --user start swww-update-wallpaper"
 
-            "SUPER + SHIFT,q,exit"
+            "SUPER + SHIFT,q,exec,uwsm stop"
           ]
           ++ flip concatMap (map toString (lib.lists.range 1 9)) (x: [
             "SUPER,${monitor_binds."${x}"},workspace,${x}"
@@ -172,6 +172,7 @@ in
             "GDK_BACKEND,wayland"
             "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
             "XDG_SESSION_TYPE,wayland"
+            "TERMINAL,uwsm app -- kitty"
           ]
           ++ optionals (elem "nvidia" nixosConfig.services.xserver.videoDrivers) [
             # See https://wiki.hyprland.org/Nvidia/
@@ -198,10 +199,6 @@ in
         };
         decoration.rounding = 4;
         exec-once = [
-          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-          "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-          "systemctl --user restart xdg-desktop-portal.service"
-          "${pkgs.waybar}/bin/waybar"
           "${pkgs.swaynotificationcenter}/bin/swaync"
         ];
         misc = {
@@ -299,6 +296,7 @@ in
       exec-once = ${pkgs.xorg.xprop}/bin/xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
       exec-once = ${float_script}
       env = XCURSOR_SIZE,48
+      exec-once = uwsm finalize
 
     '';
   };

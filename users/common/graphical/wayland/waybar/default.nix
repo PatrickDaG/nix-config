@@ -5,9 +5,13 @@
   ...
 }:
 {
+  systemd.user.services."waybar" = {
+    Unit.After = [ "graphical-session.target" ];
+    Service.Slice = [ "app-graphical.slice" ];
+  };
   programs.waybar = {
     enable = true;
-    systemd.enable = false;
+    systemd.enable = true;
     style =
       (
         {

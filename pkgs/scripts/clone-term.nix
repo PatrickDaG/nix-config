@@ -46,6 +46,6 @@ writeShellApplication {
     fi
 
     # kitty should be from user env
-    kitty --detach -d "$(readlink "/proc/''${SELECTED}/cwd")"
+    $TERMINAL --detach -d "$(readlink "/proc/''${SELECTED}/cwd")"
   '';
 }

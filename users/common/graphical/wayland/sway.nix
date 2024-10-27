@@ -15,6 +15,7 @@
             command = "swaymsg input \"*\" xkb_switch_layout 1";
             always = true;
           }
+          { command = "uwsm finalize"; }
         ];
         input = {
           "*" = {

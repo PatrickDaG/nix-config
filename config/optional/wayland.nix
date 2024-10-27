@@ -28,4 +28,18 @@ lib.optionalAttrs (!minimal) {
       pkgs.xdg-desktop-portal-gtk
     ];
   };
+  services.displayManager.enable = true;
+  programs.uwsm = {
+    enable = true;
+    waylandCompositors = {
+      hyprland = {
+        binPath = "/etc/profiles/per-user/patrick/bin/Hyprland";
+        prettyName = "Hyprland";
+      };
+      sway = {
+        binPath = "/etc/profiles/per-user/patrick/bin/sway";
+        prettyName = "Sway";
+      };
+    };
+  };
 }

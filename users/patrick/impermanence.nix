@@ -24,6 +24,8 @@
         ".config/google-chrome"
         ".cache/google-chrome"
 
+        ".config/gh"
+
         ".local/share/osu"
 
         ".config/obs-studio"

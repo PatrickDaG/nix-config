@@ -21,9 +21,9 @@ in
     services = {
       swww = {
         Install.WantedBy = [ "graphical-session.target" ];
+        Unit.After = [ "graphical-session.target" ];
         Unit = {
           Description = "Wayland wallpaper daemon";
-          PartOf = [ "graphical-session.target" ];
         };
         Service = {
           ExecStart = "${pkgs.swww}/bin/swww-daemon";
@@ -31,7 +31,6 @@ in
         };
       };
       swww-update-wallpaper = {
-        Install.WantedBy = [ "default.target" ];
         Unit.Description = "Update the wallpaper";
         Service = {
           Type = "oneshot";
@@ -42,7 +41,8 @@ in
       };
     };
     timers.swww-update-wallpaper = {
-      Install.WantedBy = [ "timers.target" ];
+      Install.WantedBy = [ "graphical-session.target" ];
+      Unit.After = [ "graphical-session.target" ];
       Unit.Description = "Periodically switch to a new wallpaper";
       Timer.OnCalendar = "*:0/3"; # Every 5 minutes
     };
