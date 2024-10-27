@@ -168,7 +168,7 @@ in
             "MOZ_ENABLE_WAYLAND,1"
             "_JAVA_AWT_WM_NONREPARENTING,1"
             "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-            "QT_QPA_PLATFORM,wayland"
+            "QT_QPA_PLATFORM,wayland;xcb"
             "GDK_BACKEND,wayland"
             "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
             "XDG_SESSION_TYPE,wayland"

@@ -59,7 +59,7 @@
         ".config/spotify"
         ".cache/spotify"
         ".local/share/cargo"
-        #".local/share/wallpapers"
+        ".local/share/wallpapers"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (nixosConfig.disko.devices.zpool ? "panzer") [
