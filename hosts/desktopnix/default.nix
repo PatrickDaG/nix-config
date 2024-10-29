@@ -26,6 +26,8 @@
     ../../config/optional/secureboot.nix
     ../../config/optional/steam.nix
     ../../config/optional/xserver.nix
+    ../../config/optional/wayland.nix
+    ../../config/optional/vr.nix
     ../../config/optional/zfs.nix
 
     ./net.nix

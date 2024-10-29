@@ -24,6 +24,7 @@
       orca-slicer
       hexyl
       gh
+      nixpkgs-review
 
       via
 

@@ -4,7 +4,7 @@
     enable = true;
     settings = {
       main = {
-        launch-preix = "uwsm app --";
+        launch-prefix = "uwsm app --";
       };
     };
   };

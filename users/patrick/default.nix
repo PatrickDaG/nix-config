@@ -63,6 +63,7 @@ lib.optionalAttrs (!minimal) {
         ./gpg
         ./impermanence.nix
         ./minion.nix
+        ./vr.nix
 
         ../common
         ../common/impermanence.nix

@@ -48,6 +48,9 @@ let
   '';
 in
 {
+  # UWSM starts a SH to read env variables
+  # this ensures all home.sessionVars are exported
+  programs.bash.enable = true;
   wayland.windowManager.hyprland = {
     enable = true;
     settings = mkMerge [
@@ -144,7 +147,7 @@ in
 
             "SUPER,b,exec,uwsm app -- firefox"
             "SUPER,t,exec,uwsm app -- kitty"
-            ",Menu,exec,uwsm app -- fuzzel"
+            ",Menu,exec,fuzzel"
             "SUPER,c,exec,${lib.getExe pkgs.scripts.clone-term}"
 
             "CTRL,F7,pass,class:^(discord)$"

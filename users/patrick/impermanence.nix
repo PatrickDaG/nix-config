@@ -30,6 +30,8 @@
 
         ".config/obs-studio"
 
+        ".local/share/monado"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
