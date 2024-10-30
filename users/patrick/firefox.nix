@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  programs.firefox =
+  hm.programs.firefox =
     let
       betterfox = pkgs.fetchFromGitHub {
         owner = "yokoffing";

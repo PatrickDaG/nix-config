@@ -10,33 +10,27 @@
 
     ../../config/basic
 
-    ../../config/hardware/bluetooth.nix
-    ../../config/hardware/laptop.nix
-    ../../config/hardware/nvidia.nix
-    ../../config/hardware/physical.nix
-    ../../config/hardware/pipewire.nix
-    ../../config/hardware/prime-offload.nix
-    ../../config/hardware/yubikey.nix
-
-    ../../config/optional/dev.nix
-    ../../config/optional/graphical.nix
-    ../../config/optional/printing.nix
-    ../../config/optional/secureboot.nix
-    ../../config/optional/steam.nix
-    ../../config/optional/wayland.nix
-    ../../config/optional/zfs.nix
+    ../../config/support/bluetooth.nix
+    ../../config/support/laptop.nix
+    ../../config/support/nvidia.nix
+    ../../config/support/physical.nix
+    ../../config/support/pipewire.nix
+    ../../config/support/prime-offload.nix
+    ../../config/support/printing.nix
+    ../../config/support/secureboot.nix
+    ../../config/support/yubikey.nix
+    ../../config/support/zfs.nix
 
     ./net.nix
     ./fs.nix
 
-    ../../users/patrick
+    #../../users/patrick
   ];
   stylix.fonts.sizes = {
     terminal = 9;
     applications = 9;
     desktop = 8;
   };
-  hidpi = true;
   services = {
     xserver.xkb = {
       layout = "de";

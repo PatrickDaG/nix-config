@@ -1,9 +1,9 @@
 {
   imports = [
     ../../config/basic
-    ../../config/optional/initrd-ssh.nix
+    ../../config/support/initrd-ssh.nix
     ../../config/services/maddy.nix
-    ../../config/optional/zfs.nix
+    ../../config/support/zfs.nix
 
     ./net.nix
     ./fs.nix

@@ -13,22 +13,16 @@
 
     ../../config/basic
 
-    ../../config/hardware/bluetooth.nix
-    ../../config/hardware/nintendo.nix
-    ../../config/hardware/nvidia.nix
-    ../../config/hardware/physical.nix
-    ../../config/hardware/pipewire.nix
-    ../../config/hardware/yubikey.nix
-
-    ../../config/optional/dev.nix
-    ../../config/optional/graphical.nix
-    ../../config/optional/printing.nix
-    ../../config/optional/secureboot.nix
-    ../../config/optional/steam.nix
-    ../../config/optional/xserver.nix
-    ../../config/optional/wayland.nix
-    ../../config/optional/vr.nix
-    ../../config/optional/zfs.nix
+    ../../config/support/bluetooth.nix
+    ../../config/support/nintendo.nix
+    ../../config/support/nvidia.nix
+    ../../config/support/physical.nix
+    ../../config/support/pipewire.nix
+    ../../config/support/printing.nix
+    ../../config/support/secureboot.nix
+    ../../config/support/vr.nix
+    ../../config/support/yubikey.nix
+    ../../config/support/zfs.nix
 
     ./net.nix
     ./fs.nix

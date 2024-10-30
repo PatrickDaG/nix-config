@@ -13,11 +13,10 @@
 
     ../../config/basic
 
-    ../../config/optional/initrd-ssh.nix
-    ../../config/optional/secureboot.nix
-    ../../config/optional/zfs.nix
-
-    ../../config/hardware/physical.nix
+    ../../config/support/initrd-ssh.nix
+    ../../config/support/physical.nix
+    ../../config/support/secureboot.nix
+    ../../config/support/zfs.nix
 
     ./net.nix
     ./fs.nix

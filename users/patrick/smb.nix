@@ -1,9 +1,9 @@
-{ nixosConfig, nodes, ... }:
+{ config, nodes, ... }:
 {
-  home.smb =
+  hm.home.smb =
     let
       address = nodes.elisabeth-samba.config.wireguard.samba-patrick.ipv4;
-      credentials = nixosConfig.age.secrets.smb-creds.path;
+      credentials = config.age.secrets.smb-creds.path;
     in
     [
       {
@@ -37,4 +37,10 @@
         automatic = true;
       }
     ];
+  age.secrets = {
+    smb-creds = {
+      owner = "patrick";
+      rekeyFile = ../../secrets/smb.cred.age;
+    };
+  };
 }

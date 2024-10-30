@@ -15,7 +15,7 @@ let
   envStr = concatStringsSep " " (mapAttrsToList (n: v: "${n}=${escapeShellArg v}") env);
 in
 {
-  programs.firefox = {
+  hm.programs.firefox = {
     enable = true;
     package = pkgs.firefox.overrideAttrs (old: {
       buildCommand =
@@ -26,12 +26,12 @@ in
         '';
     });
   };
-  home.persistence."/state".directories = [
+  hm.home.persistence."/state".directories = [
     ".cache/mozilla"
     ".mozilla"
   ];
-  xdg.mimeApps.enable = true;
-  xdg.mimeApps.defaultApplications = {
+  hm.xdg.mimeApps.enable = true;
+  hm.xdg.mimeApps.defaultApplications = {
     "text/html" = [ "firefox.desktop" ];
     "text/xml" = [ "firefox.desktop" ];
     "x-scheme-handler/http" = [ "firefox.desktop" ];

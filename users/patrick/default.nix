@@ -6,6 +6,7 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  primaryUser = "patrick";
   users.users.patrick = {
     shell = pkgs.zsh;
     isNormalUser = true;
@@ -40,12 +41,6 @@ lib.optionalAttrs (!minimal) {
     # xournalpp needs this or else it will crash
     adwaita-icon-theme
   ];
-  age.secrets = {
-    smb-creds = {
-      owner = "patrick";
-      rekeyFile = ../../secrets/smb.cred.age;
-    };
-  };
 
   programs.dconf.enable = true;
   age.secrets."my-gpg-yubikey-keygrip.tar" = {
@@ -54,43 +49,38 @@ lib.optionalAttrs (!minimal) {
     mode = "640";
   };
 
-  home-manager.users.patrick = {
-    imports =
-      [
-        ./patrick.nix
-        ./ssh.nix
-        ./firefox.nix
-        ./gpg
-        ./impermanence.nix
-        ./minion.nix
-        ./vr.nix
+  imports = [
 
-        ../common
-        ../common/impermanence.nix
+    ./firefox.nix
+    ./gpg
+    ./impermanence.nix
+    ./minion.nix
+    ./patrick.nix
+    ./smb.nix
+    ./ssh.nix
+    ./theme.nix
 
-        ../common/programs/bottles.nix
-        ../common/programs/direnv.nix
-        ../common/programs/firefox.nix
-        ../common/programs/gdb.nix
-        ../common/programs/git.nix
-        ../common/programs/kitty.nix
-        ../common/programs/minecraft.nix
-        ../common/programs/nvim
-        ../common/programs/poe.nix
-        ../common/programs/spicetify.nix
-        ../common/programs/thunderbird.nix
-        ../common/programs/gpu-screen-recorder.nix
-        ../common/shells/pager.nix
-      ]
-      ++ {
-        "desktopnix" = [
-          ../common/graphical/Xorg
-          ../common/programs/obs.nix
-          ../common/graphical/wayland
-          ./smb.nix
-        ];
-        "patricknix" = [ ../common/graphical/wayland ];
-      }
-      .${config.node.name} or [ ];
-  };
+    ../common/alias.nix
+    ../common/dev.nix
+    ../common/wayland
+
+    ../common/programs/bottles.nix
+    ../common/programs/direnv.nix
+    ../common/programs/firefox.nix
+    ../common/programs/gdb.nix
+    ../common/programs/git.nix
+    ../common/programs/gpg.nix
+    ../common/programs/gpu-screen-recorder.nix
+    ../common/programs/kitty.nix
+    ../common/programs/minecraft.nix
+    ../common/programs/nvim
+    ../common/programs/obs.nix
+    ../common/programs/pager.nix
+    ../common/programs/poe.nix
+    ../common/programs/spicetify.nix
+    ../common/programs/steam.nix
+    ../common/programs/thunderbird.nix
+    ../common/programs/zsh
+
+  ];
 }

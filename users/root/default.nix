@@ -1,8 +1,6 @@
 {
   pkgs,
   config,
-  lib,
-  minimal,
   ...
 }:
 {
@@ -17,5 +15,4 @@
     ];
     hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
   };
-  home-manager.users.root.imports = lib.lists.optionals (!minimal) [ ../common ];
 }

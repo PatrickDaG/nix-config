@@ -1,6 +1,9 @@
-{ spicePkgs, ... }:
+{ inputs, pkgs, ... }:
+let
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+in
 {
-  programs.spicetify = {
+  hm.programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.retroBlur;
     colorScheme = "Purple";

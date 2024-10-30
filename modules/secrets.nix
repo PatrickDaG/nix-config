@@ -65,24 +65,4 @@ in
       '';
     };
   };
-  config.home-manager.sharedModules = [
-    (
-      { config, ... }:
-      {
-        options = {
-          userSecretsFile = mkOption {
-            default = ../users/${config._module.args.name}/secrets.nix.age;
-            type = types.path;
-            description = "The global secrets attribute that should be exposed to the user";
-          };
-          userSecrets = mkOption {
-            readOnly = true;
-            default = importEncrypted config.userSecretsFile inputs;
-            type = types.unspecified;
-            description = "User secrets";
-          };
-        };
-      }
-    )
-  ];
 }

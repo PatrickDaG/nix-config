@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
   # addon-path is base64 encode path
   cfgFile = pkgs.writeText "mimion.xml" ''
@@ -26,12 +26,14 @@ let
   '';
 in
 {
-  home.packages = [ pkgs.minion ];
+  hm.home.packages = [ pkgs.minion ];
   # yet another program that uses the config file as a live state file
   # Why?
-  home.activation.installMinionConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run mkdir -p .minion
-    run cp -f ${cfgFile} .minion/minion.xml
-    run chmod 640 .minion/minion.xml
-  '';
+  hm.home.activation.installMinionConfig =
+    config.home-manager.users.root.lib.dag.entryAfter [ "writeBoundary" ]
+      ''
+        run mkdir -p .minion
+        run cp -f ${cfgFile} .minion/minion.xml
+        run chmod 640 .minion/minion.xml
+      '';
 }

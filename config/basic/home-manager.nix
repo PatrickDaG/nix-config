@@ -1,7 +1,6 @@
 {
   stateVersion,
   inputs,
-  pkgs,
   nodes,
   minimal,
   ...
@@ -9,6 +8,7 @@
 {
   imports = [
     ../../modules-hm/impermanence.nix
+    ../../modules-hm/hm-all.nix
   ];
   home-manager = {
     useGlobalPkgs = true;
@@ -16,10 +16,12 @@
     verbose = true;
     extraSpecialArgs = {
       inherit nodes minimal;
-      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     };
     sharedModules = [
-      { home.stateVersion = stateVersion; }
+      {
+        home.stateVersion = stateVersion;
+        systemd.user.startServices = "sd-switch";
+      }
       inputs.nix-index-database.hmModules.nix-index
       inputs.nixos-extra-modules.homeManagerModules.default
       inputs.nixvim.homeManagerModules.nixvim

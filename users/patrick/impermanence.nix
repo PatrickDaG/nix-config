@@ -1,17 +1,21 @@
-{ nixosConfig, lib, ... }:
+{ config, lib, ... }:
 {
-  home.persistence = {
+  hm.home.persistence = {
     "/state" = {
+      files = [
+        ".ssh/known_hosts"
+      ];
       directories = [
         "repos"
         "Downloads"
-
         "Zotero"
 
         ".config/ts3client"
 
         ".config/xournalpp"
         ".cache/xournalpp"
+
+        ".local/state/wireplumber"
 
         ".config/OrcaSlicer"
 
@@ -28,13 +32,12 @@
 
         ".local/share/osu"
 
-        ".config/obs-studio"
-
         ".local/share/monado"
 
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
+        ".config/dconf"
 
         # for electron signal app state
         ".config/Signal"
@@ -45,27 +48,13 @@
 
         ".cache/mpv"
 
-        # Folders for steam
-        ".local/share/Steam"
-        ".steam"
-        # Ken follets pillars of earth
-        ".local/share//Daedalic Entertainment GmbH/"
-        # Nvidia shader cache
-        ".cache/nvidia"
-        # Vulkan shader cache
-        ".local/share/vulkan"
-
-        # bottles state games
-        ".local/share/bottles"
-
         ".config/spotify"
         ".cache/spotify"
         ".local/share/cargo"
         ".local/share/wallpapers"
       ];
     };
-    "/panzer/state".directories = lib.lists.optionals (nixosConfig.disko.devices.zpool ? "panzer") [
-      ".local/share/SteamPanzer"
+    "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [
       "videos"
     ];
   };

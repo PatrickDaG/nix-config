@@ -1,5 +1,5 @@
 { pkgs, ... }:
 {
-  home.persistence."/persist".directories = [ ".local/share/PrismLauncher" ];
-  home.packages = [ pkgs.prismlauncher ];
+  hm.home.persistence."/persist".directories = [ ".local/share/PrismLauncher" ];
+  hm.home.packages = [ pkgs.prismlauncher ];
 }

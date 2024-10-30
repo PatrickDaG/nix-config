@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  nixosConfig,
+  config,
   ...
 }:
 let
@@ -88,11 +88,12 @@ let
   };
 in
 {
-  lib.gpu-screen-recorder = {
+  programs.gpu-screen-recorder.enable = true;
+  hm.lib.gpu-screen-recorder = {
     inherit save-replay;
   };
 
-  systemd.user.services.gpu-screen-recorder = {
+  hm.systemd.user.services.gpu-screen-recorder = {
     #Install.WantedBy = ["graphical-session.target"];
     Unit = {
       Description = "GPU Screen Recorder Service";
@@ -113,8 +114,8 @@ in
           "GSR_COLOR_RANGE=full"
           "GSR_FPSPPS=no"
         ]
-        ++ lib.optionals (nixosConfig.node.name == "kroma") [
-          "GSR_WINDOW=DP-2" # Primary monitor
+        ++ lib.optionals (config.node.name == "desktopnix") [
+          "GSR_WINDOW=DP-3" # Primary monitor
         ];
 
       ExecStart = lib.getExe start-service;

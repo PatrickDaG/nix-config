@@ -10,10 +10,10 @@
     inputs.nixos-hardware.nixosModules.common-pc-ssd
 
     ../../config/basic
-    ../../config/optional/initrd-ssh.nix
 
-    ../../config/hardware/physical.nix
-    ../../config/optional/zfs.nix
+    ../../config/support/initrd-ssh.nix
+    ../../config/support/physical.nix
+    ../../config/support/zfs.nix
 
     ./net.nix
     ./fs.nix

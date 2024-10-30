@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  programs.htop = {
+  hm-all.programs.htop = {
     enable = true;
     settings =
       {

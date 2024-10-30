@@ -3,7 +3,6 @@ _inputs: [
   (_final: prev: {
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
-    actual = prev.callPackage ./actual.nix { };
     pr-tracker = prev.callPackage ./pr-tracker.nix { };
     deploy = prev.callPackage ./deploy.nix { };
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };

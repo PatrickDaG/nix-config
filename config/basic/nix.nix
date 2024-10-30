@@ -59,4 +59,7 @@
   };
   programs.nix-ld.enable = true;
   system.stateVersion = stateVersion;
+  hm-all.nixpkgs.config = {
+    allowUnfree = true;
+  };
 }

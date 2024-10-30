@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
-  stylix.targets.kitty.enable = true;
-  programs.kitty = {
+  hm.stylix.targets.kitty.enable = true;
+  hm.programs.kitty = {
     enable = true;
     package = pkgs.kitty.overrideAttrs (_finalAttrs: _prevAttrs: { doCheck = false; });
     settings = {

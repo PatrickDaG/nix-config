@@ -4,7 +4,7 @@ This file contains a small overview over the contents and structure of this repo
     - `basic/` the basic system configuration, this should be applied for all systems
         - `system.nix` a far descendant of the original `configuration.nix`
             any global configuration should be done here first and later moved to their own file if necessary
-    - `hardware/` configuration for specific hardware
+    - `support/` configuration for supporting specific hardware
     - `optional/` optionally includable configuration
     - `services/` configuration for independent services
 - `hosts/` contain nixos configuration for hosts
@@ -30,9 +30,9 @@ This file contains a small overview over the contents and structure of this repo
     - `secrets.nix.age` global secrets available at deploy
 - `users/` home manager user configuration
     - `common/` shared home-manager modules
-        - `graphical/` configuration for graphical programs
+        - `wayland/` configuration for wayland windowmanagers and basic utilities
+        - `xorg/` configuration for xorg windowmanagers and basic utilities
         - `programs/` configuration for miscellaneous programs
-        - `shells/` configuration for shells
         - `default.nix` minimal setup for all users
     - `<username>/` configuration for users
         - `impermanence.nix` users persistence configuration
