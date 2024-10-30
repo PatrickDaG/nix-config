@@ -5,6 +5,11 @@
   ...
 }:
 {
+  age.secrets."my-gpg-yubikey-keygrip.tar" = {
+    rekeyFile = ./secrets/gpg-keygrip.tar.age;
+    group = "patrick";
+    mode = "640";
+  };
   hm.programs.gpg.publicKeys = [
     {
       source = ./pubkey.gpg;
