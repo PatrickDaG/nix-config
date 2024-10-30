@@ -51,36 +51,34 @@ lib.optionalAttrs (!minimal) {
 
   imports = [
 
-    ./firefox.nix
-    ./gpg
+    ./alias.nix
+    ./dev.nix
     ./impermanence.nix
-    ./minion.nix
     ./patrick.nix
     ./smb.nix
     ./ssh.nix
     ./theme.nix
 
-    ../common/alias.nix
-    ../common/dev.nix
-    ../common/wayland
+    ./wayland
 
-    ../common/programs/bottles.nix
-    ../common/programs/direnv.nix
-    ../common/programs/firefox.nix
-    ../common/programs/gdb.nix
-    ../common/programs/git.nix
-    ../common/programs/gpg.nix
-    ../common/programs/gpu-screen-recorder.nix
-    ../common/programs/kitty.nix
-    ../common/programs/minecraft.nix
-    ../common/programs/nvim
-    ../common/programs/obs.nix
-    ../common/programs/pager.nix
-    ../common/programs/poe.nix
-    ../common/programs/spicetify.nix
-    ../common/programs/steam.nix
-    ../common/programs/thunderbird.nix
-    ../common/programs/zsh
+    ./programs/bottles.nix
+    ./programs/direnv.nix
+    ./programs/firefox.nix
+    ./programs/gdb.nix
+    ./programs/git.nix
+    ./programs/gpg
+    ./programs/gpu-screen-recorder.nix
+    ./programs/kitty.nix
+    ./programs/minecraft.nix
+    ./programs/minion.nix
+    ./programs/nvim
+    ./programs/obs.nix
+    ./programs/pager.nix
+    ./programs/poe.nix
+    ./programs/spicetify.nix
+    ./programs/steam.nix
+    ./programs/thunderbird.nix
+    ./programs/zsh
 
   ];
 }

@@ -4,8 +4,7 @@ This file contains a small overview over the contents and structure of this repo
     - `basic/` the basic system configuration, this should be applied for all systems
         - `system.nix` a far descendant of the original `configuration.nix`
             any global configuration should be done here first and later moved to their own file if necessary
-    - `support/` configuration for supporting specific hardware
-    - `optional/` optionally includable configuration
+    - `support/` configuration for supporting specific hardware or use cases on a system level
     - `services/` configuration for independent services
 - `hosts/` contain nixos configuration for hosts
     - `<hostname>/` configuration for hosts
@@ -17,9 +16,8 @@ This file contains a small overview over the contents and structure of this repo
             - `secrets.nix.age` local secrets usable while evaluating
             - `host.pub` host public key, needed for rekeying agenix secrets
 - `keys/` public keys needed for evaluating the system
-- `lib/` extra library functions
 - `modules/` extra nixos modules
-- `modules-hm/` extra home-manager modules
+- `modules-hm/` extra home-manager or home management modules
 - `nix/` additional nix functions
     - `devshell.nix` Development shell
     - `extra-builtins.nix` Extra builtin plugin file to enable repository secrets
@@ -29,10 +27,8 @@ This file contains a small overview over the contents and structure of this repo
         - currently containing all yubikeys and a rage backup key
     - `secrets.nix.age` global secrets available at deploy
 - `users/` home manager user configuration
-    - `common/` shared home-manager modules
+    - `patrick` personal configuration for myself
+        - `programs/` configuration for miscellaneous programs
         - `wayland/` configuration for wayland windowmanagers and basic utilities
         - `xorg/` configuration for xorg windowmanagers and basic utilities
-        - `programs/` configuration for miscellaneous programs
-        - `default.nix` minimal setup for all users
-    - `<username>/` configuration for users
-        - `impermanence.nix` users persistence configuration
+    - `root` minimal configuration for root
