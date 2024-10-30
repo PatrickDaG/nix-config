@@ -6,7 +6,7 @@
   ...
 }:
 let
-  version = "v1.113.1";
+  version = "v1.119.1";
   immichDomain = "immich.${config.secrets.secrets.global.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
@@ -97,8 +97,6 @@ let
       };
       map = {
         enabled = true;
-        darkStyle = "";
-        lightStyle = "";
       };
       newVersionCheck.enabled = true;
       passwordLogin.enabled = true;
@@ -127,7 +125,7 @@ let
     DB_USERNAME = "postgres";
     IMMICH_VERSION = "${version}";
     UPLOAD_LOCATION = upload_folder;
-    IMMICH_SERVER_URL = "http://${ipImmichServer}:3001/";
+    IMMICH_SERVER_URL = "http://${ipImmichServer}:2283/";
     IMMICH_MACHINE_LEARNING_URL = "http://${ipImmichMachineLearning}:3003";
     REDIS_HOSTNAME = ipImmichRedis;
     IMMICH_CONFIG_FILE = "/immich.config.json";
@@ -246,7 +244,7 @@ in
   networking.nftables.chains.forward.into-immich-container = {
     after = [ "conntrack" ];
     rules = [
-      "iifname elisabeth ip saddr ${nodes.elisabeth.config.wireguard.elisabeth.ipv4} tcp dport 3001 accept"
+      "iifname elisabeth ip saddr ${nodes.elisabeth.config.wireguard.elisabeth.ipv4} tcp dport 2283 accept"
       "iifname podman1 oifname lan accept"
     ];
   };
@@ -332,7 +330,7 @@ in
       "${upload_folder}:/usr/src/app/upload:rw"
       "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
     ];
-    ports = [ "3000:3001/tcp" ];
+    ports = [ "3000:2283/tcp" ];
     dependsOn = [
       "immich_postgres"
       "immich_redis"
