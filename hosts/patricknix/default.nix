@@ -24,7 +24,7 @@
     ./net.nix
     ./fs.nix
 
-    #../../users/patrick
+    ../../users/patrick
   ];
   stylix.fonts.sizes = {
     terminal = 9;
