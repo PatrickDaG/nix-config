@@ -15,4 +15,14 @@
     ];
     hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
   };
+  imports = [
+
+    ../patrick/alias.nix
+    ../patrick/theme.nix
+
+    ../patrick/programs/nvim
+    ../patrick/programs/pager.nix
+    ../patrick/programs/zsh
+
+  ];
 }
