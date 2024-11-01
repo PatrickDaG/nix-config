@@ -63,6 +63,7 @@ lib.optionalAttrs (!minimal) {
     ./programs/git.nix
     ./programs/gpg
     ./programs/gpu-screen-recorder.nix
+    ./programs/htop.nix
     ./programs/kitty.nix
     ./programs/minecraft.nix
     ./programs/minion.nix

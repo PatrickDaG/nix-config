@@ -19,6 +19,7 @@
       mpv
       netflix
       nextcloud-client
+      nix-output-monitor
       nixpkgs-review
       orca-slicer
       osu-lazer-bin
