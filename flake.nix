@@ -122,6 +122,7 @@
         ./nix/devshell.nix
         ./nix/hosts.nix
         ./nix/pkgs.nix
+        ./nix/patch.nix
         nix-topology.flakeModule
       ];
 

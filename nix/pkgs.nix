@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, self, ... }:
 {
   imports = [
     (
@@ -14,7 +14,7 @@
   perSystem =
     { pkgs, system, ... }:
     {
-      _module.args.pkgs = import inputs.nixpkgs {
+      _module.args.pkgs = import self.nixpkgs-patched {
         inherit system;
         config.allowUnfree = true;
         overlays = (import ../pkgs inputs) ++ [

@@ -36,6 +36,7 @@
       yt-dlp
       zathura
       zotero
+      bashInteractive
     ];
   };
   hm.programs.bat.enable = true;

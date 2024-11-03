@@ -8,7 +8,6 @@ _inputs: [
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
-    ccid = prev.callPackage ./ccid.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
@@ -20,6 +19,7 @@ _inputs: [
           '';
       }
     );
+
     path-of-building = prev.path-of-building.overrideAttrs (old: {
       postFixup =
         (old.postFixup or "")

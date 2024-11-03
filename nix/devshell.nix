@@ -20,6 +20,7 @@
         packages = with pkgs; [
           # Nix
           nil
+          wcurl # for fetch-prs
 
           # Misc
           shellcheck

@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
-  openjdk22,
+  openjdk21,
   makeDesktopItem,
   javaPackages,
   gsettings-desktop-schemas,
@@ -10,13 +10,13 @@
 }:
 
 let
-  openjfx = javaPackages.openjfx22.override { withWebKit = true; };
-  jdk = openjdk22.override (
+  openjfx = javaPackages.openjfx21.override { withWebKit = true; };
+  jdk = openjdk21.override (
     prev:
     prev
     // {
       enableJavaFX = true;
-      inherit openjfx;
+      openjfx_jdk = openjfx;
     }
   );
 in

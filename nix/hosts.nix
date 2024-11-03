@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, self, ... }:
 {
   flake =
     { config, lib, ... }:
@@ -20,12 +20,16 @@
           pkgs = config.pkgs.x86_64-linux;
           stateVersion = "24.05";
         in
-        inputs.nixpkgs.lib.nixosSystem {
+        (import "${self.nixpkgs-patched}/nixos/lib/eval-config.nix") {
+          system = null;
           specialArgs = {
             # Use the correct instance lib that has our overlays
             inherit (pkgs) lib;
             inherit (config) nodes;
-            inherit inputs minimal stateVersion;
+            inherit minimal stateVersion;
+            inputs = inputs // {
+              nixpkgs = self.nixpkgs-patched;
+            };
           };
           modules = [
             {
