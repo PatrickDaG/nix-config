@@ -20,11 +20,6 @@ lib.optionalAttrs (!minimal) {
   services.nixseparatedebuginfod.enable = true;
   environment = {
     enableDebugInfo = true;
-    shellInit = ''
-      gpg-connect-agent /bye
-      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-      umask 077
-    '';
   };
   documentation = {
     dev.enable = true;
@@ -33,4 +28,9 @@ lib.optionalAttrs (!minimal) {
     info.enable = false;
     nixos.enable = false;
   };
+  hm.programs.zsh.initExtra = ''
+    gpg-connect-agent /bye
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    umask 077
+  '';
 }
