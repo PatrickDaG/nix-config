@@ -153,7 +153,7 @@ in
               X-Frame-Options = "SAMEORIGIN";
             };
             "/signalexchange.SignalExchange/".extraConfig = ''
-              grpc_pass grpc://${ipOf "netbird"}:3001;
+              grpc_pass grpc://${ipOf "netbird"}:8012;
               grpc_read_timeout 1d;
               grpc_send_timeout 1d;
               grpc_socket_keepalive on;

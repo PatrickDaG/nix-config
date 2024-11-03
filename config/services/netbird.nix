@@ -3,9 +3,10 @@
   wireguard.elisabeth = {
     client.via = "elisabeth";
     firewallRuleForNode.elisabeth.allowedTCPPorts = [
-      80
-      3000
-      3001
+      80 # dashboard
+      3000 # management
+      8012 # signal
+      33080 # relay
     ];
   };
 
@@ -28,12 +29,7 @@
     group = "netbird";
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    3000
-    3001
-  ];
-  networking.firewall.allowedUDPPorts = [ 3478 ];
+  networking.firewall.allowedUDPPorts = [ 3478 ]; # STUN/TURN server
   services.netbird = {
     server = {
       enable = true;
