@@ -37,6 +37,7 @@
       zathura
       zotero
       bashInteractive
+      element-desktop-wayland
     ];
   };
   hm.programs.bat.enable = true;

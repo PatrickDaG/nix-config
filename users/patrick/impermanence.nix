@@ -48,6 +48,8 @@
 
         ".cache/mpv"
 
+        ".config/Element"
+
         ".config/spotify"
         ".cache/spotify"
         ".local/share/cargo"
