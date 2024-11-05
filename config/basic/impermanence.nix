@@ -43,6 +43,9 @@ let
     '';
 in
 {
+  # https://github.com/nix-community/impermanence/issues/229
+  boot.initrd.systemd.suppressedUnits = [ "systemd-machine-id-commit.service" ];
+  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
   # to allow all users to access hm managed persistent folders
   lib.scripts.impermanence.pruneScripts = lib.mapAttrs (k: _: prune k) config.environment.persistence;
   programs.fuse.userAllowOther = true;
