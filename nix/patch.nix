@@ -19,7 +19,8 @@
         installPhase = ''
           cp -r ./ $out
         '';
-        patches = pkgs.lib.filesystem.listFilesRecursive ../patches;
+        patches =
+          if builtins.pathExists ../patches then pkgs.lib.filesystem.listFilesRecursive ../patches else [ ];
       };
   };
 }
