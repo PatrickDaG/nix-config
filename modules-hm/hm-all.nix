@@ -5,6 +5,7 @@ let
     mkOptionType
     types
     mkIf
+    mkMerge
     ;
 in
 {
@@ -29,12 +30,16 @@ in
       };
     };
   };
-  config.home-manager.users = mkIf (config.primaryUser != null) {
-    ${config.primaryUser} = {
-      imports = config.hm ++ config.hm-all;
-    };
-    root = {
-      imports = config.hm-all;
-    };
-  };
+  config.home-manager.users = mkMerge [
+    (mkIf (config.primaryUser != null) {
+      ${config.primaryUser} = {
+        imports = config.hm ++ config.hm-all;
+      };
+    })
+    {
+      root = {
+        imports = config.hm-all;
+      };
+    }
+  ];
 }
