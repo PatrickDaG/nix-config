@@ -37,10 +37,6 @@
   services.xserver.xkb = {
     layout = "de";
   };
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-  };
   services.logkeys = {
     enable = true;
     device = "/dev/input/event15";

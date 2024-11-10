@@ -13,7 +13,7 @@
     rekeyFile = config.node.secretsDir + "/spotifySecret.age";
   };
   services.your_spotify = {
-    enable = true;
+    #enable = true;
     spotifySecretFile = config.age.secrets.spotifySecret.path;
     settings = {
       SPOTIFY_PUBLIC = "5397a3f2a75949459da343a5e7851bd9";
