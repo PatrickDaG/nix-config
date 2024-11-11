@@ -83,7 +83,7 @@ in
       };
       systems.oauth2.paperless = {
         displayName = "paperless";
-        originUrl = "https://ppl.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://ppl.${config.secrets.secrets.global.domains.web}/accounts/oidc/kanidm/login/callback/";
         originLanding = "https://ppl.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-paperless.path;
         scopeMaps."paperless.access" = [
@@ -124,7 +124,7 @@ in
       };
       systems.oauth2.immich = {
         displayName = "Immich";
-        originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/auth/login";
         originLanding = "https://immich.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
@@ -146,7 +146,7 @@ in
 
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
-        originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/oauth2/callback";
         originLanding = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-proxy.path;
         scopeMaps."adguardhome.access" = [
@@ -199,7 +199,7 @@ in
       };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
-        originUrl = "https://forge.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://forge.${config.secrets.secrets.global.domains.web}/user/oauth2/kanidm/callback";
         originLanding = "https://forge.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-forgejo.path;
         scopeMaps."forgejo.access" = [

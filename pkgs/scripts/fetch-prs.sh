@@ -1,5 +1,5 @@
 # dependencies: wcurl
-PRS=("354038")
+PRS=("354038" "355216")
 
 if [ ! -f flake.nix ]; then
 	echo "Not in a flake top level"
