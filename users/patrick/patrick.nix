@@ -14,6 +14,7 @@
       figlet
       galaxy-buds-client
       gh
+      gh-dash
       hexyl
       hyperfine
       mpv

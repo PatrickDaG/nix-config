@@ -1952,11 +1952,11 @@
     },
     "templates": {
       "locked": {
-        "lastModified": 1731342153,
-        "narHash": "sha256-AzxI/lvVJcdoGouGxX7xr1y+u9tPrtSprI1UwdgV00g=",
+        "lastModified": 1731343127,
+        "narHash": "sha256-7zkle9m6jQlXXjnndLjgCjgklkY8i886l2z0bb7D78A=",
         "ref": "refs/heads/main",
-        "rev": "675917283e8cd12207a42cc2009ed591f98dc469",
-        "revCount": 15,
+        "rev": "6ddc1adcc8eca00dad757c4bb2961034e4afb1d8",
+        "revCount": 16,
         "type": "git",
         "url": "https://forge.lel.lol/patrick/nix-templates.git"
       },
