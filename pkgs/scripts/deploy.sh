@@ -47,15 +47,15 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-[[ ! ''${#POSITIONAL_ARGS[@]} -lt 1 ]] ||
+[[ ! ${#POSITIONAL_ARGS[@]} -lt 1 ]] ||
 	die "Missing argument: <hosts,...>"
-[[ ! ''${#POSITIONAL_ARGS[@]} -gt 2 ]] ||
+[[ ! ${#POSITIONAL_ARGS[@]} -gt 2 ]] ||
 	die "Too many arguments"
 
 shopt -s lastpipe
-tr , '\n' <<<"''${POSITIONAL_ARGS[0]}" | sort -u | readarray -t HOSTS
+tr , '\n' <<<"${POSITIONAL_ARGS[0]}" | sort -u | readarray -t HOSTS
 
-ACTION="''${POSITIONAL_ARGS[1]-switch}"
+ACTION="${POSITIONAL_ARGS[1]-switch}"
 
 function main() {
 	local system
@@ -63,8 +63,8 @@ function main() {
 	if [[ $1 == *"@"* ]]; then
 		arr=()
 		echo -n "$1" | readarray -d "@" -t arr
-		system="''${arr[0]}"
-		host="root@''${arr[1]}"
+		system="${arr[0]}"
+		host="root@${arr[1]}"
 	else
 		system=$1
 		host=$system
@@ -99,9 +99,9 @@ function main() {
 	)
 }
 
-echo -e "Building toplevels for \033[0;32m''${#HOSTS[*]} hosts\033[0m"
+echo -e "Building toplevels for \033[0;32m${#HOSTS[*]} hosts\033[0m"
 
-for host in "''${HOSTS[@]}"; do
+for host in "${HOSTS[@]}"; do
 	main "$host" &
 done
 wait

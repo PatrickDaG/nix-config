@@ -37,19 +37,19 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-[[ ! ''${#POSITIONAL_ARGS[@]} -lt 1 ]] ||
+[[ ! ${#POSITIONAL_ARGS[@]} -lt 1 ]] ||
 	die "Missing argument: <hosts,...>"
-[[ ! ''${#POSITIONAL_ARGS[@]} -gt 1 ]] ||
+[[ ! ${#POSITIONAL_ARGS[@]} -gt 1 ]] ||
 	die "Too many arguments"
 
 shopt -s lastpipe
-tr , '\n' <<<"''${POSITIONAL_ARGS[0]}" | sort -u | readarray -t HOSTS
+tr , '\n' <<<"${POSITIONAL_ARGS[0]}" | sort -u | readarray -t HOSTS
 
 NIXOS_CONFIGS=()
-for host in "''${HOSTS[@]}"; do
+for host in "${HOSTS[@]}"; do
 	NIXOS_CONFIGS+=(".#nixosConfigurations.$host.config.system.build.toplevel")
 done
 
-echo -e "Building toplevels for \033[0;32m''${#HOSTS[*]} hosts\033[0m"
+echo -e "Building toplevels for \033[0;32m${#HOSTS[*]} hosts\033[0m"
 nom build --print-out-paths --no-link "${OPTIONS[@]}" "${NIXOS_CONFIGS[@]}" ||
 	die "Failed building derivations"
