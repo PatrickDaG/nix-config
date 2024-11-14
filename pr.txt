@@ -1,0 +1,2 @@
+355216 # nixos/kanidm: allow origin url ending without slash
+354038
