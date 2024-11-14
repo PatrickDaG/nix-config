@@ -1,5 +1,5 @@
 diff --git a/nixos/modules/services/security/kanidm.nix b/nixos/modules/services/security/kanidm.nix
-index a368b6eee2a6e..96f6e23740c80 100644
+index a368b6eee2a6e..114400de434a3 100644
 --- a/nixos/modules/services/security/kanidm.nix
 +++ b/nixos/modules/services/security/kanidm.nix
 @@ -502,13 +502,13 @@ in
@@ -7,7 +7,7 @@ index a368b6eee2a6e..96f6e23740c80 100644
  
                originUrl = mkOption {
 -                description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
-+                description = "The origin URL of the service. OAuth2 redirects will only need to either exactly match or match this origin depending on wether strict-redirect is enabled.";
++                description = "The redirect URL of the service. By default this needs to exactly match the OAuth2 redirect target. When disabling strict-redirect-uri kanidm will only match by origin.";
                  type =
                    let
 -                    originStrType = types.strMatching ".*://.*/$";

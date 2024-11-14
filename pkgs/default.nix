@@ -8,6 +8,7 @@ _inputs: [
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
+    disneyplus = prev.callPackage ./disney.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
