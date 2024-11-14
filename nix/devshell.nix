@@ -21,6 +21,7 @@
           # Nix
           nil
           wcurl # for fetch-prs
+          inputs.nixp-meta.packages.x86_64-linux.nixp-meta-release
 
           # Misc
           shellcheck

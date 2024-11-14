@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixp-meta.url = "git+https://forge.lel.lol/patrick/nixp-meta.git";
 
     nixpkgs-octoprint.url = "github:patrickdag/nixpkgs/octoprint-update";
     nixpkgs-wayland = {
