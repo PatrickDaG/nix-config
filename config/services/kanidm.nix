@@ -124,7 +124,10 @@ in
       };
       systems.oauth2.immich = {
         displayName = "Immich";
-        originUrl = "https://immich.${config.secrets.secrets.global.domains.web}/auth/login";
+        originUrl = [
+          "https://immich.${config.secrets.secrets.global.domains.web}/auth/login"
+          "https://immich.${config.secrets.secrets.global.domains.web}/api/oauth/mobile-redirect"
+        ];
         originLanding = "https://immich.${config.secrets.secrets.global.domains.web}/";
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
