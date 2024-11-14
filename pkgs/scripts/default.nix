@@ -1,7 +1,24 @@
 _final: prev: {
   scripts = {
-    usbguardw = prev.callPackage ./usbguardw.nix { };
     clone-term = prev.callPackage ./clone-term.nix { };
     impermanence-o = prev.callPackage ./impermanence-orphan.nix { };
+    deploy = prev.writeShellApplication {
+      name = "deploy";
+      runtimeInputs = [ prev.nvd ];
+      text = builtins.readFile ./deploy.sh;
+    };
+    build = prev.writeShellApplication {
+      name = "build";
+      runtimeInputs = [ prev.nix-output-monitor ];
+      text = builtins.readFile ./build.sh;
+    };
+    update = prev.writeShellApplication {
+      name = "update";
+      runtimeInputs = [ ];
+      text = ''
+        nix flake update
+        nixp-meta update-prs
+      '';
+    };
   };
 }

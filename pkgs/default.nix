@@ -4,7 +4,6 @@ _inputs: [
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
     pr-tracker = prev.callPackage ./pr-tracker.nix { };
-    deploy = prev.callPackage ./deploy.nix { };
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };

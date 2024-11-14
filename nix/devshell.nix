@@ -32,8 +32,16 @@
         ];
         commands = [
           {
-            package = pkgs.deploy;
-            help = "build and deploy nix configurations";
+            package = pkgs.scripts.deploy;
+            help = "deploy nix configurations";
+          }
+          {
+            package = pkgs.scripts.build;
+            help = "build nix configurations";
+          }
+          {
+            package = pkgs.scripts.update;
+            help = "update nix configurations";
           }
           {
             package = pkgs.nixfmt-rfc-style;
