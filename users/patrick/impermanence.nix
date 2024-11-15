@@ -27,6 +27,8 @@
         # for netflix
         ".config/google-chrome"
         ".cache/google-chrome"
+        # for netflix
+        ".config/disneyplus"
 
         ".config/gh"
 

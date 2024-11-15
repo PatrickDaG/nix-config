@@ -19,6 +19,7 @@
       hyperfine
       mpv
       netflix
+      disneyplus
       nextcloud-client
       nix-output-monitor
       nixpkgs-review
