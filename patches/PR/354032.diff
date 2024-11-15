@@ -1,0 +1,959 @@
+diff --git a/nixos/modules/services/networking/netbird/dashboard.nix b/nixos/modules/services/networking/netbird/dashboard.nix
+index 788b724231be3..c8f6836f0af93 100644
+--- a/nixos/modules/services/networking/netbird/dashboard.nix
++++ b/nixos/modules/services/networking/netbird/dashboard.nix
+@@ -39,7 +39,7 @@ in
+ 
+     package = mkPackageOption pkgs "netbird-dashboard" { };
+ 
+-    enableNginx = mkEnableOption "Nginx reverse-proxy to serve the dashboard";
++    enableNginx = mkEnableOption "Nginx to serve the dashboard";
+ 
+     domain = mkOption {
+       type = str;
+diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
+index f4b5bbf643239..da5b851c3fb3e 100644
+--- a/nixos/modules/services/networking/netbird/management.nix
++++ b/nixos/modules/services/networking/netbird/management.nix
+@@ -38,7 +38,7 @@ let
+     Stuns = [
+       {
+         Proto = "udp";
+-        URI = "stun:${cfg.turnDomain}:3478";
++        URI = "stun:${cfg.management.turnDomain}:3478";
+         Username = "";
+         Password = null;
+       }
+@@ -48,7 +48,7 @@ let
+       Turns = [
+         {
+           Proto = "udp";
+-          URI = "turn:${cfg.turnDomain}:${builtins.toString cfg.turnPort}";
++          URI = "turn:${cfg.management.turnDomain}:${builtins.toString cfg.management.turnPort}";
+           Username = "netbird";
+           Password = "netbird";
+         }
+@@ -58,10 +58,15 @@ let
+       Secret = "not-secure-secret";
+       TimeBasedCredentials = false;
+     };
++    Relay = {
++      Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
++      CredentialsTTL = "24h";
++      Secret._secret = cfg.relay.authSecretFile;
++    };
+ 
+     Signal = {
+       Proto = "https";
+-      URI = "${cfg.domain}:443";
++      URI = "localhost:${builtins.toString cfg.signal.port}";
+       Username = "";
+       Password = null;
+     };
+@@ -79,9 +84,9 @@ let
+     };
+ 
+     HttpConfig = {
+-      Address = "127.0.0.1:${builtins.toString cfg.port}";
++      Address = "127.0.0.1:${builtins.toString cfg.management.port}";
+       IdpSignKeyRefreshEnabled = true;
+-      OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
++      OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
+     };
+ 
+     IdpManagerConfig = {
+@@ -128,18 +133,18 @@ let
+     };
+   };
+ 
+-  managementConfig = recursiveUpdate defaultSettings cfg.settings;
++  managementConfig = recursiveUpdate defaultSettings cfg.management.settings;
+ 
+   managementFile = settingsFormat.generate "config.json" managementConfig;
+ 
+-  cfg = config.services.netbird.server.management;
++  cfg = config.services.netbird.server;
+ in
+ 
+ {
+   options.services.netbird.server.management = {
+     enable = mkEnableOption "Netbird Management Service";
+ 
+-    package = mkPackageOption pkgs "netbird" { };
++    package = mkPackageOption pkgs "netbird-server" { };
+ 
+     domain = mkOption {
+       type = str;
+@@ -196,6 +201,12 @@ in
+       description = "Internal port of the management server.";
+     };
+ 
++    metricsPort = mkOption {
++      type = port;
++      default = 9090;
++      description = "Internal port of the metrics server.";
++    };
++
+     extraOptions = mkOption {
+       type = listOf str;
+       default = [ ];
+@@ -218,7 +229,7 @@ in
+           Stuns = [
+             {
+               Proto = "udp";
+-              URI = "stun:''${cfg.turnDomain}:3478";
++              URI = "stun:''${cfg.management.turnDomain}:3478";
+               Username = "";
+               Password = null;
+             }
+@@ -228,7 +239,7 @@ in
+             Turns = [
+               {
+                 Proto = "udp";
+-                URI = "turn:''${cfg.turnDomain}:3478";
++                URI = "turn:''${cfg.management.turnDomain}:3478";
+                 Username = "netbird";
+                 Password = "netbird";
+               }
+@@ -241,7 +252,7 @@ in
+ 
+           Signal = {
+             Proto = "https";
+-            URI = "''${cfg.domain}:443";
++            URI = "localhost:''${cfg.signal.port}";
+             Username = "";
+             Password = null;
+           };
+@@ -257,9 +268,9 @@ in
+           StoreConfig = { Engine = "sqlite"; };
+ 
+           HttpConfig = {
+-            Address = "127.0.0.1:''${builtins.toString cfg.port}";
++            Address = "127.0.0.1:''${builtins.toString cfg.management.port}";
+             IdpSignKeyRefreshEnabled = true;
+-            OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
++            OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
+           };
+ 
+           IdpManagerConfig = {
+@@ -334,11 +345,9 @@ in
+       default = "INFO";
+       description = "Log level of the netbird services.";
+     };
+-
+-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
+   };
+ 
+-  config = mkIf cfg.enable {
++  config = mkIf cfg.management.enable {
+     warnings =
+       concatMap
+         (
+@@ -373,7 +382,7 @@ in
+       serviceConfig = {
+         ExecStart = escapeSystemdExecArgs (
+           [
+-            (getExe' cfg.package "netbird-mgmt")
++            (getExe' cfg.management.package "netbird-mgmt")
+             "management"
+             # Config file
+             "--config"
+@@ -383,25 +392,28 @@ in
+             "${stateDir}/data"
+             # DNS domain
+             "--dns-domain"
+-            cfg.dnsDomain
++            cfg.management.dnsDomain
+             # Port to listen on
+             "--port"
+-            cfg.port
++            cfg.management.port
++            # Port the internal prometheus server listens on
++            "--metrics-port"
++            cfg.management.metricsPort
+             # Log to stdout
+             "--log-file"
+             "console"
+             # Log level
+             "--log-level"
+-            cfg.logLevel
++            cfg.management.logLevel
+             #
+             "--idp-sign-key-refresh-enabled"
+             # Domain for internal resolution
+             "--single-account-mode-domain"
+-            cfg.singleAccountModeDomain
++            cfg.management.singleAccountModeDomain
+           ]
+-          ++ (optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
+-          ++ (optional cfg.disableSingleAccountMode "--disable-single-account-mode")
+-          ++ cfg.extraOptions
++          ++ (optional cfg.management.disableAnonymousMetrics "--disable-anonymous-metrics")
++          ++ (optional cfg.management.disableSingleAccountMode "--disable-single-account-mode")
++          ++ cfg.management.extraOptions
+         );
+         Restart = "always";
+         RuntimeDirectory = "netbird-mgmt";
+@@ -434,27 +446,5 @@ in
+       stopIfChanged = false;
+     };
+ 
+-    services.nginx = mkIf cfg.enableNginx {
+-      enable = true;
+-
+-      virtualHosts.${cfg.domain} = {
+-        locations = {
+-          "/api".proxyPass = "http://localhost:${builtins.toString cfg.port}";
+-
+-          "/management.ManagementService/".extraConfig = ''
+-            # This is necessary so that grpc connections do not get closed early
+-            # see https://stackoverflow.com/a/67805465
+-            client_body_timeout 1d;
+-
+-            grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+-
+-            grpc_pass grpc://localhost:${builtins.toString cfg.port};
+-            grpc_read_timeout 1d;
+-            grpc_send_timeout 1d;
+-            grpc_socket_keepalive on;
+-          '';
+-        };
+-      };
+-    };
+   };
+ }
+diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
+new file mode 100644
+index 0000000000000..998ddbad212cf
+--- /dev/null
++++ b/nixos/modules/services/networking/netbird/proxy.nix
+@@ -0,0 +1,104 @@
++{ lib, config, ... }:
++let
++  inherit (lib)
++    mkEnableOption
++    mkIf
++    mkOption
++    ;
++  inherit (lib.types) str;
++  cfg = config.services.netbird.server.proxy;
++in
++{
++  options.services.netbird.server.proxy = {
++    enable = mkEnableOption "A reverse proxy for netbirds' services";
++
++    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
++
++    signalAddress = mkOption {
++      type = str;
++      description = "The external address to reach the signal service.";
++    };
++
++    relayAddress = mkOption {
++      type = str;
++      description = "The external address to reach the relay service.";
++    };
++
++    managementAddress = mkOption {
++      type = str;
++      description = "The external address to reach the dashboard.";
++    };
++
++    dashboardAddress = mkOption {
++      type = str;
++      description = "The external address to reach the dashboard.";
++    };
++
++    domain = mkOption {
++      type = str;
++      description = "The public domain to reach the proxy";
++    };
++  };
++  config = mkIf cfg.enable {
++    services.nginx = mkIf cfg.enableNginx {
++      enable = true;
++
++      virtualHosts.${cfg.domain} = {
++        locations = {
++          "/" = {
++            proxyPass = "http://${cfg.dashboardAddress}";
++            proxyWebSockets = true;
++          };
++          "/api".proxyPass = "http://${cfg.managementAddress}";
++
++          "/management.ManagementService/".extraConfig = ''
++            # This is necessary so that grpc connections do not get closed early
++            # see https://stackoverflow.com/a/67805465
++            client_body_timeout 1d;
++
++            grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++
++            grpc_pass grpc://${cfg.managementAddress};
++            grpc_read_timeout 1d;
++            grpc_send_timeout 1d;
++            grpc_socket_keepalive on;
++          '';
++        };
++        locations."/signalexchange.SignalExchange/".extraConfig = ''
++          # This is necessary so that grpc connections do not get closed early
++          # see https://stackoverflow.com/a/67805465
++          client_body_timeout 1d;
++
++          grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++
++          grpc_pass grpc://${cfg.signalAddress};
++          grpc_read_timeout 1d;
++          grpc_send_timeout 1d;
++          grpc_socket_keepalive on;
++        '';
++        locations."/relay".extraConfig = ''
++          proxy_pass http://${cfg.relayAddress}/relay;
++
++          # WebSocket support
++          proxy_http_version 1.1;
++          proxy_set_header Upgrade $http_upgrade;
++          proxy_set_header Connection "Upgrade";
++
++          # Forward headers
++          proxy_set_header Host $http_host;
++          proxy_set_header X-Real-IP $remote_addr;
++          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++          proxy_set_header X-Forwarded-Proto $scheme;
++
++          # Timeout settings
++          proxy_read_timeout 3600s;
++          proxy_send_timeout 3600s;
++          proxy_connect_timeout 60s;
++
++          # Handle upstream errors
++          proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
++        '';
++      };
++    };
++  };
++}
+diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
+new file mode 100644
+index 0000000000000..45650d15358a0
+--- /dev/null
++++ b/nixos/modules/services/networking/netbird/relay.nix
+@@ -0,0 +1,124 @@
++{
++  config,
++  lib,
++  pkgs,
++  utils,
++  ...
++}:
++
++let
++  inherit (lib)
++    getExe'
++    mkEnableOption
++    mkIf
++    mkPackageOption
++    mkOption
++    mkDefault
++    ;
++
++  inherit (lib.types)
++    port
++    str
++    attrsOf
++    bool
++    either
++    submodule
++    path
++    ;
++
++  cfg = config.services.netbird.server.relay;
++in
++
++{
++  options.services.netbird.server.relay = {
++    enable = mkEnableOption "Netbird's Relay Service";
++
++    package = mkPackageOption pkgs "netbird-server" { };
++
++    port = mkOption {
++      type = port;
++      default = 33080;
++      description = "Internal port of the relay server.";
++    };
++
++    settings = mkOption {
++      type = submodule {
++        freeformType = attrsOf (either str bool);
++        options.NB_EXPOSED_ADDRESS = mkOption {
++          type = str;
++          description = ''
++            The public address of this peer, to be distribute as part of relay operations.
++          '';
++        };
++      };
++
++      defaultText = ''
++        {
++          NB_LISTEN_ADDRESS = ":''${builtins.toString cfg.port}";
++          NB_METRICS_PORT = "9092";
++        }
++      '';
++
++      description = ''
++        An attribute set that will be set as the environment for the process.
++        Used for runtime configuration.
++        The exact values sadly aren't documented anywhere.
++        A starting point when searching for valid values is this [source file](https://github.com/netbirdio/netbird/blob/v${cfg.packag.version}/relay/cmd/root.go)
++      '';
++    };
++
++    authSecretFile = mkOption {
++      type = path;
++      description = ''
++        The path to a file containing the auth-secret used by netbird to connect to the relay server.
++      '';
++    };
++
++  };
++
++  config = mkIf cfg.enable {
++    services.netbird.server.relay.settings = {
++      NB_LISTEN_ADDRESS = mkDefault ":${builtins.toString cfg.port}";
++      NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.port}";
++      NB_METRICS_PORT = mkDefault "9092"; # Upstream default is 9090 but this would clash for nixos where all services run on the same host
++    };
++    systemd.services.netbird-relay = {
++      after = [ "network.target" ];
++      wantedBy = [ "multi-user.target" ];
++      environment = cfg.settings;
++
++      script = ''
++        export NB_AUTH_SECRET="(<${cfg.authSecretFile})"
++        ${getExe' cfg.package "netbird-relay"}
++      '';
++      serviceConfig = {
++
++        Restart = "always";
++        RuntimeDirectory = "netbird-mgmt";
++        StateDirectory = "netbird-mgmt";
++        WorkingDirectory = "/var/lib/netbird-mgmt";
++
++        # hardening
++        LockPersonality = true;
++        MemoryDenyWriteExecute = true;
++        NoNewPrivileges = true;
++        PrivateMounts = true;
++        PrivateTmp = true;
++        ProtectClock = true;
++        ProtectControlGroups = true;
++        ProtectHome = true;
++        ProtectHostname = true;
++        ProtectKernelLogs = true;
++        ProtectKernelModules = true;
++        ProtectKernelTunables = true;
++        ProtectSystem = true;
++        RemoveIPC = true;
++        RestrictNamespaces = true;
++        RestrictRealtime = true;
++        RestrictSUIDSGID = true;
++      };
++
++      stopIfChanged = false;
++    };
++  };
++}
+diff --git a/nixos/modules/services/networking/netbird/server.md b/nixos/modules/services/networking/netbird/server.md
+index 3649e97b379e5..d5c137f4fff98 100644
+--- a/nixos/modules/services/networking/netbird/server.md
++++ b/nixos/modules/services/networking/netbird/server.md
+@@ -4,9 +4,10 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
+ 
+ ## Quickstart {#module-services-netbird-server-quickstart}
+ 
+-To fully setup Netbird as a self-hosted server, we need both a Coturn server and an identity provider, the list of supported SSOs and their setup are available [on Netbird's documentation](https://docs.netbird.io/selfhosted/selfhosted-guide#step-3-configure-identity-provider-idp).
++To fully setup Netbird as a self-hosted server, we need both a Coturn server and an identity provider,
++the list of supported SSOs and their setup are available [on Netbird's documentation](https://docs.netbird.io/selfhosted/selfhosted-guide#step-3-configure-identity-provider-idp).
+ 
+-There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config looks like :
++There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config might look like :
+ 
+ ```nix
+ services.netbird.server = {
+@@ -14,7 +15,10 @@ services.netbird.server = {
+ 
+   domain = "netbird.example.selfhosted";
+ 
+-  enableNginx = true;
++  dashboard.settings.AUTH_AUTHORITY = "https://sso.example.selfhosted/oauth2/openid/netbird";
++
++  relay.authSecretFile = pkgs.writeText "very secure secret";
++
+ 
+   coturn = {
+     enable = true;
+@@ -24,19 +28,16 @@ services.netbird.server = {
+ 
+   management = {
+     oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
+-
+-    settings = {
+-      TURNConfig = {
+-        Turns = [
+-          {
+-            Proto = "udp";
+-            URI = "turn:netbird.example.selfhosted:3478";
+-            Username = "netbird";
+-            Password._secret = "/path/to/a/secret/password";
+-          }
+-        ];
+-      };
+-    };
+   };
+ };
+ ```
++
++## Proxy {#module-services-netbird-server-proxy}
++The proxy allows you to have an nginux proxy in front of your netbird instance.
++The proxy currently assumes that nginx is server over https.
++
++Rememeber to set all public options to use the proxy instead of the instance. These include
++```nix
++relay.setting.NB_EXPOSED_ADDRESS
++
++```
+diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
+index 1725374d03c6b..5d02a4017328b 100644
+--- a/nixos/modules/services/networking/netbird/server.nix
++++ b/nixos/modules/services/networking/netbird/server.nix
+@@ -16,7 +16,7 @@ in
+ 
+ {
+   meta = {
+-    maintainers = with lib.maintainers; [patrickdag];
++    maintainers = with lib.maintainers; [ patrickdag ];
+     doc = ./server.md;
+   };
+ 
+@@ -26,12 +26,12 @@ in
+     ./dashboard.nix
+     ./management.nix
+     ./signal.nix
++    ./relay.nix
++    ./proxy.nix
+   ];
+ 
+   options.services.netbird.server = {
+-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
+-
+-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
++    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API, relay and signal service";
+ 
+     domain = mkOption {
+       type = str;
+@@ -44,7 +44,6 @@ in
+       dashboard = {
+         domain = mkDefault cfg.domain;
+         enable = mkDefault cfg.enable;
+-        enableNginx = mkDefault cfg.enableNginx;
+ 
+         managementServer = "https://${cfg.domain}";
+       };
+@@ -53,7 +52,6 @@ in
+         {
+           domain = mkDefault cfg.domain;
+           enable = mkDefault cfg.enable;
+-          enableNginx = mkDefault cfg.enableNginx;
+         }
+         // (optionalAttrs cfg.coturn.enable rec {
+           turnDomain = cfg.domain;
+@@ -66,18 +64,22 @@ in
+                 URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+                 Username = "netbird";
+                 Password =
+-                  if (cfg.coturn.password != null)
+-                  then cfg.coturn.password
+-                  else {_secret = cfg.coturn.passwordFile;};
++                  if (cfg.coturn.password != null) then
++                    cfg.coturn.password
++                  else
++                    { _secret = cfg.coturn.passwordFile; };
+               }
+             ];
+           };
+         });
+ 
+       signal = {
+-        domain = mkDefault cfg.domain;
+         enable = mkDefault cfg.enable;
+-        enableNginx = mkDefault cfg.enableNginx;
++      };
++
++      relay = {
++        settings.NB_EXPOSED_ADDRESS = "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
++        enable = mkDefault cfg.enable;
+       };
+ 
+       coturn = {
+diff --git a/nixos/modules/services/networking/netbird/signal.nix b/nixos/modules/services/networking/netbird/signal.nix
+index b53e9d40c2eed..fea778531850e 100644
+--- a/nixos/modules/services/networking/netbird/signal.nix
++++ b/nixos/modules/services/networking/netbird/signal.nix
+@@ -15,7 +15,7 @@ let
+     mkOption
+     ;
+ 
+-  inherit (lib.types) enum port str;
++  inherit (lib.types) enum port;
+ 
+   inherit (utils) escapeSystemdExecArgs;
+ 
+@@ -26,14 +26,7 @@ in
+   options.services.netbird.server.signal = {
+     enable = mkEnableOption "Netbird's Signal Service";
+ 
+-    package = mkPackageOption pkgs "netbird" { };
+-
+-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
+-
+-    domain = mkOption {
+-      type = str;
+-      description = "The domain name for the signal service.";
+-    };
++    package = mkPackageOption pkgs "netbird-server" { };
+ 
+     port = mkOption {
+       type = port;
+@@ -41,6 +34,12 @@ in
+       description = "Internal port of the signal server.";
+     };
+ 
++    metricsPort = mkOption {
++      type = port;
++      default = 9091; # Upstream default is 9090 but this would clash for nixos where all services run on the same host
++      description = "Internal port of the signal metrics server.";
++    };
++
+     logLevel = mkOption {
+       type = enum [
+         "ERROR"
+@@ -65,6 +64,9 @@ in
+           # Port to listen on
+           "--port"
+           cfg.port
++          # Port the metrics server listens on
++          "--metrics-port"
++          cfg.metricsPort
+           # Log to stdout
+           "--log-file"
+           "console"
+@@ -101,23 +103,5 @@ in
+       stopIfChanged = false;
+     };
+ 
+-    services.nginx = mkIf cfg.enableNginx {
+-      enable = true;
+-
+-      virtualHosts.${cfg.domain} = {
+-        locations."/signalexchange.SignalExchange/".extraConfig = ''
+-          # This is necessary so that grpc connections do not get closed early
+-          # see https://stackoverflow.com/a/67805465
+-          client_body_timeout 1d;
+-
+-          grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+-
+-          grpc_pass grpc://localhost:${builtins.toString cfg.port};
+-          grpc_read_timeout 1d;
+-          grpc_send_timeout 1d;
+-          grpc_socket_keepalive on;
+-        '';
+-      };
+-    };
+   };
+ }
+diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
+index 887747437c22c..5589200d99078 100644
+--- a/nixos/tests/netbird.nix
++++ b/nixos/tests/netbird.nix
+@@ -1,19 +1,65 @@
+-import ./make-test-python.nix ({ pkgs, lib, ... }:
+-{
+-  name = "netbird";
++import ./make-test-python.nix (
++  { pkgs, ... }:
++  # kanidm only works over tls so we use these self signed certificates
++  # generate using `openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout selfcert.key -out selfcert.crt -subj "/CN=example.com" -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"`
++  let
++    tls_chain = "${./common/acme/server}/ca.cert.pem";
++    tls_key = "${./common/acme/server}/ca.key.pem";
++  in
++  {
++    name = "netbird";
+ 
+-  meta.maintainers = with pkgs.lib.maintainers; [ ];
++    meta.maintainers = with pkgs.lib.maintainers; [ patrickdag ];
+ 
+-  nodes = {
+-    node = { ... }: {
+-      services.netbird.enable = true;
++    nodes = {
++      client =
++        { ... }:
++        {
++          services.netbird.enable = true;
++        };
++      kanidm = {
++        services.kanidm = {
++          enableServer = true;
++          serverSettings = {
++            inherit tls_key tls_chain;
++            domain = "localhost";
++            origin = "https://localhost";
++          };
++        };
++      };
++      server =
++        { ... }:
++        {
++          # netbirds needs an openid identity provider
++          services.netbird.server = {
++            enable = true;
++            coturn = {
++              enable = true;
++              password = "lel";
++            };
++            domain = "nixos-test.internal";
++            dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
++            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
++            relay.authSecretFile = (pkgs.writeText "wuppiduppi" "huppiduppi");
++          };
++        };
+     };
+-  };
+ 
+-  testScript = ''
+-    start_all()
+-    node.wait_for_unit("netbird-wt0.service")
+-    node.wait_for_file("/var/run/netbird/sock")
+-    node.succeed("netbird status | grep -q 'Daemon status: NeedsLogin'")
+-  '';
+-})
++    testScript = ''
++      client.start()
++      with subtest("client starting"):
++        client.wait_for_unit("netbird-wt0.service")
++        client.wait_for_file("/var/run/netbird/sock")
++        client.succeed("netbird status | grep -q 'Daemon status: NeedsLogin'")
++
++      kanidm.start()
++      kanidm.wait_for_unit("kanidm.service")
++
++      server.start()
++      with subtest("server starting"):
++        server.wait_for_unit("netbird-management.service")
++        server.wait_for_unit("netbird-signal.service")
++        server.wait_for_unit("netbird-relay.service")
++    '';
++  }
++)
+diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
+index b1d49675dbd8b..549df99400c44 100644
+--- a/pkgs/tools/networking/netbird/default.nix
++++ b/pkgs/tools/networking/netbird/default.nix
+@@ -1,33 +1,56 @@
+-{ stdenv
+-, lib
+-, nixosTests
+-, nix-update-script
+-, buildGoModule
+-, fetchFromGitHub
+-, installShellFiles
+-, pkg-config
+-, gtk3
+-, libayatana-appindicator
+-, libX11
+-, libXcursor
+-, libXxf86vm
+-, Cocoa
+-, IOKit
+-, Kernel
+-, UserNotifications
+-, WebKit
+-, ui ? false
+-, netbird-ui
++{
++  stdenv,
++  lib,
++  nixosTests,
++  nix-update-script,
++  buildGoModule,
++  fetchFromGitHub,
++  installShellFiles,
++  pkg-config,
++  gtk3,
++  libayatana-appindicator,
++  libX11,
++  libXcursor,
++  libXxf86vm,
++  Cocoa,
++  IOKit,
++  Kernel,
++  UserNotifications,
++  WebKit,
++  ui ? false,
++  client ? true,
++  server ? false,
++  netbird-ui,
+ }:
+ let
+   modules =
+-    if ui then {
+-      "client/ui" = "netbird-ui";
+-    } else {
+-      client = "netbird";
+-      management = "netbird-mgmt";
+-      signal = "netbird-signal";
+-    };
++    { }
++    // (
++      if ui then
++        {
++          "client/ui" = "netbird-ui";
++        }
++      else
++        { }
++    )
++    // (
++      if client then
++        {
++          client = "netbird";
++        }
++      else
++        { }
++    )
++    // (
++      if server then
++        {
++          management = "netbird-mgmt";
++          signal = "netbird-signal";
++          relay = "netbird-relay";
++        }
++      else
++        { }
++    );
+ in
+ buildGoModule rec {
+   pname = "netbird";
+@@ -44,19 +67,21 @@ buildGoModule rec {
+ 
+   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
+ 
+-  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
+-    gtk3
+-    libayatana-appindicator
+-    libX11
+-    libXcursor
+-    libXxf86vm
+-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
+-    Cocoa
+-    IOKit
+-    Kernel
+-    UserNotifications
+-    WebKit
+-  ];
++  buildInputs =
++    lib.optionals (stdenv.hostPlatform.isLinux && ui) [
++      gtk3
++      libayatana-appindicator
++      libX11
++      libXcursor
++      libXxf86vm
++    ]
++    ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
++      Cocoa
++      IOKit
++      Kernel
++      UserNotifications
++      WebKit
++    ];
+ 
+   subPackages = lib.attrNames modules;
+ 
+@@ -78,26 +103,32 @@ buildGoModule rec {
+       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+   '';
+ 
+-  postInstall = lib.concatStringsSep "\n"
+-    (lib.mapAttrsToList
+-      (module: binary: ''
+-        mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
+-      '' + lib.optionalString (!ui) ''
+-        installShellCompletion --cmd ${binary} \
+-          --bash <($out/bin/${binary} completion bash) \
+-          --fish <($out/bin/${binary} completion fish) \
+-          --zsh <($out/bin/${binary} completion zsh)
+-      '')
+-      modules) + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
+-    mkdir -p $out/share/pixmaps
+-    cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
++  postInstall =
++    lib.concatStringsSep "\n" (
++      lib.mapAttrsToList (
++        module: binary:
++        ''
++          mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
++        ''
++        # relay has no completions, in which case the completion subcommand will error
++        + lib.optionalString (module != "relay" && module != "client/ui") ''
++          installShellCompletion --cmd ${binary} \
++            --bash <($out/bin/${binary} completion bash) \
++            --fish <($out/bin/${binary} completion fish) \
++            --zsh <($out/bin/${binary} completion zsh)
++        ''
++      ) modules
++    )
++    + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
++      mkdir -p $out/share/pixmaps
++      cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
+ 
+-    mkdir -p $out/share/applications
+-    cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
++      mkdir -p $out/share/applications
++      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
+ 
+-    substituteInPlace $out/share/applications/netbird.desktop \
+-      --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+-  '';
++      substituteInPlace $out/share/applications/netbird.desktop \
++        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
++    '';
+ 
+   passthru = {
+     tests.netbird = nixosTests.netbird;
+@@ -110,7 +141,10 @@ buildGoModule rec {
+     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
+     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
+     license = licenses.bsd3;
+-    maintainers = with maintainers; [ vrifox saturn745 ];
++    maintainers = with maintainers; [
++      vrifox
++      saturn745
++    ];
+     mainProgram = "netbird";
+   };
+ }
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index fdeeb4ed343c7..16e29ee0d406e 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -3032,6 +3032,11 @@ with pkgs;
+     ui = true;
+   };
+ 
++  netbird-server = netbird.override {
++    server = true;
++    client = false;
++  };
++
+   skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
+ 
+   ibus = callPackage ../tools/inputmethods/ibus { };

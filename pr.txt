@@ -1,1 +1,2 @@
 355216 # nixos/kanidm: allow origin url ending without slash
+354032 # netbird: rework server and include new component
