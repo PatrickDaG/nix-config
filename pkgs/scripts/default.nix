@@ -1,7 +1,6 @@
 _final: prev: {
   scripts = {
     clone-term = prev.callPackage ./clone-term.nix { };
-    impermanence-o = prev.callPackage ./impermanence-orphan.nix { };
     deploy = prev.writeShellApplication {
       name = "deploy";
       runtimeInputs = [ prev.nvd ];
