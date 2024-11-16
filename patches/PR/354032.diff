@@ -334,7 +334,7 @@ index 0000000000000..998ddbad212cf
 +}
 diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
 new file mode 100644
-index 0000000000000..45650d15358a0
+index 0000000000000..38af7fb1b2865
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/relay.nix
 @@ -0,0 +1,124 @@
@@ -403,7 +403,7 @@ index 0000000000000..45650d15358a0
 +        An attribute set that will be set as the environment for the process.
 +        Used for runtime configuration.
 +        The exact values sadly aren't documented anywhere.
-+        A starting point when searching for valid values is this [source file](https://github.com/netbirdio/netbird/blob/v${cfg.packag.version}/relay/cmd/root.go)
++        A starting point when searching for valid values is this [source file](https://github.com/netbirdio/netbird/blob/main/relay/cmd/root.go)
 +      '';
 +    };
 +

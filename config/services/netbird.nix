@@ -20,6 +20,11 @@
     owner = "turnserver";
   };
 
+  age.secrets.relaySecret = {
+    generator.script = "alnum";
+    owner = "turnserver";
+  };
+
   age.secrets.dataEnc = {
     generator.script =
       { pkgs, ... }:
@@ -41,6 +46,8 @@
           AUTH_AUTHORITY = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
         };
       };
+
+      relay.authSecretFile = config.age.secrets.relaySecret.path;
 
       coturn = {
         enable = true;
