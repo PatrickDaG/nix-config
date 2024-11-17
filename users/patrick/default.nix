@@ -55,6 +55,7 @@ lib.optionalAttrs (!minimal) {
     ./theme.nix
 
     ./wayland
+    ./Xorg
 
     ./programs/bottles.nix
     ./programs/direnv.nix

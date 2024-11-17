@@ -222,7 +222,7 @@ in
       systems.oauth2.netbird = {
         public = true;
         displayName = "Netbird";
-        originUrl = "https://netbird.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://netbird.${config.secrets.secrets.global.domains.web}/#callback";
         originLanding = "https://netbird.${config.secrets.secrets.global.domains.web}/";
         preferShortUsername = true;
         enableLocalhostRedirects = true;

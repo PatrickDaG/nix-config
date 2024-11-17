@@ -113,14 +113,6 @@ in
                 "x"
                 "p"
               ];
-            "gojo" = output "eDP-1" [
-              "1"
-              "2"
-              "3"
-              "4"
-              "5"
-              "6"
-            ];
           }
           .${nixConfig.node.name} or [ ];
 

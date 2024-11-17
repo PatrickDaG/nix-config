@@ -213,13 +213,13 @@ in
           xwayland.force_zero_scaling = true;
           windowrulev2 = [
             # fix these once nvidia gets their shit together
-            #"immediate, class:^(cs2)$"
+            "immediate, class:^(cs2)$"
             # apex legends
             "immediate, class:^(steam_app_1172470)$"
             #???
             "immediate, class:^(steam_app_238960)$"
             #baldur
-            #"immediate, class:^(steam_app_1086940)$"
+            "immediate, class:^(steam_app_1086940)$"
             "float, class:^(steam)$, title:^(Friends List)"
             "float, class:^(steam)$, title:(Chat)"
 

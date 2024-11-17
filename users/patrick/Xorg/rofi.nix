@@ -1,6 +1,6 @@
 {
-  stylix.targets.rofi.enable = true;
-  programs.rofi = {
+  hm.stylix.targets.rofi.enable = true;
+  hm.programs.rofi = {
     enable = true;
     extraConfig = {
       matching = "fuzzy";
