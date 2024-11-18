@@ -15,15 +15,15 @@ let
   name = "disneyplus-via-google-chrome";
 
   meta = {
-    description = "Open Netflix in Google Chrome app mode";
+    description = "Open DisneyPlus in Google Chrome app mode";
     longDescription = ''
-      Netflix is a video streaming service providing films, TV series and exclusive content. See https://www.netflix.com.
+      DisneyPlus is a video streaming service providing films, TV series and exclusive content. See https://www.DisneyPlus.com.
 
-      This package installs an application launcher item that opens Netflix in a dedicated Google Chrome window. If your preferred browser doesn't support Netflix's DRM, this package provides a quick and easy way to launch Netflix on a supported browser, without polluting your application list with a redundant, single-purpose browser.
+      This package installs an application launcher item that opens DisneyPlus in a dedicated Google Chrome window. If your preferred browser doesn't support DisneyPlus's DRM, this package provides a quick and easy way to launch DisneyPlus on a supported browser, without polluting your application list with a redundant, single-purpose browser.
     '';
     homepage = google-chrome.meta.homepage or null;
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.roberth ];
+    maintainers = [ lib.maintainers.patrickdag ];
     platforms = google-chrome.meta.platforms or lib.platforms.all;
   };
 
@@ -34,12 +34,12 @@ let
     # (e.g. a copy in ~/.config/autostart, you lazy lazy bastard ;) )
     exec = name;
     icon = fetchurl {
-      name = "netflix-icon-2016.png";
-      url = "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png";
-      sha256 = "sha256-c0H3uLCuPA2krqVZ78MfC1PZ253SkWZP3PfWGP2V7Yo=";
+      name = "disneyplus-logo-2024.jpg";
+      url = "https://lumiere-a.akamaihd.net/v1/images/disney_logo_march_2024_050fef2e.png?region=0%2C0%2C1920%2C1080";
+      sha256 = "sha256-t71veeGtr3LF3Rzf47YFY7j9XEYmxW/Ob6eluJx1skE=";
       meta.license = lib.licenses.unfree;
     };
-    desktopName = "Netflix via Google Chrome";
+    desktopName = "DisneyPlus via Google Chrome";
     genericName = "A video streaming service providing films and exclusive TV series";
     categories = [
       "TV"
