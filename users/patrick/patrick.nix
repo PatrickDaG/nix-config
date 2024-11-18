@@ -40,6 +40,7 @@
       zotero
       bashInteractive
       element-desktop-wayland
+      beatsabermodmanager
     ];
   };
   hm.programs.bat.enable = true;

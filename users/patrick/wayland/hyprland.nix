@@ -202,9 +202,6 @@ in
             ];
           };
           decoration.rounding = 4;
-          exec-once = [
-            "${pkgs.swaynotificationcenter}/bin/swaync"
-          ];
           misc = {
             vrr = 1;
             disable_hyprland_logo = true;
