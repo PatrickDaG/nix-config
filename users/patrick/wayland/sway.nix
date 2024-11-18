@@ -15,19 +15,11 @@ in
           {
             menu = "fuzzel";
             startup = [
-              # for games to work input 1 has to be qwerts
-              # but i would like to have bone as my layout
-              {
-                command = "swaymsg input \"*\" xkb_switch_layout 1";
-                always = true;
-              }
               { command = "uwsm finalize"; }
             ];
             input = {
               "*" = {
-                xkb_layout = "de,de,de";
-                # games are stupid so the main ui has to be de() without bone
-                xkb_variant = ",bone,neo";
+                xkb_layout = "de";
                 xkb_options = "grp:win_space_toggle";
                 repeat_delay = "235";
                 repeat_rate = "60";
