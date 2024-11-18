@@ -44,6 +44,9 @@
         enableNginx = true;
         settings = {
           AUTH_AUTHORITY = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
+          # Fix Kanidm not supporting fragmented URIs
+          AUTH_REDIRECT_URI = "/peers";
+          AUTH_SILENT_REDIRECT_URI = "/add-peers";
         };
       };
 
