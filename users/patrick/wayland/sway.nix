@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   nixConfig = config;
 in
@@ -41,9 +41,12 @@ in
             keybindings =
               let
                 cfg = config.wayland.windowManager.sway.config;
+                modifier = "Mod4";
               in
               {
                 "Menu" = "exec ${cfg.menu}";
+                "${modifier}+b" = lib.mkForce "exec uwsm start firefox";
+                "${modifier}+m" = lib.mkForce "exec uwsm start thunderbird";
               };
           }
           // {
@@ -61,6 +64,8 @@ in
                   mode = "2560x1440@143.998Hz";
                   pos = "1920,720";
                   adaptive_sync = "on";
+                  allow_tearing = "yes";
+                  max_render_time = "off";
                 };
               };
             };

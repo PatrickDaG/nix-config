@@ -28,15 +28,15 @@ in
         window.titlebar = false;
         floating.titlebar = false;
         workspaceLayout = "stacking";
-        bars = map (x: x // config.lib.stylix.i3.bar) [
-          {
-            mode = "dock";
-            workspaceButtons = true;
-            workspaceNumbers = false;
-            statusCommand = "${config.programs.i3status-rust.package}/bin/i3status-rs config-main.toml";
-            trayOutput = "primary";
-          }
-        ];
+        # bars = map (x: x // config.lib.stylix.i3.bar) [
+        #   {
+        #     mode = "dock";
+        #     workspaceButtons = true;
+        #     workspaceNumbers = false;
+        #     statusCommand = "${config.programs.i3status-rust.package}/bin/i3status-rs config-main.toml";
+        #     trayOutput = "primary";
+        #   }
+        # ];
         floating.criteria = [ { class = "Pavucontrol"; } ];
 
         assigns = {
@@ -69,15 +69,8 @@ in
           {
             "desktopnix" =
               output "HDMI-0" [
-                "1"
-                "2"
-                "3"
-                "4"
-                "5"
-                "6"
-                "7"
-                "8"
-                "9"
+                "F1"
+                "F2"
               ]
               ++ output "DP-4" [
                 "j"
@@ -88,8 +81,6 @@ in
                 "p"
               ]
               ++ output "DVI-D-0" [
-                "F1"
-                "F2"
                 "F3"
                 "F4"
               ];
