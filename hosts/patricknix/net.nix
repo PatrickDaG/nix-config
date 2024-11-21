@@ -1,6 +1,9 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
-  environment.persistence."/state".directories = [ "/var/lib/iwd" ];
+  environment.persistence."/state".directories = [
+    "/var/lib/iwd"
+    "/etc/mullvad-vpn"
+  ];
   age.secrets.eduroam = {
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
@@ -68,5 +71,9 @@
       dhcpV4Config.RouteMetric = 40;
       dhcpV6Config.RouteMetric = 40;
     };
+  };
+  services.mullvad-vpn = {
+    enable = true;
+    package = pkgs.mullvad-vpn;
   };
 }

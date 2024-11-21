@@ -12,7 +12,7 @@ index 788b724231be3..c8f6836f0af93 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index f4b5bbf643239..da5b851c3fb3e 100644
+index f4b5bbf643239..bf95ea65e5fa3 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
 @@ -38,7 +38,7 @@ let
@@ -33,7 +33,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
            Username = "netbird";
            Password = "netbird";
          }
-@@ -58,10 +58,15 @@ let
+@@ -58,10 +58,14 @@ let
        Secret = "not-secure-secret";
        TimeBasedCredentials = false;
      };
@@ -46,11 +46,10 @@ index f4b5bbf643239..da5b851c3fb3e 100644
      Signal = {
        Proto = "https";
 -      URI = "${cfg.domain}:443";
-+      URI = "localhost:${builtins.toString cfg.signal.port}";
        Username = "";
        Password = null;
      };
-@@ -79,9 +84,9 @@ let
+@@ -79,9 +83,9 @@ let
      };
  
      HttpConfig = {
@@ -62,7 +61,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
      };
  
      IdpManagerConfig = {
-@@ -128,18 +133,18 @@ let
+@@ -128,18 +132,18 @@ let
      };
    };
  
@@ -84,7 +83,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
  
      domain = mkOption {
        type = str;
-@@ -196,6 +201,12 @@ in
+@@ -196,6 +200,12 @@ in
        description = "Internal port of the management server.";
      };
  
@@ -97,7 +96,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
      extraOptions = mkOption {
        type = listOf str;
        default = [ ];
-@@ -218,7 +229,7 @@ in
+@@ -218,7 +228,7 @@ in
            Stuns = [
              {
                Proto = "udp";
@@ -106,7 +105,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
                Username = "";
                Password = null;
              }
-@@ -228,7 +239,7 @@ in
+@@ -228,7 +238,7 @@ in
              Turns = [
                {
                  Proto = "udp";
@@ -115,7 +114,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
                  Username = "netbird";
                  Password = "netbird";
                }
-@@ -241,7 +252,7 @@ in
+@@ -241,7 +251,7 @@ in
  
            Signal = {
              Proto = "https";
@@ -124,7 +123,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
              Username = "";
              Password = null;
            };
-@@ -257,9 +268,9 @@ in
+@@ -257,9 +267,9 @@ in
            StoreConfig = { Engine = "sqlite"; };
  
            HttpConfig = {
@@ -136,7 +135,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
            };
  
            IdpManagerConfig = {
-@@ -334,11 +345,9 @@ in
+@@ -334,11 +344,9 @@ in
        default = "INFO";
        description = "Log level of the netbird services.";
      };
@@ -149,7 +148,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
      warnings =
        concatMap
          (
-@@ -373,7 +382,7 @@ in
+@@ -373,7 +381,7 @@ in
        serviceConfig = {
          ExecStart = escapeSystemdExecArgs (
            [
@@ -158,7 +157,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
              "management"
              # Config file
              "--config"
-@@ -383,25 +392,28 @@ in
+@@ -383,25 +391,28 @@ in
              "${stateDir}/data"
              # DNS domain
              "--dns-domain"
@@ -194,7 +193,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
          );
          Restart = "always";
          RuntimeDirectory = "netbird-mgmt";
-@@ -434,27 +446,5 @@ in
+@@ -434,27 +445,5 @@ in
        stopIfChanged = false;
      };
  
@@ -224,7 +223,7 @@ index f4b5bbf643239..da5b851c3fb3e 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 0000000000000..998ddbad212cf
+index 0000000000000..440f3c1d710a3
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
 @@ -0,0 +1,104 @@
@@ -234,6 +233,7 @@ index 0000000000000..998ddbad212cf
 +    mkEnableOption
 +    mkIf
 +    mkOption
++    mkDefault
 +    ;
 +  inherit (lib.types) str;
 +  cfg = config.services.netbird.server.proxy;
@@ -274,10 +274,19 @@ index 0000000000000..998ddbad212cf
 +      enable = true;
 +
 +      virtualHosts.${cfg.domain} = {
++        forceSSL = mkDefault true;
++        extraConfig = ''
++          proxy_set_header        X-Real-IP $remote_addr;
++          proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
++          proxy_set_header        X-Scheme $scheme;
++          proxy_set_header        X-Forwarded-Proto https;
++          proxy_set_header        X-Forwarded-Host $host;
++          grpc_set_header         X-Forwarded-For $proxy_add_x_forwarded_for;
++        '';
 +        locations = {
 +          "/" = {
 +            proxyPass = "http://${cfg.dashboardAddress}";
-+            proxyWebSockets = true;
++            proxyWebsockets = true;
 +          };
 +          "/api".proxyPass = "http://${cfg.managementAddress}";
 +
@@ -285,8 +294,6 @@ index 0000000000000..998ddbad212cf
 +            # This is necessary so that grpc connections do not get closed early
 +            # see https://stackoverflow.com/a/67805465
 +            client_body_timeout 1d;
-+
-+            grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 +
 +            grpc_pass grpc://${cfg.managementAddress};
 +            grpc_read_timeout 1d;
@@ -298,8 +305,6 @@ index 0000000000000..998ddbad212cf
 +          # This is necessary so that grpc connections do not get closed early
 +          # see https://stackoverflow.com/a/67805465
 +          client_body_timeout 1d;
-+
-+          grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 +
 +          grpc_pass grpc://${cfg.signalAddress};
 +          grpc_read_timeout 1d;
@@ -313,12 +318,6 @@ index 0000000000000..998ddbad212cf
 +          proxy_http_version 1.1;
 +          proxy_set_header Upgrade $http_upgrade;
 +          proxy_set_header Connection "Upgrade";
-+
-+          # Forward headers
-+          proxy_set_header Host $http_host;
-+          proxy_set_header X-Real-IP $remote_addr;
-+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-+          proxy_set_header X-Forwarded-Proto $scheme;
 +
 +          # Timeout settings
 +          proxy_read_timeout 3600s;
@@ -334,10 +333,10 @@ index 0000000000000..998ddbad212cf
 +}
 diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
 new file mode 100644
-index 0000000000000..38af7fb1b2865
+index 0000000000000..01c4186505b0c
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/relay.nix
-@@ -0,0 +1,124 @@
+@@ -0,0 +1,123 @@
 +{
 +  config,
 +  lib,
@@ -419,7 +418,6 @@ index 0000000000000..38af7fb1b2865
 +  config = mkIf cfg.enable {
 +    services.netbird.server.relay.settings = {
 +      NB_LISTEN_ADDRESS = mkDefault ":${builtins.toString cfg.port}";
-+      NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.port}";
 +      NB_METRICS_PORT = mkDefault "9092"; # Upstream default is 9090 but this would clash for nixos where all services run on the same host
 +    };
 +    systemd.services.netbird-relay = {
@@ -428,7 +426,7 @@ index 0000000000000..38af7fb1b2865
 +      environment = cfg.settings;
 +
 +      script = ''
-+        export NB_AUTH_SECRET="(<${cfg.authSecretFile})"
++        export NB_AUTH_SECRET="$(<${cfg.authSecretFile})"
 +        ${getExe' cfg.package "netbird-relay"}
 +      '';
 +      serviceConfig = {
@@ -463,7 +461,7 @@ index 0000000000000..38af7fb1b2865
 +  };
 +}
 diff --git a/nixos/modules/services/networking/netbird/server.md b/nixos/modules/services/networking/netbird/server.md
-index 3649e97b379e5..d5c137f4fff98 100644
+index 3649e97b379e5..ffda72c0626a4 100644
 --- a/nixos/modules/services/networking/netbird/server.md
 +++ b/nixos/modules/services/networking/netbird/server.md
 @@ -4,9 +4,10 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
@@ -491,7 +489,7 @@ index 3649e97b379e5..d5c137f4fff98 100644
  
    coturn = {
      enable = true;
-@@ -24,19 +28,16 @@ services.netbird.server = {
+@@ -24,19 +28,17 @@ services.netbird.server = {
  
    management = {
      oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
@@ -508,6 +506,7 @@ index 3649e97b379e5..d5c137f4fff98 100644
 -        ];
 -      };
 -    };
++    settings.Signal.URI = "publicly reachable signal endpoint";
    };
  };
  ```
@@ -522,7 +521,7 @@ index 3649e97b379e5..d5c137f4fff98 100644
 +
 +```
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 1725374d03c6b..5d02a4017328b 100644
+index 1725374d03c6b..b481770071b82 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
 @@ -16,7 +16,7 @@ in
@@ -558,7 +557,7 @@ index 1725374d03c6b..5d02a4017328b 100644
  
          managementServer = "https://${cfg.domain}";
        };
-@@ -53,7 +52,6 @@ in
+@@ -53,31 +52,35 @@ in
          {
            domain = mkDefault cfg.domain;
            enable = mkDefault cfg.enable;
@@ -566,7 +565,13 @@ index 1725374d03c6b..5d02a4017328b 100644
          }
          // (optionalAttrs cfg.coturn.enable rec {
            turnDomain = cfg.domain;
-@@ -66,18 +64,22 @@ in
+           turnPort = config.services.coturn.tls-listening-port;
+           # We cannot merge a list of attrsets so we have to redefine the whole list
+           settings = {
++            Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
+             TURNConfig.Turns = mkDefault [
+               {
+                 Proto = "udp";
                  URI = "turn:${turnDomain}:${builtins.toString turnPort}";
                  Username = "netbird";
                  Password =
@@ -589,7 +594,7 @@ index 1725374d03c6b..5d02a4017328b 100644
 +      };
 +
 +      relay = {
-+        settings.NB_EXPOSED_ADDRESS = "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
++        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
 +        enable = mkDefault cfg.enable;
        };
  

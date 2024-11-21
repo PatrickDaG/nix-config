@@ -8,19 +8,6 @@ in
     openFirewall = true;
   };
 
-  disabledModules = [ "services/networking/netbird.nix" ];
-
-  imports = [ ../../modules/netbird-client.nix ];
-  services.netbird.tunnels = {
-    netbird-samba = {
-      environment = {
-        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
-        NB_HOSTNAME = "samba";
-      };
-      port = 56789;
-    };
-  };
-
   age.secrets.resticpasswd = {
     generator.script = "alnum";
   };
@@ -64,7 +51,6 @@ in
 
   networking.nftables.firewall.zones.untrusted.interfaces = [
     "samba-patrick"
-    "netbird-samba"
   ];
 
   services.samba = {
@@ -361,16 +347,6 @@ in
               directory = "${v.path}";
               user = "${v."force user"}";
               group = "${v."force group"}";
-              mode = "0770";
-            }
-          ];
-        }
-      ))
-      (lib.flip lib.mapAttrsToList config.services.netbird.tunnels (
-        _: v: {
-          "/state".directories = [
-            {
-              directory = "/var/lib/${v.stateDir}";
               mode = "0770";
             }
           ];

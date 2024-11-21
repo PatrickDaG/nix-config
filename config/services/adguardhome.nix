@@ -38,6 +38,7 @@
         "||adguardhome.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
         "||nc.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
         "||immich.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
+        "||smb.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth-samba config.secrets.secrets.global.net.privateSubnetv4}"
         "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4}"
       ];
       dhcp.enabled = false;

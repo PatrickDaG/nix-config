@@ -36,6 +36,14 @@
 
   networking.firewall.allowedUDPPorts = [ 3478 ]; # STUN/TURN server
   services.netbird = {
+    clients.main = {
+      port = 51820;
+      environment = {
+        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_ADMIN_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_HOSTNAME = "home";
+      };
+    };
     server = {
       enable = true;
       domain = "netbird.${config.secrets.secrets.global.domains.web}";
@@ -50,7 +58,10 @@
         };
       };
 
-      relay.authSecretFile = config.age.secrets.relaySecret.path;
+      relay = {
+        authSecretFile = config.age.secrets.relaySecret.path;
+        settings.NB_EXPOSED_ADDRESS = "rels://netbird.${config.secrets.secrets.global.domains.web}:443";
+      };
 
       coturn = {
         enable = true;
@@ -66,6 +77,7 @@
           TURNConfig = {
             Secret._secret = config.age.secrets.coturnSecret.path;
           };
+          Signal.URI = "netbird.${config.secrets.secrets.global.domains.web}:443";
           HttpConfig = {
             # This is not possible
             # failed validating JWT token sent from peer y1ParZkbzVMQGeU/KMycYl75v90i2O6EwgO1YQZnSFs= with error rpc error: code = Internal desc = unable to fetch account with claims, err: user ID is empty
@@ -87,6 +99,11 @@
       directory = "/var/lib/netbird-mgmt";
       mode = "440";
       user = "netbird";
+    }
+    {
+      directory = "/var/lib/netbird-main";
+      mode = "440";
+      user = "netbird-main";
     }
   ];
 }

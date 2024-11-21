@@ -38,6 +38,7 @@
       firefly-iii = uidGid 226;
       homebox = uidGid 227;
       signal = uidGid 228;
+      netbird-main = uidGid 229;
       paperless = uidGid 315;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;

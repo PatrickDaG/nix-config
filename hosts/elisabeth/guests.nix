@@ -24,7 +24,6 @@ let
         apispotify = "apisptfy";
         kanidm = "auth";
         oauth2-proxy = "oauth2";
-        netbird = "netbird";
         actual = "actual";
         firefly = "money";
         homebox = "homebox";
@@ -44,6 +43,19 @@ let
       nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in
 {
+  services.netbird.server.proxy =
+    let
+      cfg = nodes.elisabeth-netbird.config.services.netbird.server;
+    in
+    {
+      domain = "netbird.${config.secrets.secrets.global.domains.web}";
+      enable = true;
+      enableNginx = true;
+      signalAddress = "${nodes.elisabeth-netbird.config.wireguard.elisabeth.ipv4}:${toString cfg.signal.port}";
+      relayAddress = "${nodes.elisabeth-netbird.config.wireguard.elisabeth.ipv4}:${toString cfg.relay.port}";
+      managementAddress = "${nodes.elisabeth-netbird.config.wireguard.elisabeth.ipv4}:${toString cfg.management.port}";
+      dashboardAddress = "${nodes.elisabeth-netbird.config.wireguard.elisabeth.ipv4}:80";
+    };
   services.nginx =
     let
       blockOf =
@@ -129,51 +141,7 @@ in
       {
         enable = true;
         recommendedSetup = true;
-        upstreams.netbird = {
-          servers."${ipOf "netbird"}:80" = { };
-          extraConfig = ''
-            zone netbird 64k ;
-            keepalive 5 ;
-          '';
-        };
-        upstreams.netbird-mgmt = {
-          servers."${ipOf "netbird"}:3000" = { };
-          extraConfig = ''
-            zone netbird 64k ;
-            keepalive 5 ;
-          '';
-        };
-        virtualHosts.${domainOf "netbird"} = {
-          forceSSL = true;
-          useACMEHost = "web";
-          locations = {
-            "/" = {
-              proxyPass = "http://netbird";
-              proxyWebsockets = true;
-              X-Frame-Options = "SAMEORIGIN";
-            };
-            "/signalexchange.SignalExchange/".extraConfig = ''
-              grpc_pass grpc://${ipOf "netbird"}:8012;
-              grpc_read_timeout 1d;
-              grpc_send_timeout 1d;
-              grpc_socket_keepalive on;
-            '';
-
-            "/api".proxyPass = "http://netbird-mgmt";
-
-            "/management.ManagementService/".extraConfig = ''
-              grpc_pass grpc://${ipOf "netbird"}:3000;
-              grpc_read_timeout 1d;
-              grpc_send_timeout 1d;
-              grpc_socket_keepalive on;
-            '';
-          };
-          extraConfig = ''
-            client_max_body_size 500M ;
-            client_header_timeout 1d;
-            client_body_timeout 1d;
-          '';
-        };
+        virtualHosts."netbird.${config.secrets.secrets.global.domains.web}".useACMEHost = "web";
       }
       (blockOf "vaultwarden" { maxBodySize = "1G"; })
       (blockOf "forgejo" { maxBodySize = "1G"; })
