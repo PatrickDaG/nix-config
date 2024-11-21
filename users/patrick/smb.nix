@@ -1,8 +1,8 @@
-{ config, nodes, ... }:
+{ config, ... }:
 {
   hm.home.smb =
     let
-      address = nodes.elisabeth-samba.config.wireguard.samba-patrick.ipv4;
+      address = "smb.${config.secrets.secrets.global.domains.web}";
       credentials = config.age.secrets.smb-creds.path;
     in
     [

@@ -39,19 +39,6 @@ in
       ##];
     };
   };
-  wireguard.samba-patrick.server = {
-    host = config.secrets.secrets.global.domains.web;
-    port = 51830;
-    reservedAddresses = [
-      "10.43.0.0/20"
-      "fd00:1765::/112"
-    ];
-    openFirewall = true;
-  };
-
-  networking.nftables.firewall.zones.untrusted.interfaces = [
-    "samba-patrick"
-  ];
 
   services.samba = {
     enable = true;

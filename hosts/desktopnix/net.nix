@@ -26,7 +26,6 @@
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
-  wireguard.samba-patrick.client.via = "elisabeth-samba";
   services.mullvad-vpn = {
     enable = true;
     package = pkgs.mullvad-vpn;
@@ -35,7 +34,7 @@
     "/etc/mullvad-vpn"
     {
       directory = "/var/lib/netbird-main";
-      owner = "netbird-main";
+      user = "netbird-main";
     }
   ];
   services.netbird = {

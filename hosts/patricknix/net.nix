@@ -14,7 +14,6 @@
     devoloog-sae19.rekeyFile = ./secrets/iwd/devoloog-sae19.age;
     devoloog-sae20.rekeyFile = ./secrets/iwd/devoloog-sae20.age;
   };
-  wireguard.samba-patrick.client.via = "elisabeth-samba";
   networking.nftables.firewall.zones.untrusted.interfaces = [
     "lan01"
     "lan02"
