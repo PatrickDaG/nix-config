@@ -3,6 +3,10 @@
   environment.persistence."/state".directories = [
     "/var/lib/iwd"
     "/etc/mullvad-vpn"
+    {
+      directory = "/var/lib/netbird-main";
+      user = "netbird-main";
+    }
   ];
   age.secrets.eduroam = {
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
@@ -75,4 +79,15 @@
     enable = true;
     package = pkgs.mullvad-vpn;
   };
+  services.netbird = {
+    clients.main = {
+      port = 51820;
+      environment = {
+        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_ADMIN_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_HOSTNAME = "patricknix";
+      };
+    };
+  };
+  users.users."patrick".extraGroups = [ "netbird-main" ];
 }

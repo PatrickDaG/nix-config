@@ -5,11 +5,15 @@
 {
   hm.home = {
     packages = with pkgs; [
+      bashInteractive
+      beatsabermodmanager
       chatterino2
       chromium
       cmatrix
       cowsay
       discord
+      disneyplus
+      element-desktop
       feh
       figlet
       galaxy-buds-client
@@ -19,7 +23,6 @@
       hyperfine
       mpv
       netflix
-      disneyplus
       nextcloud-client
       nix-output-monitor
       nixpkgs-review
@@ -33,14 +36,12 @@
       telegram-desktop
       timer
       via
+      wcurl
       webcord
       xournalpp
       yt-dlp
       zathura
       zotero
-      bashInteractive
-      element-desktop-wayland
-      beatsabermodmanager
     ];
   };
   hm.programs.bat.enable = true;

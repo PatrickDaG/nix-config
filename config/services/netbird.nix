@@ -9,6 +9,12 @@
       33080 # relay
     ];
   };
+  networking.nftables.chains.forward.from-netbird = {
+    after = [ "conntrack" ];
+    rules = [
+      "iifname nb-main oifname mv-lan accept"
+    ];
+  };
 
   age.secrets.coturnPassword = {
     generator.script = "alnum";
@@ -34,7 +40,10 @@
     group = "netbird";
   };
 
-  networking.firewall.allowedUDPPorts = [ 3478 ]; # STUN/TURN server
+  networking.firewall.allowedUDPPorts = [
+    3478
+    5349
+  ]; # STUN/TURN server
   services.netbird = {
     clients.main = {
       port = 51820;
@@ -44,6 +53,7 @@
         NB_HOSTNAME = "home";
       };
     };
+
     server = {
       enable = true;
       domain = "netbird.${config.secrets.secrets.global.domains.web}";

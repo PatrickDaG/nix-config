@@ -61,7 +61,6 @@
   ];
   zramSwap.enable = true;
 
-  services.netbird.enable = true;
   # Do not cleanup nix store to prevent having to rebuild packages onca a month
   nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = "x86_64-linux";
