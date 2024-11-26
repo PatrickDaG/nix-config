@@ -40,6 +40,10 @@
           hostname = config.secrets.secrets.global.user.hetzner_ip;
           user = "root";
         };
+        "mailnix" = {
+          hostname = config.secrets.secrets.global.user.mailnix_ip;
+          user = "root";
+        };
 
         "desktopnix" = {
           hostname = "desktopnix.local";

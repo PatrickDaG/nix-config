@@ -37,10 +37,10 @@
   services.xserver.xkb = {
     layout = "de";
   };
-  services.logkeys = {
-    enable = true;
-    device = "/dev/input/event15";
-  };
+  # services.logkeys = {
+  #   enable = true;
+  #   device = "/dev/input/event15";
+  # };
 
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"

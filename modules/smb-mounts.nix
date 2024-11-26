@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    any
     mkOption
     types
     flip
@@ -64,42 +65,48 @@ in
     }
   ];
 
-  imports = [
-    {
-      environment.systemPackages = [ pkgs.cifs-utils ];
-      fileSystems = mkMerge (
-        flip concatMap (attrNames config.home-manager.users) (
-          user:
-          let
-            parentPath = "/home/${user}/smb";
-            cfg = config.home-manager.users.${user}.home.smb;
-            inherit (config.users.users.${user}) uid;
-            inherit (config.users.groups.${user}) gid;
-          in
-          flip map cfg (cfg: {
-            "${parentPath}/${cfg.localPath}" =
-              let
-                options =
-                  baseOptions
-                  ++ [
-                    "uid=${toString uid}"
-                    "gid=${toString gid}"
-                    "file_mode=0600"
-                    "dir_mode=0700"
-                    "credentials=${cfg.credentials}"
-                    "x-systemd.automount"
-                    "_netdev"
-                  ]
-                  ++ (optional (!cfg.automatic) "noauto");
-              in
-              {
-                inherit options;
-                device = "//${cfg.address}/${cfg.remotePath}";
-                fsType = "cifs";
-              };
-          })
-        )
+  imports =
+    let
+      existingCfg = flip any (attrNames config.home-manager.users) (
+        user: (config.home-manager.users.${user}.home.smb != [ ])
       );
-    }
-  ];
+    in
+    [
+      {
+        environment.systemPackages = lib.optional existingCfg pkgs.cifs-utils;
+        fileSystems = mkMerge (
+          flip concatMap (attrNames config.home-manager.users) (
+            user:
+            let
+              parentPath = "/home/${user}/smb";
+              cfg = config.home-manager.users.${user}.home.smb;
+              inherit (config.users.users.${user}) uid;
+              inherit (config.users.groups.${user}) gid;
+            in
+            flip map cfg (cfg: {
+              "${parentPath}/${cfg.localPath}" =
+                let
+                  options =
+                    baseOptions
+                    ++ [
+                      "uid=${toString uid}"
+                      "gid=${toString gid}"
+                      "file_mode=0600"
+                      "dir_mode=0700"
+                      "credentials=${cfg.credentials}"
+                      "x-systemd.automount"
+                      "_netdev"
+                    ]
+                    ++ (optional (!cfg.automatic) "noauto");
+                in
+                {
+                  inherit options;
+                  device = "//${cfg.address}/${cfg.remotePath}";
+                  fsType = "cifs";
+                };
+            })
+          )
+        );
+      }
+    ];
 }

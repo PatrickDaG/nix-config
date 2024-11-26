@@ -17,15 +17,14 @@ This showcases my end user setup, which I dailydrive on all my hosts.
 | | Programm | Description
 ---|---|---
 🐚 Shell | [ZSH](./users/common/shells/zsh/default.nix) & [Starship](./users/common/shells/starfish.nix) | ZSH with FZF autocomplete, starship prompt, sqlite history and histdb-skim for fancy reverse search
-🪟 WM | [Sway](./users/common/graphical/wayland/sway.nix) & [i3](./users/common/graphical/Xorg/i3.nix) | Tiling window managers with similar behaviour for wayland and xorg
-🖼️ Styling | [Stylix](./modules/graphical/default.nix) | globally consistent styling 
-📝 Editor | [NeoVim](./users/common/programs/nvim/default.nix) | Extensively configured neovim
-🎮 Gaming | [Bottles](./users/common/programs/bottles.nix) & [Steam](./modules/optional/steam.nix) | Pew, Pew and such
+🪟 WM | [Hyprland](./users/patrick/wayland/hyprland.nix) | Tiling window manager
+🖼️ Styling | [Stylix](./users/patrick/theme.nix) | globally consistent styling 
+📝 Editor | [NeoVim](./users/patrick/programs/nvim/default.nix) | Extensively configured neovim
+🎮 Gaming | [Bottles](./users/patrick/programs/bottles.nix) & [Steam](./users/patrick/programs/steam.nix) | Pew, Pew and such
 🌐 Browser | [Firefox](./users/patrick/firefox.nix) | Heavily configured Firefox to still my privacy and security needs
-💻 Terminal | [Kitty](./users/common/programs/kitty.nix) | fast terminal
-🎵 Music | [Spotify](./users/common/programs/spicetify.nix) | Fancy looking spotify using spicetify
+💻 Terminal | [Kitty](./users/patrick/programs/kitty.nix) | fast terminal
+🎵 Music | [Spotify](./users/patrick/programs/spicetify.nix) | Fancy looking spotify using spicetify
 📫 Mail | [Thunderbird](./users/common/programs/thunderbird.nix) | Best email client there is
-🎛️ StreamDeck | [StreamDeck](./users/patrick/streamdeck.nix) | More hotkeys = more better
 
 ## Service Configuration
 These are services I've set up
@@ -64,7 +63,7 @@ These are notable external flakes which this config depend upon
 [impermanence](https://github.com/nix-community/impermanence) | stateless filesystem
 [lanzaboote](https://github.com/nix-community/lanzaboote) | Secure Boot
 [stylix](https://github.com/danth/stylix) | theming
-[spicetify](https://github.com/the-argus/spicetify-nix) | spotify looking fancy
+[spicetify](https://github.com/Gerg-l/spicetify-nix) | spotify looking fancy
 
 
 
@@ -82,9 +81,9 @@ These are notable external flakes which this config depend upon
     - This might take multiple minutes(~10)
     - Alternatively boot an official nixos image connect with password
 3. Copy ISO to usb using dd
-3. After booting copy the installer to the live system using `nix copy --to <target> .#nodes.<target-system>.config.system.build.installFromLive`
+3. After booting copy the installer to the live system using `nix copy --to <target> .#minimalConfigurations.<target-system>.config.system.build.installFromLive`
 4. Run the installer script from the nix store of the live system
-    - you can get the path using `nix path-info .#nodes.<target-system>.config.system.build.installFromLive`
+    - you can get the path using `nix path-info .#minimalConfigurations.<target-system>.config.system.build.installFromLive`
 4. Export all zpools and reboot into system
 6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub`
 5. Deploy system
