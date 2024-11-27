@@ -42,6 +42,9 @@
       paperless = uidGid 315;
       stalwart-mail = uidGid 316;
       build = uidGid 317;
+      nix-build = {
+        gid = 230;
+      };
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
       patrick = uidGid 1000;

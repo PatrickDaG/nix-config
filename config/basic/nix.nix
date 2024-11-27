@@ -6,6 +6,7 @@
       allowed-users = [ "@wheel" ];
       trusted-users = [
         "root"
+        "@nix-build"
       ];
       system-features = [
         "recursive-nix"
@@ -59,7 +60,4 @@
   };
   programs.nix-ld.enable = true;
   system.stateVersion = stateVersion;
-  hm-all.nixpkgs.config = {
-    allowUnfree = true;
-  };
 }

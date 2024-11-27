@@ -4,8 +4,8 @@ set -euo pipefail
 
 print_out_path=false
 if [[ "$1" == "--print-out-path" ]]; then
-	print_out_path=true
-	shift
+  print_out_path=true
+  shift
 fi
 
 file="$1"
@@ -28,11 +28,11 @@ mkdir -p "$(dirname "$out")"
 
 # Decrypt only if necessary
 if [[ ! -e "$out" ]]; then
-	args=()
-	for i in "${identities[@]}"; do
-		args+=("-i" "$i")
-	done
-	rage -d "${args[@]}" -o "$out" "$file"
+  args=()
+  for i in "${identities[@]}"; do
+    args+=("-i" "$i")
+  done
+  rage -d "${args[@]}" -o "$out" "$file"
 fi
 
 # Print out path or decrypted content

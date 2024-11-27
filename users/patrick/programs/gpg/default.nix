@@ -10,7 +10,7 @@
     group = "patrick";
     mode = "640";
   };
-  hm.programs.gpg.publicKeys = [
+  hm-all.programs.gpg.publicKeys = [
     {
       source = ./pubkey.gpg;
       trust = 5;
@@ -30,13 +30,13 @@
           lib.escapeShellArg config.age.secrets."my-gpg-yubikey-keygrip.tar".path
         } -C "$HOME/.gnupg/private-keys-v1.d/"
       '';
-  hm.services.gpg-agent = {
+  hm-all.services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
     pinentryPackage = pkgs.pinentry-gnome3;
   };
 
-  hm.programs.gpg = {
+  hm-all.programs.gpg = {
     enable = true;
     scdaemonSettings.disable-ccid = true;
     settings = {

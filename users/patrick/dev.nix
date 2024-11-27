@@ -1,5 +1,7 @@
 {
   lib,
+  config,
+  nodes,
   minimal,
   pkgs,
   ...
@@ -22,6 +24,7 @@ lib.optionalAttrs (!minimal) {
     enableDebugInfo = true;
   };
   documentation = {
+    enable = true;
     dev.enable = true;
     doc.enable = false;
     man.enable = true;
@@ -33,4 +36,27 @@ lib.optionalAttrs (!minimal) {
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
   '';
+  age.secrets.mailnixSSHKey = {
+    inherit (nodes.mailnix.config.age.secrets.buildSSHKey) rekeyFile;
+    mode = "400";
+  };
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [
+      {
+        hostName = config.secrets.secrets.global.user.mailnix_ip;
+        protocol = "ssh-ng";
+        sshUser = "build";
+        system = "aarch64-linux";
+        sshKey = config.age.secrets.mailnixSSHKey.path;
+        supportedFeatures = [
+          "big-parallel"
+          #"kvm"
+        ];
+        publicHostKey = builtins.readFile "${pkgs.runCommand "base64HoseKey" { }
+          ''${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out''
+        }";
+      }
+    ];
+  };
 }
