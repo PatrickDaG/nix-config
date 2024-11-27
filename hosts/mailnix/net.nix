@@ -53,14 +53,14 @@
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
   security.acme.certs = {
-    # mail_public = {
-    #   domain = config.secrets.secrets.global.domains.mail_public;
-    #   extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_public}" ];
-    # };
-    # mail_private = {
-    #   domain = config.secrets.secrets.global.domains.mail_private;
-    #   extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_private}" ];
-    # };
+    "${config.secrets.secrets.global.domains.mail_public}" = {
+      domain = config.secrets.secrets.global.domains.mail_public;
+      extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_public}" ];
+    };
+    "${config.secrets.secrets.global.domains.mail_private}" = {
+      domain = config.secrets.secrets.global.domains.mail_private;
+      extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_private}" ];
+    };
   };
   environment.persistence."/state".directories = [
     {

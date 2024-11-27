@@ -10,6 +10,7 @@
     ./net.nix
     ./nftables.nix
     ./nix.nix
+    ./secrets.nix
     ./ssh.nix
     ./system.nix
     ./users.nix
@@ -28,6 +29,7 @@
     inputs.agenix.nixosModules.default
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.default
+    inputs.idmail.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nix-topology.nixosModules.default

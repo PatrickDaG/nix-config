@@ -3,6 +3,8 @@
     ../../config/basic
     ../../config/support/initrd-ssh.nix
     ../../config/support/zfs.nix
+    ../../config/services/idmail.nix
+    ../../config/services/stalwart.nix
 
     ./net.nix
     ./fs.nix

@@ -40,6 +40,8 @@
       signal = uidGid 228;
       netbird-main = uidGid 229;
       paperless = uidGid 315;
+      stalwart-mail = uidGid 316;
+      build = uidGid 317;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
       patrick = uidGid 1000;
