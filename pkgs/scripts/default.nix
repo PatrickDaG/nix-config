@@ -13,8 +13,13 @@ _final: prev: {
     };
     unlock = prev.writeShellApplication {
       name = "unlock-builders";
-      runtimeInputs = [ prev.nix-output-monitor ];
+      runtimeInputs = [ ];
       text = builtins.readFile ./unlock.sh;
+    };
+    lock = prev.writeShellApplication {
+      name = "lock-builders";
+      runtimeInputs = [ ];
+      text = builtins.readFile ./lock.sh;
     };
     update = prev.writeShellApplication {
       name = "update";

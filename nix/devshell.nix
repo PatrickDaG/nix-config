@@ -36,7 +36,13 @@
             help = "deploy nix configurations";
           }
           {
-            package = pkgs.scripts.unlock;
+            package = pkgs.symlinkJoin {
+              name = "locker";
+              paths = [
+                pkgs.scripts.unlock
+                pkgs.scripts.lock
+              ];
+            };
             help = "build nix configurations";
           }
           {
