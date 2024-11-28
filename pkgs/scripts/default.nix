@@ -11,6 +11,11 @@ _final: prev: {
       runtimeInputs = [ prev.nix-output-monitor ];
       text = builtins.readFile ./build.sh;
     };
+    unlock = prev.writeShellApplication {
+      name = "unlock-builders";
+      runtimeInputs = [ prev.nix-output-monitor ];
+      text = builtins.readFile ./unlock.sh;
+    };
     update = prev.writeShellApplication {
       name = "update";
       runtimeInputs = [ ];

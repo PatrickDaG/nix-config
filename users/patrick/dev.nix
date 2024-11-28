@@ -36,10 +36,6 @@ lib.optionalAttrs (!minimal) {
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
   '';
-  age.secrets.mailnixSSHKey = {
-    inherit (nodes.mailnix.config.age.secrets.buildSSHKey) rekeyFile;
-    mode = "400";
-  };
   nix = {
     distributedBuilds = true;
     buildMachines = [
@@ -48,7 +44,7 @@ lib.optionalAttrs (!minimal) {
         protocol = "ssh-ng";
         sshUser = "build";
         system = "aarch64-linux";
-        sshKey = config.age.secrets.mailnixSSHKey.path;
+        sshKey = "/run/builder-unlock/mailnix";
         supportedFeatures = [
           "big-parallel"
           #"kvm"

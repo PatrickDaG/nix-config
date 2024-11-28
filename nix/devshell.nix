@@ -36,6 +36,10 @@
             help = "deploy nix configurations";
           }
           {
+            package = pkgs.scripts.unlock;
+            help = "build nix configurations";
+          }
+          {
             package = pkgs.scripts.build;
             help = "build nix configurations";
           }

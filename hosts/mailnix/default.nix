@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ../../config/basic
@@ -28,32 +28,9 @@
   users.users.build = {
     isSystemUser = true;
     shell = pkgs.bash;
-    group = "build";
+    group = "nogroup";
     extraGroups = [ "nix-build" ];
     createHome = false;
-    openssh.authorizedKeys.keyFiles = [
-      ./secrets/generated/buildSSHKey.pub
-    ];
   };
-
-  age.secrets.buildSSHKey = {
-    generator.script =
-      {
-        lib,
-        name,
-        pkgs,
-        file,
-        ...
-      }:
-      ''
-        key=$(exec 3>&1; ${pkgs.openssh}/bin/ssh-keygen -q -t ed25519 -N "" -C ${lib.escapeShellArg "${config.networking.hostName}:${name}"} -f /proc/self/fd/3 <<<y >/dev/null 2>&1; true)
-        (exec 3<&0; ${pkgs.openssh}/bin/ssh-keygen -f /proc/self/fd/3 -y) <<< "$key" > ${
-          lib.escapeShellArg (lib.removeSuffix ".age" file + ".pub")
-        }
-        echo "$key"
-      '';
-    intermediary = true;
-  };
-  users.groups.build = { };
   users.groups.nix-build = { };
 }
