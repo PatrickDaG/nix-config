@@ -205,17 +205,12 @@ in
     enable = true;
     settings =
       let
-        case = field: check: value: data: {
-          "if" = field;
-          ${check} = value;
-          "then" = data;
-        };
         ifthen = field: data: {
           "if" = field;
           "then" = data;
         };
         otherwise = value: { "else" = value; };
-        is-smtp = case "listener" "eq" "smtp";
+        is-smtp = ifthen "listener = 'smtp'";
         is-authenticated = data: {
           "if" = "!is_empty(authenticated_as)";
           "then" = data;
