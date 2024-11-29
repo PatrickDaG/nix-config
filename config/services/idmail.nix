@@ -73,6 +73,8 @@ in
   systemd.services.idmail.serviceConfig.RestartSec = "60"; # Retry every minute
 
   services.nginx = {
+    enable = true;
+    recommendedSetup = true;
     upstreams.idmail = {
       servers."127.0.0.1:3000" = { };
       extraConfig = ''
@@ -82,7 +84,7 @@ in
     };
     virtualHosts.${idmailDomain} = {
       forceSSL = true;
-      useACMEWildcardHost = true;
+      useACMEHost = domain;
       locations."/" = {
         proxyPass = "http://idmail";
         proxyWebsockets = true;

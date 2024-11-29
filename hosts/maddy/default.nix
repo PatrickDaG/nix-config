@@ -2,7 +2,7 @@
   imports = [
     ../../config/basic
     ../../config/support/initrd-ssh.nix
-    ../../config/services/maddy.nix
+    # ../../config/services/maddy.nix
     ../../config/support/zfs.nix
 
     ./net.nix

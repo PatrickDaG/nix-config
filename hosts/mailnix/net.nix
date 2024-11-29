@@ -52,6 +52,7 @@
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
+  users.groups.acme.members = [ "nginx" ];
   security.acme.certs = {
     "${config.secrets.secrets.global.domains.mail_public}" = {
       domain = config.secrets.secrets.global.domains.mail_public;

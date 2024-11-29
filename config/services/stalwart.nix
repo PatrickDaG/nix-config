@@ -125,6 +125,8 @@ in
     }
   ];
   services.nginx = {
+    enable = true;
+    recommendedSetup = true;
     upstreams.stalwart = {
       servers."127.0.0.1:8080" = { };
       extraConfig = ''
@@ -136,7 +138,7 @@ in
       {
         ${domain} = {
           forceSSL = true;
-          useACMEWildcardHost = true;
+          useACMEHost = domain;
           extraConfig = ''
             client_max_body_size 512M;
           '';
@@ -154,7 +156,7 @@ in
         ]
         (_: {
           forceSSL = true;
-          useACMEWildcardHost = true;
+          useACMEHost = domain;
           locations."/".proxyPass = "http://stalwart";
         });
   };
