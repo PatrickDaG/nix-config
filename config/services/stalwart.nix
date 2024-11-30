@@ -152,7 +152,6 @@ in
         [
           "autoconfig.${domain}"
           "autodiscover.${domain}"
-          "mta-sts.${domain}"
         ]
         (_: {
           forceSSL = true;
@@ -638,6 +637,9 @@ in
           ];
         };
 
+        # needs certificate for all domain
+        # Dane is better anyway
+        session.mta-sts.mode = "none";
         session.ehlo = {
           require = true;
           reject-non-fqdn = [

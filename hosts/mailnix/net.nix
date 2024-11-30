@@ -58,10 +58,6 @@
       domain = config.secrets.secrets.global.domains.mail_public;
       extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_public}" ];
     };
-    "${config.secrets.secrets.global.domains.mail_private}" = {
-      domain = config.secrets.secrets.global.domains.mail_private;
-      extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_private}" ];
-    };
   };
   environment.persistence."/state".directories = [
     {
