@@ -182,6 +182,7 @@ in
             persistRoot = "/renaultft";
           }
           {
+            "guest ok" = "yes";
             "read only" = "yes";
             "write list" = "@family";
           }

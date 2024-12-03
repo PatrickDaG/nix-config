@@ -20,7 +20,7 @@
         packages = with pkgs; [
           # Nix
           nil
-          inputs.nixp-meta.packages.x86_64-linux.nixp-meta-release
+          inputs.nixp-meta.packages.x86_64-linux.nim-release
 
           # Misc
           shellcheck
