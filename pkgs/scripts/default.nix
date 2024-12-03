@@ -26,7 +26,7 @@ _final: prev: {
       runtimeInputs = [ ];
       text = ''
         nix flake update
-        nixp-meta update-prs
+        nim update-prs
       '';
     };
   };

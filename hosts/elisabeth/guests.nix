@@ -28,7 +28,6 @@ let
         firefly = "money";
         homebox = "homebox";
         octoprint = "print";
-        pr-tracker = "tracker";
         invidious = "yt";
         blog = "blog";
       };
@@ -161,14 +160,6 @@ in
       (blockOf "yourspotify" { port = 80; })
       (blockOf "blog" { port = 80; })
       (blockOf "homebox" { })
-      (blockOf "pr-tracker" { })
-      {
-        virtualHosts.${domainOf "pr-tracker"} = {
-          locations."/update" = {
-            extraConfig = "deny all;";
-          };
-        };
-      }
       (proxyProtect "ollama" { } true)
       (proxyProtect "octoprint" { } true)
       (proxyProtect "firefly" { port = 80; } true)
@@ -237,10 +228,14 @@ in
               systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
                 DHCP = lib.mkForce "no";
                 address = [
-                  (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName
-                  }" config.secrets.secrets.global.net.privateSubnetv4)
-                  (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName
-                  }" config.secrets.secrets.global.net.privateSubnetv6)
+                  (lib.net.cidr.hostCidr
+                    config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
+                    config.secrets.secrets.global.net.privateSubnetv4
+                  )
+                  (lib.net.cidr.hostCidr
+                    config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
+                    config.secrets.secrets.global.net.privateSubnetv6
+                  )
                 ];
                 gateway = [ (lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4) ];
               };
@@ -288,7 +283,6 @@ in
     // mkContainer "ollama" { }
     // mkContainer "murmur" { }
     // mkContainer "homebox" { }
-    // mkContainer "pr-tracker" { }
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }

@@ -12,7 +12,7 @@ index 788b724231be3..c8f6836f0af93 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index f4b5bbf643239..bf95ea65e5fa3 100644
+index 4ebaa60ecb052..a2af8fccbe932 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
 @@ -38,7 +38,7 @@ let
@@ -83,20 +83,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
  
      domain = mkOption {
        type = str;
-@@ -196,6 +200,12 @@ in
-       description = "Internal port of the management server.";
-     };
- 
-+    metricsPort = mkOption {
-+      type = port;
-+      default = 9090;
-+      description = "Internal port of the metrics server.";
-+    };
-+
-     extraOptions = mkOption {
-       type = listOf str;
-       default = [ ];
-@@ -218,7 +228,7 @@ in
+@@ -224,7 +228,7 @@ in
            Stuns = [
              {
                Proto = "udp";
@@ -105,7 +92,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
                Username = "";
                Password = null;
              }
-@@ -228,7 +238,7 @@ in
+@@ -234,7 +238,7 @@ in
              Turns = [
                {
                  Proto = "udp";
@@ -114,7 +101,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
                  Username = "netbird";
                  Password = "netbird";
                }
-@@ -241,7 +251,7 @@ in
+@@ -247,7 +251,7 @@ in
  
            Signal = {
              Proto = "https";
@@ -123,7 +110,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
              Username = "";
              Password = null;
            };
-@@ -257,9 +267,9 @@ in
+@@ -263,9 +267,9 @@ in
            StoreConfig = { Engine = "sqlite"; };
  
            HttpConfig = {
@@ -135,7 +122,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
            };
  
            IdpManagerConfig = {
-@@ -334,11 +344,9 @@ in
+@@ -340,11 +344,9 @@ in
        default = "INFO";
        description = "Log level of the netbird services.";
      };
@@ -148,7 +135,16 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
      warnings =
        concatMap
          (
-@@ -373,7 +381,7 @@ in
+@@ -368,7 +370,7 @@ in
+ 
+     assertions = [
+       {
+-        assertion = cfg.port != cfg.metricsPort;
++        assertion = cfg.management.port != cfg.management.metricsPort;
+         message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
+       }
+     ];
+@@ -386,7 +388,7 @@ in
        serviceConfig = {
          ExecStart = escapeSystemdExecArgs (
            [
@@ -157,7 +153,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
              "management"
              # Config file
              "--config"
-@@ -383,25 +391,28 @@ in
+@@ -396,28 +398,28 @@ in
              "${stateDir}/data"
              # DNS domain
              "--dns-domain"
@@ -167,8 +163,9 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
              "--port"
 -            cfg.port
 +            cfg.management.port
-+            # Port the internal prometheus server listens on
-+            "--metrics-port"
+             # Port the internal prometheus server listens on
+             "--metrics-port"
+-            cfg.metricsPort
 +            cfg.management.metricsPort
              # Log to stdout
              "--log-file"
@@ -193,7 +190,7 @@ index f4b5bbf643239..bf95ea65e5fa3 100644
          );
          Restart = "always";
          RuntimeDirectory = "netbird-mgmt";
-@@ -434,27 +445,5 @@ in
+@@ -450,27 +452,5 @@ in
        stopIfChanged = false;
      };
  
@@ -521,7 +518,7 @@ index 3649e97b379e5..ffda72c0626a4 100644
 +
 +```
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 1725374d03c6b..b481770071b82 100644
+index 1725374d03c6b..237f70ba3327f 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
 @@ -16,7 +16,7 @@ in
@@ -565,7 +562,8 @@ index 1725374d03c6b..b481770071b82 100644
          }
          // (optionalAttrs cfg.coturn.enable rec {
            turnDomain = cfg.domain;
-           turnPort = config.services.coturn.tls-listening-port;
+-          turnPort = config.services.coturn.tls-listening-port;
++          turnPort = config.services.coturn.listening-port;
            # We cannot merge a list of attrsets so we have to redefine the whole list
            settings = {
 +            Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
@@ -600,19 +598,10 @@ index 1725374d03c6b..b481770071b82 100644
  
        coturn = {
 diff --git a/nixos/modules/services/networking/netbird/signal.nix b/nixos/modules/services/networking/netbird/signal.nix
-index b53e9d40c2eed..fea778531850e 100644
+index 3122b6c9fe5ff..cf19439e89271 100644
 --- a/nixos/modules/services/networking/netbird/signal.nix
 +++ b/nixos/modules/services/networking/netbird/signal.nix
-@@ -15,7 +15,7 @@ let
-     mkOption
-     ;
- 
--  inherit (lib.types) enum port str;
-+  inherit (lib.types) enum port;
- 
-   inherit (utils) escapeSystemdExecArgs;
- 
-@@ -26,14 +26,7 @@ in
+@@ -31,14 +31,7 @@ in
    options.services.netbird.server.signal = {
      enable = mkEnableOption "Netbird's Signal Service";
  
@@ -628,30 +617,7 @@ index b53e9d40c2eed..fea778531850e 100644
  
      port = mkOption {
        type = port;
-@@ -41,6 +34,12 @@ in
-       description = "Internal port of the signal server.";
-     };
- 
-+    metricsPort = mkOption {
-+      type = port;
-+      default = 9091; # Upstream default is 9090 but this would clash for nixos where all services run on the same host
-+      description = "Internal port of the signal metrics server.";
-+    };
-+
-     logLevel = mkOption {
-       type = enum [
-         "ERROR"
-@@ -65,6 +64,9 @@ in
-           # Port to listen on
-           "--port"
-           cfg.port
-+          # Port the metrics server listens on
-+          "--metrics-port"
-+          cfg.metricsPort
-           # Log to stdout
-           "--log-file"
-           "console"
-@@ -101,23 +103,5 @@ in
+@@ -134,23 +127,5 @@ in
        stopIfChanged = false;
      };
  
@@ -761,7 +727,7 @@ index 887747437c22c..5589200d99078 100644
 +  }
 +)
 diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
-index b1d49675dbd8b..549df99400c44 100644
+index 8cdcd68b4f444..1da9614bdadf8 100644
 --- a/pkgs/tools/networking/netbird/default.nix
 +++ b/pkgs/tools/networking/netbird/default.nix
 @@ -1,33 +1,56 @@
@@ -947,10 +913,10 @@ index b1d49675dbd8b..549df99400c44 100644
    };
  }
 diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
-index fdeeb4ed343c7..16e29ee0d406e 100644
+index 02fe78d397cce..ffa5a7cb3d6d0 100644
 --- a/pkgs/top-level/all-packages.nix
 +++ b/pkgs/top-level/all-packages.nix
-@@ -3032,6 +3032,11 @@ with pkgs;
+@@ -2941,6 +2941,11 @@ with pkgs;
      ui = true;
    };
  

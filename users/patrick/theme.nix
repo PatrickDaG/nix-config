@@ -51,7 +51,7 @@
       '';
     };
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      nerd-fonts.symbols-only
       ibm-plex
       dejavu_fonts
       unifont
@@ -93,7 +93,10 @@
     autoEnable = false;
     polarity = "dark";
     image = config.lib.stylix.pixel "base00";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/vice.yaml";
+    base16Scheme = {
+      yaml = "${pkgs.base16-schemes}/share/themes/vice.yaml";
+      use-ifd = "auto";
+    };
     # Has to be green
     override.base0B = "#00CC99";
     #base16Scheme = {

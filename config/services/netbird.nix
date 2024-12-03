@@ -42,7 +42,6 @@
 
   networking.firewall.allowedUDPPorts = [
     3478
-    5349
   ]; # STUN/TURN server
   services.netbird = {
     clients.main = {
