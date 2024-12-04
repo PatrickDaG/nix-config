@@ -1,6 +1,7 @@
 { inputs, stateVersion, ... }:
 {
   nix = {
+    channel.enable = false;
     settings = {
       auto-optimise-store = true;
       allowed-users = [ "@wheel" ];
@@ -29,9 +30,12 @@
       max-jobs = "auto";
       # make agenix rekey find the secrets even without trusted user
       extra-sandbox-paths = [ "/var/tmp/agenix-rekey?" ];
+      log-lines = 25;
     };
     daemonCPUSchedPolicy = "batch";
+    daemonIOSchedClass = "idle";
     daemonIOSchedPriority = 5;
+
     distributedBuilds = true;
     extraOptions = ''
       builders-use-substitutes = true
@@ -60,4 +64,15 @@
   };
   programs.nix-ld.enable = true;
   system.stateVersion = stateVersion;
+
+  systemd.services.nix-gc.serviceConfig = {
+    CPUSchedulingPolicy = "batch";
+    IOSchedulingClass = "idle";
+    IOSchedulingPriority = 7;
+  };
+
+  # Make builds to be more likely killed than important services.
+  # 100 is the default for user slices and 500 is systemd-coredumpd@
+  # We rather want a build to be killed than our precious user sessions as builds can be easily restarted.
+  systemd.services.nix-daemon.serviceConfig.OOMScoreAdjust = 250;
 }

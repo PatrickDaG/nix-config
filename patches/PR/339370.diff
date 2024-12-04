@@ -238,7 +238,7 @@ index 42e1f738e470f..6ebea28bb187b 100644
  }:
  
 -buildDotnetModule rec {
-+buildDotnetModule {
++buildDotnetModule rec  {
    pname = "beatsabermodmanager";
 -  version = "0.0.5";
 +  version = "0.0.7";

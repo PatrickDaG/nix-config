@@ -6,7 +6,6 @@
   hm.home = {
     packages = with pkgs; [
       bashInteractive
-      beatsabermodmanager
       chatterino2
       chromium
       cmatrix

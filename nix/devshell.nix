@@ -32,10 +32,6 @@
         ];
         commands = [
           {
-            package = pkgs.scripts.deploy;
-            help = "deploy nix configurations";
-          }
-          {
             package = pkgs.symlinkJoin {
               name = "locker";
               paths = [
@@ -43,11 +39,6 @@
                 pkgs.scripts.lock
               ];
             };
-            help = "build nix configurations";
-          }
-          {
-            package = pkgs.scripts.build;
-            help = "build nix configurations";
           }
           {
             package = pkgs.scripts.update;

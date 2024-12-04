@@ -1334,11 +1334,11 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1733259424,
-        "narHash": "sha256-4TYf+5OmJr76f8PH9+G34BuDI8o2dAwcTucmgnvR4kI=",
+        "lastModified": 1733265436,
+        "narHash": "sha256-zxBh56jKE6AXhiUoktY6cOHPUTyqXWbI/Pyh5sSC5B4=",
         "owner": "patrickdag",
         "repo": "microvm.nix",
-        "rev": "68c4ab8d096b3b283e1f4e4695230885eab8efa1",
+        "rev": "799370e27eb8643e860a5df5cd168da72219a684",
         "type": "github"
       },
       "original": {
@@ -1641,13 +1641,13 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1733088671,
-        "narHash": "sha256-glAsc7l4pnnVPiC5UbxJ7SnuvFzwchg755Qe7hrM4GY=",
+        "lastModified": 1733348187,
+        "narHash": "sha256-B0PMTlkWm5o+Fi1Z4XO35zbU2k9NUMDq3g02EbPbXm4=",
         "ref": "refs/heads/main",
-        "rev": "ac55ccd2f5c3715d04a3909e3b5650b23a562884",
-        "revCount": 18,
+        "rev": "803f8ba1f252220a4016b04a90862369d8e242f2",
+        "revCount": 21,
         "type": "git",
-        "url": "https://forge.lel.lol/patrick/nixp-meta.git"
+        "url": "file:///home/patrick/repos/nixp-meta"
       },
       "original": {
         "type": "git",

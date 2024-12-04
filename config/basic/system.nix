@@ -63,10 +63,13 @@
     kitty.terminfo
     nvd
     unzip
+    bat
     # fix pcscd
     pcscliteWithPolkit.out
     wireguard-tools
   ];
+
+  environment.ldso32 = null;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
