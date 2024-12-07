@@ -54,25 +54,31 @@ in
       #];
     };
   };
-  age.secrets.maddyPasswd = {
+  age.secrets.mailnix-passwd = {
     generator.script = "alnum";
     group = "vaultwarden";
   };
 
-  nodes.maddy = {
-    age.secrets.vaultwardenPasswd = {
-      inherit (config.age.secrets.maddyPasswd) rekeyFile;
-      inherit (nodes.maddy.config.services.maddy) group;
-      mode = "640";
+  age.secrets.mailnix-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+    intermediary = true;
+  };
+  nodes.mailnix = {
+    age.secrets.idmail-vaultwarden-passwd-hash = {
+      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
+      group = "stalwart-mail";
+      mode = "440";
     };
-    services.maddy.ensureCredentials = {
-      "vaultwarden@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
-        nodes.maddy.config.age.secrets.vaultwardenPasswd.path;
+    services.idmail.provision.mailboxes."vaultwarden@${config.secrets.secrets.global.domains.mail_public}" = {
+      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-vaultwarden-passwd-hash.path}}%";
+      owner = "admin";
     };
   };
   system.activationScripts.systemd_env_smtp_passwd = {
     text = ''
-      echo "SMTP_PASSWORD=$(< ${lib.escapeShellArg config.age.secrets.maddyPasswd.path})" > /run/vaultwarden_smtp_passwd
+      echo "SMTP_PASSWORD=$(< ${lib.escapeShellArg config.age.secrets.mailnix-passwd.path})" > /run/vaultwarden_smtp_passwd
     '';
     deps = [ "agenix" ];
   };

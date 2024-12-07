@@ -47,10 +47,6 @@
   # that we can hopefully still access it remotely.
   systemd.enableEmergencyMode = false;
 
-  # Restrict the number of boot entries to prevent full /boot partition.
-  # Servers don't need too many generations.
-  boot.loader.systemd-boot.configurationLimit = 5;
-
   documentation.nixos.enable = false;
 
   # No need for fonts on a server

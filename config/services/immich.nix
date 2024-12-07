@@ -146,23 +146,29 @@ let
   processedConfigFile = "/run/agenix/immich.config.json";
 in
 {
-  age.secrets.maddyPasswd = {
+  age.secrets.mailnix-passwd = {
     generator.script = "alnum";
-    mode = "440";
     group = "root";
   };
 
-  nodes.maddy = {
-    age.secrets.immichPasswd = {
-      inherit (config.age.secrets.maddyPasswd) rekeyFile;
-      inherit (nodes.maddy.config.services.maddy) group;
-      mode = "640";
+  age.secrets.mailnix-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+    intermediary = true;
+  };
+  nodes.mailnix = {
+    age.secrets.idmail-immich-passwd-hash = {
+      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
+      group = "stalwart-mail";
+      mode = "440";
     };
-    services.maddy.ensureCredentials = {
-      "immich@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
-        nodes.maddy.config.age.secrets.immichPasswd.path;
+    services.idmail.provision.mailboxes."immich@${config.secrets.secrets.global.domains.mail_public}" = {
+      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-immich-passwd-hash.path}}%";
+      owner = "admin";
     };
   };
+
   age.secrets.resticpasswd = {
     generator.script = "alnum";
   };
@@ -221,7 +227,7 @@ in
     deps = [ "agenix" ];
     text = ''
       immichClientSecret=$(< ${config.age.secrets.immich-oauth2-client-secret.path})
-      immichEmailSecret=$(< ${config.age.secrets.maddyPasswd.path})
+      immichEmailSecret=$(< ${config.age.secrets.mailnix-passwd.path})
       ${pkgs.jq}/bin/jq \
         --arg immichClientSecret "$immichClientSecret" \
         --arg immichEmailSecret "$immichEmailSecret" \

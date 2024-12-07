@@ -9,21 +9,27 @@ let
   hostName = "nc.${config.secrets.secrets.global.domains.web}";
 in
 {
-  age.secrets.maddyPasswd = {
+
+  age.secrets.mailnix-passwd = {
     generator.script = "alnum";
-    mode = "440";
-    owner = "nextcloud";
+    group = "nextcloud";
   };
 
-  nodes.maddy = {
-    age.secrets.nextcloudPasswd = {
-      inherit (config.age.secrets.maddyPasswd) rekeyFile;
-      inherit (nodes.maddy.config.services.maddy) group;
-      mode = "640";
+  age.secrets.mailnix-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+    intermediary = true;
+  };
+  nodes.mailnix = {
+    age.secrets.idmail-nextcloud-passwd-hash = {
+      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
+      group = "stalwart-mail";
+      mode = "440";
     };
-    services.maddy.ensureCredentials = {
-      "nextcloud@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
-        nodes.maddy.config.age.secrets.nextcloudPasswd.path;
+    services.idmail.provision.mailboxes."nextcloud@${config.secrets.secrets.global.domains.mail_public}" = {
+      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-nextcloud-passwd-hash.path}}%";
+      owner = "admin";
     };
   };
   environment.persistence."/persist".directories = [
@@ -108,7 +114,7 @@ in
       mailer-passwd-conf = pkgs.writeText "nextcloud-config.php" ''
         <?php
           $CONFIG = [
-          'mail_smtppassword' => trim(file_get_contents('${config.age.secrets.maddyPasswd.path}')),
+          'mail_smtppassword' => trim(file_get_contents('${config.age.secrets.mailnix-passwd.path}')),
           ];
       '';
     in

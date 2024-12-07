@@ -68,20 +68,27 @@ in
       mode = "0700";
     }
   ];
-  age.secrets.maddyPasswd = {
+
+  age.secrets.mailnix-passwd = {
     generator.script = "alnum";
     group = "git";
-    mode = "0750";
   };
-  nodes.maddy = {
-    age.secrets.forgejoPasswd = {
-      inherit (config.age.secrets.maddyPasswd) rekeyFile;
-      inherit (nodes.maddy.config.services.maddy) group;
-      mode = "640";
+
+  age.secrets.mailnix-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+    intermediary = true;
+  };
+  nodes.mailnix = {
+    age.secrets.idmail-forgejo-passwd-hash = {
+      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
+      group = "stalwart-mail";
+      mode = "440";
     };
-    services.maddy.ensureCredentials = {
-      "forge@${config.secrets.secrets.global.domains.mail_public}".passwordFile =
-        nodes.maddy.config.age.secrets.forgejoPasswd.path;
+    services.idmail.provision.mailboxes."forge@${config.secrets.secrets.global.domains.mail_public}" = {
+      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-forgejo-passwd-hash.path}}%";
+      owner = "admin";
     };
   };
 
@@ -92,7 +99,7 @@ in
     user = "git";
     group = "git";
     lfs.enable = true;
-    secrets.mailer.PASSWD = config.age.secrets.maddyPasswd.path;
+    secrets.mailer.PASSWD = config.age.secrets.mailnix-passwd.path;
     settings = {
       DEFAULT.APP_NAME = "Patricks tolles git";
       actions = {

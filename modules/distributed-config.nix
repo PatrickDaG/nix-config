@@ -49,8 +49,9 @@ let
     ]
     [
       "services"
-      "maddy"
-      "ensureCredentials"
+      "idmail"
+      "provision"
+      "mailboxes"
     ]
   ];
 
