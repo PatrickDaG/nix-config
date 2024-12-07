@@ -7,6 +7,27 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  age.secrets.nix-key = {
+    rekeyFile = ../../secrets/nix-key.age;
+    generator.script =
+      {
+        pkgs,
+        file,
+        ...
+      }:
+      ''
+        priv=$(${lib.getExe pkgs.nix} key generate-secret --key-name patrickdag.lel.lol-1)
+        ${lib.getExe pkgs.nix} key convert-secret-to-public <<< "$priv" > ${
+          lib.escapeShellArg (lib.removeSuffix ".age" file + ".pub")
+        }
+        echo "$priv"
+      '';
+  };
+  nix.settings = {
+    secret-key-files = [
+      config.age.secrets.nix-key.path
+    ];
+  };
   environment.systemPackages = with pkgs; [
     python3
     jq

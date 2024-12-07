@@ -1,4 +1,8 @@
-{ inputs, stateVersion, ... }:
+{
+  inputs,
+  stateVersion,
+  ...
+}:
 {
   nix = {
     channel.enable = false;
@@ -25,6 +29,7 @@
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc="
+        (builtins.readFile ../../secrets/nix-key.pub)
       ];
       cores = 0;
       max-jobs = "auto";
