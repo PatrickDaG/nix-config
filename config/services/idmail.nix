@@ -36,6 +36,8 @@ in
     idmail-user-hash_admin = mkArgon2id "idmail-user-pw_admin";
     idmail-mailbox-pw_catch-all = mkRandomSecret;
     idmail-mailbox-hash_catch-all = mkArgon2id "idmail-mailbox-pw_catch-all";
+    idmail-mailbox-pw_postmaster = mkRandomSecret;
+    idmail-mailbox-hash_postmaster = mkArgon2id "idmail-mailbox-pw_postmaster";
   };
 
   services.idmail = {
@@ -63,9 +65,15 @@ in
           public = false;
         };
       };
-      mailboxes."catch-all@${domain}" = {
-        password_hash = "%{file:${config.age.secrets.idmail-mailbox-hash_catch-all.path}}%";
-        owner = "admin";
+      mailboxes = {
+        "catch-all@${domain}" = {
+          password_hash = "%{file:${config.age.secrets.idmail-mailbox-hash_catch-all.path}}%";
+          owner = "admin";
+        };
+        "postmaster@${domain}" = {
+          password_hash = "%{file:${config.age.secrets.idmail-mailbox-hash_postmaster.path}}%";
+          owner = "admin";
+        };
       };
       # XXX: create mailboxes for git@ vaultwarden@ and simultaneously alias them to the catch all for a send only mail.
     };
