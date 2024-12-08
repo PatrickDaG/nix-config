@@ -56,7 +56,6 @@ in
   };
   age.secrets.mailnix-passwd = {
     generator.script = "alnum";
-    group = "vaultwarden";
   };
 
   age.secrets.mailnix-passwd-hash = {

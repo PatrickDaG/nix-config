@@ -13,6 +13,7 @@ in
   age.secrets.mailnix-passwd = {
     generator.script = "alnum";
     group = "nextcloud";
+    mode = "440";
   };
 
   age.secrets.mailnix-passwd-hash = {
