@@ -33,4 +33,5 @@
     createHome = false;
   };
   users.groups.nix-build = { };
+  topology.self.icon = "devices.cloud-server";
 }

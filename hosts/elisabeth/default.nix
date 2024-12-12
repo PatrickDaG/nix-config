@@ -81,4 +81,5 @@
       kexecTime = "1m";
     };
   };
+  topology.self.interfaces.lan.network = "home";
 }

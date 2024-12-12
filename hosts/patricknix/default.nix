@@ -44,4 +44,5 @@
     "kvm"
     "nixos-test"
   ];
+  topology.self.icon = "devices.laptop";
 }

@@ -1522,12 +1522,13 @@
         "pre-commit-hooks": "pre-commit-hooks_3"
       },
       "locked": {
-        "lastModified": 1732192922,
-        "narHash": "sha256-xQO/3I99TFdiXTN5VoS28NpbNlCQWQUvxmPQHlfkzmU=",
-        "owner": "oddlama",
-        "repo": "nix-topology",
-        "rev": "2b107e98bbde932a363874e0ef5b1739a932bbc5",
-        "type": "github"
+        "lastModified": 1733919075,
+        "narHash": "sha256-qr0HiP+YEuMJWkEsM3KBQkIvfBjA4VFvV6gC43Ize2o=",
+        "ref": "refs/heads/fix-container-mvlan",
+        "rev": "f4f7786d315beb8d7c65665b7cfc7260a988d89f",
+        "revCount": 152,
+        "type": "git",
+        "url": "file:///home/patrick/repos/nix/nix-topology/fix-container-mvlan"
       },
       "original": {
         "owner": "oddlama",

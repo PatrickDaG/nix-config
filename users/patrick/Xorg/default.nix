@@ -28,7 +28,7 @@ lib.optionalAttrs (!minimal) {
   services.libinput = {
     enable = true;
     mouse = {
-      accelSpeed = "0.5";
+      accelSpeed = "0.3";
       accelProfile = "flat";
       middleEmulation = false;
     };

@@ -27,20 +27,13 @@ let
         actual = "actual";
         firefly = "money";
         homebox = "homebox";
-        octoprint = "print";
         invidious = "yt";
         blog = "blog";
       };
     in
     "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
-  ipOf =
-    hostName:
-    if hostName == "octoprint" then
-      #nodes.testienix.config.wireguard.elisabeth.ipv4
-      "0.0.0.0"
-    else
-      nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
+  ipOf = hostName: nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
 in
 {
   services.netbird.server.proxy =
@@ -161,7 +154,6 @@ in
       (blockOf "blog" { port = 80; })
       (blockOf "homebox" { })
       (proxyProtect "ollama" { } true)
-      (proxyProtect "octoprint" { } true)
       (proxyProtect "firefly" { port = 80; } true)
       (blockOf "apispotify" {
         port = 3000;

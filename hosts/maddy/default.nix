@@ -16,4 +16,5 @@
     "virtio_blk"
   ];
   nixpkgs.hostPlatform = "x86_64-linux";
+  topology.self.icon = "devices.cloud-server";
 }
