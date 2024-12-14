@@ -21,6 +21,7 @@ in
         name = "Home-manager options for the main user";
         merge = _loc: defs: (map (x: x.value) defs);
       };
+      default = { };
     };
     hm-all = mkOption {
       description = "Home-manager options for the primary User and root.";
@@ -28,6 +29,7 @@ in
         name = "Home-manager options for the all users";
         merge = _loc: defs: (map (x: x.value) defs);
       };
+      default = { };
     };
   };
   config.home-manager.users = mkMerge [

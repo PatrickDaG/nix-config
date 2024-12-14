@@ -8,16 +8,14 @@
   imports = [
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
-    inputs.nixos-hardware.nixosModules.common-cpu-amd
-    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
 
     ../../config/basic
 
     ../../config/support/initrd-ssh.nix
     ../../config/support/physical.nix
-    ../../config/support/secureboot.nix
-    ../../config/support/server.nix
     ../../config/support/zfs.nix
+    ../../config/support/server.nix
 
     ./net.nix
     ./fs.nix
