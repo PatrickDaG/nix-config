@@ -1,3 +1,47 @@
+diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
+index f792750a1ea4d..a4da736ad3191 100644
+--- a/nixos/doc/manual/redirects.json
++++ b/nixos/doc/manual/redirects.json
+@@ -821,6 +821,12 @@
+   "module-services-netbird-multiple-connections": [
+     "index.html#module-services-netbird-multiple-connections"
+   ],
++  "module-services-netbird-firewall": [
++    "index.html#module-services-netbird-firewall"
++  ],
++  "module-services-netbird-customization": [
++    "index.html#module-services-netbird-customization"
++  ],
+   "module-services-mosquitto": [
+     "index.html#module-services-mosquitto"
+   ],
+diff --git a/nixos/doc/manual/release-notes/rl-2405.section.md b/nixos/doc/manual/release-notes/rl-2405.section.md
+index aee8b80727990..a4be58e5b2005 100644
+--- a/nixos/doc/manual/release-notes/rl-2405.section.md
++++ b/nixos/doc/manual/release-notes/rl-2405.section.md
+@@ -711,7 +711,7 @@ Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` for Pi
+   and `services.kavita.settings.IpAddresses`. The file at `services.kavita.tokenKeyFile` now needs to contain a secret with
+   512+ bits instead of 128+ bits.
+ 
+-- `services.netbird` now allows running multiple tunnels in parallel through [`services.netbird.tunnels`](#opt-services.netbird.tunnels).
++- `services.netbird` now allows running multiple tunnels in parallel through [`services.netbird.tunnels`](#opt-services.netbird.clients).
+ 
+ - `services.nginx.virtualHosts` using `forceSSL` or
+   `globalRedirect` can now have redirect codes other than 301 through `redirectCode`.
+diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
+index 10236562d78b1..10c1f4bd44f11 100644
+--- a/nixos/doc/manual/release-notes/rl-2505.section.md
++++ b/nixos/doc/manual/release-notes/rl-2505.section.md
+@@ -135,6 +135,9 @@
+ - `zf` was updated to 0.10.2, which includes breaking changes from the [0.10.0 release](https://github.com/natecraddock/zf/releases/tag/0.10.0).
+   `zf` no longer does Unicode normalization of the input and no longer supports terminal escape sequences in the `ZF_PROMPT` environment variable.
+ 
++- `services.netbird.tunnels` was renamed to [`services.netbird.clients`](#opt-services.netbird.clients),
++  hardened (using dedicated less-privileged users) and significantly extended.
++
+ <!-- To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead. -->
+ 
+ ## Other Notable Changes {#sec-release-25.05-notable-changes}
 diff --git a/nixos/modules/services/networking/netbird.md b/nixos/modules/services/networking/netbird.md
 index e1f6753cbd30c..876c27cb0d22e 100644
 --- a/nixos/modules/services/networking/netbird.md
@@ -112,7 +156,7 @@ index e1f6753cbd30c..876c27cb0d22e 100644
 +through environment variables, but special care needs to be taken for overriding config location and
 +daemon address due [hardened](#opt-services.netbird.clients._name_.hardened) option.
 diff --git a/nixos/modules/services/networking/netbird.nix b/nixos/modules/services/networking/netbird.nix
-index d39c373dbc94c..c9a2251437c6a 100644
+index 9771503e14e28..c9a2251437c6a 100644
 --- a/nixos/modules/services/networking/netbird.nix
 +++ b/nixos/modules/services/networking/netbird.nix
 @@ -7,64 +7,179 @@
@@ -245,27 +289,27 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +              name = mkOption {
 +                type = str;
 +                default = name;
-+                description = ''
+                 description = ''
+-                  Port for the ${name} netbird interface.
 +                  Primary name for use (as a suffix) in:
 +                  - systemd service name,
 +                  - hardened user name and group,
 +                  - [systemd `*Directory=`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#RuntimeDirectory=) names,
 +                  - desktop application identification,
-+                '';
-+              };
-+
+                 '';
+               };
+ 
 +              dns-resolver.address = mkOption {
 +                type = nullOr str;
 +                default = null;
 +                example = "127.0.0.123";
-                 description = ''
--                  Port for the ${name} netbird interface.
++                description = ''
 +                  An explicit address that Netbird will serve `*.netbird.cloud.` (usually) entries on.
 +
 +                  Netbird serves DNS on it's own (dynamic) client address by default.
-                 '';
-               };
- 
++                '';
++              };
++
 +              dns-resolver.port = mkOption {
 +                type = port;
 +                default = 53;
@@ -308,7 +352,7 @@ index d39c373dbc94c..c9a2251437c6a 100644
                    }
                  '';
                  description = ''
-@@ -72,97 +187,416 @@ in
+@@ -72,64 +187,269 @@ in
                  '';
                };
  
@@ -324,16 +368,9 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +
 +                  As of 2024-02-13 it is not possible to start a Netbird client daemon without immediately
 +                  connecting to the network, but it is [planned for a near future](https://github.com/netbirdio/netbird/projects/2#card-91718018).
-                 '';
-               };
--            };
- 
--            config.environment = builtins.mapAttrs (_: mkDefault) {
--              NB_CONFIG = "/var/lib/${config.stateDir}/config.json";
--              NB_LOG_FILE = "console";
--              NB_WIREGUARD_PORT = builtins.toString config.port;
--              NB_INTERFACE_NAME = name;
--              NB_DAEMON_ADDR = "unix:///var/run/${config.stateDir}/sock";
++                '';
++              };
++
 +              openFirewall = mkOption {
 +                type = bool;
 +                default = true;
@@ -385,9 +422,16 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +                defaultText = literalExpression ''client.ui.enable'';
 +                description = ''
 +                  Controls presence of `netbird-ui` wrapper for this Netbird client.
-+                '';
-+              };
-+
+                 '';
+               };
+-            };
+ 
+-            config.environment = builtins.mapAttrs (_: mkDefault) {
+-              NB_CONFIG = "/var/lib/${config.stateDir}/config.json";
+-              NB_LOG_FILE = "console";
+-              NB_WIREGUARD_PORT = builtins.toString config.port;
+-              NB_INTERFACE_NAME = name;
+-              NB_DAEMON_ADDR = "unix:///var/run/${config.stateDir}/sock";
 +              wrapper = mkOption {
 +                type = package;
 +                internal = true;
@@ -533,7 +577,9 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +          interface = mkDefault "wt0";
 +          hardened = mkDefault false;
 +        };
-+
+ 
+-    (mkIf (cfg.tunnels != { }) {
+-      boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
 +        environment.systemPackages = [
 +          (lib.hiPrio (
 +            pkgs.runCommand "${client.name}-as-default" { } ''
@@ -551,8 +597,7 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +        cfg.clients != { } && (versionOlder kernel.version "5.6")
 +      ) kernelPackages.wireguard;
  
--    (mkIf (cfg.tunnels != { }) {
--      boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+-      environment.systemPackages = [ cfg.package ];
 +      environment.systemPackages = toClientList (client: client.wrapper)
 +      # omitted due to https://github.com/netbirdio/netbird/issues/1562
 +      #++ optional (cfg.clients != { }) cfg.package
@@ -560,51 +605,38 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +      #++ optional (cfg.clients != { } && cfg.ui.enable) cfg.ui.package
 +      ;
  
--      environment.systemPackages = [ cfg.package ];
+-      networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
 +      networking.dhcpcd.denyInterfaces = toClientList (client: client.interface);
 +      networking.networkmanager.unmanaged = toClientList (client: "interface-name:${client.interface}");
- 
--      networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
++
 +      networking.firewall.allowedUDPPorts = concatLists (
 +        toClientList (client: optional client.openFirewall client.port)
 +      );
  
        systemd.network.networks = mkIf config.networking.useNetworkd (
--        mapAttrs'
--          (
--            name: _:
--            nameValuePair "50-netbird-${name}" {
--              matchConfig = {
--                Name = name;
--              };
--              linkConfig = {
--                Unmanaged = true;
--                ActivationPolicy = "manual";
--              };
--            }
--          )
--          cfg.tunnels
+-        mapAttrs' (
+-          name: _:
+-          nameValuePair "50-netbird-${name}" {
 +        toClientAttrs (
 +          client:
 +          nameValuePair "50-netbird-${client.interface}" {
-+            matchConfig = {
+             matchConfig = {
+-              Name = name;
 +              Name = client.interface;
-+            };
-+            linkConfig = {
-+              Unmanaged = true;
-+              ActivationPolicy = "manual";
-+            };
-+          }
+             };
+             linkConfig = {
+               Unmanaged = true;
+               ActivationPolicy = "manual";
+             };
+           }
+-        ) cfg.tunnels
 +        )
        );
  
--      systemd.services =
--        mapAttrs'
--          (
--            name:
--            { environment, stateDir, ... }:
--            nameValuePair "netbird-${name}" {
--              description = "A WireGuard-based mesh network that connects your devices into a single private network";
+-      systemd.services = mapAttrs' (
+-        name:
+-        { environment, stateDir, ... }:
+-        nameValuePair "netbird-${name}" {
 +      environment.etc = toClientAttrs (
 +        client:
 +        nameValuePair "netbird-${client.name}/config.d/50-nixos.json" {
@@ -612,60 +644,45 @@ index d39c373dbc94c..c9a2251437c6a 100644
 +          mode = "0444";
 +        }
 +      );
- 
--              documentation = [ "https://netbird.io/docs/" ];
++
 +      systemd.services = toClientAttrs (
 +        client:
 +        nameValuePair "netbird-${client.name}" {
-+          description = "A WireGuard-based mesh network that connects your devices into a single private network";
+           description = "A WireGuard-based mesh network that connects your devices into a single private network";
  
--              after = [ "network.target" ];
--              wantedBy = [ "multi-user.target" ];
-+          documentation = [ "https://netbird.io/docs/" ];
+           documentation = [ "https://netbird.io/docs/" ];
+@@ -137,17 +457,19 @@ in
+           after = [ "network.target" ];
+           wantedBy = [ "multi-user.target" ];
  
--              path = with pkgs; [ openresolv ];
-+          after = [ "network.target" ];
-+          wantedBy = [ "multi-user.target" ];
- 
--              inherit environment;
+-          path = with pkgs; [ openresolv ];
+-
+-          inherit environment;
 +          path = optional (!config.services.resolved.enable) pkgs.openresolv;
  
--              serviceConfig = {
--                ExecStart = "${getExe cfg.package} service run";
--                Restart = "always";
--                RuntimeDirectory = stateDir;
--                StateDirectory = stateDir;
--                StateDirectoryMode = "0700";
--                WorkingDirectory = "/var/lib/${stateDir}";
--              };
-+          serviceConfig = {
+           serviceConfig = {
+-            ExecStart = "${getExe cfg.package} service run";
 +            ExecStart = "${getExe client.wrapper} service run";
-+            Restart = "always";
- 
--              unitConfig = {
--                StartLimitInterval = 5;
--                StartLimitBurst = 10;
--              };
+             Restart = "always";
+-            RuntimeDirectory = stateDir;
+-            StateDirectory = stateDir;
++
 +            RuntimeDirectory = "netbird-${client.name}";
 +            RuntimeDirectoryMode = mkDefault "0755";
 +            ConfigurationDirectory = "netbird-${client.name}";
 +            StateDirectory = "netbird-${client.name}";
-+            StateDirectoryMode = "0700";
- 
--              stopIfChanged = false;
--            }
--          )
--          cfg.tunnels;
+             StateDirectoryMode = "0700";
+-            WorkingDirectory = "/var/lib/${stateDir}";
++
 +            WorkingDirectory = "/var/lib/netbird-${client.name}";
-+          };
-+
-+          unitConfig = {
-+            StartLimitInterval = 5;
-+            StartLimitBurst = 10;
-+          };
-+
-+          stopIfChanged = false;
-+        }
+           };
+ 
+           unitConfig = {
+@@ -157,7 +479,124 @@ in
+ 
+           stopIfChanged = false;
+         }
+-      ) cfg.tunnels;
 +      );
 +    }
 +    # Hardening section

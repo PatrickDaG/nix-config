@@ -1,5 +1,6 @@
 { config, lib, ... }:
 {
+  imports = [ ./hostapd.nix ];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };
