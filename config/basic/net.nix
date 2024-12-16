@@ -5,6 +5,7 @@
 }:
 {
   networking = {
+    search = [ "local" ];
     useNetworkd = true;
     dhcpcd.enable = false;
     useDHCP = false;

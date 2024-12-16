@@ -68,6 +68,7 @@ in
         eth3 = mkConnection "switch-patrick" "eth5";
         eth4 = mkConnection "docking-station-ganzoben" "lan";
         eth5 = mkConnection "desktop-ganzoben" "lan";
+        eth6 = mkConnection "nucnix" "lan01";
         eth9 = mkConnection "drucker" "lan";
         eth10 = mkConnection "homematic" "lan";
         eth11 = mkConnection "raspberry-pi" "lan";

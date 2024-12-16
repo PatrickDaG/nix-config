@@ -6,17 +6,6 @@
     # stubs. Server users should know what they are doing.
     stub-ld.enable = false;
   };
-  # Given that our systems are headless, emergency mode is useless.
-  # We prefer the system to attempt to continue booting so
-  # that we can hopefully still access it remotely.
-  boot.initrd.systemd.suppressedUnits = [
-    "emergency.service"
-    "emergency.target"
-  ];
-  # Given that our systems are headless, emergency mode is useless.
-  # We prefer the system to attempt to continue booting so
-  # that we can hopefully still access it remotely.
-  systemd.enableEmergencyMode = false;
 
   documentation.nixos.enable = false;
 

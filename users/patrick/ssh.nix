@@ -26,16 +26,6 @@
           user = "root";
         };
 
-        "testienix" = {
-          hostname = "testienix.local";
-          user = "root";
-        };
-
-        "patricknix" = {
-          hostname = "patricknix.local";
-          user = "root";
-        };
-
         "maddy" = {
           hostname = config.secrets.secrets.global.user.hetzner_ip;
           user = "root";
@@ -45,10 +35,6 @@
           user = "root";
         };
 
-        "desktopnix" = {
-          hostname = "desktopnix.local";
-          user = "root";
-        };
         "*" = {
           user = "root";
           identitiesOnly = true;

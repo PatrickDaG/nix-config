@@ -32,6 +32,8 @@
 
         ".config/gh"
 
+        ".config/qmk"
+
         ".local/share/osu"
 
         ".local/share/monado"

@@ -59,6 +59,7 @@ in
           port ? 3000,
           upstream ? hostName,
           protocol ? "http",
+          ...
         }:
         {
           upstreams.${hostName} = {
@@ -84,7 +85,11 @@ in
           };
         };
       proxyProtect =
-        hostName: cfg: allowedGroup:
+        hostName:
+        {
+          allowedGroup ? true,
+          ...
+        }@cfg:
         lib.mkMerge [
           (blockOf hostName cfg)
           {
@@ -145,16 +150,16 @@ in
           proxy_request_buffering off;
         '';
       })
-      (proxyProtect "adguardhome" { } true)
-      (proxyProtect "oauth2-proxy" { } false)
+      (proxyProtect "adguardhome" { })
+      (proxyProtect "oauth2-proxy" { allowedGroup = false; })
       (blockOf "paperless" { maxBodySize = "5G"; })
-      (proxyProtect "ttrss" { port = 80; } true)
-      (proxyProtect "invidious" { } true)
+      (proxyProtect "ttrss" { port = 80; })
+      (proxyProtect "invidious" { })
       (blockOf "yourspotify" { port = 80; })
       (blockOf "blog" { port = 80; })
       (blockOf "homebox" { })
-      (proxyProtect "ollama" { } true)
-      (proxyProtect "firefly" { port = 80; } true)
+      (proxyProtect "ollama" { })
+      (proxyProtect "firefly" { port = 80; })
       (blockOf "apispotify" {
         port = 3000;
         upstream = "yourspotify";

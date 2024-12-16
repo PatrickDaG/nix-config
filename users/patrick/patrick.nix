@@ -41,6 +41,7 @@
       yt-dlp
       zathura
       zotero
+      qmk
     ];
   };
   hm.programs.bat.enable = true;
@@ -60,4 +61,5 @@
       DOWN add volume -2
     '';
   };
+  services.udev.packages = [ pkgs.qmk-udev-rules ];
 }

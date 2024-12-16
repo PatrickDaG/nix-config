@@ -30,6 +30,7 @@ in
           port ? 3000,
           upstream ? hostName,
           protocol ? "http",
+          ...
         }:
         {
           upstreams.${hostName} = {
@@ -55,7 +56,11 @@ in
           };
         };
       proxyProtect =
-        hostName: cfg: allowedGroup:
+        hostName:
+        {
+          allowedGroup ? true,
+          ...
+        }@cfg:
         lib.mkMerge [
           (blockOf hostName cfg)
           {
