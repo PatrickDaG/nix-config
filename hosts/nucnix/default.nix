@@ -16,6 +16,7 @@
     ../../config/support/physical.nix
     ../../config/support/zfs.nix
     ../../config/support/server.nix
+    ../../config/support/secureboot.nix
 
     ./net.nix
     ./fs.nix
