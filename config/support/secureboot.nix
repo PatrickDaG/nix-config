@@ -8,15 +8,16 @@
 lib.optionalAttrs (!minimal) {
   environment.systemPackages = [
     # For debugging and troubleshooting Secure Boot.
-    (pkgs.sbctl.override { databasePath = "/run/secureboot"; })
+    pkgs.sbctl
   ];
   age.secrets.secureboot.rekeyFile = ../../hosts/${config.node.name}/secrets/secureboot.tar.age;
   system.activationScripts.securebootuntar = {
+    # TODO sbctl config file
     text = ''
-         rm -r /run/secureboot || true
-         mkdir -p /run/secureboot
-      chmod 700 /run/secureboot
-         ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /run/secureboot || true
+      rm -r /var/lib/sbctl || true
+      mkdir -p /var/lib/sbctl
+      chmod 700 /var/lib/sbctl
+      ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /var/lib/sbctl || true
     '';
     deps = [ "agenix" ];
   };
@@ -29,8 +30,6 @@ lib.optionalAttrs (!minimal) {
 
   boot.lanzaboote = {
     enable = true;
-    # Not usable anyway
-    #enrollKeys = true;
-    pkiBundle = "/run/secureboot";
+    pkiBundle = "/var/lib/sbctl/";
   };
 }

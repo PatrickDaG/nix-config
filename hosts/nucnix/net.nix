@@ -23,6 +23,13 @@
         };
       };
     };
+    netdevs."40-vlan-fritz" = {
+      netdevConfig = {
+        Name = "vlan-fritz";
+        Kind = "vlan";
+      };
+      vlanConfig.Id = 2;
+    };
     netdevs."40-vlan-home" = {
       netdevConfig = {
         Name = "vlan-home";
@@ -67,6 +74,7 @@
     networks."40-vlans" = {
       matchConfig.Name = "lan01";
       vlan = [
+        "vlan-fritz"
         "vlan-home"
         "vlan-services"
         "vlan-devices"

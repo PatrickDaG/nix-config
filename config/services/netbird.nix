@@ -79,7 +79,8 @@
 
       management = {
         port = 3000;
-        dnsDomain = "internal.${config.secrets.secrets.global.domains.web}";
+        # DNS server should do the lookup this is not used
+        dnsDomain = "internal.invalid";
         singleAccountModeDomain = "netbird.patrick";
         oidcConfigEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/.well-known/openid-configuration";
         settings = {
