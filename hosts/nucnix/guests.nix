@@ -11,9 +11,8 @@ let
   domainOf =
     hostName:
     let
-      domains =
-        {
-        };
+      domains = {
+      };
     in
     "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
   # TODO hard coded elisabeth nicht so schön
@@ -134,18 +133,7 @@ in
               config.guests.${guestName}.networking.mainLinkName
             ];
             systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
-              DHCP = lib.mkForce "no";
-              address = [
-                (lib.net.cidr.hostCidr
-                  config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
-                  config.secrets.secrets.global.net.privateSubnetv4
-                )
-                (lib.net.cidr.hostCidr
-                  config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
-                  config.secrets.secrets.global.net.privateSubnetv6
-                )
-              ];
-              gateway = [ (lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4) ];
+              DHCP = "yes";
             };
           }
         ];
