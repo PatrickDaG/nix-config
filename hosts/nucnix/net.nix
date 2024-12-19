@@ -1,28 +1,108 @@
 { config, lib, ... }:
+let
+  vlans = {
+    home = 10;
+    services = 20;
+    devices = 30;
+    iot = 40;
+    guests = 50;
+  };
+  inherit (lib) flip mapAttrsToList;
+in
 {
-  imports = [ ./hostapd.nix ];
+  imports =
+    [
+      ./hostapd.nix
+      ./kea.nix
+    ]
+    ++ (flip mapAttrsToList vlans (
+      name: id: {
+        networking.nftables.firewall.zones.${name}.interfaces = [ "lan-${name}" ];
+
+        systemd.network = {
+          netdevs = {
+            "40-vlan-${name}" = {
+              netdevConfig = {
+                Name = "vlan-${name}";
+                Kind = "vlan";
+              };
+              vlanConfig.Id = id;
+            };
+            "50-mlan-${name}" = {
+              netdevConfig = {
+                Name = "lan-${name}";
+                Kind = "macvlan";
+              };
+              extraConfig = ''
+                [MACVLAN]
+                Mode=bridge
+              '';
+            };
+          };
+          networks = {
+            "10-vlan-${name}" = {
+              matchConfig.Name = "vlan-${name}";
+              # This interface should only be used from attached macvtaps.
+              # So don't acquire a link local address and only wait for
+              # this interface to gain a carrier.
+              networkConfig.LinkLocalAddressing = "no";
+              linkConfig.RequiredForOnline = "carrier";
+              extraConfig = ''
+                [Network]
+                MACVLAN=lan-${name}
+              '';
+            };
+            "20-lan-${name}" = {
+              address = [
+                (lib.net.cidr.hostCidr 1 "10.99.${toString id}.0/24")
+              ];
+              matchConfig.Name = "lan-${name}";
+              networkConfig = {
+                MulticastDNS = true;
+                IPv6PrivacyExtensions = "yes";
+                IPv4Forwarding = "yes";
+                IPv6SendRA = true;
+                IPv6AcceptRA = false;
+                DHCPPrefixDelegation = true;
+              };
+              ipv6Prefixes = [
+                { Prefix = "fd${toString id}::/64"; }
+              ];
+            };
+          };
+        };
+      }
+    ));
+  networking.nftables.firewall = {
+    snippets.nnf-ssh.enable = lib.mkForce false;
+    rules = {
+      ssh = {
+        from = [
+          "fritz"
+          "home"
+        ];
+        to = [ "local" ];
+        allowedTCPPorts = [ 22 ];
+      };
+      internet = {
+        from = [
+          "home"
+          "devices"
+          "guests"
+          "services"
+        ];
+        to = [ "fritz" ];
+        late = true;
+        verdict = "accept";
+        masquerade = true;
+      };
+    };
+  };
+  networking.nftables.firewall.zones.fritz.interfaces = [ "vlan-fritz" ];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };
   systemd.network = {
-    networks = {
-      "10-lan01" = {
-        address = [
-          (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name}
-            config.secrets.secrets.global.net.privateSubnetv4
-          )
-        ];
-        gateway = [ (lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4) ];
-        #matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
-        matchConfig.Name = "lan";
-        dhcpV6Config.UseDNS = false;
-        dhcpV4Config.UseDNS = false;
-        ipv6AcceptRAConfig.UseDNS = false;
-        networkConfig = {
-          MulticastDNS = true;
-        };
-      };
-    };
     netdevs."40-vlan-fritz" = {
       netdevConfig = {
         Name = "vlan-fritz";
@@ -30,49 +110,22 @@
       };
       vlanConfig.Id = 2;
     };
-    netdevs."40-vlan-home" = {
-      netdevConfig = {
-        Name = "vlan-home";
-        Kind = "vlan";
+    networks = {
+      "10-lan-fritz" = {
+        address = [
+          (lib.net.cidr.hostCidr 2 "10.99.2.0/24")
+        ];
+        gateway = [ (lib.net.cidr.host 1 "10.99.2.0/24") ];
+        matchConfig.Name = "vlan-fritz";
+        networkConfig = {
+          IPv6PrivacyExtensions = "yes";
+        };
       };
-      vlanConfig.Id = 10;
-    };
-
-    netdevs."40-vlan-services" = {
-      netdevConfig = {
-        Name = "vlan-services";
-        Kind = "vlan";
-      };
-      vlanConfig.Id = 20;
-    };
-
-    netdevs."40-vlan-devices" = {
-      netdevConfig = {
-        Name = "vlan-devices";
-        Kind = "vlan";
-      };
-      vlanConfig.Id = 30;
-    };
-
-    netdevs."40-vlan-iot" = {
-      netdevConfig = {
-        Name = "vlan-iot";
-        Kind = "vlan";
-      };
-      vlanConfig.Id = 40;
-    };
-
-    netdevs."40-vlan-guests" = {
-      netdevConfig = {
-        Name = "vlan-guests";
-        Kind = "vlan";
-
-      };
-      vlanConfig.Id = 50;
     };
 
     networks."40-vlans" = {
       matchConfig.Name = "lan01";
+      networkConfig.LinkLocalAddressing = "no";
       vlan = [
         "vlan-fritz"
         "vlan-home"
@@ -82,14 +135,6 @@
         "vlan-guests"
       ];
     };
-  };
-  networking.nftables.firewall.zones.untrusted.interfaces = [ "lan" ];
-
-  # To be able to ping containers from the host, it is necessary
-  # to create a macvlan on the host on the VLAN 1 network.
-  networking.macvlans.lan = {
-    interface = "vlan-home";
-    mode = "bridge";
   };
 
   boot.initrd = {
@@ -101,37 +146,49 @@
       enable = true;
       networks = {
         # redo the network cause the livesystem has macvlans
-        "10-lan01" = {
+        "10-lanhome" = {
           address = [
-            (lib.net.cidr.hostCidr config.secrets.secrets.global.net.ips.${config.node.name}
-              config.secrets.secrets.global.net.privateSubnetv4
-            )
+            (lib.net.cidr.hostCidr 1 "10.99.10.0/24")
           ];
-          gateway = [ (lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4) ];
           matchConfig.Name = "vlan-home";
-          dhcpV6Config.UseDNS = false;
-          dhcpV4Config.UseDNS = false;
-          ipv6AcceptRAConfig.UseDNS = false;
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
-            MulticastDNS = true;
           };
         };
-      };
-      netdevs."10-vlan-home" = {
-        netdevConfig = {
-          Name = "vlan-home";
-          Kind = "vlan";
-
+        # redo the network cause the livesystem has macvlans
+        "10-lan-fritz" = {
+          address = [
+            (lib.net.cidr.hostCidr 2 "10.99.2.0/24")
+          ];
+          gateway = [ (lib.net.cidr.host 1 "10.99.2.0/24") ];
+          matchConfig.Name = "vlan-fritz";
+          networkConfig = {
+            IPv6PrivacyExtensions = "yes";
+          };
         };
-        vlanConfig.Id = 10;
+        "40-vlans" = {
+          matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
+          vlan = [
+            "vlan-home"
+            "vlan-fritz"
+          ];
+        };
       };
-
-      networks."40-vlans" = {
-        matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
-        vlan = [
-          "vlan-home"
-        ];
+      netdevs = {
+        "10-vlan-home" = {
+          netdevConfig = {
+            Name = "vlan-home";
+            Kind = "vlan";
+          };
+          vlanConfig.Id = 10;
+        };
+        "10-vlan-fritz" = {
+          netdevConfig = {
+            Name = "vlan-fritz";
+            Kind = "vlan";
+          };
+          vlanConfig.Id = 2;
+        };
       };
     };
   };
