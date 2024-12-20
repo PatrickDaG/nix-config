@@ -219,23 +219,11 @@ in
             ../../config/services/${guestName}.nix
             {
               node.secretsDir = config.node.secretsDir + "/${guestName}";
-              networking.nftables.firewall.zones.untrusted.interfaces = [
-                config.guests.${guestName}.networking.mainLinkName
-              ];
-              systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
-                DHCP = lib.mkForce "no";
-                address = [
-                  (lib.net.cidr.hostCidr
-                    config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
-                    config.secrets.secrets.global.net.privateSubnetv4
-                  )
-                  (lib.net.cidr.hostCidr
-                    config.secrets.secrets.global.net.ips."${config.guests.${guestName}.nodeName}"
-                    config.secrets.secrets.global.net.privateSubnetv6
-                  )
-                ];
-                gateway = [ (lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4) ];
-              };
+              networking.nftables.firewall.zones.untrusted.interfaces =
+                if lib.length config.guests.${guestName}.networking.links < 2 then
+                  config.guests.${guestName}.networking.links
+                else
+                  [ ];
             }
           ];
         };
@@ -245,7 +233,7 @@ in
           backend = "microvm";
           microvm = {
             system = "x86_64-linux";
-            macvtap = "lan";
+            interfaces."lan" = { };
             baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           };
           extraSpecialArgs = {
@@ -259,7 +247,7 @@ in
       mkContainer = guestName: cfg: {
         ${guestName} = mkGuest guestName cfg // {
           backend = "container";
-          container.macvlan = "lan";
+          container.macvlans = [ "lan" ];
           extraSpecialArgs = {
             inherit
               lib

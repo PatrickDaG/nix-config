@@ -13,12 +13,7 @@
     settings = {
       dns = {
         bind_hosts = [
-          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name}
-            config.secrets.secrets.global.net.privateSubnetv4
-          )
-          (lib.net.cidr.host config.secrets.secrets.global.net.ips.${config.node.name}
-            config.secrets.secrets.global.net.privateSubnetv6
-          )
+          "0.0.0.0"
         ];
         anonymize_client_ip = false;
         upstream_dns = [

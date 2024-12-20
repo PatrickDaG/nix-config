@@ -114,7 +114,7 @@ in
 
   guests =
     let
-      mkGuest = guestName: {
+      mkGuest = guestName: _: {
         autostart = true;
         zfs."/state" = {
           pool = "rpool";
@@ -129,12 +129,11 @@ in
           ../../config/services/${guestName}.nix
           {
             node.secretsDir = config.node.secretsDir + "/${guestName}";
-            networking.nftables.firewall.zones.untrusted.interfaces = [
-              config.guests.${guestName}.networking.mainLinkName
-            ];
-            systemd.network.networks."10-${config.guests.${guestName}.networking.mainLinkName}" = {
-              DHCP = "yes";
-            };
+            networking.nftables.firewall.zones.untrusted.interfaces =
+              if lib.length config.guests.${guestName}.networking.links < 2 then
+                config.guests.${guestName}.networking.links
+              else
+                [ ];
           }
         ];
       };
@@ -155,21 +154,27 @@ in
         };
       };
 
-      mkContainer = guestName: cfg: {
-        ${guestName} = mkGuest guestName cfg // {
-          backend = "container";
-          container.macvlan = "lan";
-          extraSpecialArgs = {
-            inherit
-              lib
-              nodes
-              inputs
-              minimal
-              stateVersion
-              ;
+      mkContainer =
+        guestName:
+        {
+          macvlans ? [ "lan-services" ],
+          ...
+        }@cfg:
+        {
+          ${guestName} = mkGuest guestName cfg // {
+            backend = "container";
+            container.macvlans = macvlans;
+            extraSpecialArgs = {
+              inherit
+                lib
+                nodes
+                inputs
+                minimal
+                stateVersion
+                ;
+            };
           };
         };
-      };
     in
-    { };
+    { } // mkContainer "adguardhome" { macvlans = [ "lan-services" ]; };
 }
