@@ -1,6 +1,6 @@
 {
   pkgs,
-  config,
+  globals,
   lib,
   minimal,
   ...
@@ -20,7 +20,7 @@ lib.optionalAttrs (!minimal) {
       "tss"
     ];
     group = "patrick";
-    hashedPassword = config.secrets.secrets.global.users.patrick.passwordHash;
+    hashedPassword = globals.users.patrick.passwordHash;
     autoSubUidGidRange = false;
     subUidRanges = [
       {

@@ -3,11 +3,9 @@
   pkgs,
   config,
   nodes,
+  globals,
   ...
 }:
-let
-  hostName = "nc.${config.secrets.secrets.global.domains.web}";
-in
 {
 
   age.secrets.mailnix-passwd = {
@@ -28,7 +26,7 @@ in
       group = "stalwart-mail";
       mode = "440";
     };
-    services.idmail.provision.mailboxes."nextcloud@${config.secrets.secrets.global.domains.mail_public}" = {
+    services.idmail.provision.mailboxes."nextcloud@${globals.domains.mail_public}" = {
       password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-nextcloud-passwd-hash.path}}%";
       owner = "admin";
     };
@@ -57,7 +55,7 @@ in
   services.postgresql.package = pkgs.postgresql_16;
 
   services.nextcloud = {
-    inherit hostName;
+    hostName = globals.services.nextcloud.domain;
     enable = true;
     package = pkgs.nextcloud30;
     configureRedis = true;
@@ -79,7 +77,7 @@ in
     phpOptions."opcache.interned_strings_buffer" = "32";
     settings = {
       default_phone_region = "DE";
-      trusted_proxies = [ nodes.elisabeth.config.wireguard.elisabeth.ipv4 ];
+      trusted_proxies = [ nodes.nucnix-nginx.config.wireguard.services.ipv4 ];
       overwriteprotocol = "https";
       maintenance_window_start = 2;
       enabledPreviewProviders = [
@@ -97,13 +95,13 @@ in
       ];
 
       mail_smtpmode = "smtp";
-      mail_smtphost = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+      mail_smtphost = "smtp.${globals.domains.mail_public}";
       mail_smtpport = 465;
       mail_from_address = "nextcloud";
       mail_smtpsecure = "ssl";
-      mail_domain = config.secrets.secrets.global.domains.mail_public;
+      mail_domain = globals.domains.mail_public;
       mail_smtpauth = true;
-      mail_smtpname = "nextcloud@${config.secrets.secrets.global.domains.mail_public}";
+      mail_smtpname = "nextcloud@${globals.domains.mail_public}";
       loglevel = 2;
     };
     config = {
@@ -123,9 +121,9 @@ in
       "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
     ];
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
   networking = {
     # Use systemd-resolved inside the container

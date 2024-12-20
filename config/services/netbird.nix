@@ -1,8 +1,13 @@
-{ config, lib, ... }:
 {
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [
+  config,
+  lib,
+  globals,
+  ...
+}:
+{
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       80 # dashboard
       3000 # management
       8012 # signal
@@ -47,20 +52,20 @@
     clients.main = {
       port = 51820;
       environment = {
-        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
-        NB_ADMIN_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_MANAGEMENT_URL = "https://${globals.services.netbird.domain}";
+        NB_ADMIN_URL = "https://${globals.services.netbird.domain}";
         NB_HOSTNAME = "home";
       };
     };
 
     server = {
       enable = true;
-      domain = "netbird.${config.secrets.secrets.global.domains.web}";
+      inherit (globals.services.netbird) domain;
 
       dashboard = {
         enableNginx = true;
         settings = {
-          AUTH_AUTHORITY = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird";
+          AUTH_AUTHORITY = "https://${globals.services.kanidm.domain}/oauth2/openid/netbird";
           # Fix Kanidm not supporting fragmented URIs
           AUTH_REDIRECT_URI = "/peers";
           AUTH_SILENT_REDIRECT_URI = "/add-peers";
@@ -69,7 +74,7 @@
 
       relay = {
         authSecretFile = config.age.secrets.relaySecret.path;
-        settings.NB_EXPOSED_ADDRESS = "rels://netbird.${config.secrets.secrets.global.domains.web}:443";
+        settings.NB_EXPOSED_ADDRESS = "rels://${globals.services.netbird.domain}:443";
       };
 
       coturn = {
@@ -82,12 +87,12 @@
         # DNS server should do the lookup this is not used
         dnsDomain = "internal.invalid";
         singleAccountModeDomain = "netbird.patrick";
-        oidcConfigEndpoint = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/netbird/.well-known/openid-configuration";
+        oidcConfigEndpoint = "https://${globals.services.kanidm.domain}/oauth2/openid/netbird/.well-known/openid-configuration";
         settings = {
           TURNConfig = {
             Secret._secret = config.age.secrets.coturnSecret.path;
           };
-          Signal.URI = "netbird.${config.secrets.secrets.global.domains.web}:443";
+          Signal.URI = "${globals.services.netbird.domain}:443";
           HttpConfig = {
             # This is not possible
             # failed validating JWT token sent from peer y1ParZkbzVMQGeU/KMycYl75v90i2O6EwgO1YQZnSFs= with error rpc error: code = Internal desc = unable to fetch account with claims, err: user ID is empty

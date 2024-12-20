@@ -1,8 +1,13 @@
-{ config, nodes, ... }:
 {
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+  config,
+  nodes,
+  globals,
+  ...
+}:
+{
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
 
   age.secrets.oauth2-cookie-secret = {
@@ -13,7 +18,7 @@
 
   services.oauth2-proxy = {
     enable = true;
-    cookie.domain = ".${config.secrets.secrets.global.domains.web}";
+    cookie.domain = ".${globals.domains.web}";
     cookie.secure = true;
     cookie.expire = "900m";
     cookie.secret = null;
@@ -22,26 +27,26 @@
 
     reverseProxy = true;
     httpAddress = "0.0.0.0:3000";
-    redirectURL = "https://oauth2.${config.secrets.secrets.global.domains.web}/oauth2/callback";
+    redirectURL = "https://oauth2.${globals.domains.web}/oauth2/callback";
     setXauthrequest = true;
     extraConfig = {
       code-challenge-method = "S256";
-      whitelist-domain = ".${config.secrets.secrets.global.domains.web}";
+      whitelist-domain = ".${globals.domains.web}";
       set-authorization-header = true;
       pass-access-token = true;
       skip-jwt-bearer-tokens = true;
       upstream = "static://202";
 
-      oidc-issuer-url = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/oauth2-proxy";
+      oidc-issuer-url = "https://auth.${globals.domains.web}/oauth2/openid/oauth2-proxy";
       provider-display-name = "Kanidm";
       #client-secret-file = config.age.secrets.oauth2-client-secret.path;
     };
 
     provider = "oidc";
     scope = "openid email";
-    loginURL = "https://auth.${config.secrets.secrets.global.domains.web}/ui/oauth2";
-    redeemURL = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/token";
-    validateURL = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/oauth2-proxy/userinfo";
+    loginURL = "https://auth.${globals.domains.web}/ui/oauth2";
+    redeemURL = "https://auth.${globals.domains.web}/oauth2/token";
+    validateURL = "https://auth.${globals.domains.web}/oauth2/openid/oauth2-proxy/userinfo";
     clientID = "oauth2-proxy";
     email.domains = [ "*" ];
   };

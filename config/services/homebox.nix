@@ -1,7 +1,7 @@
 {
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
   services.homebox = {
     enable = true;

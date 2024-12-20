@@ -4,114 +4,9 @@
   inputs,
   lib,
   minimal,
-  nodes,
   ...
 }:
-let
-  domainOf =
-    hostName:
-    let
-      domains = {
-      };
-    in
-    "${domains.${hostName}}.${config.secrets.secrets.global.domains.web}";
-  # TODO hard coded elisabeth nicht so schön
-  ipOf = hostName: nodes."elisabeth-${hostName}".config.wireguard.elisabeth.ipv4;
-in
 {
-  services.nginx =
-    let
-      blockOf =
-        hostName:
-        {
-          virtualHostExtraConfig ? "",
-          maxBodySize ? "500M",
-          port ? 3000,
-          upstream ? hostName,
-          protocol ? "http",
-          ...
-        }:
-        {
-          upstreams.${hostName} = {
-            servers."${ipOf upstream}:${toString port}" = { };
-            extraConfig = ''
-              zone ${hostName} 64k ;
-              keepalive 5 ;
-            '';
-          };
-          virtualHosts.${domainOf hostName} = {
-            forceSSL = true;
-            useACMEHost = "web";
-            locations."/" = {
-              proxyPass = "${protocol}://${hostName}";
-              proxyWebsockets = true;
-              X-Frame-Options = "SAMEORIGIN";
-            };
-            extraConfig =
-              ''
-                client_max_body_size ${maxBodySize} ;
-              ''
-              + virtualHostExtraConfig;
-          };
-        };
-      proxyProtect =
-        hostName:
-        {
-          allowedGroup ? true,
-          ...
-        }@cfg:
-        lib.mkMerge [
-          (blockOf hostName cfg)
-          {
-            virtualHosts.${domainOf hostName} = {
-              locations."/".extraConfig = ''
-                auth_request /oauth2/auth;
-                error_page 401 = /oauth2/sign_in;
-
-                # pass information via X-User and X-Email headers to backend,
-                # requires running with --set-xauthrequest flag
-                auth_request_set $user   $upstream_http_x_auth_request_preferred_username;
-                # Set the email to our own domain in case user change their mail
-                auth_request_set $email  "''${upstream_http_x_auth_request_preferred_username}@${config.secrets.secrets.global.domains.web}";
-                proxy_set_header X-User  $user;
-                proxy_set_header X-Email $email;
-
-                # if you enabled --cookie-refresh, this is needed for it to work with auth_request
-                auth_request_set $auth_cookie $upstream_http_set_cookie;
-                add_header Set-Cookie $auth_cookie;
-              '';
-              locations."/oauth2/" = {
-                proxyPass = "http://oauth2-proxy";
-                extraConfig = ''
-                  proxy_set_header X-Scheme                $scheme;
-                  proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
-                '';
-              };
-
-              locations."= /oauth2/auth" = {
-                proxyPass =
-                  "http://oauth2-proxy/oauth2/auth"
-                  + lib.optionalString allowedGroup "?allowed_groups=${hostName}_access";
-                extraConfig = ''
-                  internal;
-
-                  proxy_set_header X-Scheme         $scheme;
-                  # nginx auth_request includes headers but not body
-                  proxy_set_header Content-Length   "";
-                  proxy_pass_request_body           off;
-                '';
-              };
-            };
-          }
-        ];
-    in
-    lib.mkMerge [
-      {
-        enable = false;
-        recommendedSetup = true;
-      }
-    ];
-
   guests =
     let
       mkGuest = guestName: _: {
@@ -129,11 +24,9 @@ in
           ../../config/services/${guestName}.nix
           {
             node.secretsDir = config.node.secretsDir + "/${guestName}";
-            networking.nftables.firewall.zones.untrusted.interfaces =
-              if lib.length config.guests.${guestName}.networking.links < 2 then
-                config.guests.${guestName}.networking.links
-              else
-                [ ];
+            networking.nftables.firewall.zones.untrusted.interfaces = lib.mkIf (
+              lib.length config.guests.${guestName}.networking.links == 1
+            ) config.guests.${guestName}.networking.links;
           }
         ];
       };
@@ -143,11 +36,11 @@ in
           backend = "microvm";
           microvm = {
             system = "x86_64-linux";
-            macvtap = "lan";
+            interfaces.lan = { };
             baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           };
           extraSpecialArgs = {
-            inherit (inputs.self) nodes;
+            inherit (inputs.self) nodes globals;
             inherit (inputs.self.pkgs.x86_64-linux) lib;
             inherit inputs minimal stateVersion;
           };
@@ -165,16 +58,14 @@ in
             backend = "container";
             container.macvlans = macvlans;
             extraSpecialArgs = {
-              inherit
-                lib
-                nodes
-                inputs
-                minimal
-                stateVersion
-                ;
+              inherit (inputs.self) nodes globals;
+              inherit (inputs.self.pkgs.x86_64-linux) lib;
+              inherit inputs minimal stateVersion;
             };
           };
         };
     in
-    { } // mkContainer "adguardhome" { macvlans = [ "lan-services" ]; };
+    { }
+    // mkContainer "adguardhome" { macvlans = [ "lan-services" ]; }
+    // mkContainer "nginx" { macvlans = [ "lan-services" ]; };
 }

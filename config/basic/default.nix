@@ -20,6 +20,7 @@
 
     ../../modules/deterministic-ids.nix
     ../../modules/distributed-config.nix
+    ../../modules/globals.nix
     ../../modules/meta.nix
     ../../modules/iwd.nix
     ../../modules/secrets.nix

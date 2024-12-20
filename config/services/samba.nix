@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  globals,
+  ...
+}:
 let
   shares = lib.removeAttrs config.services.samba.settings [ "global" ];
 in
@@ -26,8 +31,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.smb) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.smb) subUid path;
         sshAgeSecret = "resticHetznerSsh";
       };
       paths = [ "/bunker" ];

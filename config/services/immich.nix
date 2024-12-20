@@ -3,11 +3,12 @@
   pkgs,
   nodes,
   config,
+  globals,
   ...
 }:
 let
   version = "v1.119.1";
-  immichDomain = "immich.${config.secrets.secrets.global.domains.web}";
+  immichDomain = "immich.${globals.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
   ipImmichPostgres = "10.89.0.12";
@@ -57,10 +58,10 @@ let
       };
       notifications.smtp = {
         enabled = true;
-        from = "immich@${config.secrets.secrets.global.domains.mail_public}";
+        from = "immich@${globals.domains.mail_public}";
         transport = {
-          username = "immich@${config.secrets.secrets.global.domains.mail_public}";
-          host = "smtp.${config.secrets.secrets.global.domains.mail_public}";
+          username = "immich@${globals.domains.mail_public}";
+          host = "smtp.${globals.domains.mail_public}";
           port = 465;
         };
       };
@@ -91,7 +92,7 @@ let
 
         clientId = "immich";
         # clientSecret will be dynamically added in activation script
-        issuerUrl = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}";
+        issuerUrl = "https://auth.${globals.domains.web}/oauth2/openid/${clientId}";
         scope = "openid email profile";
         storageLabelClaim = "preferred_username";
       };
@@ -163,7 +164,7 @@ in
       group = "stalwart-mail";
       mode = "440";
     };
-    services.idmail.provision.mailboxes."immich@${config.secrets.secrets.global.domains.mail_public}" = {
+    services.idmail.provision.mailboxes."immich@${globals.domains.mail_public}" = {
       password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-immich-passwd-hash.path}}%";
       owner = "admin";
     };
@@ -193,8 +194,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.immich) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.immich) subUid path;
         sshAgeSecret = "immichHetznerSsh";
       };
       backupPrepareCommand = ''
@@ -242,15 +243,15 @@ in
     vcpu = 12;
   };
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
 
   networking.nftables.chains.forward.into-immich-container = {
     after = [ "conntrack" ];
     rules = [
-      "iifname elisabeth ip saddr ${nodes.elisabeth.config.wireguard.elisabeth.ipv4} tcp dport 2283 accept"
+      "iifname elisabeth ip saddr ${nodes.nucnix-nginx.config.wireguard.services.ipv4} tcp dport 2283 accept"
       "iifname podman1 oifname lan accept"
     ];
   };

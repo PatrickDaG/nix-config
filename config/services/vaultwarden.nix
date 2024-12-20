@@ -2,11 +2,9 @@
   config,
   lib,
   nodes,
+  globals,
   ...
 }:
-let
-  vaultwardenDomain = "pw.${config.secrets.secrets.global.domains.web}";
-in
 {
   age.secrets.vaultwarden-env = {
     rekeyFile = config.node.secretsDir + "/vaultwarden-env.age";
@@ -41,8 +39,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.vaultwarden) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.vaultwarden) subUid path;
         sshAgeSecret = "vaultwardenHetznerSsh";
       };
       paths = [ config.services.vaultwarden.backupDir ];
@@ -70,7 +68,7 @@ in
       group = "stalwart-mail";
       mode = "440";
     };
-    services.idmail.provision.mailboxes."vaultwarden@${config.secrets.secrets.global.domains.mail_public}" = {
+    services.idmail.provision.mailboxes."vaultwarden@${globals.domains.mail_public}" = {
       password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-vaultwarden-passwd-hash.path}}%";
       owner = "admin";
     };
@@ -101,21 +99,23 @@ in
       passwordIterations = 1000000;
       invitationsAllowed = true;
       invitationOrgName = "Vaultwarden";
-      domain = "https://${vaultwardenDomain}";
+      domain = "https://${globals.services.vaultwarden.domain}";
 
-      smtpHost = "smtp.${config.secrets.secrets.global.domains.mail_public}";
-      smtpFrom = "vaultwarden@${config.secrets.secrets.global.domains.mail_public}";
+      smtpHost = "smtp.${globals.domains.mail_public}";
+      smtpFrom = "vaultwarden@${globals.domains.mail_public}";
       smtpPort = 465;
       smtpSecurity = "force_tls";
-      smtpUsername = "vaultwarden@${config.secrets.secrets.global.domains.mail_public}";
+      smtpUsername = "vaultwarden@${globals.domains.mail_public}";
       smtpEmbedImages = true;
     };
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.vaultwarden.config.rocketPort ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+      config.services.vaultwarden.config.rocketPort
+    ];
   };
 
   # Replace uses of old name

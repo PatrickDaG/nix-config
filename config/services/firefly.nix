@@ -1,9 +1,14 @@
-{ config, nodes, ... }:
+{
+  config,
+  nodes,
+  globals,
+  ...
+}:
 {
   i18n.supportedLocales = [ "all" ];
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
 
   age.secrets.appKey = {
@@ -16,12 +21,12 @@
   services.firefly-iii = {
     enable = true;
     enableNginx = true;
-    virtualHost = "money.${config.secrets.secrets.global.domains.web}";
+    virtualHost = globals.services.firefly.domain;
     settings = {
-      APP_URL = "https://money.${config.secrets.secrets.global.domains.web}";
+      APP_URL = "https://${globals.services.firefly.domain}";
       TZ = "Europe/Berlin";
-      TRUSTED_PROXIES = nodes.elisabeth.config.wireguard.elisabeth.ipv4;
-      SITE_OWNER = "firefly-admin@${config.secrets.secrets.global.domains.mail_public}";
+      TRUSTED_PROXIES = nodes.nucnix-nginx.config.wireguard.services.ipv4;
+      SITE_OWNER = "firefly-admin@${globals.domains.mail_public}";
       APP_KEY_FILE = config.age.secrets.appKey.path;
       AUTHENTICATION_GUARD = "remote_user_guard";
       AUTHENTICATION_GUARD_HEADER = "X-User";

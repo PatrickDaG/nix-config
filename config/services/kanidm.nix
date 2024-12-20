@@ -1,11 +1,13 @@
-{ config, pkgs, ... }:
-let
-  kanidmdomain = "auth.${config.secrets.secrets.global.domains.web}";
-in
 {
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+  globals,
+  config,
+  pkgs,
+  ...
+}:
+{
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
   environment.persistence."/persist".directories = [
     {
@@ -56,8 +58,8 @@ in
     package = pkgs.kanidm.withSecretProvisioning;
     enableServer = true;
     serverSettings = {
-      domain = kanidmdomain;
-      origin = "https://${kanidmdomain}";
+      inherit (globals.services.kanidm) domain;
+      origin = "https://${globals.services.kanidm.domain}";
       tls_chain = config.age.secrets.kanidm-cert.path;
       tls_key = config.age.secrets.kanidm-key.path;
       bindaddress = "0.0.0.0:3000";
@@ -83,8 +85,8 @@ in
       };
       systems.oauth2.paperless = {
         displayName = "paperless";
-        originUrl = "https://ppl.${config.secrets.secrets.global.domains.web}/accounts/oidc/kanidm/login/callback/";
-        originLanding = "https://ppl.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://${globals.services.paperless.domain}/accounts/oidc/kanidm/login/callback/";
+        originLanding = "https://${globals.services.paperless.domain}/";
         basicSecretFile = config.age.secrets.oauth2-paperless.path;
         scopeMaps."paperless.access" = [
           "openid"
@@ -103,8 +105,8 @@ in
       };
       systems.oauth2.nextcloud = {
         displayName = "nextcloud";
-        originUrl = "https://nc.${config.secrets.secrets.global.domains.web}/";
-        originLanding = "https://nc.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://${globals.services.nextcloud.domain}/";
+        originLanding = "https://${globals.services.nextcloud.domain}/";
         basicSecretFile = config.age.secrets.oauth2-nextcloud.path;
         allowInsecureClientDisablePkce = true;
         scopeMaps."nextcloud.access" = [
@@ -125,10 +127,10 @@ in
       systems.oauth2.immich = {
         displayName = "Immich";
         originUrl = [
-          "https://immich.${config.secrets.secrets.global.domains.web}/auth/login"
-          "https://immich.${config.secrets.secrets.global.domains.web}/api/oauth/mobile-redirect"
+          "https://${globals.services.immich.domain}/auth/login"
+          "https://${globals.services.immich.domain}/api/oauth/mobile-redirect"
         ];
-        originLanding = "https://immich.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://${globals.services.immich.domain}/";
         basicSecretFile = config.age.secrets.oauth2-immich.path;
         allowInsecureClientDisablePkce = true;
         enableLegacyCrypto = true;
@@ -149,8 +151,8 @@ in
 
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
-        originUrl = "https://oauth2.${config.secrets.secrets.global.domains.web}/oauth2/callback";
-        originLanding = "https://oauth2.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://${globals.services.oauth2-proxy.domain}/oauth2/callback";
+        originLanding = "https://${globals.services.oauth2-proxy.domain}/";
         basicSecretFile = config.age.secrets.oauth2-proxy.path;
         scopeMaps."adguardhome.access" = [
           "openid"
@@ -202,8 +204,8 @@ in
       };
       systems.oauth2.forgejo = {
         displayName = "Forgejo";
-        originUrl = "https://forge.${config.secrets.secrets.global.domains.web}/user/oauth2/kanidm/callback";
-        originLanding = "https://forge.${config.secrets.secrets.global.domains.web}/";
+        originUrl = "https://${globals.services.forgejo.domain}/user/oauth2/kanidm/callback";
+        originLanding = "https://${globals.services.forgejo.domain}/";
         basicSecretFile = config.age.secrets.oauth2-forgejo.path;
         scopeMaps."forgejo.access" = [
           "openid"
@@ -223,10 +225,10 @@ in
         public = true;
         displayName = "Netbird";
         originUrl = [
-          "https://netbird.${config.secrets.secrets.global.domains.web}/peers"
-          "https://netbird.${config.secrets.secrets.global.domains.web}/add-peers"
+          "https://${globals.services.netbird.domain}/peers"
+          "https://${globals.services.netbird.domain}/add-peers"
         ];
-        originLanding = "https://netbird.${config.secrets.secrets.global.domains.web}/";
+        originLanding = "https://${globals.services.netbird.domain}/";
         preferShortUsername = true;
         enableLocalhostRedirects = true;
         enableLegacyCrypto = true;

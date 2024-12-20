@@ -1,12 +1,12 @@
 {
   pkgs,
   nodes,
+  globals,
   config,
   lib,
   ...
 }:
 let
-  paperlessdomain = "ppl.${config.secrets.secrets.global.domains.web}";
   paperlessBackupDir = "/var/cache/backups/paperless";
 in
 {
@@ -34,8 +34,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.paperless) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.paperless) subUid path;
         sshAgeSecret = "paperlessHetznerSsh";
       };
       paths = [ paperlessBackupDir ];
@@ -64,9 +64,9 @@ in
       before = [ "restic-backups-main.service" ];
     };
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.paperless.port ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
   age.secrets.paperless-admin-passwd = {
@@ -83,10 +83,10 @@ in
     consumptionDir = "/paperless/consume";
     mediaDir = "/paperless/media";
     settings = {
-      PAPERLESS_URL = "https://${paperlessdomain}";
-      PAPERLESS_ALLOWED_HOSTS = paperlessdomain;
-      PAPERLESS_CORS_ALLOWED_HOSTS = "https://${paperlessdomain}";
-      PAPERLESS_TRUSTED_PROXIES = nodes.elisabeth.config.wireguard.elisabeth.ipv4;
+      PAPERLESS_URL = "https://${globals.services.paperless.domain}";
+      PAPERLESS_ALLOWED_HOSTS = globals.services.paperless.domain;
+      PAPERLESS_CORS_ALLOWED_HOSTS = "https://${globals.services.paperless.domain}";
+      PAPERLESS_TRUSTED_PROXIES = nodes.nucnix-nginx.config.wireguard.services.ipv4;
 
       PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
 
@@ -98,7 +98,7 @@ in
               provider_id = "kanidm";
               name = "Kanidm";
               client_id = "paperless";
-              settings.server_url = "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${client_id}/.well-known/openid-configuration";
+              settings.server_url = "https://${globals.services.kanidm.domain}/oauth2/openid/${client_id}/.well-known/openid-configuration";
             }
           ];
         };

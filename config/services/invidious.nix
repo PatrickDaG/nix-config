@@ -1,8 +1,8 @@
-{ config, ... }:
+{ globals, ... }:
 {
   services.invidious = {
     enable = true;
-    domain = "yt.${config.secrets.secrets.global.domains.web}";
+    inherit (globals.services.invidious) domain;
     sig-helper.enable = true;
     settings = {
       external_port = 443;
@@ -33,8 +33,8 @@
     }
   ];
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 3000 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  # globals,
+  ...
+}:
 {
   disko.devices = {
     disk = {
@@ -127,7 +132,8 @@
   };
 
   wireguard.scrtiny-patrick.server = {
-    host = config.secrets.secrets.global.domains.web;
+    #host = globals.domains.web;
+    host = "3.3.3.3";
     port = 51831;
     reservedAddresses = [
       "10.44.0.0/16"

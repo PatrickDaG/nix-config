@@ -1,12 +1,13 @@
 {
   inputs,
   config,
+  globals,
   ...
 }:
 let
-  domain = config.secrets.secrets.global.domains.mail_public;
-  idmailDomain = "alias.${domain}";
-  priv_domain = config.secrets.secrets.global.domains.mail_private;
+  domain = globals.domains.mail_public;
+  idmailDomain = globals.services.idmail.domain;
+  priv_domain = globals.domains.mail_private;
 
   mkRandomSecret = {
     generator.script = "alnum";

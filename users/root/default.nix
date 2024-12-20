@@ -1,6 +1,6 @@
 {
   pkgs,
-  config,
+  globals,
   lib,
   minimal,
   ...
@@ -13,7 +13,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ"
     ];
-    hashedPassword = config.secrets.secrets.global.users.root.passwordHash;
+    inherit (globals.users.root) hashedPassword;
   };
   imports = lib.optionals (!minimal) [
 

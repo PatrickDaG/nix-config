@@ -25,7 +25,7 @@
           specialArgs = {
             # Use the correct instance lib that has our overlays
             inherit (pkgs) lib;
-            inherit (config) nodes;
+            inherit (config) nodes globals;
             inherit minimal stateVersion;
             inputs = inputs // {
               nixpkgs = self.nixpkgs-patched;
@@ -87,7 +87,7 @@
       nodes = config.nixosConfigurations // config.guestConfigurations;
       wireguardEvalCache = config.pkgs.x86_64-linux.lib.wireguard.createEvalCache inputs [
         "scrtiny-patrick"
-        "elisabeth"
+        "services"
       ];
     };
 }

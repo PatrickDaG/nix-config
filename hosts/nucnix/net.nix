@@ -1,78 +1,130 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  globals,
+  ...
+}:
 let
-  vlans = {
-    home = 10;
-    services = 20;
-    devices = 30;
-    iot = 40;
-    guests = 50;
-  };
-  inherit (lib) flip mapAttrsToList;
+  inherit (lib)
+    flip
+    mapAttrsToList
+    mkMerge
+    genAttrs
+    attrNames
+    ;
 in
 {
-  imports =
+  imports = [
+    ./hostapd.nix
+    ./kea.nix
+  ];
+  networking.nftables.firewall.zones = mkMerge [
+    { fritz.interfaces = [ "vlan-fritz" ]; }
+    (genAttrs (attrNames globals.net.vlans) (name: {
+      interfaces = [ "lan-${name}" ];
+    }))
+  ];
+  systemd.network.netdevs = mkMerge (
     [
-      ./hostapd.nix
-      ./kea.nix
-    ]
-    ++ (flip mapAttrsToList vlans (
-      name: id: {
-        networking.nftables.firewall.zones.${name}.interfaces = [ "lan-${name}" ];
-
-        systemd.network = {
-          netdevs = {
-            "40-vlan-${name}" = {
-              netdevConfig = {
-                Name = "vlan-${name}";
-                Kind = "vlan";
-              };
-              vlanConfig.Id = id;
-            };
-            "50-mlan-${name}" = {
-              netdevConfig = {
-                Name = "lan-${name}";
-                Kind = "macvlan";
-              };
-              extraConfig = ''
-                [MACVLAN]
-                Mode=bridge
-              '';
-            };
+      {
+        "40-vlan-fritz" = {
+          netdevConfig = {
+            Name = "vlan-fritz";
+            Kind = "vlan";
           };
-          networks = {
-            "10-vlan-${name}" = {
-              matchConfig.Name = "vlan-${name}";
-              # This interface should only be used from attached macvtaps.
-              # So don't acquire a link local address and only wait for
-              # this interface to gain a carrier.
-              networkConfig.LinkLocalAddressing = "no";
-              linkConfig.RequiredForOnline = "carrier";
-              extraConfig = ''
-                [Network]
-                MACVLAN=lan-${name}
-              '';
-            };
-            "20-lan-${name}" = {
-              address = [
-                (lib.net.cidr.hostCidr 1 "10.99.${toString id}.0/24")
-              ];
-              matchConfig.Name = "lan-${name}";
-              networkConfig = {
-                MulticastDNS = true;
-                IPv6PrivacyExtensions = "yes";
-                IPv4Forwarding = "yes";
-                IPv6SendRA = true;
-                IPv6AcceptRA = false;
-                DHCPPrefixDelegation = true;
-              };
-              ipv6Prefixes = [
-                { Prefix = "fd${toString id}::/64"; }
-              ];
-            };
-          };
+          vlanConfig.Id = 2;
         };
       }
-    ));
+    ]
+    ++ (flip mapAttrsToList globals.net.vlans (
+      name:
+      {
+        id,
+        ...
+      }:
+      {
+        "40-vlan-${name}" = {
+          netdevConfig = {
+            Name = "vlan-${name}";
+            Kind = "vlan";
+          };
+          vlanConfig.Id = id;
+        };
+        "50-macvlan-${name}" = {
+          netdevConfig = {
+            Name = "lan-${name}";
+            Kind = "macvlan";
+          };
+          extraConfig = ''
+            [MACVLAN]
+            Mode=bridge
+          '';
+        };
+      }
+    ))
+  );
+  systemd.network.networks = mkMerge (
+    [
+      {
+        "10-lan-fritz" = {
+          address = [
+            (lib.net.cidr.hostCidr 2 "10.99.2.0/24")
+          ];
+          gateway = [ (lib.net.cidr.host 1 "10.99.2.0/24") ];
+          matchConfig.Name = "vlan-fritz";
+          networkConfig = {
+            IPv6PrivacyExtensions = "yes";
+          };
+        };
+        "40-vlans" = {
+          matchConfig.Name = "lan01";
+          networkConfig.LinkLocalAddressing = "no";
+          vlan = [ "lan-fritz" ];
+        };
+      }
+    ]
+    ++ (flip mapAttrsToList globals.net.vlans (
+      name:
+      {
+        cidrv4,
+        cidrv6,
+        ...
+      }:
+      {
+
+        "40-vlans".vlan = [ "vlan-${name}" ];
+        "10-vlan-${name}" = {
+          matchConfig.Name = "vlan-${name}";
+          # This interface should only be used from attached macvtaps.
+          # So don't acquire a link local address and only wait for
+          # this interface to gain a carrier.
+          networkConfig.LinkLocalAddressing = "no";
+          linkConfig.RequiredForOnline = "carrier";
+          extraConfig = ''
+            [Network]
+            MACVLAN=lan-${name}
+          '';
+        };
+        "20-lan-${name}" = {
+          address = [
+            (lib.net.cidr.hostCidr 1 cidrv4)
+          ];
+          matchConfig.Name = "lan-${name}";
+          networkConfig = {
+            MulticastDNS = true;
+            IPv6PrivacyExtensions = "yes";
+            IPv4Forwarding = "yes";
+            IPv6SendRA = true;
+            IPv6AcceptRA = false;
+            DHCPPrefixDelegation = true;
+          };
+          ipv6Prefixes = [
+            { Prefix = cidrv6; }
+          ];
+        };
+      }
+    ))
+  );
   networking.nftables.firewall = {
     snippets.nnf-ssh.enable = lib.mkForce false;
     rules = {
@@ -96,45 +148,23 @@ in
         verdict = "accept";
         masquerade = true;
       };
+      wireguard = {
+        from = [ "services" ];
+        to = [ "local" ];
+        allowedUDPPorts = [ config.wireguard.services.server.port ];
+      };
     };
   };
-  networking.nftables.firewall.zones.fritz.interfaces = [ "vlan-fritz" ];
+  wireguard.services.server = {
+    host = lib.net.cidr.host 1 "10.99.20.0/24";
+    reservedAddresses = [
+      "10.42.0.0/20"
+      "fd00:1764::/112"
+    ];
+    openFirewall = true;
+  };
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
-  };
-  systemd.network = {
-    netdevs."40-vlan-fritz" = {
-      netdevConfig = {
-        Name = "vlan-fritz";
-        Kind = "vlan";
-      };
-      vlanConfig.Id = 2;
-    };
-    networks = {
-      "10-lan-fritz" = {
-        address = [
-          (lib.net.cidr.hostCidr 2 "10.99.2.0/24")
-        ];
-        gateway = [ (lib.net.cidr.host 1 "10.99.2.0/24") ];
-        matchConfig.Name = "vlan-fritz";
-        networkConfig = {
-          IPv6PrivacyExtensions = "yes";
-        };
-      };
-    };
-
-    networks."40-vlans" = {
-      matchConfig.Name = "lan01";
-      networkConfig.LinkLocalAddressing = "no";
-      vlan = [
-        "vlan-fritz"
-        "vlan-home"
-        "vlan-services"
-        "vlan-devices"
-        "vlan-iot"
-        "vlan-guests"
-      ];
-    };
   };
 
   boot.initrd = {
@@ -148,7 +178,7 @@ in
         # redo the network cause the livesystem has macvlans
         "10-lanhome" = {
           address = [
-            (lib.net.cidr.hostCidr 1 "10.99.10.0/24")
+            (lib.net.cidr.hostCidr 1 globals.net.vlans.home.cidrv4)
           ];
           matchConfig.Name = "vlan-home";
           networkConfig = {
@@ -180,7 +210,7 @@ in
             Name = "vlan-home";
             Kind = "vlan";
           };
-          vlanConfig.Id = 10;
+          vlanConfig.Id = globals.net.vlans.home.id;
         };
         "10-vlan-fritz" = {
           netdevConfig = {

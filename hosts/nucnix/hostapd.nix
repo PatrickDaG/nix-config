@@ -1,4 +1,4 @@
-{ config, ... }:
+{ globals, ... }:
 
 {
 
@@ -22,7 +22,7 @@
       wifi6.enable = true;
       wifi7.enable = true;
       networks.wlan1 = {
-        inherit (config.secrets.secrets.global.hostapd) ssid;
+        inherit (globals.hostapd) ssid;
         apIsolate = true;
         authentication = {
           saePasswords = [

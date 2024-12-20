@@ -2,13 +2,14 @@
   config,
   lib,
   pkgs,
+  globals,
   ...
 }:
 {
   boot = lib.mkIf (!config.boot.isContainer) {
     initrd.systemd = {
       enable = true;
-      emergencyAccess = config.secrets.secrets.global.users.root.passwordHash;
+      emergencyAccess = globals.users.root.hashedPassword;
       extraBin.ip = "${pkgs.iproute2}/bin/ip";
       extraBin.cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
       users.root.shell = "${pkgs.bashInteractive}/bin/bash";

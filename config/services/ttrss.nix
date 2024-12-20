@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 {
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ 80 ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
   services.freshrss = {
     enable = true;

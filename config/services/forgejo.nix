@@ -1,13 +1,11 @@
 {
   config,
+  globals,
   nodes,
   pkgs,
   lib,
   ...
 }:
-let
-  forgejoDomain = "forge.${config.secrets.secrets.global.domains.web}";
-in
 {
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -27,8 +25,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.forgejo) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.forgejo) subUid path;
         sshAgeSecret = "forgejoHetznerSsh";
       };
       paths = [ config.services.forgejo.stateDir ];
@@ -52,9 +50,9 @@ in
     home = config.services.forgejo.stateDir;
   };
 
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.forgejo.settings.server.HTTP_PORT
     ];
   };
@@ -86,7 +84,7 @@ in
       group = "stalwart-mail";
       mode = "440";
     };
-    services.idmail.provision.mailboxes."forge@${config.secrets.secrets.global.domains.mail_public}" = {
+    services.idmail.provision.mailboxes."forge@${globals.domains.mail_public}" = {
       password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-forgejo-passwd-hash.path}}%";
       owner = "admin";
     };
@@ -116,9 +114,9 @@ in
       # federation.ENABLED = true;
       mailer = {
         ENABLED = true;
-        SMTP_ADDR = "smtp.${config.secrets.secrets.global.domains.mail_public}";
-        FROM = "forge@${config.secrets.secrets.global.domains.mail_public}";
-        USER = "forge@${config.secrets.secrets.global.domains.mail_public}";
+        SMTP_ADDR = "smtp.${globals.domains.mail_public}";
+        FROM = "forge@${globals.domains.mail_public}";
+        USER = "forge@${globals.domains.mail_public}";
         SEND_AS_PLAIN_TEXT = true;
       };
       oauth2_client = {
@@ -137,8 +135,8 @@ in
       server = {
         HTTP_ADDR = "0.0.0.0";
         HTTP_PORT = 3000;
-        DOMAIN = forgejoDomain;
-        ROOT_URL = "https://${forgejoDomain}/";
+        DOMAIN = globals.services.forgejo.domain;
+        ROOT_URL = "https://${globals.services.forgejo.domain}/";
         LANDING_PAGE = "login";
         SSH_PORT = 9922;
       };
@@ -176,7 +174,7 @@ in
           "--key"
           clientId
           "--auto-discover-url"
-          "https://auth.${config.secrets.secrets.global.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
+          "https://auth.${globals.domains.web}/oauth2/openid/${clientId}/.well-known/openid-configuration"
           "--scopes"
           "email"
           "--scopes"

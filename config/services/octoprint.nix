@@ -3,9 +3,9 @@
 
   disabledModules = [ "services/misc/octoprint.nix" ];
   imports = [ "${inputs.nixpkgs-octoprint}/nixos/modules/services/misc/octoprint.nix" ];
-  wireguard.elisabeth = {
-    client.via = "elisabeth";
-    firewallRuleForNode.elisabeth.allowedTCPPorts = [ config.services.octoprint.port ];
+  wireguard.services = {
+    client.via = "nucnix";
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.octoprint.port ];
   };
   environment.persistence."/persist".directories = [
     {
