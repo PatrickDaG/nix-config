@@ -43,8 +43,12 @@
                       DHCP = "no";
                       address = [
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
                       ];
-                      gateway = lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv4;
+                      gateway = [
+                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv6)
+                      ];
                     }
                   )
                 )
@@ -90,12 +94,5 @@
           ];
         };
     in
-    { }
-    // mkContainer "adguardhome" {
-      vlans = [
-        "services"
-        "home"
-      ];
-    }
-    // mkContainer "nginx" { };
+    { } // mkContainer "adguardhome" { } // mkContainer "nginx" { };
 }

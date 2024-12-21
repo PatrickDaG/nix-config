@@ -18,8 +18,17 @@ in
     ./hostapd.nix
     ./kea.nix
   ];
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking.nftables.firewall.zones = mkMerge [
-    { fritz.interfaces = [ "vlan-fritz" ]; }
+    {
+      fritz.interfaces = [ "vlan-fritz" ];
+      adguard.ipv4Addresses = [
+        (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
+      ];
+      nginx.ipv4Addresses = [
+        (lib.net.cidr.host globals.services.nginx.ip globals.net.vlans.services.cidrv4)
+      ];
+    }
     (genAttrs (attrNames globals.net.vlans) (name: {
       interfaces = [ "lan-${name}" ];
     }))
@@ -125,9 +134,26 @@ in
       }
     ))
   );
+  networking.nftables.chains = {
+    prerouting.port-forward = {
+      after = [ "hook" ];
+      rules = [
+        "iifname lan-fritz tcp dport { 80, 443 } dnat ip to ${lib.net.cidr.host globals.services.nginx.ip globals.net.vlans.services.cidrv4}"
+        "iifname lan-fritz tcp dport { 80, 443 } dnat ip6 to ${lib.net.cidr.host globals.services.nginx.ip globals.net.vlans.services.cidrv6}"
+      ];
+    };
+  };
   networking.nftables.firewall = {
     snippets.nnf-ssh.enable = lib.mkForce false;
     rules = {
+      forward-nginx = {
+        from = [ "fritz" ];
+        to = [ "nginx" ];
+        allowedTCPPorts = [
+          80
+          443
+        ];
+      };
       ssh = {
         from = [
           "fritz"
@@ -135,6 +161,27 @@ in
         ];
         to = [ "local" ];
         allowedTCPPorts = [ 22 ];
+      };
+      services = {
+        from = [
+          "home"
+        ];
+        to = [
+          "services"
+          "fritz"
+        ];
+        late = true;
+        verdict = "accept";
+      };
+      dns = {
+        from = [
+          "home"
+          "devices"
+          "guests"
+          "services"
+        ];
+        to = [ "adguard" ];
+        allowedUDPPorts = [ 53 ];
       };
       internet = {
         from = [

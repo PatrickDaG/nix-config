@@ -57,7 +57,7 @@ in
             }
             {
               name = "domain-name-servers";
-              data = "${net.cidr.host globals.services.adguardhome.ip subnet}";
+              data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
             }
           ];
           reservations = [

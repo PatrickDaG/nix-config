@@ -9,8 +9,6 @@ let
   ipOf = name: nodes.${globals.services.${name}.host}.config.wireguard.services.ipv4;
 in
 {
-  systemd.network.networks."10-static" = {
-  };
   wireguard.services = {
     client.via = "nucnix";
   };
