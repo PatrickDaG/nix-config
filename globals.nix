@@ -49,6 +49,7 @@ in
       adguardhome = {
         domain = "adguardhome.${globals.domains.web}";
         host = "nucnix-adguardhome";
+        ip = 10;
       };
       forgejo = {
         domain = "forge.${globals.domains.web}";
@@ -84,7 +85,7 @@ in
       };
       apispotify = {
         domain = "apisptfy.${globals.domains.web}";
-        host = "elisabeth-apispotify";
+        host = "elisabeth-yourspotify";
       };
       kanidm = {
         domain = "auth.${globals.domains.web}";
@@ -117,6 +118,16 @@ in
       netbird = {
         domain = "netbird.${globals.domains.web}";
         host = "elisabeth-netbird";
+      };
+      nginx = {
+        domain = globals.domains.web;
+        host = "nucnix-nginx";
+        ip = 5;
+      };
+      samba = {
+        domain = "smb.${globals.domains.web}";
+        host = "elisabeth-samba";
+        ip = 12;
       };
     };
   };

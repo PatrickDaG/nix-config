@@ -132,6 +132,11 @@ in
                     type = types.str;
                     description = "The node-name on which this service runs";
                   };
+                  ip = mkOption {
+                    type = types.nullOr (types.ints.between 5 49);
+                    default = null;
+                    description = "Optional IP in case this service runs needs a static ip. Shou";
+                  };
                 };
               }
             );
