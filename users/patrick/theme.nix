@@ -95,7 +95,7 @@
     image = config.lib.stylix.pixel "base00";
     base16Scheme = {
       yaml = "${pkgs.base16-schemes}/share/themes/vice.yaml";
-      use-ifd = "auto";
+      use-ifd = "always";
     };
     # Has to be green
     override.base0B = "#00CC99";

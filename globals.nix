@@ -54,6 +54,7 @@ in
       forgejo = {
         domain = "forge.${globals.domains.web}";
         host = "elisabeth-forgejo";
+        ip = 13;
       };
       immich = {
         domain = "immich.${globals.domains.web}";
@@ -118,6 +119,7 @@ in
       netbird = {
         domain = "netbird.${globals.domains.web}";
         host = "elisabeth-netbird";
+        ip = 16;
       };
       nginx = {
         domain = globals.domains.web;
@@ -128,6 +130,15 @@ in
         domain = "smb.${globals.domains.web}";
         host = "elisabeth-samba";
         ip = 12;
+      };
+      ddclient = {
+        domain = "";
+        host = "elisabeth-ddclient";
+      };
+      murmur = {
+        domain = "ts.${globals.domains.web}";
+        host = "elisabeth-murmur";
+        ip = 9;
       };
     };
   };

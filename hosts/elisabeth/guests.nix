@@ -1,5 +1,6 @@
 {
   config,
+  globals,
   stateVersion,
   inputs,
   lib,
@@ -17,6 +18,7 @@
           enableRenaultFT ? false,
           enableBunker ? false,
           enableSharedPaperless ? false,
+          vlans ? [ "services" ],
           ...
         }:
         {
@@ -54,6 +56,25 @@
               networking.nftables.firewall.zones.untrusted.interfaces = lib.mkIf (
                 lib.length config.guests.${guestName}.networking.links == 1
               ) config.guests.${guestName}.networking.links;
+              systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) (
+                lib.listToAttrs (
+                  lib.flip map vlans (
+                    name:
+                    lib.nameValuePair "09-mv-${name}" {
+                      matchConfig.Name = "mv-${name}";
+                      DHCP = "no";
+                      address = [
+                        (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
+                      ];
+                      gateway = [
+                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv6)
+                      ];
+                    }
+                  )
+                )
+              );
             }
           ];
         };
@@ -74,17 +95,23 @@
         };
       };
 
-      mkContainer = guestName: cfg: {
-        ${guestName} = mkGuest guestName cfg // {
-          backend = "container";
-          container.macvlans = [ "lan-services" ];
-          extraSpecialArgs = {
-            inherit (inputs.self) nodes globals;
-            inherit (inputs.self.pkgs.x86_64-linux) lib;
-            inherit inputs minimal stateVersion;
+      mkContainer =
+        guestName:
+        {
+          vlans ? [ "services" ],
+          ...
+        }@cfg:
+        {
+          ${guestName} = mkGuest guestName cfg // {
+            backend = "container";
+            container.macvlans = lib.flip map vlans (x: "lan-${x}:mv-${x}");
+            extraSpecialArgs = {
+              inherit (inputs.self) nodes globals;
+              inherit (inputs.self.pkgs.x86_64-linux) lib;
+              inherit inputs minimal stateVersion;
+            };
           };
         };
-      };
     in
     { }
     // mkContainer "adguardhome" { }
@@ -110,5 +137,6 @@
       enableRenaultFT = true;
       enableBunker = true;
       enableSharedPaperless = true;
+      vlans = [ "home" ];
     };
 }
