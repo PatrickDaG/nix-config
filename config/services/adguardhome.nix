@@ -1,4 +1,9 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  globals,
+  ...
+}:
 {
   wireguard.services = {
     client.via = "nucnix";
@@ -30,11 +35,9 @@
         ];
       };
       user_rules = [
-        # "||adguardhome.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
-        # "||nc.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
-        # "||immich.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth config.secrets.secrets.global.net.privateSubnetv4}"
-        # "||smb.${config.secrets.secrets.global.domains.web}^$dnsrewrite=${lib.net.cidr.host config.secrets.secrets.global.net.ips.elisabeth-samba config.secrets.secrets.global.net.privateSubnetv4}"
-        # "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 config.secrets.secrets.global.net.privateSubnetv4}"
+        "||${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host globals.services.nginx.ip globals.net.vlans.home.cidrv4}"
+        "||${globals.services.samba.domain}^$dnsrewrite=${lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4}"
+        "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 "10.99.2.0/24"}"
       ];
       dhcp.enabled = false;
       ratelimit = 60;

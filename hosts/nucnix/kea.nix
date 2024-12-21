@@ -1,7 +1,9 @@
 {
   lib,
   utils,
+  globals,
   ...
+
 }:
 let
   inherit (lib)
@@ -55,30 +57,17 @@ in
             }
             {
               name = "domain-name-servers";
-              data = "${net.cidr.host 10 subnet}";
+              data = "${net.cidr.host globals.services.adguardhome.ip subnet}";
             }
           ];
           reservations = [
-            #FIXME
-            # {
-            #   hw-address = nodes.ward-adguardhome.config.lib.microvm.mac;
-            #   ip-address = globals.net.home-lan.hosts.ward-adguardhome.ipv4;
-            # }
-            # {
-            #   hw-address = nodes.ward-web-proxy.config.lib.microvm.mac;
-            #   ip-address = globals.net.home-lan.hosts.ward-web-proxy.ipv4;
-            # }
-            # {
-            #   hw-address = nodes.sire-samba.config.lib.microvm.mac;
-            #   ip-address = globals.net.home-lan.hosts.sire-samba.ipv4;
-            # }
           ];
         }
       );
     };
   };
 
-  systemd.services.kea-dhcp4-server.after = [
-    "sys-subsystem-net-devices-${utils.escapeSystemdPath "lan-self"}.device"
-  ];
+  systemd.services.kea-dhcp4-server.after = flip mapAttrsToList vlans (
+    name: _: "sys-subsystem-net-devices-${utils.escapeSystemdPath "lan-${name}"}.device"
+  );
 }
