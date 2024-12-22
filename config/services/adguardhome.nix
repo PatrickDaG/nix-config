@@ -18,7 +18,8 @@
     settings = {
       dns = {
         bind_hosts = [
-          "0.0.0.0"
+          (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
+          (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv6)
         ];
         anonymize_client_ip = false;
         upstream_dns = [
@@ -35,8 +36,8 @@
         ];
       };
       user_rules = [
-        "||${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host globals.services.nginx.ip globals.net.vlans.home.cidrv4}"
         "||${globals.services.samba.domain}^$dnsrewrite=${lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4}"
+        "||${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4}"
         "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 "10.99.2.0/24"}"
       ];
       dhcp.enabled = false;

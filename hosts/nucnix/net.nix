@@ -23,6 +23,7 @@ in
   networking.nftables.firewall.zones = mkMerge [
     {
       fritz.interfaces = [ "vlan-fritz" ];
+      wg-services.interfaces = [ "services" ];
       adguard.ipv4Addresses = [
         (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
       ];
@@ -86,7 +87,7 @@ in
         "40-vlans" = {
           matchConfig.Name = "lan01";
           networkConfig.LinkLocalAddressing = "no";
-          vlan = [ "lan-fritz" ];
+          vlan = [ "vlan-fritz" ];
         };
       }
     ]
@@ -135,6 +136,11 @@ in
   networking.nftables.firewall = {
     snippets.nnf-ssh.enable = lib.mkForce false;
     rules = {
+      mdns = {
+        from = [ "home" ];
+        to = [ "local" ];
+        allowedUDPPorts = [ 5353 ];
+      };
       ssh = {
         from = [
           "fritz"
@@ -180,6 +186,12 @@ in
         from = [ "services" ];
         to = [ "local" ];
         allowedUDPPorts = [ config.wireguard.services.server.port ];
+      };
+      # Forward traffic between participants
+      forward-wireguard = {
+        from = [ "wg-services" ];
+        to = [ "wg-services" ];
+        verdict = "accept";
       };
     };
   };

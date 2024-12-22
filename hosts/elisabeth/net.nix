@@ -58,13 +58,7 @@ in
       }
     ]
     ++ (flip mapAttrsToList globals.net.vlans (
-      name:
-      {
-        cidrv4,
-        cidrv6,
-        ...
-      }:
-      {
+      name: _: {
         "40-vlans".vlan = [ "vlan-${name}" ];
         "10-vlan-${name}" = {
           matchConfig.Name = "vlan-${name}";
@@ -79,21 +73,12 @@ in
           '';
         };
         "20-lan-${name}" = {
-          address = [
-            (lib.net.cidr.hostCidr 1 cidrv4)
-          ];
+          DHCP = "yes";
           matchConfig.Name = "lan-${name}";
           networkConfig = {
             MulticastDNS = true;
             IPv6PrivacyExtensions = "yes";
-            IPv4Forwarding = "yes";
-            IPv6SendRA = true;
-            IPv6AcceptRA = false;
-            DHCPPrefixDelegation = true;
           };
-          ipv6Prefixes = [
-            { Prefix = cidrv6; }
-          ];
         };
       }
     ))
@@ -108,6 +93,11 @@ in
         to = [ "local" ];
         allowedTCPPorts = [ 22 ];
       };
+      mdns = {
+        from = [ "home" ];
+        to = [ "local" ];
+        allowedUDPPorts = [ 5353 ];
+      };
     };
   };
 
@@ -120,10 +110,8 @@ in
       enable = true;
       networks = {
         # redo the network cause the livesystem has macvlans
-        "10-lanhome" = {
-          address = [
-            # (lib.net.cidr.hostCidr 1 globals.net.vlans.home.cidrv4)
-          ];
+        "10-lan-home" = {
+          DHCP = "yes";
           matchConfig.Name = "vlan-home";
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
@@ -142,7 +130,7 @@ in
             Name = "vlan-home";
             Kind = "vlan";
           };
-          # vlanConfig.Id = globals.net.vlans.home.id;
+          vlanConfig.Id = globals.net.vlans.home.id;
         };
       };
     };

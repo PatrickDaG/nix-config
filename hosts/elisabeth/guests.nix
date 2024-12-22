@@ -68,8 +68,8 @@
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
                       ];
                       gateway = [
-                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv4)
-                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv6)
+                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv6)
                       ];
                     }
                   )
@@ -84,7 +84,7 @@
           backend = "microvm";
           microvm = {
             system = "x86_64-linux";
-            interfaces.lan = { };
+            interfaces.lan-services = { };
             baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           };
           extraSpecialArgs = {
@@ -114,7 +114,6 @@
         };
     in
     { }
-    // mkContainer "adguardhome" { }
     // mkContainer "oauth2-proxy" { }
     // mkContainer "vaultwarden" { }
     // mkContainer "ddclient" { }

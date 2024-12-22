@@ -46,8 +46,8 @@
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
                       ];
                       gateway = [
-                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv4)
-                        (lib.net.cidr.hostCidr 1 globals.net.vlans.${name}.cidrv6)
+                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv4)
+                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv6)
                       ];
                     }
                   )

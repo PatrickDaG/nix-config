@@ -119,7 +119,7 @@ in
             # clients hardcode the host and share names.
             "disable netbios" = "yes";
             # Allow access to local network
-            "hosts allow" = "192.168.178. 10. localhost";
+            "hosts allow" = "10. localhost";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";
