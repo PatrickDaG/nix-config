@@ -5,12 +5,14 @@ let
     net
     toUpper
     mkMerge
+    optionalString
     ;
   forward =
     {
       service,
       ports,
       protocol,
+      fport ? null,
       ...
     }:
     {
@@ -21,10 +23,10 @@ let
             rules = [
               "iifname { vlan-fritz, lan-home } ip daddr { ${net.cidr.host 1 globals.net.vlans.services.cidrv4}, ${net.cidr.host 2 "10.99.2.0/24"} } ${protocol} dport { ${concatStringsSep ", " (map toString ports)} } dnat ip to ${
                 net.cidr.host globals.services.${service}.ip globals.net.vlans.services.cidrv4
-              }"
+              }${optionalString (fport != null) ":${toString fport}"}"
               "iifname { vlan-fritz, lan-home } ip6 daddr ${net.cidr.host 1 globals.net.vlans.services.cidrv6} ${protocol} dport { ${concatStringsSep ", " (map toString ports)} } dnat ip6 to ${
                 net.cidr.host globals.services.${service}.ip globals.net.vlans.services.cidrv6
-              }"
+              }${optionalString (fport != null) ":${toString fport}"}"
             ];
           };
         };
@@ -63,6 +65,7 @@ mkMerge [
       9922
     ];
     protocol = "tcp";
+    fport = 22;
   })
   (forward {
     service = "murmur";
