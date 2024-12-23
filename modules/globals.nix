@@ -125,8 +125,9 @@ in
               types.submodule {
                 options = {
                   domain = mkOption {
-                    type = types.str;
+                    type = types.nullOr types.str;
                     description = "The domain under which this service can be reached";
+                    default = null;
                   };
                   host = mkOption {
                     type = types.str;

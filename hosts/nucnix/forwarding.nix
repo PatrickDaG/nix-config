@@ -82,4 +82,13 @@ mkMerge [
     ];
     protocol = "udp";
   })
+  {
+    networking.nftables.chains.prerouting.mdns-forward = {
+      after = [ "hook" ];
+      rules = [
+        # "iifname lan-home ip daddr 224.0.0.251 ip saddr set ${net.cidr.host 1 globals.net.vlans.services.cidrv4} dup to 224.0.0.251 device lan-services notrack"
+        # "iifname lan-services ip daddr 224.0.0.251 ip saddr set ${net.cidr.host 1 globals.net.vlans.home.cidrv4} dup to 224.0.0.251 device lan-home notrack"
+      ];
+    };
+  }
 ]

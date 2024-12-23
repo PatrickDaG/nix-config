@@ -132,8 +132,10 @@ in
         ip = 12;
       };
       ddclient = {
-        domain = "";
         host = "elisabeth-ddclient";
+      };
+      hostapd = {
+        host = "nucnix-hostapd";
       };
       murmur = {
         domain = "ts.${globals.domains.web}";

@@ -7,6 +7,13 @@
   minimal,
   ...
 }:
+let
+  inherit (lib)
+    listToAttrs
+    flip
+    nameValuePair
+    ;
+in
 {
   guests =
     let
@@ -57,21 +64,27 @@
           ];
         };
 
-      mkMicrovm = guestName: cfg: {
-        ${guestName} = mkGuest guestName cfg // {
-          backend = "microvm";
-          microvm = {
-            system = "x86_64-linux";
-            interfaces.lan = lib.trace "This don't work yet" { };
-            baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
-          };
-          extraSpecialArgs = {
-            inherit (inputs.self) nodes globals;
-            inherit (inputs.self.pkgs.x86_64-linux) lib;
-            inherit inputs minimal stateVersion;
+      mkMicrovm =
+        guestName:
+        {
+          vlans ? [ "services" ],
+          ...
+        }@cfg:
+        {
+          ${guestName} = mkGuest guestName cfg // {
+            backend = "microvm";
+            microvm = {
+              system = "x86_64-linux";
+              interfaces = listToAttrs (flip map vlans (x: (nameValuePair "lan-${x}" { })));
+              baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
+            };
+            extraSpecialArgs = {
+              inherit (inputs.self) nodes globals;
+              inherit (inputs.self.pkgs.x86_64-linux) lib;
+              inherit inputs minimal stateVersion;
+            };
           };
         };
-      };
 
       mkContainer =
         guestName:
@@ -94,5 +107,14 @@
           ];
         };
     in
-    { } // mkContainer "adguardhome" { } // mkContainer "nginx" { };
+    { }
+    // mkContainer "adguardhome" { }
+    // mkContainer "nginx" { }
+    // mkMicrovm "hostapd" {
+      vlans = [
+        "guests"
+        "home"
+        "services"
+      ];
+    };
 }

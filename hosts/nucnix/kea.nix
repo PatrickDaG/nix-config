@@ -61,6 +61,16 @@ in
             }
           ];
           reservations = [
+            {
+              # homematic
+              hw-address = "b8:27:eb:5d:ff:36";
+              ip-address = net.cidr.host 30 subnet;
+            }
+            {
+              # testberry
+              hw-address = "d8:3a:dd:dc:b6:6a";
+              ip-address = net.cidr.host 31 subnet;
+            }
           ];
         }
       );

@@ -15,7 +15,6 @@ let
 in
 {
   imports = [
-    ./hostapd.nix
     ./kea.nix
     ./forwarding.nix
   ];

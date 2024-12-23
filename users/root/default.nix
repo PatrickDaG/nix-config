@@ -25,4 +25,5 @@
     ../patrick/programs/zsh
 
   ];
+  environment.systemPackages = [ pkgs.neovim ];
 }
