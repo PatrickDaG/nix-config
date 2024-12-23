@@ -5,7 +5,9 @@
   ...
 }:
 let
-  onlyHost = lib.mkIf (!config.boot.isContainer);
+  onlyHost = lib.mkIf (
+    !config.boot.isContainer && !(config ? microvm.guest && config.microvm.guest.enable)
+  );
   prune =
     folder:
     pkgs.writers.writePython3Bin "impermanence-prune" { } ''

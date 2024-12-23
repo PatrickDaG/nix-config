@@ -1,3 +1,4 @@
+{ config, lib, ... }:
 {
   age.generators.argon2id =
     {
@@ -17,5 +18,9 @@
         | ${pkgs.libargon2}/bin/argon2 "$(${pkgs.openssl}/bin/openssl rand -base64 16)" -id -e \
         || die "Failure while generating argon2id hash"
     '';
-
+  secrets.secretFiles =
+    let
+      local = config.node.secretsDir + "/secrets.nix.age";
+    in
+    lib.optionalAttrs (config.node.name != null && lib.pathExists local) { inherit local; };
 }
