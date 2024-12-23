@@ -136,7 +136,10 @@ in
     snippets.nnf-ssh.enable = lib.mkForce false;
     rules = {
       mdns = {
-        from = [ "home" ];
+        from = [
+          "home"
+          "services"
+        ];
         to = [ "local" ];
         allowedUDPPorts = [ 5353 ];
       };

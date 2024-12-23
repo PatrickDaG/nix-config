@@ -83,12 +83,25 @@ mkMerge [
     protocol = "udp";
   })
   {
-    networking.nftables.chains.prerouting.mdns-forward = {
-      after = [ "hook" ];
-      rules = [
-        # "iifname lan-home ip daddr 224.0.0.251 ip saddr set ${net.cidr.host 1 globals.net.vlans.services.cidrv4} dup to 224.0.0.251 device lan-services notrack"
-        # "iifname lan-services ip daddr 224.0.0.251 ip saddr set ${net.cidr.host 1 globals.net.vlans.home.cidrv4} dup to 224.0.0.251 device lan-home notrack"
-      ];
-    };
+    networking.nftables.ruleset = ''
+      table ip mdns {
+        chain prerouting {
+            type filter hook prerouting priority mangle; policy accept;
+
+            iifname {lan-home, lan-services} ip daddr 224.0.0.251 meta mark 0xa5f3 jump mdns-saddr
+            iifname {lan-home, lan-services} ip daddr 224.0.0.251 meta mark != 0xa5f3 jump mdns
+        }
+        chain mdns {
+            meta mark set 0xa5f3
+            iifname lan-services dup to 224.0.0.251 device lan-home
+            iifname lan-home dup to 224.0.0.251 device lan-services
+        }
+        chain mdns-saddr {
+            # repeat mDNS from IoT to main
+            iifname lan-services ip saddr set 10.99.20.1
+            iifname lan-home ip saddr set 10.99.10.1
+        }
+      }
+    '';
   }
 ]
