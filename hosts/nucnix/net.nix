@@ -25,7 +25,7 @@ in
       fritz.interfaces = [ "vlan-fritz" ];
       wg-services.interfaces = [ "services" ];
       printer.ipv4Addresses = [
-        (lib.net.cidr.host 32 globals.net.vlans.device.cidrv4)
+        (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
       ];
       adguard.ipv4Addresses = [
         (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)

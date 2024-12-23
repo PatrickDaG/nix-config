@@ -136,6 +136,7 @@ in
       };
       hostapd = {
         host = "nucnix-hostapd";
+        ip = 19;
       };
       murmur = {
         domain = "ts.${globals.domains.web}";
