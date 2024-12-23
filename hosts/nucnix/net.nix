@@ -2,6 +2,7 @@
   config,
   lib,
   globals,
+  utils,
   ...
 }:
 let
@@ -23,8 +24,14 @@ in
     {
       fritz.interfaces = [ "vlan-fritz" ];
       wg-services.interfaces = [ "services" ];
+      printer.ipv4Addresses = [
+        (lib.net.cidr.host 32 globals.net.vlans.device.cidrv4)
+      ];
       adguard.ipv4Addresses = [
         (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
+      ];
+      samba.ipv4Addresses = [
+        (lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4)
       ];
     }
     (genAttrs (attrNames globals.net.vlans) (name: {
@@ -143,6 +150,13 @@ in
         to = [ "local" ];
         allowedUDPPorts = [ 5353 ];
       };
+      printer-smb = {
+        from = [
+          "printer"
+        ];
+        to = [ "smb" ];
+        allowedUDPPorts = [ 445 ];
+      };
       ssh = {
         from = [
           "fritz"
@@ -156,7 +170,9 @@ in
           "home"
         ];
         to = [
+          "iot"
           "services"
+          "devices"
           "fritz"
         ];
         late = true;
@@ -264,4 +280,7 @@ in
       };
     };
   };
+  systemd.services.nftables.after = flip mapAttrsToList globals.net.vlans (
+    name: _: "sys-subsystem-net-devices-${utils.escapeSystemdPath "lan-${name}"}.device"
+  );
 }

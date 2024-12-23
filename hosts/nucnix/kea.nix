@@ -11,13 +11,6 @@ let
     flip
     mapAttrsToList
     ;
-  vlans = {
-    home = 10;
-    services = 20;
-    devices = 30;
-    iot = 40;
-    guests = 50;
-  };
 in
 {
   environment.persistence."/persist".directories = [
@@ -38,10 +31,12 @@ in
       valid-lifetime = 86400;
       renew-timer = 3600;
       interfaces-config = {
-        interfaces = flip mapAttrsToList vlans (x: _: "lan-${x}");
+        interfaces = flip mapAttrsToList globals.net.vlans (x: _: "lan-${x}");
       };
-      subnet4 = flip mapAttrsToList vlans (
-        name: id: rec {
+      subnet4 = flip mapAttrsToList globals.net.vlans (
+        name:
+        { id, cidrv4, ... }:
+        rec {
           inherit id;
           interface = "lan-${name}";
           subnet = "10.99.${toString id}.0/24";
@@ -71,13 +66,18 @@ in
               hw-address = "d8:3a:dd:dc:b6:6a";
               ip-address = net.cidr.host 31 subnet;
             }
+            {
+              # drucker
+              hw-address = "48:9e:bd:5c:31:ac";
+              ip-address = net.cidr.host 32 subnet;
+            }
           ];
         }
       );
     };
   };
 
-  systemd.services.kea-dhcp4-server.after = flip mapAttrsToList vlans (
+  systemd.services.kea-dhcp4-server.after = flip mapAttrsToList globals.net.vlans (
     name: _: "sys-subsystem-net-devices-${utils.escapeSystemdPath "lan-${name}"}.device"
   );
 }

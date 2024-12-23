@@ -2,7 +2,7 @@
 {
   hm.home.smb =
     let
-      address = "smb.${config.secrets.secrets.global.domains.web}";
+      address = "smb.internal";
       credentials = config.age.secrets.smb-creds.path;
     in
     [

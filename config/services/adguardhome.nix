@@ -36,9 +36,9 @@
         ];
       };
       user_rules = [
-        "||homematic.${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host 30 globals.net.vlans.home.cidrv4}"
-        "||testberry.${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host 31 globals.net.vlans.home.cidrv4}"
-        "||${globals.services.samba.domain}^$dnsrewrite=${lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4}"
+        "||homematic.internal^$dnsrewrite=${lib.net.cidr.host 30 globals.net.vlans.devices.cidrv4}"
+        "||testberry.internal^$dnsrewrite=${lib.net.cidr.host 31 globals.net.vlans.devices.cidrv4}"
+        "||smb.internal^$dnsrewrite=${lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4}"
         "||${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4}"
         "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 "10.99.2.0/24"}"
       ];
