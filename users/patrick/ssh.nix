@@ -1,4 +1,4 @@
-{ config, ... }:
+{ globals, ... }:
 {
   # yubikey public key parts
   hm.home.file = {
@@ -27,11 +27,11 @@
         };
 
         "maddy" = {
-          hostname = config.secrets.secrets.global.user.hetzner_ip;
+          hostname = globals.hosts.maddy.ip;
           user = "root";
         };
         "mailnix" = {
-          hostname = config.secrets.secrets.global.user.mailnix_ip;
+          hostname = globals.hosts.mailnix.ip;
           user = "root";
         };
 

@@ -20,7 +20,7 @@ lib.optionalAttrs (!minimal) {
       "tss"
     ];
     group = "patrick";
-    hashedPassword = globals.users.patrick.passwordHash;
+    inherit (globals.users.patrick) hashedPassword;
     autoSubUidGidRange = false;
     subUidRanges = [
       {

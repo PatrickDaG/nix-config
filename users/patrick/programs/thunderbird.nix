@@ -1,7 +1,7 @@
-{ config, lib, ... }:
+{ globals, lib, ... }:
 {
   hm = {
-    accounts.email.accounts = lib.flip lib.mapAttrs' config.secrets.secrets.global.user.accounts.email (
+    accounts.email.accounts = lib.flip lib.mapAttrs' globals.accounts.email (
       _: v:
       lib.nameValuePair v.address (
         lib.recursiveUpdate v {

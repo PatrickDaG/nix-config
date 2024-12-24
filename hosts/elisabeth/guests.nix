@@ -60,9 +60,9 @@
                 lib.listToAttrs (
                   lib.flip map vlans (
                     name:
-                    lib.nameValuePair "09-mv-${name}" {
+                    lib.nameValuePair "10-mv-${name}" {
                       matchConfig.Name = "mv-${name}";
-                      DHCP = "no";
+                      DHCP = lib.mkForce "no";
                       address = [
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv4)
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)

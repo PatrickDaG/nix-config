@@ -2,6 +2,7 @@
   lib,
   config,
   nodes,
+  globals,
   minimal,
   pkgs,
   ...
@@ -61,7 +62,7 @@ lib.optionalAttrs (!minimal) {
     distributedBuilds = true;
     buildMachines = [
       {
-        hostName = config.secrets.secrets.global.user.mailnix_ip;
+        hostName = globals.hosts.mailnix.ip;
         protocol = "ssh-ng";
         sshUser = "build";
         system = "aarch64-linux";

@@ -1,5 +1,6 @@
 {
   config,
+  globals,
   pkgs,
   ...
 }:
@@ -41,8 +42,8 @@
     clients.main = {
       port = 51820;
       environment = {
-        NB_MANAGEMENT_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
-        NB_ADMIN_URL = "https://netbird.${config.secrets.secrets.global.domains.web}";
+        NB_MANAGEMENT_URL = "https://netbird.${globals.domains.web}";
+        NB_ADMIN_URL = "https://netbird.${globals.domains.web}";
         NB_HOSTNAME = "desktopnix";
       };
     };

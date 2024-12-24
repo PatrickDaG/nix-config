@@ -251,7 +251,7 @@ in
   networking.nftables.chains.forward.into-immich-container = {
     after = [ "conntrack" ];
     rules = [
-      "iifname elisabeth ip saddr ${nodes.nucnix-nginx.config.wireguard.services.ipv4} tcp dport 2283 accept"
+      "iifname services ip saddr ${nodes.nucnix-nginx.config.wireguard.services.ipv4} tcp dport 2283 accept"
       "iifname podman1 oifname lan accept"
     ];
   };
