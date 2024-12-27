@@ -43,7 +43,7 @@ let
                 "home"
               ];
               to = [ service ];
-              "allowed${toUpper protocol}Ports" = ports;
+              "allowed${toUpper protocol}Ports" = if fport != null then [ fport ] else ports;
             };
           };
         };

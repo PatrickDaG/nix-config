@@ -1558,11 +1558,10 @@
       "locked": {
         "lastModified": 1734643696,
         "narHash": "sha256-W5JSWhhThI9erzhZmpHy1gZGwSxEGPKYmOUBEXH/WGA=",
-        "ref": "refs/heads/main",
+        "owner": "oddlama",
+        "repo": "nixos-extra-modules",
         "rev": "6a4736e0773a1852b0b6c5f71cbe96dd39c3caf1",
-        "revCount": 40,
-        "type": "git",
-        "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
+        "type": "github"
       },
       "original": {
         "owner": "oddlama",
