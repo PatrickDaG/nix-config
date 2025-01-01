@@ -252,7 +252,7 @@ in
     after = [ "conntrack" ];
     rules = [
       "iifname services ip saddr ${nodes.nucnix-nginx.config.wireguard.services.ipv4} tcp dport 2283 accept"
-      "iifname podman1 oifname lan accept"
+      "iifname podman1 oifname lan-services accept"
     ];
   };
   systemd.tmpfiles.settings = {
