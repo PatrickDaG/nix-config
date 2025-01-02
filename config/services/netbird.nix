@@ -17,7 +17,7 @@
   networking.nftables.chains.forward.from-netbird = {
     after = [ "conntrack" ];
     rules = [
-      "iifname nb-main oifname mv-lan accept"
+      "iifname nb-main oifname { lan-home, lan-services } accept"
     ];
   };
 

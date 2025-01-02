@@ -75,7 +75,7 @@ in
             backend = "microvm";
             microvm = {
               system = "x86_64-linux";
-              interfaces = listToAttrs (flip map vlans (x: (nameValuePair "lan-${x}" { })));
+              interfaces = listToAttrs (flip map vlans (x: (nameValuePair "mv-${x}" { hostLink = "lan-${x}"; })));
               baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
             };
             extraSpecialArgs = {
