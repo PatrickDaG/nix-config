@@ -9,16 +9,22 @@ let
     interfaces = "lan-.*";
     rules = [
       {
+        from = ".*";
+        to = "lan-home";
+        allow_questions = "";
+        allow_answers = ".*";
+      }
+      {
         from = "lan-home";
         to = "lan-services";
         allow_questions = "(nucnix|elisabeth)";
         allow_answers = "";
       }
       {
-        from = "lan-services";
-        to = "lan-home";
-        allow_questions = "";
-        allow_answers = "(nucnix|elisabeth)";
+        from = "lan-home";
+        to = "lan-devices";
+        allow_questions = "(printer|ipp)";
+        allow_answers = "";
       }
     ];
   };

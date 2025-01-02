@@ -16,7 +16,10 @@
     intel2200BGFirmware
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  networking.nftables.firewall.zones.untrusted.interfaces = [ "lan-services" ];
+  networking.nftables.firewall.zones.untrusted.interfaces = [
+    "lan-services"
+    "lan-home"
+  ];
   hardware.wirelessRegulatoryDatabase = true;
   # systemd.network = {
   #   netdevs."40-wifi-home" = {
@@ -40,28 +43,28 @@
   #   };
   # };
 
-  networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
-  networking.nftables.firewall.zones.home.interfaces = [ "lan-home" ];
-  networking.nftables.firewall.rules.wifi-forward = {
-    from = [ "wlan" ];
-    to = [ "lan-home" ];
-    verdict = "accept";
-  };
-  systemd.network.networks."40-wifi" = {
-    matchConfig.Name = "lan-home";
-    address = [
-      (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv4)
-      (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv6)
-    ];
-    gateway = [
-      (lib.net.cidr.host 1 globals.net.vlans.home.cidrv4)
-      (lib.net.cidr.host 1 globals.net.vlans.home.cidrv6)
-    ];
-
-  };
-
+  # networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
+  # networking.nftables.firewall.zones.home.interfaces = [ "lan-home" ];
+  # networking.nftables.firewall.rules.wifi-forward = {
+  #   from = [ "wlan" ];
+  #   to = [ "home" ];
+  #   verdict = "accept";
+  # };
+  # systemd.network.networks."40-wifi" = {
+  #   matchConfig.Name = "wlan1";
+  #   address = [
+  #     (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv4)
+  #     (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv6)
+  #   ];
+  #   gateway = [
+  #     (lib.net.cidr.host 1 globals.net.vlans.home.cidrv4)
+  #     (lib.net.cidr.host 1 globals.net.vlans.home.cidrv6)
+  #   ];
+  #
+  # };
+  #
   services.hostapd = {
-    enable = true;
+    # enable = true;
     radios.wlan1 = {
       band = "2g";
       countryCode = "DE";

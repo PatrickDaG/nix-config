@@ -112,7 +112,7 @@ in
     // mkContainer "nginx" { }
     // mkMicrovm "hostapd" {
       vlans = [
-        "guests"
+        # "guests"
         "home"
         "services"
       ];
