@@ -114,7 +114,6 @@ in
       vlans = [
         # "guests"
         "home"
-        "services"
       ];
     };
 }

@@ -34,7 +34,7 @@ in
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
 
-    #environment.RUST_LOG = "debug";
+    environment.RUST_LOG = "debug";
 
     serviceConfig = {
       Restart = "on-failure";

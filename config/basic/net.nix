@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -42,31 +41,4 @@
       MulticastDNS=true
     '';
   };
-  networking.nftables.ruleset = ''
-    table inet mdns {
-       set OWN_IPS {
-         typeof ip saddr
-         elements = { 127.0.0.1 }
-       }
-      chain prerouting {
-          type filter hook prerouting priority mangle; policy accept;
-          udp dport 5353 ip saddr @OWN_IPS drop;
-      }
-    }
-  '';
-  services.networkd-dispatcher = {
-    enable = true;
-    rules = {
-      disable-mdns = {
-        onState = [ "configured" ];
-        script = ''
-          ADDRS=$(${lib.getExe' pkgs.iproute2 "ip"} -j -o addr | ${lib.getExe pkgs.jq} -r ".[] | .addr_info[] | select(.dev != \"lo\") | .local")
-          for i in $ADDRS; do
-            ${lib.getExe pkgs.nftables} add element inet mdns OWN_IPS "{ $i }"
-          done
-        '';
-      };
-    };
-  };
-
 }
