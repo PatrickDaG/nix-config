@@ -17,51 +17,48 @@
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking.nftables.firewall.zones.untrusted.interfaces = [
-    "lan-home"
+    "mv-home"
+    "br-home"
   ];
   hardware.wirelessRegulatoryDatabase = true;
   # systemd.network = {
-  #   netdevs."40-wifi-home" = {
+  #   netdevs."40-br-home" = {
   #     netdevConfig = {
   #       Name = "br-home";
   #       Kind = "bridge";
   #     };
   #   };
-  #   networks."10-home-bridge" = {
-  #     networkConfig.LinkLocalAddressing = "no";
-  #     matchConfig.Name = "lan-home";
+  #   networks."10-mv-home" = {
+  #     networkConfig = {
+  #       LinkLocalAddressing = "no";
+  #       IPv6AcceptRA = lib.mkForce false;
+  #       Bridge = "br-home";
+  #     };
+  #     matchConfig.Name = "mv-home";
   #     DHCP = "no";
-  #     extraConfig = ''
-  #       [Network]
-  #       Bridge=br-home
-  #     '';
   #   };
-  #   networks."10-home-" = {
+  #   networks."10-home" = {
   #     matchConfig.Name = "br-home";
   #     DHCP = "yes";
   #   };
+  #   networks."40-wifi" = {
+  #     matchConfig.Name = "wlan1";
+  #     networkConfig = {
+  #       LinkLocalAddressing = "no";
+  #       IPv6AcceptRA = lib.mkForce false;
+  #       Bridge = "br-home";
+  #     };
+  #     DHCP = "no";
+  #   };
   # };
 
-  # networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
-  # networking.nftables.firewall.zones.home.interfaces = [ "lan-home" ];
+  networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
+  networking.nftables.firewall.zones.home.interfaces = [ "mv-home" ];
   networking.nftables.firewall.rules.wifi-forward = {
     from = [ "wlan" ];
     to = [ "home" ];
     verdict = "accept";
   };
-  systemd.network.networks."40-wifi" = {
-    matchConfig.Name = "wlan1";
-    address = [
-      (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv4)
-      (lib.net.cidr.hostCidr (globals.services.hostapd.ip + 1) globals.net.vlans.home.cidrv6)
-    ];
-    gateway = [
-      (lib.net.cidr.host 1 globals.net.vlans.home.cidrv4)
-      (lib.net.cidr.host 1 globals.net.vlans.home.cidrv6)
-    ];
-
-  };
-
   services.hostapd = {
     enable = true;
     radios.wlan1 = {

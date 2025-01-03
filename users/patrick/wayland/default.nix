@@ -51,7 +51,7 @@
   ];
   # Autostart compositor if on tty1 (once, don't restart after logout)
   hm.programs.zsh.initExtra = lib.mkOrder 9999 ''
-    if uwsm check may-start ; then
+    if [[ -t 0 && "$(tty || true)" == /dev/tty1 ]] && uwsm check may-start ; then
     	exec systemd-cat -t uwsm_start uwsm start -S -F Hyprland
     fi
   '';
