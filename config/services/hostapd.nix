@@ -21,36 +21,39 @@
     "br-home"
   ];
   hardware.wirelessRegulatoryDatabase = true;
-  # systemd.network = {
-  #   netdevs."40-br-home" = {
-  #     netdevConfig = {
-  #       Name = "br-home";
-  #       Kind = "bridge";
-  #     };
-  #   };
-  #   networks."10-mv-home" = {
-  #     networkConfig = {
-  #       LinkLocalAddressing = "no";
-  #       IPv6AcceptRA = lib.mkForce false;
-  #       Bridge = "br-home";
-  #     };
-  #     matchConfig.Name = "mv-home";
-  #     DHCP = "no";
-  #   };
-  #   networks."10-home" = {
-  #     matchConfig.Name = "br-home";
-  #     DHCP = "yes";
-  #   };
-  #   networks."40-wifi" = {
-  #     matchConfig.Name = "wlan1";
-  #     networkConfig = {
-  #       LinkLocalAddressing = "no";
-  #       IPv6AcceptRA = lib.mkForce false;
-  #       Bridge = "br-home";
-  #     };
-  #     DHCP = "no";
-  #   };
-  # };
+  systemd.network = {
+    netdevs."40-br-home" = {
+      netdevConfig = {
+        Name = "br-home";
+        Kind = "bridge";
+      };
+    };
+    networks."10-mv-home" = {
+      networkConfig = {
+        LinkLocalAddressing = "no";
+        IPv6AcceptRA = lib.mkForce false;
+        Bridge = "br-home";
+      };
+      address = lib.mkForce [ ];
+      gateway = lib.mkForce [ ];
+      DHCP = "no";
+    };
+    networks."10-home" = {
+      matchConfig.Name = "br-home";
+      DHCP = "no";
+      address = [ "10.99.10.19/24" ];
+      gateway = [ "10.99.10.1" ];
+    };
+    networks."40-wifi" = {
+      matchConfig.Name = "wlan1";
+      networkConfig = {
+        LinkLocalAddressing = "no";
+        IPv6AcceptRA = lib.mkForce false;
+        Bridge = "br-home";
+      };
+      DHCP = "no";
+    };
+  };
 
   networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
   networking.nftables.firewall.zones.home.interfaces = [ "mv-home" ];

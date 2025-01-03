@@ -123,6 +123,7 @@ in
         "20-lan-${name}" = {
           address = [
             (lib.net.cidr.hostCidr 1 cidrv4)
+            (lib.net.cidr.hostCidr 1 cidrv6)
           ];
           matchConfig.Name = "lan-${name}";
           networkConfig = {
