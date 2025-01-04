@@ -19,6 +19,7 @@ in
     ./kea.nix
     ./forwarding.nix
     ./mdns.nix
+    ./hostapd.nix
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking.nftables.firewall.zones = mkMerge [
@@ -30,9 +31,6 @@ in
       ];
       adguard.ipv4Addresses = [
         (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
-      ];
-      samba.ipv4Addresses = [
-        (lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4)
       ];
     }
     (genAttrs (attrNames globals.net.vlans) (name: {
@@ -64,6 +62,12 @@ in
             Kind = "vlan";
           };
           vlanConfig.Id = id;
+        };
+        "50-bridge-${name}" = {
+          netdevConfig = {
+            Name = "br-${name}";
+            Kind = "bridge";
+          };
         };
         "50-macvlan-${name}" = {
           netdevConfig = {
@@ -115,10 +119,17 @@ in
           # this interface to gain a carrier.
           networkConfig.LinkLocalAddressing = "no";
           linkConfig.RequiredForOnline = "carrier";
-          extraConfig = ''
-            [Network]
-            MACVLAN=lan-${name}
-          '';
+          networkConfig = {
+            Bridge = "br-${name}";
+          };
+        };
+        "10-${name}" = {
+          matchConfig.Name = "br-${name}";
+          networkConfig.LinkLocalAddressing = "no";
+          linkConfig.RequiredForOnline = "carrier";
+          networkConfig = {
+            MACVLAN = "lan-${name}";
+          };
         };
         "20-lan-${name}" = {
           address = [
@@ -148,6 +159,9 @@ in
         from = [
           "home"
           "services"
+          "devices"
+          "guests"
+          "iot"
         ];
         to = [ "local" ];
         allowedUDPPorts = [ 5353 ];

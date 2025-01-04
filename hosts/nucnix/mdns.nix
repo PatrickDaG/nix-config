@@ -23,7 +23,7 @@ let
       {
         from = "lan-home";
         to = "lan-devices";
-        allow_questions = "(printer|ipp)";
+        allow_questions = "(printer|ipp|uscans|alljoyn)";
         allow_answers = "";
       }
     ];

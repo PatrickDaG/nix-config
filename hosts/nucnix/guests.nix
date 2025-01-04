@@ -107,13 +107,5 @@ in
           ];
         };
     in
-    { }
-    // mkContainer "adguardhome" { }
-    // mkContainer "nginx" { }
-    // mkMicrovm "hostapd" {
-      vlans = [
-        # "guests"
-        "home"
-      ];
-    };
+    { } // mkContainer "adguardhome" { } // mkContainer "nginx" { };
 }
