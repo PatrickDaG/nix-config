@@ -254,7 +254,7 @@ in
             "5, monitor:DP-3"
             "6, monitor:DVI-D-1, default:true"
             "7, monitor:DVI-D-1"
-            "8, monitor:HDMI-A-1, default: true"
+            "8, monitor:HDMI-A-1, default:true"
             "9, monitor:HDMI-A-1"
           ];
           env = [ "HYPRLAND_FLOAT_LOCATION,3800 680" ];

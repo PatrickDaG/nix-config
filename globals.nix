@@ -143,6 +143,10 @@ in
         host = "elisabeth-murmur";
         ip = 9;
       };
+      homeassistant = {
+        domain = "hs.${globals.domains.web}";
+        host = "elisabeth-homeassistant";
+      };
     };
   };
 }

@@ -5,7 +5,7 @@
       enable = true;
       settings = {
         keymap = {
-          preset = "enter";
+          preset = "none";
           "<A-Tab>" = [
             "snippet_forward"
             "fallback"
@@ -44,7 +44,7 @@
         };
         signature.enabled = true;
         completion = {
-          list.selection = "manual";
+          list.selection = "auto_insert";
           #   menu = {
           #     border = "none";
           #     draw = {

@@ -1,5 +1,6 @@
 {
   globals,
+  config,
   pkgs,
   ...
 }:
@@ -9,6 +10,14 @@
     intel2200BGFirmware
   ];
   #boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  age.secrets = {
+    homeWlan = {
+      generator.script = "alnum";
+    };
+    guestWlan = {
+      generator.script = "alnum";
+    };
+  };
 
   networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
   networking.nftables.firewall.zones.home.interfaces = [ "br-home" ];
@@ -56,11 +65,11 @@
         authentication = {
           saePasswords = [
             {
-              password = "ctiectie";
+              passwordFile = config.age.secrets.homeWlan.path;
               vlanid = 10;
             }
             {
-              password = "nrsgnrsg";
+              passwordFile = config.age.secrets.guestWlan.path;
               vlanid = 50;
             }
           ];

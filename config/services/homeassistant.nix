@@ -1,7 +1,8 @@
 {
   config,
-  globals,
   nodes,
+  lib,
+  pkgs,
   ...
 }:
 {
@@ -59,22 +60,43 @@
         #themes = "!include_dir_merge_named themes";
       };
 
-      influxdb = {
-        api_version = 2;
-        host = globals.services.influxdb.domain;
-        port = "443";
-        max_retries = 10;
-        ssl = true;
-        verify_ssl = true;
-        token = "!secret influxdb_token";
-        organization = "home";
-        bucket = "home_assistant";
-      };
+      # influxdb = {
+      #   api_version = 2;
+      #   host = globals.services.influxdb.domain;
+      #   port = "443";
+      #   max_retries = 10;
+      #   ssl = true;
+      #   verify_ssl = true;
+      #   token = "!secret influxdb_token";
+      #   organization = "home";
+      #   bucket = "home_assistant";
+      # };
     };
     extraPackages =
       python3Packages: with python3Packages; [
         psycopg2
         gtts
       ];
+  };
+  age.secrets."home-assistant-secrets.yaml" = {
+    rekeyFile = "${config.node.secretsDir}/secrets.yaml.age";
+    owner = "hass";
+  };
+  systemd.services.home-assistant = {
+    preStart = lib.mkBefore ''
+      if [[ -e ${config.services.home-assistant.configDir}/secrets.yaml ]]; then
+        rm ${config.services.home-assistant.configDir}/secrets.yaml
+      fi
+
+      # Update influxdb token
+      # We don't use -i because it would require chown with is a @privileged syscall
+      # INFLUXDB_TOKEN="$(cat ${config.age.secrets.hass-influxdb-token.path})" \
+      #   ${lib.getExe pkgs.yq-go} '.influxdb_token = strenv(INFLUXDB_TOKEN)'
+        cat ${
+          config.age.secrets."home-assistant-secrets.yaml".path
+        } > ${config.services.home-assistant.configDir}/secrets.yaml
+
+      touch -a ${config.services.home-assistant.configDir}/{automations,scenes,scripts,manual}.yaml
+    '';
   };
 }

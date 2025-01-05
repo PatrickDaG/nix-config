@@ -127,6 +127,7 @@
     // mkContainer "netbird" { }
     // mkContainer "blog" { }
     // mkContainer "kanidm" { }
+    // mkContainer "homeassistant" { }
     // mkContainer "nextcloud" { enablePanzer = true; }
     // mkContainer "paperless" { enableSharedPaperless = true; }
     // mkContainer "forgejo" { enablePanzer = true; }
