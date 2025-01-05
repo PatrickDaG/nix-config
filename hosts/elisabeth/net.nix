@@ -76,7 +76,6 @@ in
           DHCP = "yes";
           matchConfig.Name = "lan-${name}";
           networkConfig = {
-            MulticastDNS = true;
             IPv6PrivacyExtensions = "yes";
           };
         };

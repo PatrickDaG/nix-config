@@ -14,7 +14,6 @@
       matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
       };
     };
     "01-wlan1" = {
@@ -22,7 +21,6 @@
       matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.wlan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
       };
     };
   };

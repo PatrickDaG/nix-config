@@ -116,6 +116,6 @@
     # Highlight certain keywords
     todo-comments.enable = true;
     fidget.enable = true;
-    nvim-colorizer.enable = true;
+    colorizer.enable = true;
   };
 }

@@ -8,8 +8,6 @@
     useNetworkd = true;
     dhcpcd.enable = false;
     useDHCP = false;
-    # allow mdns port
-    firewall.allowedUDPPorts = [ 5353 ];
     renameInterfacesByMac = lib.mkIf (!config.boot.isContainer) (
       lib.mapAttrs (_: v: v.mac) (config.secrets.secrets.local.networking.interfaces or { })
     );
@@ -19,6 +17,15 @@
     wait-online.enable = false;
   };
   systemd.services.NetworkManager-wait-online.enable = false;
+  # systemd resolved does not fully support dnssd
+  # Also it isn't yet supported by cups so for printer finding we need avahi
+  services.avahi = {
+    enable = true;
+    ipv4 = true;
+    ipv6 = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
+  };
 
   # Do not take down the network for too long when upgrading,
   # This also prevents failures of services that are restarted instead of stopped.
@@ -27,10 +34,6 @@
   systemd.services.systemd-networkd.stopIfChanged = false;
   # Services that are only restarted might be not able to resolve when resolved is stopped before
   systemd.services.systemd-resolved.stopIfChanged = false;
-  system.nssDatabases.hosts = lib.mkMerge [
-    (lib.mkBefore [ "mdns_minimal [NOTFOUND=return]" ])
-    (lib.mkAfter [ "mdns" ])
-  ];
   services.resolved = {
     enable = true;
     # man I whish dnssec would be viable to use
@@ -38,7 +41,6 @@
     llmnr = "false";
     extraConfig = ''
       Domains=~.
-      MulticastDNS=true
     '';
   };
 }

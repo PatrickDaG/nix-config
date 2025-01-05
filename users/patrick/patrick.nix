@@ -25,7 +25,7 @@
       nextcloud-client
       nix-output-monitor
       nixpkgs-review
-      orca-slicer
+      #orca-slicer
       osu-lazer-bin
       pinentry-gnome3 # for yubikey pinentry
       signal-desktop

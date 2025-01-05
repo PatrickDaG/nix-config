@@ -51,7 +51,6 @@
       matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
       };
       dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 10;
@@ -62,7 +61,6 @@
       matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan02.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
       };
       dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 10;
@@ -73,7 +71,6 @@
       matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.wlan01.mac;
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
-        MulticastDNS = true;
       };
       dns = [ "1.1.1.1" ];
       dhcpV4Config.RouteMetric = 40;

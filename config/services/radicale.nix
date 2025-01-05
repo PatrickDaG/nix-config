@@ -44,7 +44,6 @@ in
           dns = [ "192.168.178.2" ];
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
-            MulticastDNS = true;
           };
         };
       };

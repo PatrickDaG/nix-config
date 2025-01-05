@@ -138,7 +138,6 @@ in
           ];
           matchConfig.Name = "lan-${name}";
           networkConfig = {
-            MulticastDNS = true;
             IPv6PrivacyExtensions = "yes";
             IPv4Forwarding = "yes";
             IPv6SendRA = true;

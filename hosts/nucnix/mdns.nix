@@ -11,20 +11,17 @@ let
       {
         from = ".*";
         to = "lan-home";
-        allow_questions = "";
         allow_answers = ".*";
       }
       {
         from = "lan-home";
         to = "lan-services";
         allow_questions = "(nucnix|elisabeth)";
-        allow_answers = "";
       }
       {
         from = "lan-home";
         to = "lan-devices";
         allow_questions = "(printer|ipp|uscans|alljoyn)";
-        allow_answers = "";
       }
     ];
   };
@@ -34,7 +31,7 @@ in
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
 
-    environment.RUST_LOG = "debug";
+    environment.RUST_LOG = "trace";
 
     serviceConfig = {
       Restart = "on-failure";
