@@ -1442,11 +1442,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1736086096,
-        "narHash": "sha256-dfPOYcPFMJaiua7b+mLmHdM+5e0iu5kN6J5CsLn9wjs=",
+        "lastModified": 1736118316,
+        "narHash": "sha256-H1Ep8rc0FPizkFRAN8t33iSNSS92SHxdM2kR8DCACAU=",
         "ref": "refs/heads/main",
-        "rev": "f50ec426de55f4a0ecf11c504eeec3634e5e58ac",
-        "revCount": 15,
+        "rev": "b8e6b75ea5cf4ff9608ae1a734bf23dd7c66d38f",
+        "revCount": 16,
         "type": "git",
         "url": "https://forge.lel.lol/patrick/mdns-repeater.git"
       },

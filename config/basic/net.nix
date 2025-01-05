@@ -25,6 +25,10 @@
     ipv6 = true;
     nssmdns4 = true;
     nssmdns6 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
   };
 
   # Do not take down the network for too long when upgrading,
