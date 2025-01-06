@@ -2,7 +2,6 @@
   config,
   nodes,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -83,15 +82,15 @@
     owner = "hass";
   };
   systemd.services.home-assistant = {
+    # Update influxdb token
+    # We don't use -i because it would require chown with is a @privileged syscall
+    # INFLUXDB_TOKEN="$(cat ${config.age.secrets.hass-influxdb-token.path})" \
+    #   ${lib.getExe pkgs.yq-go} '.influxdb_token = strenv(INFLUXDB_TOKEN)'
     preStart = lib.mkBefore ''
       if [[ -e ${config.services.home-assistant.configDir}/secrets.yaml ]]; then
         rm ${config.services.home-assistant.configDir}/secrets.yaml
       fi
 
-      # Update influxdb token
-      # We don't use -i because it would require chown with is a @privileged syscall
-      # INFLUXDB_TOKEN="$(cat ${config.age.secrets.hass-influxdb-token.path})" \
-      #   ${lib.getExe pkgs.yq-go} '.influxdb_token = strenv(INFLUXDB_TOKEN)'
         cat ${
           config.age.secrets."home-assistant-secrets.yaml".path
         } > ${config.services.home-assistant.configDir}/secrets.yaml

@@ -29,6 +29,9 @@ in
       printer.ipv4Addresses = [
         (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
       ];
+      smb.ipv4Addresses = [
+        (lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4)
+      ];
       adguard.ipv4Addresses = [
         (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
       ];
@@ -170,7 +173,7 @@ in
           "printer"
         ];
         to = [ "smb" ];
-        allowedUDPPorts = [ 445 ];
+        allowedTCPPorts = [ 445 ];
       };
       ssh = {
         from = [

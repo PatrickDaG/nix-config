@@ -16,8 +16,8 @@ lib.optionalAttrs (!minimal) {
     text = ''
       rm -r /var/lib/sbctl || true
       mkdir -p /var/lib/sbctl
-      chmod 700 /var/lib/sbctl
       ${pkgs.gnutar}/bin/tar xf ${config.age.secrets.secureboot.path} -C /var/lib/sbctl || true
+      chmod 700 /var/lib/sbctl
     '';
     deps = [ "agenix" ];
   };

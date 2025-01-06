@@ -119,7 +119,8 @@ in
             # clients hardcode the host and share names.
             "disable netbios" = "yes";
             # Allow access to local network
-            "hosts allow" = "10.99.10. localhost";
+            # Also allow printer access
+            "hosts allow" = "10.99.10. ${lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4} localhost";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";
@@ -176,8 +177,6 @@ in
             group = "printer";
           }
           {
-            # Also allow printer access
-            "hosts allow" = "10.99.10. ${lib.net.cidr.host 32 globals.net.vlans.home.cidrv4} localhost";
           }
         )
         (mkShare {
