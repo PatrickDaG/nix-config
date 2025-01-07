@@ -8,6 +8,8 @@ let
   shares = lib.removeAttrs config.services.samba.settings [ "global" ];
 in
 {
+  # allow direct access to shares
+  networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-home" ];
   services.samba-wsdd = {
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;

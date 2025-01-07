@@ -109,6 +109,11 @@ in
                     default = null;
                     description = "The CIDRv6 of this vlan";
                   };
+                  internet = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "Whether this vlan is connected to the internet";
+                  };
 
                   name = mkOption {
                     description = "The name of this VLAN";
@@ -130,7 +135,8 @@ in
                     default = null;
                   };
                   host = mkOption {
-                    type = types.str;
+                    type = types.nullOr types.str;
+                    default = null;
                     description = "The node-name on which this service runs";
                   };
                   ip = mkOption {

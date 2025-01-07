@@ -53,9 +53,7 @@
             ../../config/services/${guestName}.nix
             {
               node.secretsDir = config.node.secretsDir + "/${guestName}";
-              networking.nftables.firewall.zones.untrusted.interfaces = lib.mkIf (
-                lib.length config.guests.${guestName}.networking.links == 1
-              ) config.guests.${guestName}.networking.links;
+              networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-services" ];
               systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) (
                 lib.listToAttrs (
                   lib.flip map vlans (
@@ -67,7 +65,7 @@
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv4)
                         (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
                       ];
-                      gateway = [
+                      gateway = lib.optionals globals.net.vlans.${name}.internet [
                         (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv4)
                         (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv6)
                       ];
@@ -127,7 +125,13 @@
     // mkContainer "netbird" { }
     // mkContainer "blog" { }
     // mkContainer "kanidm" { }
-    // mkContainer "homeassistant" { }
+    // mkContainer "homeassistant" {
+      vlans = [
+        "services"
+        "devices"
+        "iot"
+      ];
+    }
     // mkContainer "nextcloud" { enablePanzer = true; }
     // mkContainer "paperless" { enableSharedPaperless = true; }
     // mkContainer "forgejo" { enablePanzer = true; }
@@ -137,6 +141,8 @@
       enableRenaultFT = true;
       enableBunker = true;
       enableSharedPaperless = true;
-      vlans = [ "home" ];
+      vlans = [
+        "home"
+      ];
     };
 }

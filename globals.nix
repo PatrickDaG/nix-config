@@ -38,6 +38,7 @@ in
         id = 40;
         cidrv4 = "10.99.${toString id}.0/24";
         cidrv6 = "fd${toString id}::/64";
+        internet = false;
       };
       guests = rec {
         id = 50;
@@ -71,6 +72,9 @@ in
       paperless = {
         domain = "ppl.${globals.domains.web}";
         host = "elisabeth-paperless";
+      };
+      fritz = {
+        domain = "fritz.${globals.domains.web}";
       };
       ttrss = {
         domain = "rss.${globals.domains.web}";

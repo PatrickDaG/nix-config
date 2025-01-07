@@ -7,7 +7,12 @@
 {
   wireguard.services = {
     client.via = "nucnix";
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.adguardhome.port ];
+    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+      config.services.adguardhome.port
+    ];
+    firewallRuleForNode.${globals.services.homeassistant.host}.allowedTCPPorts = [
+      config.services.adguardhome.port
+    ];
   };
   services.adguardhome = {
     enable = true;

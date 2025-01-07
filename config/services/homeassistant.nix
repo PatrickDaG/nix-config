@@ -1,5 +1,6 @@
 {
   config,
+  globals,
   nodes,
   lib,
   ...
@@ -24,9 +25,11 @@
       "met"
       "esphome"
       "fritzbox"
+      "homematic"
       "soundtouch"
       "spotify"
       "matter"
+      "esphome"
       #"zha"
       "mqtt"
     ];
@@ -75,7 +78,14 @@
       python3Packages: with python3Packages; [
         psycopg2
         gtts
+        fritzconnection
+        adguardhome
       ];
+  };
+  networking.hosts = {
+    "${nodes.${globals.services.adguardhome.host}.config.wireguard.services.ipv4}" = [
+      "adguardhome.internal"
+    ];
   };
   age.secrets."home-assistant-secrets.yaml" = {
     rekeyFile = "${config.node.secretsDir}/secrets.yaml.age";

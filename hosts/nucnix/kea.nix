@@ -35,7 +35,12 @@ in
       };
       subnet4 = flip mapAttrsToList globals.net.vlans (
         name:
-        { id, cidrv4, ... }:
+        {
+          id,
+          cidrv4,
+          internet,
+          ...
+        }:
         rec {
           inherit id;
           interface = "lan-${name}";
@@ -45,16 +50,17 @@ in
               pool = "${net.cidr.host 50 subnet} - ${net.cidr.host (-6) subnet}";
             }
           ];
-          option-data = [
-            {
+          option-data =
+            [
+              {
+                name = "domain-name-servers";
+                data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
+              }
+            ]
+            ++ lib.optional internet {
               name = "routers";
               data = "${net.cidr.host 1 subnet}";
-            }
-            {
-              name = "domain-name-servers";
-              data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
-            }
-          ];
+            };
           reservations = [
             {
               # homematic

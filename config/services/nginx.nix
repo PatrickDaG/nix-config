@@ -116,6 +116,29 @@ in
         enable = true;
         recommendedSetup = true;
         virtualHosts."${globals.services.netbird.domain}".useACMEHost = "web";
+        upstreams.fritz = {
+          servers."${lib.net.cidr.host 1 "10.99.2.0/24"}" = { };
+          extraConfig = ''
+            zone fritz 64k ;
+            keepalive 5 ;
+          '';
+        };
+        virtualHosts.${globals.services.fritz.domain} = {
+          forceSSL = true;
+          useACMEHost = "web";
+          locations."/" = {
+            proxyPass = "https://fritz";
+            proxyWebsockets = true;
+            X-Frame-Options = "SAMEORIGIN";
+          };
+          extraConfig = ''
+            client_max_body_size 512M ;
+            proxy_ssl_verify off ;
+            allow ${globals.net.vlans.home.cidrv4} ;
+            allow ${globals.net.vlans.home.cidrv6} ;
+            deny all ;
+          '';
+        };
       }
       (blockOf "vaultwarden" { maxBodySize = "1G"; })
       (blockOf "forgejo" { maxBodySize = "1G"; })
