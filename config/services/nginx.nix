@@ -117,7 +117,7 @@ in
         recommendedSetup = true;
         virtualHosts."${globals.services.netbird.domain}".useACMEHost = "web";
         upstreams.fritz = {
-          servers."${lib.net.cidr.host 1 "10.99.2.0/24"}" = { };
+          servers."${lib.net.cidr.host 1 "10.99.2.0/24"}:443" = { };
           extraConfig = ''
             zone fritz 64k ;
             keepalive 5 ;

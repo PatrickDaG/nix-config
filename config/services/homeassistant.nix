@@ -32,6 +32,7 @@
       "esphome"
       #"zha"
       "mqtt"
+      "ollama"
     ];
     config = {
       http = {
@@ -85,6 +86,9 @@
   networking.hosts = {
     "${nodes.${globals.services.adguardhome.host}.config.wireguard.services.ipv4}" = [
       "adguardhome.internal"
+    ];
+    "${nodes.${globals.services.ollama.host}.config.wireguard.services.ipv4}" = [
+      "ollama.internal"
     ];
   };
   age.secrets."home-assistant-secrets.yaml" = {

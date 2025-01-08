@@ -1,11 +1,16 @@
-{ config, ... }:
+{ config, globals, ... }:
 {
   wireguard.services = {
     client.via = "nucnix";
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.open-webui.port ];
+    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+      config.services.open-webui.port
+    ];
+    firewallRuleForNode.${globals.services.homeassistant.host}.allowedTCPPorts = [
+      config.services.ollama.port
+    ];
   };
   services.ollama = {
-    host = "localhost";
+    host = "0.0.0.0";
     port = 3001;
     enable = true;
   };
@@ -34,6 +39,8 @@
       directory = "/var/lib/private/open-webui";
       mode = "0700";
     }
+  ];
+  environment.persistence."/renaultft".directories = [
     {
       directory = "/var/lib/private/ollama";
       mode = "0700";
