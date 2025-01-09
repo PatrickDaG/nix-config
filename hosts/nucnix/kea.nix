@@ -39,24 +39,23 @@ in
           id,
           cidrv4,
           internet,
+          dns,
           ...
         }:
         rec {
           inherit id;
           interface = "lan-${name}";
-          subnet = "10.99.${toString id}.0/24";
+          subnet = cidrv4;
           pools = [
             {
               pool = "${net.cidr.host 50 subnet} - ${net.cidr.host (-6) subnet}";
             }
           ];
           option-data =
-            [
-              {
-                name = "domain-name-servers";
-                data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
-              }
-            ]
+            lib.optional dns {
+              name = "domain-name-servers";
+              data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
+            }
             ++ lib.optional internet {
               name = "routers";
               data = "${net.cidr.host 1 subnet}";
@@ -76,6 +75,11 @@ in
               # drucker
               hw-address = "48:9e:bd:5c:31:ac";
               ip-address = net.cidr.host 32 subnet;
+            }
+            {
+              # varta
+              hw-address = "00:0c:c6:06:7a:70";
+              ip-address = net.cidr.host 20 subnet;
             }
           ];
         }

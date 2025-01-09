@@ -159,6 +159,7 @@ in
       (blockOf "homebox" { })
       (blockOf "homeassistant" { })
       (proxyProtect "ollama" { })
+      (proxyProtect "esphome" { port = 3001; })
       (proxyProtect "firefly" { port = 80; })
       (blockOf "apispotify" {
         port = 3000;

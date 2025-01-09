@@ -148,6 +148,7 @@
       groups."adguardhome.access" = { };
       groups."octoprint.access" = { };
       groups."invidious.access" = { };
+      groups."esphome.access" = { };
 
       systems.oauth2.oauth2-proxy = {
         displayName = "Oauth2-Proxy";
@@ -184,6 +185,11 @@
           "email"
           "profile"
         ];
+        scopeMaps."esphome.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
         preferShortUsername = true;
         claimMaps.groups = {
           joinType = "array";
@@ -193,6 +199,7 @@
           valuesByGroup."ollama.access" = [ "ollama_access" ];
           valuesByGroup."octoprint.access" = [ "octoprint_access" ];
           valuesByGroup."invidious.access" = [ "invidious_access" ];
+          valuesByGroup."esphome.access" = [ "esphome_access" ];
         };
       };
 

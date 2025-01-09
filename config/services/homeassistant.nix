@@ -3,10 +3,15 @@
   globals,
   nodes,
   lib,
+  pkgs,
   ...
 }:
 {
   environment.persistence."/persist".directories = [
+    {
+      directory = "/var/lib/private/esphome";
+      mode = "0700";
+    }
     {
       directory = config.services.home-assistant.configDir;
       user = "hass";
@@ -14,9 +19,21 @@
       mode = "0700";
     }
   ];
+
+  services.esphome = {
+    enable = true;
+    address = "0.0.0.0";
+    port = 3001;
+    #allowedDevices = lib.mkForce ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
+    # TODO instead deny the zigbee device
+  };
+
   wireguard.services = {
     client.via = "nucnix";
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+      3000
+      3001
+    ];
   };
   services.home-assistant = {
     enable = true;
@@ -33,6 +50,11 @@
       #"zha"
       "mqtt"
       "ollama"
+      "solaredge"
+    ];
+    customComponents = with pkgs.home-assistant-custom-components; [
+      homematicip_local
+      pkgs.havartastorage
     ];
     config = {
       http = {
@@ -81,6 +103,11 @@
         gtts
         fritzconnection
         adguardhome
+        aiosolaredge
+        zlib-ng
+        stringcase
+        hahomematic
+        pymodbus
       ];
   };
   networking.hosts = {
@@ -92,7 +119,7 @@
     ];
   };
   age.secrets."home-assistant-secrets.yaml" = {
-    rekeyFile = "${config.node.secretsDir}/secrets.yaml.age";
+    rekeyFile = config.node.secretsDir + "/secrets.yaml.age";
     owner = "hass";
   };
   systemd.services.home-assistant = {
