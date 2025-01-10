@@ -2,6 +2,7 @@
   globals,
   config,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -17,15 +18,21 @@
     guestWlan = {
       generator.script = "alnum";
     };
+    iotWlan = {
+      generator.script = "alnum";
+    };
   };
+  systemd.services.hostapd.stopIfChanged = false;
+  systemd.services.hostapd.restartIfChanged = false;
+  systemd.services.hostapd.reloadTriggers = lib.mkForce [ ];
 
-  networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
-  networking.nftables.firewall.zones.home.interfaces = [ "br-home" ];
-  networking.nftables.firewall.rules.wifi-forward = {
-    from = [ "wlan" ];
-    to = [ "home" ];
-    verdict = "accept";
-  };
+  # networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
+  # networking.nftables.firewall.zones.home.interfaces = [ "br-home" ];
+  # networking.nftables.firewall.rules.wifi-forward = {
+  #   from = [ "wlan" ];
+  #   to = [ "home" ];
+  #   verdict = "accept";
+  # };
   services.hostapd = {
     enable = true;
     radios.wlan01 = {
@@ -57,16 +64,20 @@
         apIsolate = true;
         # not supporte by laptop :(
         # settings.ieee80211w = 0;
-        settings.bridge = "br-home";
         settings.vlan_file = "${pkgs.writeText "hostaps.vlans" ''
           10 wifi-home br-home
-          50 wifi-guest br-guest
+          40 wifi-iot br-iot
+          50 wifi-guests br-guests
         ''}";
         authentication = {
           saePasswords = [
             {
               passwordFile = config.age.secrets.homeWlan.path;
               vlanid = 10;
+            }
+            {
+              passwordFile = config.age.secrets.iotWlan.path;
+              vlanid = 40;
             }
             {
               passwordFile = config.age.secrets.guestWlan.path;

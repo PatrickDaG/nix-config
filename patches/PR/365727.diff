@@ -1,5 +1,5 @@
 diff --git a/nixos/modules/services/networking/hostapd.nix b/nixos/modules/services/networking/hostapd.nix
-index 8635dea738ce2..12821fc9f07c1 100644
+index 8635dea738ce2..28dd6db874bc4 100644
 --- a/nixos/modules/services/networking/hostapd.nix
 +++ b/nixos/modules/services/networking/hostapd.nix
 @@ -1,4 +1,10 @@
@@ -2000,7 +2000,7 @@ index 8635dea738ce2..12821fc9f07c1 100644
 +                                    (
 +                                      echo -n 'sae_password='
 +                                      ${optionalString (entry.passwordFile != null) ''tr -d '\n' < ${entry.passwordFile}''}
-+                                      cat <<< '${escapeShellArg lineSuffix}'
++                                      echo ${escapeShellArg lineSuffix}
 +                                    ) >> "$HOSTAPD_CONFIG_FILE"
 +                                  ''
 +                                ) bssCfg.authentication.saePasswords
