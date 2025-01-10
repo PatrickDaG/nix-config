@@ -9,7 +9,6 @@ _inputs: [
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
-    havartastorage = prev.callPackage ./havartastorage.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
@@ -22,7 +21,6 @@ _inputs: [
     );
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (_pythonFinal: _pythonPrev: {
-        vartastorage = prev.callPackage ./pyvartastorage.nix { };
       })
     ];
 
