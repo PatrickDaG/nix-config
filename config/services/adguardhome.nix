@@ -45,6 +45,7 @@
         "||testberry.internal^$dnsrewrite=${lib.net.cidr.host 31 globals.net.vlans.devices.cidrv4}"
         "||smb.internal^$dnsrewrite=${lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4}"
         "||${globals.domains.web}^$dnsrewrite=${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4}"
+        "@@||${globals.services.vaultwarden.domain}"
         "||fritz.box^$dnsrewrite=${lib.net.cidr.host 1 "10.99.2.0/24"}"
       ];
       dhcp.enabled = false;
