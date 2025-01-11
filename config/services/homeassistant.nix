@@ -35,6 +35,19 @@
       3001
     ];
   };
+  networking.nftables.firewall.zones.devices.interfaces = [ "mv-devices" ];
+  networking.nftables.firewall = {
+    rules = {
+      homematic = {
+        from = [
+          "devices"
+        ];
+        to = [ "local" ];
+        allowedTCPPorts = [ 45053 ];
+      };
+    };
+  };
+
   services.home-assistant = {
     enable = true;
     extraComponents = [
@@ -83,6 +96,7 @@
       frontend = {
         #themes = "!include_dir_merge_named themes";
       };
+      "automation ui" = "!include automations.yaml";
 
       # influxdb = {
       #   api_version = 2;
@@ -95,6 +109,7 @@
       #   organization = "home";
       #   bucket = "home_assistant";
       # };
+
       # Modbus Varta element backup
       modbus = {
 
@@ -252,6 +267,46 @@
               scale = 1;
               device_class = "power";
               unit_of_measurement = "W";
+            }
+            ### Active Power Exponent;
+            {
+              name = "mb_varta_active_power_exponent";
+              slave = 1;
+              address = 2066;
+              data_type = "int16";
+              device_class = "power";
+            }
+            ### Apparent Power Exponent;
+            {
+              name = "mb_varta_apparent_power_exponent";
+              slave = 1;
+              address = 2067;
+              data_type = "int16";
+              device_class = "power";
+            }
+            ### Enegrey Counter Exponent;
+            {
+              name = "mb_varta_energy_counter_exponent";
+              slave = 1;
+              address = 2069;
+              data_type = "int16";
+              device_class = "power";
+            }
+            ### Capacity Counter Exponent;
+            {
+              name = "mb_varta_capacity_exponent";
+              slave = 1;
+              address = 2071;
+              data_type = "int16";
+              device_class = "power";
+            }
+            ### Grid Power Exponent;
+            {
+              name = "mb_varta_grid_power_exponent";
+              slave = 1;
+              address = 2078;
+              data_type = "int16";
+              device_class = "power";
             }
           ];
       };
