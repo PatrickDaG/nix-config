@@ -22,6 +22,9 @@
       generator.script = "alnum";
     };
   };
+  # Hostapd tries to delete any bridges it uses when restarting
+  # If any other service dares also using the bridges, thats too bad
+  # Have fun resetting your server because they're not coming back
   systemd.services.hostapd.stopIfChanged = false;
   systemd.services.hostapd.restartIfChanged = false;
   systemd.services.hostapd.reloadTriggers = lib.mkForce [ ];
@@ -64,25 +67,29 @@
         apIsolate = true;
         # not supporte by laptop :(
         # settings.ieee80211w = 0;
-        settings.vlan_file = "${pkgs.writeText "hostaps.vlans" ''
-          10 wifi-home br-home
-          40 wifi-iot br-iot
-          50 wifi-guests br-guests
-        ''}";
+        settings = {
+          #   vlan_file = "${pkgs.writeText "hostaps.vlans" ''
+          #     10 wifi-home br-home
+          #     40 wifi-iot br-iot
+          #     50 wifi-guests br-guests
+          #   ''}";
+          #   rsn_preauth_interfaces = "br-home br-iot br-guests";
+          bridge = "br-home";
+        };
         authentication = {
           saePasswords = [
             {
               passwordFile = config.age.secrets.homeWlan.path;
-              vlanid = 10;
+              # vlanid = 10;
             }
-            {
-              passwordFile = config.age.secrets.iotWlan.path;
-              vlanid = 40;
-            }
-            {
-              passwordFile = config.age.secrets.guestWlan.path;
-              vlanid = 50;
-            }
+            # {
+            #   passwordFile = config.age.secrets.iotWlan.path;
+            #   vlanid = 40;
+            # }
+            # {
+            #   passwordFile = config.age.secrets.guestWlan.path;
+            #   vlanid = 50;
+            # }
           ];
           pairwiseCiphers = [
             "CCMP"
