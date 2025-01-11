@@ -67,29 +67,29 @@
         apIsolate = true;
         # not supporte by laptop :(
         # settings.ieee80211w = 0;
+        logLevel = 0;
         settings = {
-          #   vlan_file = "${pkgs.writeText "hostaps.vlans" ''
-          #     10 wifi-home br-home
-          #     40 wifi-iot br-iot
-          #     50 wifi-guests br-guests
-          #   ''}";
-          #   rsn_preauth_interfaces = "br-home br-iot br-guests";
-          bridge = "br-home";
+          vlan_file = "${pkgs.writeText "hostaps.vlans" ''
+            10 wifi-home br-home
+            40 wifi-iot br-iot
+            50 wifi-guests br-guests
+          ''}";
+          dynamic_vlan = 1;
         };
         authentication = {
           saePasswords = [
             {
               passwordFile = config.age.secrets.homeWlan.path;
-              # vlanid = 10;
+              vlanid = 10;
             }
-            # {
-            #   passwordFile = config.age.secrets.iotWlan.path;
-            #   vlanid = 40;
-            # }
-            # {
-            #   passwordFile = config.age.secrets.guestWlan.path;
-            #   vlanid = 50;
-            # }
+            {
+              passwordFile = config.age.secrets.iotWlan.path;
+              vlanid = 40;
+            }
+            {
+              passwordFile = config.age.secrets.guestWlan.path;
+              vlanid = 50;
+            }
           ];
           pairwiseCiphers = [
             "CCMP"
