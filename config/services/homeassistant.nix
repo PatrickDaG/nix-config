@@ -77,6 +77,8 @@
       mushroom
       multiple-entity-row
       button-card
+      weather-chart-card
+      hourly-weather
     ];
     config = {
       http = {

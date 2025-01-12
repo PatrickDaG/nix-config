@@ -1,0 +1,20 @@
+diff --git a/pkgs/servers/home-assistant/custom-lovelace-modules/weather-card/package.nix b/pkgs/servers/home-assistant/custom-lovelace-modules/weather-card/package.nix
+index 1ae70654dea4c..b021292f9b3c0 100644
+--- a/pkgs/servers/home-assistant/custom-lovelace-modules/weather-card/package.nix
++++ b/pkgs/servers/home-assistant/custom-lovelace-modules/weather-card/package.nix
+@@ -6,13 +6,13 @@
+ 
+ stdenv.mkDerivation rec {
+   pname = "weather-card";
+-  version = "1.5.0";
++  version = "2.0.0b0";
+ 
+   src = fetchFromGitHub {
+     owner = "bramkragten";
+     repo = "weather-card";
+     tag = "v${version}";
+-    hash = "sha256-pod5cayaHP+4vgdBgBRMQ7szkyz9HLaKVJWQX36XdTY=";
++    hash = "sha256-139OhAHxulXovyywBuz552lmDqoV7aLHKKNb81dOKDo=";
+   };
+   dontBuild = true;
+   installPhase = ''
