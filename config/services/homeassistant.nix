@@ -68,6 +68,16 @@
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local
     ];
+
+    customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
+      bubble-card
+      weather-card
+      mini-graph-card
+      card-mod
+      mushroom
+      multiple-entity-row
+      button-card
+    ];
     config = {
       http = {
         server_host = [ "0.0.0.0" ];
@@ -75,6 +85,7 @@
         use_x_forwarded_for = true;
         trusted_proxies = [ nodes.nucnix-nginx.config.wireguard.services.ipv4 ];
       };
+      lovelace.mode = "yaml";
 
       homeassistant = {
         name = "!secret ha_name";
@@ -94,7 +105,7 @@
       ### Components not from default_config
 
       frontend = {
-        #themes = "!include_dir_merge_named themes";
+        themes = "!include_dir_merge_named themes";
       };
       "automation ui" = "!include automations.yaml";
 
@@ -393,21 +404,52 @@
     rekeyFile = config.node.secretsDir + "/secrets.yaml.age";
     owner = "hass";
   };
-  systemd.services.home-assistant = {
-    # Update influxdb token
-    # We don't use -i because it would require chown with is a @privileged syscall
-    # INFLUXDB_TOKEN="$(cat ${config.age.secrets.hass-influxdb-token.path})" \
-    #   ${lib.getExe pkgs.yq-go} '.influxdb_token = strenv(INFLUXDB_TOKEN)'
-    preStart = lib.mkBefore ''
-      if [[ -e ${config.services.home-assistant.configDir}/secrets.yaml ]]; then
-        rm ${config.services.home-assistant.configDir}/secrets.yaml
-      fi
+  systemd.services.home-assistant.preStart =
+    let
+      modules = [
+        (pkgs.fetchFromGitHub {
+          owner = "catppuccin";
+          repo = "home-assistant";
+          rev = "e877188ca467e7bbe8991440f6b5f6b3d30347fc";
+          hash = "sha256-eUqYlaXNLPfaKn3xcRm5AQwTOKf70JF8cepibBb9KXc=";
+        })
+        (pkgs.fetchFromGitHub {
+          owner = "flejz";
+          repo = "hass-cyberpunk-2077-theme";
+          rev = "78077ad6298a5bbbc8de4c72858b43cedebaae12";
+          hash = "sha256-gSlykxPBKji7hAX9E2L7dDtK3zNcRvRjCq2+apgMjFg=";
+        })
+        (pkgs.fetchFromGitHub {
+          owner = "Madelena";
+          repo = "Metrology-for-Hass";
+          rev = "3e858768d5afba3f83de0d3fe836336cb20f11ea";
+          hash = "sha256-IBKIB5KandpjWyVQYXuUvTL3gHHjTLr7saskkqq3A0w=";
+        })
+      ];
+    in
+    lib.mkBefore (
+      ''
+        if [[ -e ${config.services.home-assistant.configDir}/secrets.yaml ]]; then
+          rm ${config.services.home-assistant.configDir}/secrets.yaml
+        fi
 
-        cat ${
-          config.age.secrets."home-assistant-secrets.yaml".path
-        } > ${config.services.home-assistant.configDir}/secrets.yaml
+          cat ${
+            config.age.secrets."home-assistant-secrets.yaml".path
+          } > ${config.services.home-assistant.configDir}/secrets.yaml
 
-      touch -a ${config.services.home-assistant.configDir}/{automations,scenes,scripts,manual}.yaml
-    '';
-  };
+        touch -a ${config.services.home-assistant.configDir}/{automations,scenes,scripts,manual}.yaml
+        mkdir -p ${config.services.home-assistant.configDir}/themes
+      ''
+      + lib.concatStringsSep "\n" (
+        lib.flip map modules (x: ''
+          for i in ${x}/themes/*; do
+            ln -fFns "$i" ${config.services.home-assistant.configDir}/themes/"$(basename "$i")"
+          done
+          for i in ${x}/www/*; do
+            ln -fFns "$i" ${config.services.home-assistant.configDir}/www/"$(basename "$i")"
+          done
+        '')
+      )
+    );
+
 }

@@ -29,9 +29,4 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   topology.self.interfaces.lan.network = "home";
-  boot = {
-    kernelParams = [
-      "intel_iommu=on,igx_off,sm_on"
-    ];
-  };
 }
