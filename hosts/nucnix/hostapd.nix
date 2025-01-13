@@ -15,9 +15,6 @@
     homeWlan = {
       generator.script = "alnum";
     };
-    guestWlan = {
-      generator.script = "alnum";
-    };
     iotWlan = {
       generator.script = "alnum";
     };
@@ -66,35 +63,23 @@
         inherit (globals.hostapd) ssid;
         apIsolate = true;
         # not supporte by laptop :(
-        # settings.ieee80211w = 0;
+        #settings.ieee80211w = 0;
         logLevel = 0;
         settings = {
-          vlan_file = "${pkgs.writeText "hostaps.vlans" ''
-            10 wifi-home br-home
-            40 wifi-iot br-iot
-            50 wifi-guests br-guests
-          ''}";
-          dynamic_vlan = 1;
+          bridge = "br-iot";
         };
         authentication = {
-          saePasswords = [
-            {
-              passwordFile = config.age.secrets.homeWlan.path;
-              vlanid = 10;
-            }
-            {
-              passwordFile = config.age.secrets.iotWlan.path;
-              vlanid = 40;
-            }
-            {
-              passwordFile = config.age.secrets.guestWlan.path;
-              vlanid = 50;
-            }
-          ];
+          mode = "wpa2-sha1";
+          wpaPasswordFile = config.age.secrets.iotWlan.path;
+          # saePasswords = [
+          #   {
+          #     passwordFile = config.age.secrets.iotWlan.path;
+          #   }
+          # ];
           pairwiseCiphers = [
             "CCMP"
-            "GCMP"
-            "GCMP-256"
+            # "GCMP"
+            # "GCMP-256"
           ];
           #enableRecommendedPairwiseCiphers = true;
         };

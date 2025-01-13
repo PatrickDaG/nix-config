@@ -36,8 +36,17 @@
     ];
   };
   networking.nftables.firewall.zones.devices.interfaces = [ "mv-devices" ];
+  networking.nftables.firewall.zones.iot.interfaces = [ "mv-iot" ];
   networking.nftables.firewall = {
     rules = {
+      mqtt = {
+        from = [
+          "devices"
+          "iot"
+        ];
+        to = [ "local" ];
+        allowedTCPPorts = [ 1883 ];
+      };
       homematic = {
         from = [
           "devices"
@@ -45,7 +54,37 @@
         to = [ "local" ];
         allowedTCPPorts = [ 45053 ];
       };
+      mdns = {
+        from = [
+          "devices"
+          "iot"
+        ];
+        to = [ "local" ];
+        allowedUDPPorts = [ 5353 ];
+      };
     };
+  };
+  age.secrets.mosquitto-pw-home_assistant = {
+    mode = "440";
+    owner = "hass";
+    group = "mosquitto";
+    generator.script = "alnum";
+  };
+  services.mosquitto = {
+    enable = true;
+    persistence = true;
+    listeners = [
+      {
+        acl = [ "pattern readwrite #" ];
+        users = {
+          home_assistant = {
+            passwordFile = config.age.secrets.mosquitto-pw-home_assistant.path;
+            acl = [ "readwrite #" ];
+          };
+        };
+        settings.allow_anonymous = false;
+      }
+    ];
   };
 
   services.home-assistant = {
@@ -392,6 +431,7 @@
         stringcase
         hahomematic
         pymodbus
+        hatasmota
       ];
   };
   networking.hosts = {
