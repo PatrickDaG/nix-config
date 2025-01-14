@@ -62,9 +62,7 @@
       networks.wlan01 = {
         inherit (globals.hostapd) ssid;
         apIsolate = true;
-        # not supporte by laptop :(
-        #settings.ieee80211w = 0;
-        logLevel = 0;
+        #logLevel = 0;
         settings = {
           bridge = "br-iot";
         };

@@ -171,6 +171,7 @@ in
       printer-smb = {
         from = [
           "printer"
+          "fritz"
         ];
         to = [ "smb" ];
         allowedTCPPorts = [ 445 ];
@@ -200,8 +201,10 @@ in
         from = [
           "home"
           "devices"
+          "fritz"
           "guests"
           "services"
+          "fritz"
         ];
         to = [ "adguard" ];
         allowedUDPPorts = [ 53 ];
