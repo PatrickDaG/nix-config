@@ -65,4 +65,12 @@
       };
     };
   };
+  boot.initrd.luks.devices.rpool_m2-ssd.crypttabExtraOpts = [
+    "tpm2-device=auto"
+    "tpm2-measure-pcr=yes"
+  ];
+  boot.initrd.luks.devices.panzer_sata-hdd.crypttabExtraOpts = [
+    "tpm2-device=auto"
+    "tpm2-measure-pcr=yes"
+  ];
 }
