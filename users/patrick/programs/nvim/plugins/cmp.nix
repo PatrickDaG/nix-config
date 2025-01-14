@@ -44,7 +44,10 @@
         };
         signature.enabled = true;
         completion = {
-          list.selection = "auto_insert";
+          list.selection = {
+            preselect = true;
+            auto_insert = true;
+          };
           #   menu = {
           #     border = "none";
           #     draw = {
