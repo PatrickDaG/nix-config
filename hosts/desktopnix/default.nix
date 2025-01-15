@@ -56,6 +56,7 @@
     "nohibernate"
     "root=fstab"
     "loglevel=4"
+    "rd.luks=no"
     "nvidia-drm.modeset=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];

@@ -65,12 +65,8 @@
       };
     };
   };
-  boot.initrd.luks.devices.rpool_m2-ssd.crypttabExtraOpts = [
-    "tpm2-device=auto"
-    "tpm2-measure-pcr=yes"
-  ];
-  boot.initrd.luks.devices.panzer_sata-hdd.crypttabExtraOpts = [
-    "tpm2-device=auto"
-    "tpm2-measure-pcr=yes"
-  ];
+  systemIdentity = {
+    enable = true;
+    pcr15 = "dc9b7fa0d2a0ef5441bb8bfb7b2103b9f45f1143d87f69929c12cf7a3cc35ccf";
+  };
 }

@@ -33,31 +33,11 @@
   };
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
-
   boot.initrd.systemd.extraBin = {
     jq = lib.getExe pkgs.jq;
   };
-  # In ermergency shell type:
-  # ´systemctl disable check-pcrs´
-  # ´systemctl default´
-  # to continue booting
-  boot.initrd.systemd.services.check-pcrs = {
-    script = ''
-      echo "Checking PCRS tag: ctiectie"
-      if [[ $(systemd-analyze pcrs 15 --json=short | jq -r ".[0].sha256") != "a8cfdc8ec869f9edf4635129ba6bb19a076a5d234655cf4684286dc57e325a38" ]] ; then
-        echo "PCR 15 contains invalid hash"
-        exit 1
-      else
-        echo "PCR 15 checked"
-      fi
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    unitConfig.DefaultDependencies = "no";
-    after = [ "cryptsetup.target" ];
-    before = [ "sysroot.mount" ];
-    requiredBy = [ "sysroot.mount" ];
+  systemIdentity = {
+    enable = true;
+    pcr15 = "6214de8c3d861c4b451acc8c4e24294c95d55bcec516bbf15c077ca3bffb6547";
   };
 }
