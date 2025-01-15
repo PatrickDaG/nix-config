@@ -30,12 +30,12 @@ in
         description = ''
           The expected value of PCR 15 after all luks partitions have been unlocked
           Should be a 64 character hex string as ouput by the sha256 field of
-          ´systemd-analyze pcrs 15 --json=short´
+          'systemd-analyze pcrs 15 --json=short'
           If set to null (the default) it will not check the value.
           If the check fails the boot will abort and you will be dropped into an emergency shell, if enabled.
           In ermergency shell type:
-          ´systemctl disable check-pcrs´
-          ´systemctl default´
+          'systemctl disable check-pcrs'
+          'systemctl default'
           to continue booting
         '';
         example = "6214de8c3d861c4b451acc8c4e24294c95d55bcec516bbf15c077ca3bffb6547";
