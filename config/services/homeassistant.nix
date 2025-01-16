@@ -467,6 +467,30 @@
           rev = "3e858768d5afba3f83de0d3fe836336cb20f11ea";
           hash = "sha256-IBKIB5KandpjWyVQYXuUvTL3gHHjTLr7saskkqq3A0w=";
         })
+        (pkgs.fetchFromGitHub {
+          owner = "ricardoquecria";
+          repo = "caule-themes-pack-1";
+          rev = "0ec8a4b7acf63d8618bcf2fdd968d6256e998acb";
+          hash = "sha256-biNz3ZO3nFfEgchoPu9M3lXiTj9BDxkUaZiCNq0Jy8M=";
+        })
+        (pkgs.fetchFromGitHub {
+          owner = "TilmanGriesel";
+          repo = "graphite";
+          rev = "bce4342b9f2423a14a09af703f6d22f9660d764e";
+          hash = "sha256-ZniV5Sw00ml1AaPx7oQZ1oorj01TLamrZV/a2wS8jVg=";
+        })
+        (pkgs.fetchFromGitHub {
+          owner = "am80l";
+          repo = "sundown";
+          rev = "bdfa827a2d3e524dae9637724053bf19567bbe5b";
+          hash = "sha256-PpqufsjWukAM/gQpet/m+n2+nQQWGVeow6F4yXI+oG8=";
+        })
+        (pkgs.fetchFromGitHub {
+          owner = "bbbenji";
+          repo = "synthwave-hass";
+          rev = "332617a96c3325dd845f90ff79f2a1f995a5006b";
+          hash = "sha256-zi6VNhKUlqy4VAMMqGL09V6RdIKxikkkEPp3+GyYhmg=";
+        })
       ];
     in
     lib.mkBefore (
