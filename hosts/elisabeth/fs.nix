@@ -168,4 +168,7 @@
   fileSystems."/persist".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-panzer".after = [ "cryptsetup.target" ];
   boot.initrd.systemd.services."zfs-import-renaultft".after = [ "cryptsetup.target" ];
+  systemIdentity = {
+    enable = true;
+  };
 }
