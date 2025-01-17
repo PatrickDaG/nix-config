@@ -50,32 +50,40 @@ beamPackages.mixRelease rec {
     pnpm_9.configHook
     nodejs
   ];
-  mixReleaseName = "web";
+  mixReleaseName = "domain";
   removeCookie = false;
 
   #https://github.com/elixir-cldr/cldr_numbers/pull/52
   mixNixDeps = import ./mix.nix {
     inherit lib beamPackages;
-    overrides = final: prev: {
-      # mix2nix does not support git dependencies yet,
-      # so we need to add them manually
-      openid_connect = beamPackages.buildMix {
-        name = "openid_connect";
-        version = "2024-06-15-unstable";
+    overrides =
+      final: prev:
+      (lib.mapAttrs (
+        _: value:
+        value.override {
+          appConfigPath = src + "/config";
+        }
+      ) prev)
+      // {
+        # mix2nix does not support git dependencies yet,
+        # so we need to add them manually
+        openid_connect = beamPackages.buildMix {
+          name = "openid_connect";
+          version = "2024-06-15-unstable";
 
-        src = fetchFromGitHub {
-          owner = "firezone";
-          repo = "openid_connect";
-          rev = "e4d9dca8ae43c765c00a7d3dfa12d6f24f5b3418";
-          hash = "sha256-LMmG+WWs83Hw/jcrersUMpk2tdXxkOU0CTe7qVbk6GQ=";
+          src = fetchFromGitHub {
+            owner = "firezone";
+            repo = "openid_connect";
+            rev = "e4d9dca8ae43c765c00a7d3dfa12d6f24f5b3418";
+            hash = "sha256-LMmG+WWs83Hw/jcrersUMpk2tdXxkOU0CTe7qVbk6GQ=";
+          };
+          beamDeps = with final; [
+            jason
+            finch
+            jose
+          ];
         };
-        beamDeps = with final; [
-          jason
-          finch
-          jose
-        ];
       };
-    };
   };
 
   meta = {
