@@ -3,8 +3,8 @@ _inputs: [
   (_final: prev: {
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
-    pr-tracker = prev.callPackage ./pr-tracker.nix { };
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
+    firezone = prev.callPackage ./firezone.nix { };
     minion = prev.callPackage ./minion.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };

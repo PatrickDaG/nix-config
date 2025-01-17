@@ -26,6 +26,8 @@
   systemd.services.hostapd.restartIfChanged = false;
   systemd.services.hostapd.reloadTriggers = lib.mkForce [ ];
 
+  boot.extraModprobeConfig = "options iwlwifi fw_restart=false";
+
   # networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
   # networking.nftables.firewall.zones.home.interfaces = [ "br-home" ];
   # networking.nftables.firewall.rules.wifi-forward = {
