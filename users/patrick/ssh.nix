@@ -25,11 +25,6 @@
           hostname = "lel.lol";
           user = "root";
         };
-
-        "maddy" = {
-          hostname = globals.hosts.maddy.ip;
-          user = "root";
-        };
         "mailnix" = {
           hostname = globals.hosts.mailnix.ip;
           user = "root";
