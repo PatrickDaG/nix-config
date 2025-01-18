@@ -26,15 +26,8 @@
   systemd.services.hostapd.restartIfChanged = false;
   systemd.services.hostapd.reloadTriggers = lib.mkForce [ ];
 
-  boot.extraModprobeConfig = "options iwlwifi fw_restart=false";
+  #boot.extraModprobeConfig = "options iwlwifi fw_restart=false";
 
-  # networking.nftables.firewall.zones.wlan.interfaces = [ "wlan1" ];
-  # networking.nftables.firewall.zones.home.interfaces = [ "br-home" ];
-  # networking.nftables.firewall.rules.wifi-forward = {
-  #   from = [ "wlan" ];
-  #   to = [ "home" ];
-  #   verdict = "accept";
-  # };
   services.hostapd = {
     enable = true;
     radios.wlan01 = {
@@ -64,7 +57,7 @@
       networks.wlan01 = {
         inherit (globals.hostapd) ssid;
         apIsolate = true;
-        #logLevel = 0;
+        logLevel = 0;
         settings = {
           bridge = "br-iot";
         };

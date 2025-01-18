@@ -168,6 +168,13 @@ in
         to = [ "local" ];
         allowedUDPPorts = [ 5353 ];
       };
+      fritz-home-bridge = {
+        from = [
+          "fritz"
+        ];
+        to = [ "home" ];
+        verdict = "accept";
+      };
       printer-smb = {
         from = [
           "printer"
