@@ -6,6 +6,14 @@
   lib,
   ...
 }:
+let
+  robots = pkgs.fetchFromGitHub {
+    owner = "ai-robots-txt";
+    repo = "ai.robots.txt";
+    rev = "main";
+    hash = "sha256-zbpaty7IDxebNrv+ulCA0KybfX4ZRHlRkBPitpye+rA=";
+  };
+in
 {
   age.secrets.resticpasswd = {
     generator.script = "alnum";
@@ -92,6 +100,7 @@
 
   services.forgejo = {
     enable = true;
+    package = pkgs.forgejo;
     # TODO db backups
     # dump.enable = true;
     user = "git";
@@ -194,6 +203,7 @@
         else
           ${exe} admin auth update-oauth --id "$provider_id" ${args} --secret "$SECRET"
         fi
+        ln --symbolic --force "${robots}/robots.txt" "${config.services.forgejo.customDir}/robots.txt"
       '';
   };
 
