@@ -18,6 +18,7 @@
     ../../config/support/secureboot.nix
     ../../config/support/server.nix
     ../../config/support/zfs.nix
+    ../../config/support/vlans.nix
 
     ./net.nix
     ./fs.nix
