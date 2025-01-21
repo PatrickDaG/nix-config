@@ -1,6 +1,5 @@
 {
   config,
-  nodes,
   lib,
   ...
 }:
@@ -54,17 +53,6 @@
   boot.initrd.systemd.services."zfs-import-panzer".after = [ "cryptsetup.target" ];
   boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
 
-  wireguard.scrtiny-patrick.client.via = "elisabeth";
-
-  services.scrutiny = {
-    collector = {
-      enable = true;
-      settings = {
-        host.id = "desktopnix";
-        api.endpoint = "http://${nodes.elisabeth.config.wireguard.scrtiny-patrick.ipv4}:8080";
-      };
-    };
-  };
   systemIdentity = {
     enable = true;
     pcr15 = "dc9b7fa0d2a0ef5441bb8bfb7b2103b9f45f1143d87f69929c12cf7a3cc35ccf";
