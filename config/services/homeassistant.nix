@@ -20,6 +20,7 @@
     }
   ];
 
+  globals.services.esphome.host = config.node.name;
   services.esphome = {
     enable = true;
     address = "0.0.0.0";

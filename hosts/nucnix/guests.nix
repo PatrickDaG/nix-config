@@ -38,6 +38,7 @@ in
             ../../config/services/${guestName}.nix
             {
               node.secretsDir = config.node.secretsDir + "/${guestName}";
+              globals.services.${guestName}.host = "${config.node.name}-${guestName}";
               networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-services" ];
               systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) (
                 lib.listToAttrs (

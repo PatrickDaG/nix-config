@@ -141,7 +141,6 @@ in
                   };
                   host = mkOption {
                     type = types.nullOr types.str;
-                    default = null;
                     description = "The node-name on which this service runs";
                   };
                   ip = mkOption {

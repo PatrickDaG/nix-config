@@ -53,6 +53,11 @@
       mode = "440";
       group = "kanidm";
     };
+    oauth2-grafana = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
   };
   services.kanidm = {
     package = pkgs.kanidm.withSecretProvisioning;
@@ -142,6 +147,74 @@
         preferShortUsername = true;
       };
 
+      groups."grafana.access" = {
+        members = [ "grafana.admins" ];
+      };
+      groups."grafana.admins" = {
+        members = [ "administrator" ];
+      };
+      systems.oauth2.grafana = {
+        displayName = "grafana";
+        originUrl = "https://${globals.services.grafana.domain}/login/generic_oauth";
+        originLanding = "https://${globals.services.grafana.domain}/";
+        basicSecretFile = config.age.secrets.oauth2-grafana.path;
+        scopeMaps."grafana.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+        allowInsecureClientDisablePkce = true;
+        preferShortUsername = true;
+        claimMaps.groups = {
+          joinType = "array";
+          valuesByGroup."grafana.admins" = [ "admin" ];
+        };
+      };
+
+      groups."forgejo.access" = {
+        members = [ "forgejo.admins" ];
+      };
+      groups."forgejo.admins" = {
+        members = [ "administrator" ];
+      };
+      systems.oauth2.forgejo = {
+        displayName = "Forgejo";
+        originUrl = "https://${globals.services.forgejo.domain}/user/oauth2/kanidm/callback";
+        originLanding = "https://${globals.services.forgejo.domain}/";
+        basicSecretFile = config.age.secrets.oauth2-forgejo.path;
+        scopeMaps."forgejo.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+        allowInsecureClientDisablePkce = true;
+        preferShortUsername = true;
+        claimMaps.groups = {
+          joinType = "array";
+          valuesByGroup."forgejo.admins" = [ "admin" ];
+        };
+      };
+
+      groups."netbird.access" = { };
+      systems.oauth2.netbird = {
+        public = true;
+        displayName = "Netbird";
+        originUrl = [
+          "https://${globals.services.netbird.domain}/peers"
+          "https://${globals.services.netbird.domain}/add-peers"
+        ];
+        originLanding = "https://${globals.services.netbird.domain}/";
+        preferShortUsername = true;
+        enableLocalhostRedirects = true;
+        enableLegacyCrypto = true;
+        scopeMaps."netbird.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+      };
+
+      # oauth2 proxy groups
       groups."rss.access" = { };
       groups."firefly.access" = { };
       groups."ollama.access" = { };
@@ -201,49 +274,6 @@
           valuesByGroup."invidious.access" = [ "invidious_access" ];
           valuesByGroup."esphome.access" = [ "esphome_access" ];
         };
-      };
-
-      groups."forgejo.access" = {
-        members = [ "forgejo.admins" ];
-      };
-      groups."forgejo.admins" = {
-        members = [ "administrator" ];
-      };
-      systems.oauth2.forgejo = {
-        displayName = "Forgejo";
-        originUrl = "https://${globals.services.forgejo.domain}/user/oauth2/kanidm/callback";
-        originLanding = "https://${globals.services.forgejo.domain}/";
-        basicSecretFile = config.age.secrets.oauth2-forgejo.path;
-        scopeMaps."forgejo.access" = [
-          "openid"
-          "email"
-          "profile"
-        ];
-        allowInsecureClientDisablePkce = true;
-        preferShortUsername = true;
-        claimMaps.groups = {
-          joinType = "array";
-          valuesByGroup."forgejo.admins" = [ "admin" ];
-        };
-      };
-
-      groups."netbird.access" = { };
-      systems.oauth2.netbird = {
-        public = true;
-        displayName = "Netbird";
-        originUrl = [
-          "https://${globals.services.netbird.domain}/peers"
-          "https://${globals.services.netbird.domain}/add-peers"
-        ];
-        originLanding = "https://${globals.services.netbird.domain}/";
-        preferShortUsername = true;
-        enableLocalhostRedirects = true;
-        enableLegacyCrypto = true;
-        scopeMaps."netbird.access" = [
-          "openid"
-          "email"
-          "profile"
-        ];
       };
     };
   };

@@ -2,6 +2,7 @@
   lib,
   utils,
   config,
+  pkgs,
   ...
 }:
 let
@@ -56,6 +57,9 @@ in
     boot.kernelParams = [
       "rd.luks=no"
     ];
+    boot.initrd.systemd.extraBin = {
+      jq = lib.getExe pkgs.jq;
+    };
     boot.initrd.systemd.services =
       {
         check-pcrs = mkIf (config.systemIdentity.pcr15 != null) {

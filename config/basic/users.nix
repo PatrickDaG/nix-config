@@ -39,6 +39,8 @@
       homebox = uidGid 227;
       signal = uidGid 228;
       netbird-main = uidGid 229;
+      grafana = uidGid 230;
+      loki = uidGid 231;
       paperless = uidGid 315;
       stalwart-mail = uidGid 316;
       build = uidGid 317;

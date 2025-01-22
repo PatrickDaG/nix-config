@@ -1,0 +1,24 @@
+diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
+index 16504673e8e59..3f3552bfec671 100644
+--- a/pkgs/tools/networking/netbird/default.nix
++++ b/pkgs/tools/networking/netbird/default.nix
+@@ -31,16 +31,16 @@ let
+ in
+ buildGoModule rec {
+   pname = "netbird";
+-  version = "0.35.2";
++  version = "0.36.1";
+ 
+   src = fetchFromGitHub {
+     owner = "netbirdio";
+     repo = "netbird";
+     rev = "v${version}";
+-    hash = "sha256-CvKJiv3CyCRp0wyH+OZejOChcumnMOrA7o9wL4ElJio=";
++    hash = "sha256-5D3kkURyFrTjxWAAoZuVMHjnpDtYTzX/WVBLFppryAU=";
+   };
+ 
+-  vendorHash = "sha256-CgfZZOiFDLf6vCbzovpwzt7FlO9BnzNSdR8e5U+xCDQ=";
++  vendorHash = "sha256-xZz2JkD3yD7tuXVFlMm2g1hRBItkGmO9OvnLdUfqai0=";
+ 
+   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
+ 
