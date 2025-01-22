@@ -15,7 +15,6 @@
     ../../config/support/initrd-ssh.nix
     ../../config/support/physical.nix
     ../../config/support/zfs.nix
-    ../../config/support/vlans.nix
     ../../config/support/server.nix
     ../../config/support/secureboot.nix
 
