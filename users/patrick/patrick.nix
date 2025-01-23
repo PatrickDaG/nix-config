@@ -39,6 +39,7 @@
       webcord
       xournalpp
       yt-dlp
+      ytdlp-pot-provider
       zathura
       zotero
       qmk

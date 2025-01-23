@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r package.json $out/
 
     mkdir -p $out/bin
-    makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/serve" \
+    makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/pot-provider-server" \
       --add-flags "$out/lib/main.js" --set NODE_PATH "$out/share/ytdlp-pot-provider/node_modules"
     runHook postInstall
   '';
