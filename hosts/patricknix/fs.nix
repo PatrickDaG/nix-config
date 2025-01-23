@@ -38,6 +38,6 @@
   };
   systemIdentity = {
     enable = true;
-    pcr15 = "6214de8c3d861c4b451acc8c4e24294c95d55bcec516bbf15c077ca3bffb6547";
+    pcr15 = "a8cfdc8ec869f9edf4635129ba6bb19a076a5d234655cf4684286dc57e325a38";
   };
 }

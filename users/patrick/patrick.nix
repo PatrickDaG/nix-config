@@ -85,7 +85,7 @@
       };
     in
     {
-      inherit source;
+      source = "${source}/plugin";
       target = "yt-dlp/plugins/bgutil-ytdlp-pot-provider";
     };
 }

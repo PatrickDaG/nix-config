@@ -7,25 +7,24 @@
   yarnBuildHook,
   nodejs,
   makeWrapper,
-  callPackage,
-  nixosTests,
-  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bgutil-ytdlp-pot-provider";
   version = "0.7.2";
 
-  src = fetchFromGitHub {
-    owner = "Brainicism";
-    repo = "bgutil-ytdlp-pot-provider";
-    tag = finalAttrs.version;
-    hash = "";
-  };
+  src = "${
+    fetchFromGitHub {
+      owner = "Brainicism";
+      repo = "bgutil-ytdlp-pot-provider";
+      tag = finalAttrs.version;
+      hash = "sha256-IiPle9hZEHFG6bjMbe+psVJH0iBZXOMg3pjgoERH3Eg=";
+    }
+  }/server";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/server/yarn.lock";
-    hash = "";
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-2LCzURu1rcchu4i/xLEiQojEwirQAdbXePfHAJczQMk=";
   };
 
   nativeBuildInputs = [
@@ -36,20 +35,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildPhase = ''
-    pushd ./server/
+    runHook preBuild
     npx tsc
-    popd
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
+    mkdir -p $out/share/ytdlp-pot-provider
+    cp -r node_modules $out/share/ytdlp-pot-provider/node_modules
+    cp -r build $out/lib/
+    cp -r package.json $out/
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/serve" \
+      --add-flags "$out/lib/main.js" --set NODE_PATH "$out/share/ytdlp-pot-provider/node_modules"
+    runHook postInstall
   '';
 
   meta = {
-    homepage = "https://github.com/Yooooomi/your_spotify";
-    changelog = "https://github.com/Yooooomi/your_spotify/releases/tag/${finalAttrs.version}";
-    description = "Self-hosted application that tracks what you listen and offers you a dashboard to explore statistics about it";
-    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ patrickdag ];
   };
 })
