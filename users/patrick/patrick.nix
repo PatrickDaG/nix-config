@@ -62,4 +62,30 @@
     '';
   };
   services.udev.packages = [ pkgs.qmk-udev-rules ];
+  hm.xdg.configFile.yt-dlp-get-pot =
+    let
+      source = pkgs.fetchFromGitHub {
+        owner = "coletdjnz";
+        repo = "yt-dlp-get-pot";
+        tag = "v0.2.0";
+        hash = "sha256-c5iKnZ7rYckbqvEI20nymOV6/QJAWyu/FX0QM6ps2D4=";
+      };
+    in
+    {
+      inherit source;
+      target = "yt-dlp/plugins/yt-dlp-get-pot";
+    };
+  hm.xdg.configFile.bgutil-ytdlp-pot-provider =
+    let
+      source = pkgs.fetchFromGitHub {
+        owner = "Brainicism";
+        repo = "bgutil-ytdlp-pot-provider";
+        tag = "0.7.2";
+        hash = "sha256-IiPle9hZEHFG6bjMbe+psVJH0iBZXOMg3pjgoERH3Eg=";
+      };
+    in
+    {
+      inherit source;
+      target = "yt-dlp/plugins/bgutil-ytdlp-pot-provider";
+    };
 }
