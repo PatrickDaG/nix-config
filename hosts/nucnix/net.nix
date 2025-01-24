@@ -231,24 +231,46 @@ in
       wireguard = {
         from = [ "services" ];
         to = [ "local" ];
-        allowedUDPPorts = [ config.wireguard.services.server.port ];
+        allowedUDPPorts = [
+          config.wireguard.services.server.port
+          config.wireguard.monitoring.server.port
+        ];
       };
       # Forward traffic between participants
-      forward-wireguard = {
+      forward-services-swireguard = {
         from = [ "wg-services" ];
         to = [ "wg-services" ];
+        verdict = "accept";
+      };
+      forward-monitoring-wireguard = {
+        from = [ "wg-monitoring" ];
+        to = [ "wg-monitoring" ];
         verdict = "accept";
       };
     };
   };
   wireguard.services.server = {
-    host = lib.net.cidr.host 1 "10.99.20.0/24";
+    host = lib.net.cidr.host 1 globals.net.vlans.services.cidrv4;
     reservedAddresses = [
       "10.42.0.0/20"
       "fd00:1764::/112"
     ];
     openFirewall = true;
   };
+  wireguard.monitoring.server = {
+    host = "wg.${globals.domains.web}";
+    port = 51821;
+    reservedAddresses = [
+      "10.43.0.0/20"
+      "fd00:1765::/112"
+    ];
+    openFirewall = true;
+  };
+  # Override the wg endpoint to not tunnel the traffic through the router
+  networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [
+    "wg.${globals.domains.web}"
+  ];
+
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };

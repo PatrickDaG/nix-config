@@ -39,6 +39,10 @@ in
             {
               node.secretsDir = config.node.secretsDir + "/${guestName}";
               globals.services.${guestName}.host = "${config.node.name}-${guestName}";
+
+              networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [
+                "wg.${globals.domains.web}"
+              ];
               networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-services" ];
               systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) (
                 lib.listToAttrs (

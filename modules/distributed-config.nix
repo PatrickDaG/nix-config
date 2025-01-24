@@ -53,6 +53,12 @@ let
       "provision"
       "mailboxes"
     ]
+    [
+      "services"
+      "influxdb2"
+      "provision"
+      "organizations"
+    ]
   ];
 
   attrsForEachOption =

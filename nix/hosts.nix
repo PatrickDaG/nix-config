@@ -87,6 +87,7 @@
       nodes = config.nixosConfigurations // config.guestConfigurations;
       wireguardEvalCache = config.pkgs.x86_64-linux.lib.wireguard.createEvalCache inputs [
         "services"
+        "monitoring"
       ];
     };
 }

@@ -28,6 +28,10 @@
     group = "grafana";
   };
 
+  age.secrets.loki-basic-auth-hashes.generator.dependencies = [
+    config.age.secrets.grafana-loki-basic-auth-password
+  ];
+
   age.secrets.grafana-influxdb-token-machines = {
     generator.script = "alnum";
     mode = "440";
@@ -47,37 +51,6 @@
     group = "grafana";
   };
 
-  nodes.sire-influxdb = {
-    # Mirror the original secret on the influx host
-    age.secrets."grafana-influxdb-token-machines-${config.node.name}" = {
-      inherit (config.age.secrets.grafana-influxdb-token-machines) rekeyFile;
-      mode = "440";
-      group = "influxdb2";
-    };
-
-    services.influxdb2.provision.organizations.machines.auths."grafana machines:telegraf (${config.node.name})" =
-      {
-        readBuckets = [ "telegraf" ];
-        writeBuckets = [ "telegraf" ];
-        tokenFile =
-          nodes.sire-influxdb.config.age.secrets."grafana-influxdb-token-machines-${config.node.name}".path;
-      };
-
-    age.secrets."grafana-influxdb-token-home-${config.node.name}" = {
-      inherit (config.age.secrets.grafana-influxdb-token-home) rekeyFile;
-      mode = "440";
-      group = "influxdb2";
-    };
-
-    services.influxdb2.provision.organizations.home.auths."grafana home:home_assistant (${config.node.name})" =
-      {
-        readBuckets = [ "home_assistant" ];
-        writeBuckets = [ "home_assistant" ];
-        tokenFile =
-          nodes.sire-influxdb.config.age.secrets."grafana-influxdb-token-home-${config.node.name}".path;
-      };
-  };
-
   environment.persistence."/persist".directories = [
     {
       directory = config.services.grafana.dataDir;
@@ -94,7 +67,7 @@
       users.allow_sign_up = false;
 
       server = rec {
-        domain = globals.services.grafana.domain;
+        inherit (globals.services.grafana) domain;
         root_url = "https://${domain}";
         enforce_domain = true;
         enable_gzip = true;
@@ -138,7 +111,7 @@
           name = "InfluxDB (machines)";
           type = "influxdb";
           access = "proxy";
-          url = "https://${globals.services.influxdb.domain}";
+          url = "http://localhost:8086";
           orgId = 1;
           secureJsonData.token = "$__file{${config.age.secrets.grafana-influxdb-token-machines.path}}";
           jsonData.version = "Flux";
@@ -149,7 +122,7 @@
           name = "InfluxDB (home_assistant)";
           type = "influxdb";
           access = "proxy";
-          url = "https://${globals.services.influxdb.domain}";
+          url = "http://localhost:8086";
           orgId = 1;
           secureJsonData.token = "$__file{${config.age.secrets.grafana-influxdb-token-home.path}}";
           jsonData.version = "Flux";
@@ -160,7 +133,7 @@
           name = "Loki";
           type = "loki";
           access = "proxy";
-          url = "https://${globals.services.loki.domain}";
+          url = "http://localhost:${toString config.services.loki.configuration.server.http_listen_port}";
           orgId = 1;
           basicAuth = true;
           basicAuthUser = "${config.node.name}+grafana-loki-basic-auth-password";

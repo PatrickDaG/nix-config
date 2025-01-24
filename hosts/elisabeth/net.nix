@@ -20,6 +20,10 @@ in
   networking.nftables.firewall.zones = genAttrs (attrNames globals.net.vlans) (name: {
     interfaces = [ "lan-${name}" ];
   });
+
+  networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [
+    "wg.${globals.domains.web}"
+  ];
   systemd.network.netdevs = mkMerge (
     flip mapAttrsToList globals.net.vlans (
       name:

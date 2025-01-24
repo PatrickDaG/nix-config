@@ -4,6 +4,17 @@
   ...
 }:
 {
+  wireguard.monitoring = {
+    client.via = "nucnix";
+  };
+  networking.nftables.firewall.rules.ingress = {
+    from = [
+      "wg-monitoring"
+    ];
+    to = [ "local" ];
+    allowedTCPPorts = [ config.services.loki.configuration.server.http_listen_port ];
+  };
+
   globals.services.loki.host = config.node.name;
   wireguard.services = {
     client.via = "nucnix";

@@ -36,6 +36,9 @@
       3001
     ];
   };
+  wireguard.monitoring = {
+    client.via = "nucnix";
+  };
   networking.nftables.firewall.zones.devices.interfaces = [ "mv-devices" ];
   networking.nftables.firewall.zones.iot.interfaces = [ "mv-iot" ];
   networking.nftables.firewall = {
@@ -151,17 +154,16 @@
       };
       "automation ui" = "!include automations.yaml";
 
-      # influxdb = {
-      #   api_version = 2;
-      #   host = globals.services.influxdb.domain;
-      #   port = "443";
-      #   max_retries = 10;
-      #   ssl = true;
-      #   verify_ssl = true;
-      #   token = "!secret influxdb_token";
-      #   organization = "home";
-      #   bucket = "home_assistant";
-      # };
+      influxdb = {
+        api_version = 2;
+        host = nodes.${globals.services.influxdb.host}.config.wireguard.monitoring.ipv4;
+        port = 8086;
+        max_retries = 10;
+        ssl = false;
+        token = "!secret influxdb_token";
+        organization = "home";
+        bucket = "home_assistant";
+      };
 
       # Modbus Varta element backup
       modbus = {
@@ -500,7 +502,11 @@
           rm ${config.services.home-assistant.configDir}/secrets.yaml
         fi
 
-          cat ${
+        # Update influxdb token
+        # We don't use -i because it would require chown with is a @privileged syscall
+        INFLUXDB_TOKEN="$(cat ${config.age.secrets.hass-influxdb-token.path})" \
+          ${lib.getExe pkgs.yq-go} '.influxdb_token = strenv(INFLUXDB_TOKEN)' \
+          ${
             config.age.secrets."home-assistant-secrets.yaml".path
           } > ${config.services.home-assistant.configDir}/secrets.yaml
 
@@ -518,5 +524,26 @@
         '')
       )
     );
+  age.secrets.hass-influxdb-token = {
+    generator.script = "alnum";
+    mode = "440";
+    group = "hass";
+  };
+
+  nodes.${globals.services.influxdb.host} = {
+    # Mirror the original secret on the influx host
+    age.secrets."hass-influxdb-token-${config.node.name}" = {
+      inherit (config.age.secrets.hass-influxdb-token) rekeyFile;
+      mode = "440";
+      group = "influxdb2";
+    };
+
+    services.influxdb2.provision.organizations.home.auths."home-assistant (${config.node.name})" = {
+      readBuckets = [ "home_assistant" ];
+      writeBuckets = [ "home_assistant" ];
+      tokenFile =
+        nodes.${globals.services.influxdb.host}.config.age.secrets."hass-influxdb-token-${config.node.name}".path;
+    };
+  };
 
 }

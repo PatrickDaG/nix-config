@@ -1,6 +1,5 @@
 {
   config,
-  globals,
   pkgs,
   ...
 }:
@@ -8,11 +7,18 @@ let
   influxdbPort = 8086;
 in
 {
-  globals.services.influxdb.host = config.node.name;
-  wireguard.services = {
+  wireguard.monitoring = {
     client.via = "nucnix";
-    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [ influxdbPort ];
   };
+  networking.nftables.firewall.rules.ingress = {
+    from = [
+      "wg-monitoring"
+    ];
+    to = [ "local" ];
+    allowedTCPPorts = [ influxdbPort ];
+
+  };
+  globals.services.influxdb.host = config.node.name;
 
   age.secrets.influxdb-admin-password = {
     generator.script = "alnum";
@@ -63,4 +69,29 @@ in
   environment.systemPackages = [ pkgs.influxdb2-cli ];
 
   systemd.services.grafana.serviceConfig.RestartSec = "60"; # Retry every minute
+
+  age.secrets."grafana-influxdb-token-machines-${config.node.name}" = {
+    inherit (config.age.secrets.grafana-influxdb-token-machines) rekeyFile;
+    mode = "440";
+    group = "influxdb2";
+  };
+  services.influxdb2.provision.organizations.machines.auths."grafana machines:telegraf (${config.node.name})" =
+    {
+      readBuckets = [ "telegraf" ];
+      writeBuckets = [ "telegraf" ];
+      tokenFile = config.age.secrets."grafana-influxdb-token-machines-${config.node.name}".path;
+    };
+
+  age.secrets."grafana-influxdb-token-home-${config.node.name}" = {
+    inherit (config.age.secrets.grafana-influxdb-token-home) rekeyFile;
+    mode = "440";
+    group = "influxdb2";
+  };
+
+  services.influxdb2.provision.organizations.home.auths."grafana home:home_assistant (${config.node.name})" =
+    {
+      readBuckets = [ "home_assistant" ];
+      writeBuckets = [ "home_assistant" ];
+      tokenFile = config.age.secrets."grafana-influxdb-token-home-${config.node.name}".path;
+    };
 }
