@@ -68,7 +68,7 @@ mkMerge [
     fport = 22;
   })
   (forward {
-    service = "murmur";
+    service = "teamspeak";
     ports = [
       9987
     ];

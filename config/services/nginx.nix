@@ -181,7 +181,6 @@ in
     (proxyProtect "invidious" { })
     (blockOf "yourspotify" { port = 80; })
     (blockOf "blog" { port = 80; })
-    (blockOf "homebox" { })
     (blockOf "homeassistant" { })
     (proxyProtect "ollama" { })
     (proxyProtect "esphome" { port = 3001; })

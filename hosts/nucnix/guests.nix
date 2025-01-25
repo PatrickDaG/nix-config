@@ -110,5 +110,5 @@ in
           ];
         };
     in
-    { } // mkContainer "adguardhome" { } // mkContainer "nginx" { };
+    { } // mkContainer "adguardhome" { } // mkContainer "nginx" { } // mkContainer "teamspeak" { };
 }

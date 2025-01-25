@@ -122,7 +122,6 @@
     // mkContainer "ollama" {
       enableRenaultFT = true;
     }
-    // mkContainer "murmur" { }
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }

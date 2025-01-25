@@ -28,8 +28,9 @@
         {
           basic_auth.username = "${config.node.name}+promtail-loki-basic-auth-password";
           basic_auth.password_file = config.age.secrets.promtail-loki-basic-auth-password.path;
-          url = "http://${
-            nodes.${globals.services.loki.host}.config.wireguard.monitoring.ipv4
+          url = "http://${nodes.${globals.services.loki.host}.config.wireguard.monitoring.ipv4}:${
+            builtins.toString
+              nodes.${globals.services.loki.host}.config.services.loki.configuration.server.http_listen_port
           }/loki/api/v1/push";
         }
       ];

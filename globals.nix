@@ -130,7 +130,7 @@ in
       hostapd = {
         ip = 19;
       };
-      murmur = {
+      teamspeak = {
         domain = "ts.${globals.domains.web}";
         ip = 9;
       };
