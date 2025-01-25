@@ -218,7 +218,7 @@ in
 
   # Mirror the original oauth2 secret
   age.secrets.immich-oauth2-client-secret = {
-    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-immich) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-immich) rekeyFile;
     mode = "440";
     group = "root";
   };

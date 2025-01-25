@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ ./oauth2-proxy.nix ];
   wireguard.services = {
     client.via = "nucnix";
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];

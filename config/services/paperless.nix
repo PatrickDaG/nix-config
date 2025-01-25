@@ -135,7 +135,7 @@ in
   ];
   # Mirror the original oauth2 secret
   age.secrets.paperless-oauth2-client-secret = {
-    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-paperless) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-paperless) rekeyFile;
     mode = "440";
     group = "paperless";
   };

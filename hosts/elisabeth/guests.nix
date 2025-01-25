@@ -117,7 +117,6 @@
         };
     in
     { }
-    // mkContainer "oauth2-proxy" { }
     // mkContainer "vaultwarden" { }
     // mkContainer "ollama" {
       enableRenaultFT = true;
@@ -129,7 +128,6 @@
     // mkContainer "netbird" { }
     // mkContainer "grafana" { }
     // mkContainer "blog" { }
-    // mkContainer "kanidm" { }
     // mkContainer "homeassistant" {
       vlans = [
         "services"

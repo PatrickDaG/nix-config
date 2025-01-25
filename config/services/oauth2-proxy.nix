@@ -9,6 +9,7 @@
     client.via = "nucnix";
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
+  globals.services.oauth2-proxy.host = config.node.name;
 
   age.secrets.oauth2-cookie-secret = {
     rekeyFile = config.node.secretsDir + "/cookie-secret.age";
@@ -64,7 +65,7 @@
   ];
   # Mirror the original oauth2 secret
   age.secrets.oauth2-client-secret = {
-    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-proxy) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-proxy) rekeyFile;
     mode = "440";
     group = "oauth2-proxy";
   };
@@ -74,7 +75,7 @@
   # it includes the newline terminating the file which
   # makes kanidm reject the secret
   age.secrets.oauth2-client-secret-env = {
-    generator.dependencies = [ nodes.elisabeth-kanidm.config.age.secrets.oauth2-proxy ];
+    generator.dependencies = [ nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-proxy ];
     generator.script =
       {
         lib,

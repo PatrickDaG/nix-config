@@ -208,7 +208,7 @@ in
   };
 
   age.secrets.openid-secret = {
-    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-forgejo) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-forgejo) rekeyFile;
     mode = "440";
     inherit (config.services.forgejo) group;
   };
