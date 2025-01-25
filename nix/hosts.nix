@@ -85,6 +85,7 @@
       # All nixosSystem instanciations are collected here, so that we can refer
       # to any system via nodes.<name>
       nodes = config.nixosConfigurations // config.guestConfigurations;
+      # wireguardEvalCache = builtins.fromJSON (builtins.readFile ./cache.json);
       wireguardEvalCache = config.pkgs.x86_64-linux.lib.wireguard.createEvalCache inputs [
         "services"
         "monitoring"

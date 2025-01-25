@@ -36,9 +36,6 @@
       3001
     ];
   };
-  wireguard.monitoring = {
-    client.via = "nucnix";
-  };
   networking.nftables.firewall.zones.devices.interfaces = [ "mv-devices" ];
   networking.nftables.firewall.zones.iot.interfaces = [ "mv-iot" ];
   networking.nftables.firewall = {

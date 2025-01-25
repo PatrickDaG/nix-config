@@ -4,6 +4,8 @@
   ...
 }:
 {
+  wireguard.monitoring.client.via = "nucnix";
+
   networking = {
     useNetworkd = true;
     dhcpcd.enable = false;

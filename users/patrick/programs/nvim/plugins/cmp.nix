@@ -45,41 +45,12 @@
         signature.enabled = true;
         completion = {
           list.selection = {
-            preselect = true;
+            preselect = false;
             auto_insert = true;
           };
-          #   menu = {
-          #     border = "none";
-          #     draw = {
-          #       gap = 1;
-          #       treesitter = [ "lsp" ];
-          #       columns = [
-          #         {
-          #           __unkeyed-1 = "label";
-          #         }
-          #         {
-          #           __unkeyed-1 = "kind_icon";
-          #           __unkeyed-2 = "kind";
-          #           gap = 1;
-          #         }
-          #         { __unkeyed-1 = "source_name"; }
-          #       ];
-          #     };
-          #   };
-          #   trigger = {
-          #     show_in_snippet = false;
-          #   };
           documentation = {
             auto_show = true;
-            #     window = {
-            #       border = "rounded";
-            #     };
           };
-          #   accept = {
-          #     auto_brackets = {
-          #       enabled = true;
-          #     };
-          #   };
         };
       };
     };

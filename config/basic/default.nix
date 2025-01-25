@@ -13,6 +13,7 @@
     ./secrets.nix
     ./ssh.nix
     ./system.nix
+    ./promtail.nix
     ./users.nix
     ./xdg.nix
 

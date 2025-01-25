@@ -7,9 +7,6 @@ let
   influxdbPort = 8086;
 in
 {
-  wireguard.monitoring = {
-    client.via = "nucnix";
-  };
   networking.nftables.firewall.rules.ingress = {
     from = [
       "wg-monitoring"

@@ -9,6 +9,7 @@ let
   inherit (lib)
     flip
     mapAttrsToList
+    mkForce
     mkMerge
     genAttrs
     attrNames
@@ -20,6 +21,7 @@ in
     ./forwarding.nix
     ./mdns.nix
     ./hostapd.nix
+    ./ddclient.nix
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking.nftables.firewall.zones = mkMerge [
@@ -257,14 +259,17 @@ in
     ];
     openFirewall = true;
   };
-  wireguard.monitoring.server = {
-    host = "wg.${globals.domains.web}";
-    port = 51821;
-    reservedAddresses = [
-      "10.43.0.0/20"
-      "fd00:1765::/112"
-    ];
-    openFirewall = true;
+  wireguard.monitoring = {
+    client.via = mkForce null;
+    server = {
+      host = "wg.${globals.domains.web}";
+      port = 51821;
+      reservedAddresses = [
+        "10.43.0.0/20"
+        "fd00:1765::/112"
+      ];
+      openFirewall = true;
+    };
   };
   # Override the wg endpoint to not tunnel the traffic through the router
   networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [

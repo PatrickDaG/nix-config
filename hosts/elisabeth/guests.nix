@@ -119,12 +119,10 @@
     { }
     // mkContainer "oauth2-proxy" { }
     // mkContainer "vaultwarden" { }
-    // mkContainer "ddclient" { }
     // mkContainer "ollama" {
       enableRenaultFT = true;
     }
     // mkContainer "murmur" { }
-    // mkContainer "homebox" { }
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }

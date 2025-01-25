@@ -41,6 +41,8 @@
       netbird-main = uidGid 229;
       grafana = uidGid 230;
       loki = uidGid 231;
+      promtail = uidGid 232;
+      telegraf = uidGid 233;
       paperless = uidGid 315;
       stalwart-mail = uidGid 316;
       build = uidGid 317;
