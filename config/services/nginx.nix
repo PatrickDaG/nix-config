@@ -175,7 +175,10 @@ in
       '';
     })
     (proxyProtect "adguardhome" { })
-    (proxyProtect "oauth2-proxy" { allowedGroup = false; })
+    (proxyProtect "oauth2-proxy" {
+      port = 3001;
+      allowedGroup = false;
+    })
     (blockOf "paperless" { maxBodySize = "5G"; })
     (proxyProtect "ttrss" { port = 80; })
     (proxyProtect "invidious" { })
