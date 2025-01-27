@@ -43,14 +43,15 @@
       loki = uidGid 231;
       promtail = uidGid 232;
       telegraf = uidGid 233;
+      gamemode = uidGid 234;
+      systemd-oom = uidGid 300;
+      systemd-coredump = uidGid 301;
       paperless = uidGid 315;
       stalwart-mail = uidGid 316;
       build = uidGid 317;
       nix-build = {
-        gid = 230;
+        gid = 330;
       };
-      systemd-oom = uidGid 300;
-      systemd-coredump = uidGid 301;
       patrick = uidGid 1000;
       smb = uidGid 2000;
       david = uidGid 2004;

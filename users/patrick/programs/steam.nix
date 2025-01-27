@@ -32,4 +32,11 @@
       ".local/share/SteamPanzer"
     ];
   };
+  programs.gamemode = {
+    enable = true;
+    settings = {
+      general.renice = 10;
+    };
+  };
+  users.users.patrick.extraGroups = [ "gamemode" ];
 }
