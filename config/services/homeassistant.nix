@@ -432,6 +432,8 @@
         hahomematic
         pymodbus
         hatasmota
+        pyipp
+        devolo-plc-api
       ];
   };
   networking.hosts = {

@@ -13,6 +13,7 @@
     ./secrets.nix
     ./ssh.nix
     ./system.nix
+    ./telegraf.nix
     ./promtail.nix
     ./users.nix
     ./xdg.nix
@@ -24,6 +25,7 @@
     ../../modules/ensure-pcr.nix
     ../../modules/globals.nix
     ../../modules/meta.nix
+    ../../modules/nginx-monitor.nix
     ../../modules/iwd.nix
     ../../modules/secrets.nix
     ../../modules/smb-mounts.nix
@@ -40,6 +42,7 @@
     inputs.nixos-nftables-firewall.nixosModules.default
     inputs.nixvim.nixosModules.nixvim
     inputs.stylix.nixosModules.stylix
+    inputs.elewrap.nixosModules.default
   ];
   age.identityPaths = [ "/state/etc/ssh/ssh_host_ed25519_key" ];
   boot.mode = lib.mkDefault "efi";

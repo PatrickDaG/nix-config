@@ -50,4 +50,7 @@
     };
   };
   users.users."patrick".extraGroups = [ "netbird-main" ];
+  meta.telegraf.availableMonitoringNetworks = [
+    "home"
+  ];
 }

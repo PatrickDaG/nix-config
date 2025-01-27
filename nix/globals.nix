@@ -47,6 +47,7 @@
             hetzner
             net
             users
+            monitoring
             ;
         };
     };

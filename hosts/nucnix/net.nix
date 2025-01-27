@@ -338,4 +338,7 @@ in
   systemd.services.nftables.after = flip mapAttrsToList globals.net.vlans (
     name: _: "sys-subsystem-net-devices-${utils.escapeSystemdPath "lan-${name}"}.device"
   );
+  meta.telegraf.availableMonitoringNetworks = [
+    "home"
+  ];
 }

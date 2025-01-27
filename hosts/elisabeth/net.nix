@@ -139,4 +139,7 @@ in
     };
   };
 
+  meta.telegraf.availableMonitoringNetworks = [
+    "home"
+  ];
 }

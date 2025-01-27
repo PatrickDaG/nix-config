@@ -9,6 +9,10 @@
       url = "github:oddlama/idmail/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    elewrap = {
+      url = "github:oddlama/elewrap";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
