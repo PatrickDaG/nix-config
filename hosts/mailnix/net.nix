@@ -1,4 +1,7 @@
 { config, lib, ... }:
+let
+  icfg = config.secrets.secrets.local.networking.interfaces.lan01;
+in
 {
   networking.hostId = config.secrets.secrets.local.networking.hostId;
   networking.domain = config.secrets.secrets.global.domains.mail_public;
@@ -11,27 +14,23 @@
   };
 
   systemd.network.networks = {
-    "lan01" =
-      let
-        icfg = config.secrets.secrets.local.networking.interfaces.lan01;
-      in
-      {
-        address = [
-          icfg.hostCidrv4
-          (lib.net.cidr.hostCidr 1 icfg.hostCidrv6)
-        ];
-        gateway = [ "fe80::1" ];
-        routes = [
-          { Destination = "172.31.1.1"; }
-          {
-            Gateway = "172.31.1.1";
-            GatewayOnLink = true;
-          }
-        ];
-        matchConfig.MACAddress = icfg.mac;
-        networkConfig.IPv6PrivacyExtensions = "yes";
-        linkConfig.RequiredForOnline = "routable";
-      };
+    "lan01" = {
+      address = [
+        icfg.hostCidrv4
+        (lib.net.cidr.hostCidr 1 icfg.hostCidrv6)
+      ];
+      gateway = [ "fe80::1" ];
+      routes = [
+        { Destination = "172.31.1.1"; }
+        {
+          Gateway = "172.31.1.1";
+          GatewayOnLink = true;
+        }
+      ];
+      matchConfig.MACAddress = icfg.mac;
+      networkConfig.IPv6PrivacyExtensions = "yes";
+      linkConfig.RequiredForOnline = "routable";
+    };
   };
   age.secrets.cloudflare_token_acme = {
     rekeyFile = ./secrets/cloudflare_api_token.age;
@@ -70,4 +69,10 @@
   meta.telegraf.availableMonitoringNetworks = [
     "internet"
   ];
+  globals.monitoring.ping.mailnix = {
+    hostv4 = lib.net.cidr.ip icfg.hostCidrv4;
+    hostv6 = lib.net.cidr.ip (lib.net.cidr.hostCidr 1 icfg.hostCidrv6);
+    network = "internet";
+  };
+
 }

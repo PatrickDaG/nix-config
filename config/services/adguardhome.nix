@@ -79,4 +79,9 @@
       mode = "0700";
     }
   ];
+  globals.monitoring.dns.adguardhome = {
+    server = lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4;
+    domain = ".";
+    network = "home";
+  };
 }

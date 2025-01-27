@@ -354,4 +354,9 @@ in
       ))
     ]
   );
+  globals.monitoring.tcp.samba = {
+    host = lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4;
+    port = 445;
+    network = "home";
+  };
 }

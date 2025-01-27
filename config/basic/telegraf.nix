@@ -25,7 +25,7 @@ let
     ;
 
   mkIfNotEmpty = xs: mkIf (xs != [ ]) xs;
-  cfg = config.services.telegraf;
+  cfg = config.meta.telegraf;
 in
 {
   options.meta.telegraf = {
@@ -39,7 +39,7 @@ in
     # Monitor anything that can only be monitored from this node
     meta.telegraf.availableMonitoringNetworks = [
       "local-${config.node.name}"
-    ] ++ (lib.optional (config.meta.type == "host") [ "internet" ]);
+    ] ++ (lib.optional (config.node.type == "host") "internet");
 
     nodes.${globals.services.influxdb.host} = {
       # Mirror the original secret on the influx host
@@ -296,7 +296,7 @@ in
         AmbientCapabilities = [ "CAP_NET_ADMIN" ];
         RestartSec = "60"; # Retry every minute
         ExecStart = mkForce (
-          "${cfg.package}/bin/telegraf -config /var/run/telegraf/config.toml"
+          "${config.services.telegraf.package}/bin/telegraf -config /var/run/telegraf/config.toml"
           + (lib.optionalString config.boot.isContainer " --unprotected")
         );
       };

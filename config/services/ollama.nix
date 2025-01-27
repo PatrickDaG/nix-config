@@ -14,6 +14,12 @@
     port = 3001;
     enable = true;
   };
+  globals.monitoring.http.ollama = {
+    url = config.services.open-webui.environment.OLLAMA_BASE_URL;
+    expectedBodyRegex = "Ollama is running";
+    network = "local-${config.node.name}";
+  };
+
   services.open-webui = {
     host = "0.0.0.0";
     port = 3000;

@@ -132,4 +132,9 @@
       mode = "0770";
     }
   ];
+  globals.monitoring.http.vaultwarden = {
+    url = config.services.vaultwarden.config.domain;
+    expectedBodyRegex = "Vaultwarden Web";
+    network = "internet";
+  };
 }

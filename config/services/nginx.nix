@@ -24,6 +24,10 @@ let
           zone ${hostName} 64k ;
           keepalive 5 ;
         '';
+        monitoring = {
+          enable = true;
+          expectedBodyRegex = hostName;
+        };
       };
       virtualHosts.${globals.services.${hostName}.domain} = {
         forceSSL = true;
