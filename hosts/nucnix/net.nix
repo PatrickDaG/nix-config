@@ -230,11 +230,17 @@ in
         verdict = "accept";
         masquerade = true;
       };
-      wireguard = {
+      wireguard-services = {
         from = [ "services" ];
         to = [ "local" ];
         allowedUDPPorts = [
           config.wireguard.services.server.port
+        ];
+      };
+      wireguard-monitor = {
+        from = "all";
+        to = [ "local" ];
+        allowedUDPPorts = [
           config.wireguard.monitoring.server.port
         ];
       };

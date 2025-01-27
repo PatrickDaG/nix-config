@@ -67,4 +67,7 @@
       mode = "0755";
     }
   ];
+  meta.telegraf.availableMonitoringNetworks = [
+    "internet"
+  ];
 }
