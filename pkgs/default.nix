@@ -10,6 +10,9 @@ _inputs: [
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
+    home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {
+      bar-card = prev.callPackage ./hass/bar-card.nix { };
+    };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];

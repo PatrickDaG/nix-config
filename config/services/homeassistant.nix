@@ -119,6 +119,7 @@
       button-card
       weather-chart-card
       hourly-weather
+      bar-card
     ];
     config = {
       http = {
