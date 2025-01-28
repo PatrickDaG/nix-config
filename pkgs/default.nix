@@ -8,6 +8,7 @@ _inputs: [
     ytdlp-pot-provider = prev.callPackage ./ytdlp-pot-provider.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
+    amazon = prev.callPackage ./amazon.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {
       bar-card = prev.callPackage ./hass/bar-card.nix { };

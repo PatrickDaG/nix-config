@@ -12,6 +12,7 @@
       cowsay
       discord
       disneyplus
+      amazon
       element-desktop
       feh
       figlet
