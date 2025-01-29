@@ -52,8 +52,10 @@
       ratelimit = 60;
       querylog = {
         size_memory = 5;
+        ignored = [ "." ];
         #dir_path = "/run";
       };
+      statistics.ignored = [ "." ];
       filters = [
         {
           name = "AdGuard DNS filter";
@@ -103,19 +105,25 @@
     agent.debug = true;
     inputs.tail = {
       files = [ "/var/lib/AdGuardHome/data/querylog.json" ];
-      data_format = "json";
-      tag_keys = [
-        "IP"
-        "QH"
-        "QT"
-        "QC"
-        "CP"
-        "Upstream"
-        "Elapsed"
+      data_format = "xpath_json";
+      xpath_allow_empty_selection = true;
+      xpath_native_types = true;
+      xpath = [
+        {
+          timestamp = "/T";
+          timestamp_format = "2006-01-02T15:04:05.999999999Z07:00";
+          field_selection = "Elapsed";
+          tag_selection = lib.concatStringsSep "|" [
+            "IP"
+            "QH"
+            "QT"
+            "QC"
+            "CP"
+            "Upstream"
+            "Result/Reason"
+          ];
+        }
       ];
-      #json_name_key = "query";
-      json_time_key = "T";
-      json_time_format = "2006-01-02T15:04:05.999999999Z07:00";
     };
 
     processors.regex = [
@@ -125,13 +133,13 @@
             key = "IP";
             result_key = "IP_24";
             pattern = "^(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)$";
-            replacement = "\${1}.\${2}.\${3}.x";
+            replacement = "$\${1}.$\${2}.$\${3}.x";
           }
           {
             key = "QH";
             result_key = "TLD";
             pattern = "^.*?(?P<tld>[^.]+\\.[^.]+)$";
-            replacement = "\${tld}";
+            replacement = "$\${tld}";
           }
         ];
       }
