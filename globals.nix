@@ -33,7 +33,6 @@ in
         id = 30;
         cidrv4 = "10.99.${toString id}.0/24";
         cidrv6 = "fd${toString id}::/64";
-        dns = false;
       };
       iot = rec {
         id = 40;

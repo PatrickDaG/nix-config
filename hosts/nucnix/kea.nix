@@ -39,7 +39,6 @@ in
           id,
           cidrv4,
           internet,
-          dns,
           ...
         }:
         rec {
@@ -51,15 +50,16 @@ in
               pool = "${net.cidr.host 50 subnet} - ${net.cidr.host (-6) subnet}";
             }
           ];
-          option-data =
-            lib.optional dns {
+          option-data = lib.optionals internet [
+            {
               name = "domain-name-servers";
               data = "${net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4}";
             }
-            ++ lib.optional internet {
+            {
               name = "routers";
               data = "${net.cidr.host 1 subnet}";
-            };
+            }
+          ];
           reservations = [
             {
               # homematic

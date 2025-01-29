@@ -228,7 +228,6 @@ in
         to = [ "fritz" ];
         late = true;
         verdict = "accept";
-        masquerade = true;
       };
       wireguard-services = {
         from = [ "services" ];

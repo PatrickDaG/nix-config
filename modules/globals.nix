@@ -114,11 +114,6 @@ in
                     default = true;
                     description = "Whether this vlan is connected to the internet";
                   };
-                  dns = mkOption {
-                    type = types.bool;
-                    default = vlanNetSubmod.config.internet;
-                    description = "Whether this vlan should utilize the internal dns server";
-                  };
 
                   name = mkOption {
                     description = "The name of this VLAN";
