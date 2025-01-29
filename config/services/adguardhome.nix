@@ -50,6 +50,10 @@
       ];
       dhcp.enabled = false;
       ratelimit = 60;
+      querylog = {
+        size_memory = 5;
+        #dir_path = "/run";
+      };
       filters = [
         {
           name = "AdGuard DNS filter";
@@ -75,13 +79,62 @@
   };
   environment.persistence."/persist".directories = [
     {
-      directory = "/var/lib/private/AdGuardHome";
-      mode = "0700";
+      user = "adguardhome";
+      group = "adguardhome";
+      directory = "/var/lib/AdGuardHome";
+      mode = "0750";
     }
   ];
   globals.monitoring.dns.adguardhome = {
     server = lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4;
     domain = ".";
     network = "home";
+  };
+  systemd.services.telegraf.serviceConfig.SupplementaryGroups = [ "adguardhome" ];
+  users.groups.adguardhome = { };
+  users.users.adguardhome.group = "adguardhome";
+  systemd.services.adguardhome.serviceConfig = {
+    UMask = "027";
+    DynamicUser = lib.mkForce false;
+    User = "adguardhome";
+    Group = "adguardhome";
+  };
+  services.telegraf.extraConfig = {
+    agent.debug = true;
+    inputs.tail = {
+      files = [ "/var/lib/AdGuardHome/data/querylog.json" ];
+      data_format = "json";
+      tag_keys = [
+        "IP"
+        "QH"
+        "QT"
+        "QC"
+        "CP"
+        "Upstream"
+        "Elapsed"
+      ];
+      #json_name_key = "query";
+      json_time_key = "T";
+      json_time_format = "2006-01-02T15:04:05.999999999Z07:00";
+    };
+
+    processors.regex = [
+      {
+        tags = [
+          {
+            key = "IP";
+            result_key = "IP_24";
+            pattern = "^(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)$";
+            replacement = "\${1}.\${2}.\${3}.x";
+          }
+          {
+            key = "QH";
+            result_key = "TLD";
+            pattern = "^.*?(?P<tld>[^.]+\\.[^.]+)$";
+            replacement = "\${tld}";
+          }
+        ];
+      }
+    ];
   };
 }

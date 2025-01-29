@@ -118,7 +118,7 @@ in
             conntrack = { };
             cpu = { };
             disk = { };
-            diskio = { };
+            diskio = mkIf (!config.boot.isContainer) { };
             internal = { };
             interrupts = { };
             kernel = { };
@@ -136,7 +136,7 @@ in
             systemd_units = {
               unittype = "service";
             };
-            temp = { };
+            temp = mkIf (config.node.type == "host") { };
             wireguard = { };
 
             ping = mkIfNotEmpty (

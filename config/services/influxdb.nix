@@ -29,12 +29,6 @@ in
     group = "influxdb2";
   };
 
-  age.secrets.influxdb-user-telegraf-token = {
-    generator.script = "alnum";
-    mode = "440";
-    group = "influxdb2";
-  };
-
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/influxdb2";

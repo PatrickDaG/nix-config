@@ -44,6 +44,7 @@
       promtail = uidGid 232;
       telegraf = uidGid 233;
       gamemode = uidGid 234;
+      adguardhome = uidGid 234;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
       paperless = uidGid 315;
