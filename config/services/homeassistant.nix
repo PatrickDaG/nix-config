@@ -7,6 +7,7 @@
   ...
 }:
 {
+  imports = [ ./wyoming.nix ];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/private/esphome";
@@ -104,9 +105,15 @@
       "mqtt"
       "ollama"
       "solaredge"
+      "wled"
+      "wake_word"
+      "whisper"
+      "wyoming"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local
+      waste_collection_schedule
+      dwd
     ];
 
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
@@ -120,6 +127,7 @@
       weather-chart-card
       hourly-weather
       bar-card
+      #clock-weather-card
     ];
     config = {
       http = {
@@ -398,28 +406,52 @@
       ];
 
       ##Grid
-      sensor = {
-
-        platform = "template";
-        sensors = {
-          mb_varta_status = {
-            friendly_name = "Varta Status";
-            value_template = ''
-              {% set mapper =  {
-                  '0' : 'Busy',
-                  '1' : 'Run',
-                  '2' : 'Charge',
-                  '3' : 'Discharge',
-                  '4' : 'Standby',
-                  '5' : 'Error',
-                  '6' : 'Service',
-                  '7' : 'Islanding' } %}
-              {% set state =  states.sensor.mb_varta_state.state %}
-              {{ mapper[state] if state in mapper else 'Unknown' }}
-            '';
-          };
-        };
+      waste_collection_schedule = {
+        sources = [
+          {
+            name = "ics";
+            args.url = "!ha_waste_url";
+            calendar_title = "Abfalltermine";
+          }
+        ];
       };
+
+      sensor = [
+        {
+
+          platform = "template";
+          sensors = {
+            mb_varta_status = {
+              friendly_name = "Varta Status";
+              value_template = ''
+                {% set mapper =  {
+                    '0' : 'Busy',
+                    '1' : 'Run',
+                    '2' : 'Charge',
+                    '3' : 'Discharge',
+                    '4' : 'Standby',
+                    '5' : 'Error',
+                    '6' : 'Service',
+                    '7' : 'Islanding' } %}
+                {% set state =  states.sensor.mb_varta_state.state %}
+                {{ mapper[state] if state in mapper else 'Unknown' }}
+              '';
+            };
+          };
+        }
+        {
+          platform = "waste_collection_schedule";
+          name = "restmuell_upcoming";
+          value_template = "{{value.types|join(\", \")}}|{{value.daysTo}}|{{value.date.strftime(\"%d.%m.%Y\")}}|{{value.date.strftime(\"%a\")}}";
+          types = [ "Restmüll" ];
+        }
+        {
+          platform = "waste_collection_schedule";
+          name = "kompost_upcoming";
+          value_template = "{{value.types|join(\", \")}}|{{value.daysTo}}|{{value.date.strftime(\"%d.%m.%Y\")}}|{{value.date.strftime(\"%a\")}}";
+          types = [ "Kompost" ];
+        }
+      ];
     };
     extraPackages =
       python3Packages: with python3Packages; [
@@ -435,6 +467,8 @@
         hatasmota
         pyipp
         devolo-plc-api
+        dwdwfsapi
+        wled
       ];
   };
   networking.hosts = {

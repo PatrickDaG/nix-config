@@ -29,6 +29,7 @@
       #orca-slicer
       osu-lazer-bin
       pinentry-gnome3 # for yubikey pinentry
+      pdfpc
       signal-desktop
       streamlink
       streamlink-twitch-gui-bin
