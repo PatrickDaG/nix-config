@@ -410,7 +410,7 @@
         sources = [
           {
             name = "ics";
-            args.url = "!ha_waste_url";
+            args.url = "!secret ha_waste_url";
             calendar_title = "Abfalltermine";
           }
         ];

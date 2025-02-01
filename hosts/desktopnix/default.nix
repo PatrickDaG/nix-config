@@ -69,6 +69,6 @@
   #nixpkgs.config.cudaSupport = true;
 
   programs.streamcontroller.enable = true;
-  hardware.opentabletdriver.enable = true;
+  #  hardware.opentabletdriver.enable = true;
   topology.self.icon = "devices.desktop";
 }

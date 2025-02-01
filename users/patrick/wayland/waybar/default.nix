@@ -40,10 +40,9 @@
       position = "bottom";
       modules-left = [
         "privacy"
-        "hyprland/submap"
-        "hyprland/window"
+        "sway/window"
       ];
-      modules-center = [ "hyprland/workspaces" ];
+      modules-center = [ "sway/workspaces" ];
       modules-right =
         {
           desktopnix = [

@@ -24,19 +24,9 @@ in
           followMouse = false;
           mouseWarping = false;
         };
-        #bindkeysToCode = true;
         window.titlebar = false;
         floating.titlebar = false;
         workspaceLayout = "stacking";
-        # bars = map (x: x // config.lib.stylix.i3.bar) [
-        #   {
-        #     mode = "dock";
-        #     workspaceButtons = true;
-        #     workspaceNumbers = false;
-        #     statusCommand = "${config.programs.i3status-rust.package}/bin/i3status-rs config-main.toml";
-        #     trayOutput = "primary";
-        #   }
-        # ];
         floating.criteria = [ { class = "Pavucontrol"; } ];
 
         assigns = {
@@ -175,55 +165,5 @@ in
       wayland.windowManager.sway.config = cfg;
       xsession.windowManager.i3.config = cfg;
 
-      programs.i3status-rust = {
-        enable = true;
-        bars.main = {
-          blocks =
-            [
-              { block = "net"; }
-              {
-                block = "cpu";
-                format = " $icon  $utilization ";
-              }
-              {
-                block = "nvidia_gpu";
-                format = " $icon  $utilization $memory $temperature ";
-              }
-            ]
-            ++ {
-              "patricknix" = [ { block = "battery"; } ];
-            }
-            .${nixConfig.node.name} or [ ]
-            ++ [
-              {
-                block = "sound";
-                click = [
-                  {
-                    button = "left";
-                    action = "toggle_mute";
-                  }
-                ];
-              }
-              {
-                block = "backlight";
-                missing_format = "";
-              }
-              {
-                block = "time";
-                format = "$icon  $timestamp.datetime(f:'%a %d.%m.%y %H:%M:%S') ";
-                interval = 1;
-              }
-            ];
-          theme = "native";
-          # currently nixpgs-wayland breaks this
-          # icons = "material-nf";
-          settings = {
-            icons.icons = "material-nf";
-            icons.overrides = {
-              cpu = " ";
-            };
-          };
-        };
-      };
     };
 }

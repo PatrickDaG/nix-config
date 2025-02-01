@@ -1,8 +1,8 @@
 diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
-index 595b6af0e339d..72f5dbff1c2f4 100644
+index f60911ebe685f..53aa827cd7363 100644
 --- a/nixos/doc/manual/release-notes/rl-2505.section.md
 +++ b/nixos/doc/manual/release-notes/rl-2505.section.md
-@@ -175,6 +175,10 @@
+@@ -200,6 +200,10 @@
  - `zf` was updated to 0.10.2, which includes breaking changes from the [0.10.0 release](https://github.com/natecraddock/zf/releases/tag/0.10.0).
    `zf` no longer does Unicode normalization of the input and no longer supports terminal escape sequences in the `ZF_PROMPT` environment variable.
  
@@ -14,7 +14,7 @@ index 595b6af0e339d..72f5dbff1c2f4 100644
  
  ## Other Notable Changes {#sec-release-25.05-notable-changes}
 diff --git a/nixos/modules/services/misc/octoprint.nix b/nixos/modules/services/misc/octoprint.nix
-index 193e4222a37e7..6ab48ee10e3c7 100644
+index 193e4222a37e7..443f29d310abd 100644
 --- a/nixos/modules/services/misc/octoprint.nix
 +++ b/nixos/modules/services/misc/octoprint.nix
 @@ -6,17 +6,22 @@
@@ -143,13 +143,10 @@ index 193e4222a37e7..6ab48ee10e3c7 100644
            chmod 600 "${cfg.stateDir}/config.yaml"
          fi
        '';
-@@ -132,12 +166,42 @@ in
-         ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
-         User = cfg.user;
-         Group = cfg.group;
--        SupplementaryGroups = [
--          "dialout"
-+        SupplementaryGroups = [ "dialout" ];
+@@ -135,9 +169,41 @@ in
+         SupplementaryGroups = [
+           "dialout"
+         ];
 +
 +        # Hardening
 +        CapabilityBoundingSet = "";
@@ -177,7 +174,7 @@ index 193e4222a37e7..6ab48ee10e3c7 100644
 +        SystemCallFilter = [
 +          "@system-service"
 +          "@pkey"
-         ];
++        ];
 +        ReadWritePaths = [ cfg.stateDir ];
 +        UMask = "0077";
 +
@@ -189,44 +186,68 @@ index 193e4222a37e7..6ab48ee10e3c7 100644
 +  meta.maintainers = with lib.maintainers; [ patrickdag ];
  }
 diff --git a/nixos/tests/octoprint.nix b/nixos/tests/octoprint.nix
-index 9473797d50475..12fb94e0eaf90 100644
+index 9473797d50475..4499e5e67674a 100644
 --- a/nixos/tests/octoprint.nix
 +++ b/nixos/tests/octoprint.nix
-@@ -54,16 +54,22 @@ import ./make-test-python.nix (
-       curl_cmd = "curl --retry-all-errors --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 \
-                   --retry-max-time 40 -X GET --header 'X-API-Key: ${apikey}' "
+@@ -35,33 +35,40 @@ import ./make-test-python.nix (
+       };
  
--      # used to fail early, in case octoprint first starts and then crashes
--      with octoprint_running: # type: ignore[union-attr]
--          with subtest("Check for web interface"):
+     testScript = ''
+-      import json
++        import json
+ 
+-      @polling_condition
+-      def octoprint_running():
+-          machine.succeed("pgrep octoprint")
++        @polling_condition
++        def octoprint_running():
++            machine.succeed("pgrep octoprint")
+ 
+-      with subtest("Wait for octoprint service to start"):
+-          machine.wait_for_unit("octoprint.service")
+-          machine.wait_until_succeeds("pgrep octoprint")
++        with subtest("Wait for octoprint service to start"):
++            machine.wait_for_unit("octoprint.service")
++            machine.wait_until_succeeds("pgrep octoprint")
+ 
+-      with subtest("Wait for final boot"):
+-          # this appears whe octoprint is almost finished starting
+-          machine.wait_for_file("/var/lib/octoprint/uploads")
++        with subtest("Wait for final boot"):
++            # this appears whe octoprint is almost finished starting
++            machine.wait_for_file("/var/lib/octoprint/uploads")
+ 
+-      # octoprint takes some time to start. This makes sure we'll retry just in case it takes longer
+-      # retry-all-errors in necessary, since octoprint will report a 404 error when not yet ready
+-      curl_cmd = "curl --retry-all-errors --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 \
+-                  --retry-max-time 40 -X GET --header 'X-API-Key: ${apikey}' "
++        # octoprint takes some time to start. This makes sure we'll retry just in case it takes longer
++        # retry-all-errors in necessary, since octoprint will report a 404 error when not yet ready
++        curl_cmd = "curl --retry-all-errors --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 \
++                    --retry-max-time 40 -X GET --header 'X-API-Key: ${apikey}' "
+ 
+       # used to fail early, in case octoprint first starts and then crashes
+       with octoprint_running: # type: ignore[union-attr]
+           with subtest("Check for web interface"):
 -              machine.wait_until_succeeds("curl -s localhost:5000")
-+    # used to fail early, in case octoprint first starts and then crashes
-+    with octoprint_running: # type: ignore[union-attr]
-+        with subtest("Check for web interface"):
-+            machine.wait_until_succeeds("curl -s -4 localhost:5000")
-+            machine.wait_until_succeeds("curl -s -6 localhost:5000")
++              machine.wait_until_succeeds("curl -s -4 localhost:5000")
++              machine.wait_until_succeeds("curl -s -6 localhost:5000")
  
 -          with subtest("Check API"):
 -              version = json.loads(machine.succeed(curl_cmd + "localhost:5000/api/version"))
 -              server = json.loads(machine.succeed(curl_cmd + "localhost:5000/api/server"))
--              assert version["server"] == str("${pkgs.octoprint.version}")
--              assert server["safemode"] == None
--    '';
--  }
--)
-+        with subtest("Check API IPv4"):
-+            version = json.loads(machine.succeed(curl_cmd + "-4 localhost:5000/api/version"))
-+            server = json.loads(machine.succeed(curl_cmd + "-4 localhost:5000/api/server"))
-+            assert version["server"] == str("${pkgs.octoprint.version}")
-+            assert server["safemode"] == None
++          with subtest("Check API IPv4"):
++              version = json.loads(machine.succeed(curl_cmd + "-4 localhost:5000/api/version"))
++              server = json.loads(machine.succeed(curl_cmd + "-4 localhost:5000/api/server"))
++              assert version["server"] == str("${pkgs.octoprint.version}")
++              assert server["safemode"] == None
 +
-+        with subtest("Check API IPv6"):
-+            version = json.loads(machine.succeed(curl_cmd + "-6 localhost:5000/api/version"))
-+            server = json.loads(machine.succeed(curl_cmd + "-6 localhost:5000/api/server"))
-+            assert version["server"] == str("${pkgs.octoprint.version}")
-+            assert server["safemode"] == None
-+  '';
-+})
++          with subtest("Check API IPv6"):
++              version = json.loads(machine.succeed(curl_cmd + "-6 localhost:5000/api/version"))
++              server = json.loads(machine.succeed(curl_cmd + "-6 localhost:5000/api/server"))
+               assert version["server"] == str("${pkgs.octoprint.version}")
+               assert server["safemode"] == None
+     '';
 diff --git a/pkgs/by-name/oc/octoprint/ffmpeg-path.patch b/pkgs/by-name/oc/octoprint/ffmpeg-path.patch
 deleted file mode 100644
 index 2e7c7dbe06428..0000000000000

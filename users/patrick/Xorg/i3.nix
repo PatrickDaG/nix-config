@@ -102,5 +102,55 @@
             };
         };
       };
+      # programs.i3status-rust = {
+      #   enable = true;
+      #   bars.main = {
+      #     blocks =
+      #       [
+      #         { block = "net"; }
+      #         {
+      #           block = "cpu";
+      #           format = " $icon  $utilization ";
+      #         }
+      #         {
+      #           block = "nvidia_gpu";
+      #           format = " $icon  $utilization $memory $temperature ";
+      #         }
+      #       ]
+      #       ++ {
+      #         "patricknix" = [ { block = "battery"; } ];
+      #       }
+      #       .${nixConfig.node.name} or [ ]
+      #       ++ [
+      #         {
+      #           block = "sound";
+      #           click = [
+      #             {
+      #               button = "left";
+      #               action = "toggle_mute";
+      #             }
+      #           ];
+      #         }
+      #         {
+      #           block = "backlight";
+      #           missing_format = "";
+      #         }
+      #         {
+      #           block = "time";
+      #           format = "$icon  $timestamp.datetime(f:'%a %d.%m.%y %H:%M:%S') ";
+      #           interval = 1;
+      #         }
+      #       ];
+      #     theme = "native";
+      #     # currently nixpgs-wayland breaks this
+      #     # icons = "material-nf";
+      #     settings = {
+      #       icons.icons = "material-nf";
+      #       icons.overrides = {
+      #         cpu = " ";
+      #       };
+      #     };
+      #   };
+      # };
     };
 }

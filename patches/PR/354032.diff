@@ -12,7 +12,7 @@ index 788b724231be3..c8f6836f0af93 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index 4ebaa60ecb052..a2af8fccbe932 100644
+index f05adb671e992..982fc98b0206d 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
 @@ -38,7 +38,7 @@ let
@@ -190,7 +190,7 @@ index 4ebaa60ecb052..a2af8fccbe932 100644
          );
          Restart = "always";
          RuntimeDirectory = "netbird-mgmt";
-@@ -450,27 +452,5 @@ in
+@@ -452,27 +454,5 @@ in
        stopIfChanged = false;
      };
  
@@ -642,35 +642,33 @@ index 3122b6c9fe5ff..cf19439e89271 100644
    };
  }
 diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
-index 887747437c22c..5589200d99078 100644
+index f684a31042651..f7f5ca3a58aa9 100644
 --- a/nixos/tests/netbird.nix
 +++ b/nixos/tests/netbird.nix
-@@ -1,19 +1,65 @@
--import ./make-test-python.nix ({ pkgs, lib, ... }:
--{
--  name = "netbird";
-+import ./make-test-python.nix (
-+  { pkgs, ... }:
+@@ -1,59 +1,99 @@
+ import ./make-test-python.nix (
+   { pkgs, lib, ... }:
 +  # kanidm only works over tls so we use these self signed certificates
 +  # generate using `openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout selfcert.key -out selfcert.crt -subj "/CN=example.com" -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"`
 +  let
 +    tls_chain = "${./common/acme/server}/ca.cert.pem";
 +    tls_key = "${./common/acme/server}/ca.key.pem";
 +  in
-+  {
-+    name = "netbird";
+   {
+     name = "netbird";
  
--  meta.maintainers = with pkgs.lib.maintainers; [ ];
-+    meta.maintainers = with pkgs.lib.maintainers; [ patrickdag ];
+     meta.maintainers = with pkgs.lib.maintainers; [
++      patrickdag
+       nazarewk
+     ];
  
--  nodes = {
--    node = { ... }: {
--      services.netbird.enable = true;
-+    nodes = {
+     nodes = {
+-      clients =
 +      client =
-+        { ... }:
-+        {
-+          services.netbird.enable = true;
+         { ... }:
+         {
+           services.netbird.enable = true;
+-          services.netbird.clients.custom.port = 51819;
 +        };
 +      kanidm = {
 +        services.kanidm = {
@@ -697,93 +695,118 @@ index 887747437c22c..5589200d99078 100644
 +            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
 +            relay.authSecretFile = (pkgs.writeText "wuppiduppi" "huppiduppi");
 +          };
-+        };
+         };
      };
--  };
  
--  testScript = ''
--    start_all()
--    node.wait_for_unit("netbird-wt0.service")
--    node.wait_for_file("/var/run/netbird/sock")
--    node.succeed("netbird status | grep -q 'Daemon status: NeedsLogin'")
--  '';
--})
-+    testScript = ''
-+      client.start()
-+      with subtest("client starting"):
-+        client.wait_for_unit("netbird-wt0.service")
-+        client.wait_for_file("/var/run/netbird/sock")
-+        client.succeed("netbird status | grep -q 'Daemon status: NeedsLogin'")
+     # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
+     testScript = ''
+-      start_all()
+-      def did_start(node, name):
+-        node.wait_for_unit(f"{name}.service")
+-        node.wait_for_file(f"/var/run/{name}/sock")
+-        output = node.succeed(f"{name} status")
+-
+-        # not sure why, but it can print either of:
+-        #  - Daemon status: NeedsLogin
+-        #  - Management: Disconnected
+-        expected = [
+-          "Disconnected",
+-          "NeedsLogin",
+-        ]
+-        assert any(msg in output for msg in expected)
+-
+-      did_start(clients, "netbird")
+-      did_start(clients, "netbird-custom")
+-    '';
++        start_all()
++        def did_start(node, name):
++          node.wait_for_unit(f"{name}.service")
++          node.wait_for_file(f"/var/run/{name}/sock")
++          output = node.succeed(f"{name} status")
+ 
+-    /*
+-      `netbird status` used to print `Daemon status: NeedsLogin`
+-          https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
+-      as the first line, but now it is just:
+-
+-          Daemon version: 0.26.3
+-          CLI version: 0.26.3
+-          Management: Disconnected
+-          Signal: Disconnected
+-          Relays: 0/0 Available
+-          Nameservers: 0/0 Available
+-          FQDN:
+-          NetBird IP: N/A
+-          Interface type: N/A
+-          Quantum resistance: false
+-          Routes: -
+-          Peers count: 0/0 Connected
+-    */
++          # not sure why, but it can print either of:
++          #  - Daemon status: NeedsLogin
++          #  - Management: Disconnected
++          expected = [
++            "Disconnected",
++            "NeedsLogin",
++          ]
++          assert any(msg in output for msg in expected)
 +
-+      kanidm.start()
-+      kanidm.wait_for_unit("kanidm.service")
++        did_start(clients, "netbird")
++        did_start(clients, "netbird-custom")
 +
-+      server.start()
-+      with subtest("server starting"):
-+        server.wait_for_unit("netbird-management.service")
-+        server.wait_for_unit("netbird-signal.service")
-+        server.wait_for_unit("netbird-relay.service")
++      /*
++        `netbird status` used to print `Daemon status: NeedsLogin`
++            https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
++        as the first line, but now it is just:
++
++            Daemon version: 0.26.3
++            CLI version: 0.26.3
++            Management: Disconnected
++            Signal: Disconnected
++            Relays: 0/0 Available
++            Nameservers: 0/0 Available
++            FQDN:
++            NetBird IP: N/A
++            Interface type: N/A
++            Quantum resistance: false
++            Routes: -
++            Peers count: 0/0 Connected
++      */
++        kanidm.start()
++        kanidm.wait_for_unit("kanidm.service")
++
++        server.start()
++        with subtest("server starting"):
++          server.wait_for_unit("netbird-management.service")
++          server.wait_for_unit("netbird-signal.service")
++          server.wait_for_unit("netbird-relay.service")
 +    '';
-+  }
-+)
+   }
+ )
 diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
-index 8cdcd68b4f444..1da9614bdadf8 100644
+index a66390a16e3ec..bf51ad02a85fd 100644
 --- a/pkgs/tools/networking/netbird/default.nix
 +++ b/pkgs/tools/networking/netbird/default.nix
-@@ -1,33 +1,56 @@
--{ stdenv
--, lib
--, nixosTests
--, nix-update-script
--, buildGoModule
--, fetchFromGitHub
--, installShellFiles
--, pkg-config
--, gtk3
--, libayatana-appindicator
--, libX11
--, libXcursor
--, libXxf86vm
--, Cocoa
--, IOKit
--, Kernel
--, UserNotifications
--, WebKit
--, ui ? false
--, netbird-ui
-+{
-+  stdenv,
-+  lib,
-+  nixosTests,
-+  nix-update-script,
-+  buildGoModule,
-+  fetchFromGitHub,
-+  installShellFiles,
-+  pkg-config,
-+  gtk3,
-+  libayatana-appindicator,
-+  libX11,
-+  libXcursor,
-+  libXxf86vm,
-+  Cocoa,
-+  IOKit,
-+  Kernel,
-+  UserNotifications,
-+  WebKit,
-+  ui ? false,
+@@ -18,20 +18,39 @@
+   UserNotifications,
+   WebKit,
+   ui ? false,
 +  client ? true,
 +  server ? false,
-+  netbird-ui,
+   netbird-ui,
  }:
  let
    modules =
--    if ui then {
--      "client/ui" = "netbird-ui";
--    } else {
--      client = "netbird";
--      management = "netbird-mgmt";
--      signal = "netbird-signal";
--    };
+-    if ui then
+-      {
+-        "client/ui" = "netbird-ui";
+-      }
+-    else
+-      {
+-        client = "netbird";
+-        management = "netbird-mgmt";
+-        signal = "netbird-signal";
+-      };
 +    { }
 +    // (
 +      if ui then
@@ -814,109 +837,33 @@ index 8cdcd68b4f444..1da9614bdadf8 100644
  in
  buildGoModule rec {
    pname = "netbird";
-@@ -44,19 +67,21 @@ buildGoModule rec {
- 
-   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
- 
--  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
--    gtk3
--    libayatana-appindicator
--    libX11
--    libXcursor
--    libXxf86vm
--  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
--    Cocoa
--    IOKit
--    Kernel
--    UserNotifications
--    WebKit
--  ];
-+  buildInputs =
-+    lib.optionals (stdenv.hostPlatform.isLinux && ui) [
-+      gtk3
-+      libayatana-appindicator
-+      libX11
-+      libXcursor
-+      libXxf86vm
-+    ]
-+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
-+      Cocoa
-+      IOKit
-+      Kernel
-+      UserNotifications
-+      WebKit
-+    ];
- 
-   subPackages = lib.attrNames modules;
- 
-@@ -78,26 +103,32 @@ buildGoModule rec {
-       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
-   '';
- 
--  postInstall = lib.concatStringsSep "\n"
--    (lib.mapAttrsToList
--      (module: binary: ''
--        mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
--      '' + lib.optionalString (!ui) ''
--        installShellCompletion --cmd ${binary} \
--          --bash <($out/bin/${binary} completion bash) \
--          --fish <($out/bin/${binary} completion fish) \
--          --zsh <($out/bin/${binary} completion zsh)
--      '')
--      modules) + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
--    mkdir -p $out/share/pixmaps
--    cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
-+  postInstall =
-+    lib.concatStringsSep "\n" (
-+      lib.mapAttrsToList (
-+        module: binary:
-+        ''
-+          mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
-+        ''
+@@ -91,7 +110,8 @@ buildGoModule rec {
+         ''
+           mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
+         ''
+-        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform && !ui) ''
 +        # relay has no completions, in which case the completion subcommand will error
 +        + lib.optionalString (module != "relay" && module != "client/ui") ''
-+          installShellCompletion --cmd ${binary} \
-+            --bash <($out/bin/${binary} completion bash) \
-+            --fish <($out/bin/${binary} completion fish) \
-+            --zsh <($out/bin/${binary} completion zsh)
-+        ''
-+      ) modules
-+    )
-+    + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
-+      mkdir -p $out/share/pixmaps
-+      cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
- 
--    mkdir -p $out/share/applications
--    cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
-+      mkdir -p $out/share/applications
-+      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
- 
--    substituteInPlace $out/share/applications/netbird.desktop \
--      --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
--  '';
-+      substituteInPlace $out/share/applications/netbird.desktop \
-+        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
-+    '';
- 
-   passthru = {
-     tests.netbird = nixosTests.netbird;
-@@ -110,7 +141,10 @@ buildGoModule rec {
+           installShellCompletion --cmd ${binary} \
+             --bash <($out/bin/${binary} completion bash) \
+             --fish <($out/bin/${binary} completion fish) \
+@@ -121,10 +141,7 @@ buildGoModule rec {
      changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
      description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
      license = licenses.bsd3;
--    maintainers = with maintainers; [ vrifox saturn745 ];
-+    maintainers = with maintainers; [
-+      vrifox
-+      saturn745
-+    ];
-     mainProgram = "netbird";
+-    maintainers = with maintainers; [
+-      vrifox
+-      saturn745
+-    ];
+     mainProgram = if ui then "netbird-ui" else "netbird";
++    maintainers = with maintainers; [ vrifox saturn745 patrickdag ];
    };
  }
 diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
-index 02fe78d397cce..ffa5a7cb3d6d0 100644
+index 9ef803cc022c2..144af1c99d47a 100644
 --- a/pkgs/top-level/all-packages.nix
 +++ b/pkgs/top-level/all-packages.nix
-@@ -2941,6 +2941,11 @@ with pkgs;
+@@ -2831,6 +2831,11 @@ with pkgs;
      ui = true;
    };
  

@@ -10,9 +10,14 @@ in
     {
       stylix.targets.sway.enable = true;
       wayland.windowManager.sway = {
+        extraOptions = [
+          "--unsupported-gpu"
+          "-Dlegacy-wl-drm"
+        ];
         enable = true;
         config =
           {
+            bars = [ ];
             menu = "fuzzel";
             startup = [
               { command = "uwsm finalize"; }
@@ -45,8 +50,9 @@ in
               in
               {
                 "Menu" = "exec ${cfg.menu}";
-                "${modifier}+b" = lib.mkForce "exec uwsm start firefox";
-                "${modifier}+m" = lib.mkForce "exec uwsm start thunderbird";
+                "${modifier}+t" = lib.mkForce "exec uwsm app kitty";
+                "${modifier}+b" = lib.mkForce "exec uwsm app firefox";
+                "${modifier}+m" = lib.mkForce "exec uwsm app thunderbird";
               };
           }
           // {
@@ -92,14 +98,14 @@ in
             bindgesture swipe:3:left workpace next
             bindgesture swipe:3:right workpace prev
             bindgesture pinch:4:outward exec ${cfg.menu}
+            output Unknown-1 disable
           '';
       };
       # Cursor invisible
       home.sessionVariables = {
-        WLR_NO_HARDWARE_CURSORS = 1;
+        #WLR_NO_HARDWARE_CURSORS = 1;
         NIXOS_OZONE_WL = 1;
-        # opengl backend flickers, also vulkan is love.
-        #WLR_RENDERER = "vulkan";
+        WLR_DRM_DEVICES = "/dev/dri/card1";
       };
     };
 }

@@ -33,7 +33,7 @@
       signal-desktop
       streamlink
       streamlink-twitch-gui-bin
-      teamspeak_client
+      teamspeak3
       telegram-desktop
       timer
       via
