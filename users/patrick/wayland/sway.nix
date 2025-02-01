@@ -5,6 +5,7 @@ in
 {
   # import shared i3 config
   imports = [ ../Xorg/sway3.nix ];
+  systemd.user.services.opentabletdriver.after = [ "sway-session.target" ];
   hm =
     { config, ... }:
     {
@@ -19,12 +20,13 @@ in
           {
             bars = [ ];
             menu = "fuzzel";
-            startup = [
+            startup = lib.mkAfter [
               { command = "uwsm finalize"; }
             ];
             input = {
               "*" = {
                 xkb_layout = "de";
+                xkb_variant = "nodeadkeys";
                 xkb_options = "grp:win_space_toggle";
                 repeat_delay = "235";
                 repeat_rate = "60";
@@ -99,13 +101,18 @@ in
             bindgesture swipe:3:right workpace prev
             bindgesture pinch:4:outward exec ${cfg.menu}
             output Unknown-1 disable
+
+            for_window [class=^cs2$] allow_tearing yes
+            for_window [app_id="kitty"] allow_tearing yes
           '';
       };
       # Cursor invisible
       home.sessionVariables = {
         #WLR_NO_HARDWARE_CURSORS = 1;
         NIXOS_OZONE_WL = 1;
+        # ?????
         WLR_DRM_DEVICES = "/dev/dri/card1";
+        WLR_RENDERER = "vulkan";
       };
     };
 }

@@ -3,6 +3,7 @@
   hm.stylix.targets.kitty.enable = true;
   hm.home.sessionVariables = {
     TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
+    TERMINAL = "kitty";
   };
   hm.programs.kitty = {
     enable = true;

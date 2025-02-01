@@ -27,18 +27,32 @@ in
         window.titlebar = false;
         floating.titlebar = false;
         workspaceLayout = "stacking";
-        floating.criteria = [ { class = "Pavucontrol"; } ];
+        workspaceAutoBackAndForth = true;
+        startup = lib.mkAfter [
+          { command = "swaymsg focus output DP-3 && swaysmg workspace 1:j"; }
+          { command = "swaymsg focus output DVI-D-1 && swaysmg workspace 1:F1"; }
+          { command = "swaymsg focus output HDMI-A-1 && swaysmg workspace 1:F3"; }
+        ];
+        floating.criteria = [
+          { class = "Pavucontrol"; }
+          { class = "streamlink-twitch-gui"; }
+          { title = "Extension: (Bitwarden Password Manager)"; }
+        ];
 
         assigns = {
           "2:d" = [ { class = "^firefox$"; } ];
-          "2:2" = [ { class = "^spotify$"; } ];
+          "2:F4" = [ { class = "^spotify$"; } ];
           "3:u" = [ { class = "^thunderbird$"; } ];
           "4:a" = [
             { class = "^bottles$"; }
             { class = "^steam$"; }
             { class = "^prismlauncher$"; }
           ];
-          "1:F1" = [ { class = "^discord$"; } ];
+          "1:F1" = [
+            { class = "^discord$"; }
+            { title = "WebCord"; }
+            { class = "^TeamSpeak 3$"; }
+          ];
           "2:F2" = [
             { class = "^Signal$"; }
             { class = "^TelegramDesktop$"; }
@@ -58,42 +72,28 @@ in
           in
           {
             "desktopnix" =
-              output "HDMI-0" [
+              output "DP-3" [
+                "j"
+                "d"
+                "u"
+                "a"
+                "x"
+              ]
+              ++ output "DVI-D-1" [
                 "F1"
                 "F2"
               ]
-              ++ output "DP-4" [
-                "j"
-                "d"
-                "u"
-                "a"
-                "x"
-                "p"
-              ]
-              ++ output "DVI-D-0" [
+              ++ output "HDMI-A-1" [
                 "F3"
                 "F4"
               ];
-            "patricknix" =
-              output "eDP-1" [
-                "1"
-                "2"
-                "3"
-                "4"
-                "5"
-                "6"
-                "7"
-                "8"
-                "9"
-              ]
-              ++ output "DP-1" [
-                "j"
-                "d"
-                "u"
-                "a"
-                "x"
-                "p"
-              ];
+            "patricknix" = output "eDP-1" [
+              "j"
+              "d"
+              "u"
+              "a"
+              "x"
+            ];
           }
           .${nixConfig.node.name} or [ ];
 
@@ -164,6 +164,5 @@ in
     {
       wayland.windowManager.sway.config = cfg;
       xsession.windowManager.i3.config = cfg;
-
     };
 }
