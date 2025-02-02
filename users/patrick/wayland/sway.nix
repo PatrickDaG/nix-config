@@ -18,6 +18,13 @@ in
         enable = true;
         config =
           {
+            assigns = {
+              "2:d" = [ { app_id = "^firefox$"; } ];
+            };
+            floating.criteria = [
+              { app_id = "org.pipewire.Helvum"; }
+              { app_id = "com.saivert.pwvucontrol"; }
+            ];
             bars = [ ];
             menu = "fuzzel";
             startup = lib.mkAfter [

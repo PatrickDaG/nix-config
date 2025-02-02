@@ -6,21 +6,6 @@
 {
 
   environment.systemPackages = with pkgs; [ xdg-utils ];
-  xdg.portal = {
-    xdgOpenUsePortal = true;
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-gtk
-    ];
-    config = {
-      common.default = [
-        "gtk"
-        "hyprland"
-      ];
-      sway.default = [ "wlr" ];
-    };
-  };
   fonts = {
     enableGhostscriptFonts = false;
     fontDir.enable = false;

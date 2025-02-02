@@ -6,7 +6,11 @@
 }:
 {
   hm.systemd.user.services."waybar" = {
-    Unit.After = [ "graphical-session.target" ];
+    Unit.After = [
+      "graphical-session.target"
+      "pipewire.service"
+      "wireplumber.service"
+    ];
     Service.Slice = [ "app-graphical.slice" ];
   };
   hm.programs.waybar = {
@@ -137,11 +141,9 @@
 
       wireplumber = {
         format = "{icon} {volume}%";
-        on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-        on-click-middle = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float;pin;move 80% 50%;size 20% 50%;noborder]\" ${lib.getExe pkgs.pwvucontrol}";
-        on-click-right = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float]\" ${lib.getExe pkgs.helvum}";
-        on-scroll-up = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
-        on-scroll-down = "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
+        on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+        on-click-middle = "${pkgs.sway}/bin/swaymsg exec ${lib.getExe pkgs.pwvucontrol}";
+        on-click-right = "${pkgs.sway}/bin/swaymsg exec ${lib.getExe pkgs.helvum}";
         format-muted = "󰖁";
         format-icons = [
           "󰕿"

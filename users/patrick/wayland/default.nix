@@ -11,14 +11,21 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
+    wlr.enable = true;
     config.common = {
+      default = [
+        "wlr"
+        "gtk"
+      ];
       "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
-      "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+      # "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+      # "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "xdg-desktop-portal-wlr" ];
+      "org.freedesktop.impl.portal.Screenshot" = [ "xdg-desktop-portal-wlr" ];
       "org.freedesktop.portal.FileChooser" = [ "xdg-desktop-portal-gtk" ];
     };
     extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
+      # pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gtk
     ];
   };
@@ -42,7 +49,7 @@
     ./hyprland.nix
     ./waybar
     ./swaync
-    ./swww.nix
+    #./swww.nix
   ];
   hm.home.packages = with pkgs; [
     wdisplays
