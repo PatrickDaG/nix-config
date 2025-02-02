@@ -44,9 +44,9 @@
       position = "bottom";
       modules-left = [
         "privacy"
-        "sway/window"
+        "hyprland/window"
       ];
-      modules-center = [ "sway/workspaces" ];
+      modules-center = [ "hyprland/workspaces" ];
       modules-right =
         {
           desktopnix = [
@@ -132,6 +132,7 @@
           dnd-inhibited-none = "";
         };
         return-type = "json";
+        exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
 
         on-click = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
         on-click-right = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
@@ -142,8 +143,8 @@
       wireplumber = {
         format = "{icon} {volume}%";
         on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
-        on-click-middle = "${pkgs.sway}/bin/swaymsg exec ${lib.getExe pkgs.pwvucontrol}";
-        on-click-right = "${pkgs.sway}/bin/swaymsg exec ${lib.getExe pkgs.helvum}";
+        on-click-middle = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float;pin;move 80% 50%;size 20% 50%;noborder]\" ${lib.getExe pkgs.pwvucontrol}";
+        on-click-right = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float]\" ${lib.getExe pkgs.helvum}";
         format-muted = "󰖁";
         format-icons = [
           "󰕿"
@@ -152,7 +153,7 @@
         ];
       };
 
-      "sway/workspaces" = {
+      "hyprland/workspaces" = {
         format = "{icon}";
         format-icons.urgent = "";
         all-outputs = false;
@@ -168,6 +169,9 @@
           "1:F3" = [ "HDMI-A-1" ];
           "2:F4" = [ "HDMI-A-1" ];
         };
+      };
+      "hyprland/window" = {
+        separate-outputs = true;
       };
 
       privacy = {

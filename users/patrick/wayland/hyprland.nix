@@ -48,12 +48,14 @@ let
   '';
 in
 {
+  systemd.user.services.opentabletdriver.after = [ "hyprland-session.target" ];
   hm = {
     # UWSM starts a SH to read env variables
     # this ensures all home.sessionVars are exported
     programs.bash.enable = true;
 
-    home.sessionVariables = {
+    # Force use of nvidia gpu on desktopnix
+    home.sessionVariables = mkIf (config.node.name == "desktopnix") {
       AQ_DRM_DEVICES = "/dev/dri/card1";
     };
     wayland.windowManager.hyprland = {
