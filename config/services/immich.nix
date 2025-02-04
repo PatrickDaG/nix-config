@@ -7,7 +7,7 @@
   ...
 }:
 let
-  version = "v1.119.1";
+  version = "v1.125.7";
   immichDomain = "immich.${globals.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
