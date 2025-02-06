@@ -19,7 +19,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    lix = {
+      url = "git+https://forge.lel.lol/patrick/lix.git?ref=release-2.92";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    lix-module = {
+      url = "git+https://git.lix.systems/lix-project/nixos-module.git?ref=release-2.92";
+      inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.lix.follows = "lix";
+    };
+
     nixos-extra-modules = {
+      #url = "github:oddlama/nixos-extra-modules/lix-compat";
       url = "github:oddlama/nixos-extra-modules";
       inputs.nixpkgs.follows = "nixpkgs";
     };
