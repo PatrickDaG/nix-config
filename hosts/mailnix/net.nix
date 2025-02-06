@@ -1,10 +1,15 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  globals,
+  ...
+}:
 let
   icfg = config.secrets.secrets.local.networking.interfaces.lan01;
 in
 {
   networking.hostId = config.secrets.secrets.local.networking.hostId;
-  networking.domain = config.secrets.secrets.global.domains.mail_public;
+  networking.domain = globals.domains.mail_public;
 
   boot.initrd.systemd.network = {
     enable = true;
@@ -40,7 +45,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = config.secrets.secrets.global.devEmail;
+      email = globals.accounts.email."1".address;
       dnsProvider = "cloudflare";
       dnsPropagationCheck = true;
       reloadServices = [ "nginx" ];
@@ -53,9 +58,9 @@ in
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" ];
   users.groups.acme.members = [ "nginx" ];
   security.acme.certs = {
-    "${config.secrets.secrets.global.domains.mail_public}" = {
-      domain = config.secrets.secrets.global.domains.mail_public;
-      extraDomainNames = [ "*.${config.secrets.secrets.global.domains.mail_public}" ];
+    "${globals.domains.mail_public}" = {
+      domain = globals.domains.mail_public;
+      extraDomainNames = [ "*.${globals.domains.mail_public}" ];
     };
   };
   environment.persistence."/state".directories = [

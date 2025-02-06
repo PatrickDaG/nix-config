@@ -2,11 +2,12 @@
   config,
   lib,
   pkgs,
+  globals,
   ...
 }:
 let
-  priv_domain = config.secrets.secrets.global.domains.mail_private;
-  domain = config.secrets.secrets.global.domains.mail_public;
+  priv_domain = globals.domains.mail_private;
+  domain = globals.domains.mail_public;
   mailDomains = [
     priv_domain
     domain
@@ -33,8 +34,8 @@ in
       passwordFile = config.age.secrets.resticpasswd.path;
       hetznerStorageBox = {
         enable = true;
-        inherit (config.secrets.secrets.global.hetzner) mainUser;
-        inherit (config.secrets.secrets.global.hetzner.users.stalwart-mail) subUid path;
+        inherit (globals.hetzner) mainUser;
+        inherit (globals.hetzner.users.stalwart-mail) subUid path;
         sshAgeSecret = "stalwartHetznerSshKey";
       };
       paths = [

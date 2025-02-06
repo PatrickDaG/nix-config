@@ -77,7 +77,6 @@ in
           owner = "admin";
         };
       };
-      # XXX: create mailboxes for git@ vaultwarden@ and simultaneously alias them to the catch all for a send only mail.
     };
   };
   systemd.services.idmail.serviceConfig.RestartSec = "60"; # Retry every minute

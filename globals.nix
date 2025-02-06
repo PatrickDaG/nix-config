@@ -139,6 +139,9 @@ in
       esphome = {
         domain = "esp.${globals.domains.web}";
       };
+      idmail = {
+        domain = "alias.${globals.domains.web}";
+      };
     };
   };
 }
