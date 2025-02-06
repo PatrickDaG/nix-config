@@ -32,7 +32,7 @@
 
     nixos-extra-modules = {
       #url = "github:oddlama/nixos-extra-modules/lix-compat";
-      url = "github:oddlama/nixos-extra-modules";
+      url = "github:oddlama/nixos-extra-modules/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {

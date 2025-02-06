@@ -9,7 +9,7 @@ _inputs: [
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
     amazon = prev.callPackage ./amazon.nix { };
-    nix-plugins = prev.callPackage ./nix-plugins.nix { };
+    #nix-plugins = prev.callPackage ./nix-plugins.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {

@@ -20,7 +20,7 @@
         overlays = (import ../pkgs inputs) ++ [
           inputs.nix-topology.overlays.default
           inputs.nixos-extra-modules.overlays.default
-          inputs.lix-module.overlays.default
+          #inputs.lix-module.overlays.default
         ];
       };
 
