@@ -126,9 +126,6 @@ in
       };
       ddclient = {
       };
-      hostapd = {
-        ip = 19;
-      };
       teamspeak = {
         domain = "ts.${globals.domains.web}";
         ip = 9;

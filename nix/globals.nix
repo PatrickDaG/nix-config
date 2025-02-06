@@ -41,7 +41,6 @@
           inherit (globalsSystem.config.globals)
             accounts
             hosts
-            hostapd
             domains
             services
             hetzner

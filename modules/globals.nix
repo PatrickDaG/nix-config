@@ -22,11 +22,6 @@ in
             type = types.attrs;
             default = { };
           };
-          hostapd.ssid = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = "The ssid to use with hostapd";
-          };
           domains = mkOption {
             type = types.attrsOf types.str;
             default = { };

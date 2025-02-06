@@ -20,7 +20,6 @@ in
     ./kea.nix
     ./forwarding.nix
     ./mdns.nix
-    ./hostapd.nix
     ./ddclient.nix
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
