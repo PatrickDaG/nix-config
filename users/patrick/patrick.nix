@@ -41,7 +41,6 @@
       wcurl
       webcord
       xournalpp
-      yt-dlp
       ytdlp-pot-provider
       zathura
       zotero
@@ -92,4 +91,18 @@
       source = "${source}/plugin";
       target = "yt-dlp/plugins/bgutil-ytdlp-pot-provider";
     };
+  hm.programs.yt-dlp = {
+    enable = true;
+    extraConfig = ''
+      --restrict-filenames
+      -P "temp:~/tmp"
+      -P "~/videos"
+      -o "%(uploader)s_$(title)s.%(ext)s"
+    '';
+    settings = {
+      sponsorblock-remove = "sponsor";
+      sponsorblock-mark = "all";
+      cookie-from-browser = "firefox";
+    };
+  };
 }
