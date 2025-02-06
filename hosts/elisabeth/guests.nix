@@ -117,17 +117,19 @@
         };
     in
     { }
-    // mkContainer "vaultwarden" { }
-    // mkContainer "ollama" {
-      enableRenaultFT = true;
-    }
+    # // mkContainer "ollama" {
+    #   enableRenaultFT = true;
+    # }
+    # // mkContainer "netbird" { }
+
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }
     // mkContainer "yourspotify" { }
-    // mkContainer "netbird" { }
-    // mkContainer "grafana" { }
     // mkContainer "blog" { }
+
+    // mkContainer "grafana" { }
+    // mkContainer "vaultwarden" { }
     // mkContainer "homeassistant" {
       vlans = [
         "services"

@@ -142,7 +142,7 @@
 
       wireplumber = {
         format = "{icon} {volume}%";
-        on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+        on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
         on-click-middle = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float;pin;move 80% 50%;size 20% 50%;noborder]\" ${lib.getExe pkgs.pwvucontrol}";
         on-click-right = "${pkgs.hyprland}/bin/hyprctl dispatch exec \"[float]\" ${lib.getExe pkgs.helvum}";
         format-muted = "󰖁";
@@ -159,15 +159,21 @@
         all-outputs = false;
         sort-by = "id";
         persistent-workspaces = {
-          "1:j" = [ "DP-3" ];
-          "2:d" = [ "DP-3" ];
-          "3:u" = [ "DP-3" ];
-          "4:a" = [ "DP-3" ];
-          "5:x" = [ "DP-3" ];
-          "1:F1" = [ "DVI-D-1" ];
-          "2:F2" = [ "DVI-D-1" ];
-          "1:F3" = [ "HDMI-A-1" ];
-          "2:F4" = [ "HDMI-A-1" ];
+          "DP-3" = [
+            1
+            2
+            3
+            4
+            5
+          ];
+          "DVI-D-1" = [
+            6
+            7
+          ];
+          "HDMI-A-1" = [
+            8
+            9
+          ];
         };
       };
       "hyprland/window" = {

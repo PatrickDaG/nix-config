@@ -21,6 +21,7 @@
       gh-dash
       hexyl
       hyperfine
+      helvum
       mpv
       netflix
       nextcloud-client

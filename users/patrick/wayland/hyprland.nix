@@ -48,7 +48,7 @@ let
   '';
 in
 {
-  systemd.user.services.opentabletdriver.after = [ "hyprland-session.target" ];
+  #systemd.user.services.opentabletdriver.after = [ "hyprland-session.target" ];
   hm = {
     # UWSM starts a SH to read env variables
     # this ensures all home.sessionVars are exported

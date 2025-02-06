@@ -11,7 +11,6 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    wlr.enable = true;
     config.common = {
       default = [
         "hyprland"
