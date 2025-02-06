@@ -263,12 +263,5 @@ in
         };
       };
     };
-
-    _globalsDefs = mkOption {
-      type = types.unspecified;
-      default = options.globals.definitions;
-      readOnly = true;
-      internal = true;
-    };
   };
 }

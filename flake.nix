@@ -138,6 +138,7 @@
         ./nix/pkgs.nix
         ./nix/patch.nix
         nix-topology.flakeModule
+        nixos-extra-modules.modules.flake.default
       ];
 
       systems = [

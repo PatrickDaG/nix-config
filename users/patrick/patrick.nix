@@ -102,7 +102,7 @@
     settings = {
       sponsorblock-remove = "sponsor";
       sponsorblock-mark = "all";
-      cookie-from-browser = "firefox";
+      cookies-from-browser = "firefox";
     };
   };
 }
