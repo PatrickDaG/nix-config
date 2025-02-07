@@ -23,7 +23,6 @@
     ../../modules/deterministic-ids.nix
     ../../modules/distributed-config.nix
     ../../modules/ensure-pcr.nix
-    ../../modules/globals.nix
     ../../modules/meta.nix
     ../../modules/nginx-monitor.nix
     ../../modules/iwd.nix
@@ -39,7 +38,6 @@
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nix-topology.nixosModules.default
     #inputs.lix-module.nixosModules.default
-    inputs.nixos-extra-modules.modules.nixos.default
     inputs.nixos-nftables-firewall.nixosModules.default
     inputs.nixvim.nixosModules.nixvim
     inputs.stylix.nixosModules.stylix

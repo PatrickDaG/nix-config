@@ -1,6 +1,5 @@
 {
   lib,
-  stateVersion,
   config,
   pkgs, # not unused needed for the usage of attrs later to contains pkgs
   ...
@@ -91,8 +90,6 @@ in
           };
         };
       };
-
-      system.stateVersion = stateVersion;
 
       networking = {
         firewall = {

@@ -1,6 +1,5 @@
 {
   inputs,
-  stateVersion,
   ...
 }:
 {
@@ -68,7 +67,7 @@
     '';
   };
   programs.nix-ld.enable = true;
-  system.stateVersion = stateVersion;
+  system.stateVersion = "24.05";
 
   systemd.services.nix-gc.serviceConfig = {
     CPUSchedulingPolicy = "batch";

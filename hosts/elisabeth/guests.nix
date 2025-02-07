@@ -1,7 +1,6 @@
 {
   config,
   globals,
-  stateVersion,
   inputs,
   lib,
   minimal,
@@ -93,7 +92,7 @@
           extraSpecialArgs = {
             inherit (inputs.self) nodes globals;
             inherit (inputs.self.pkgs.x86_64-linux) lib;
-            inherit inputs minimal stateVersion;
+            inherit inputs minimal;
           };
         };
       };
@@ -111,7 +110,7 @@
             extraSpecialArgs = {
               inherit (inputs.self) nodes globals;
               inherit (inputs.self.pkgs.x86_64-linux) lib;
-              inherit inputs minimal stateVersion;
+              inherit inputs minimal;
             };
           };
         };

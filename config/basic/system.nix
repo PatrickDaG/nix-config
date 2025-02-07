@@ -1,13 +1,12 @@
 {
   inputs,
   lib,
-  stateVersion,
   pkgs,
   config,
   ...
 }:
 {
-  system.stateVersion = stateVersion;
+  system.stateVersion = "24.05";
 
   age.rekey = {
     inherit (inputs.self.secretsConfig) masterIdentities extraEncryptionPubkeys;

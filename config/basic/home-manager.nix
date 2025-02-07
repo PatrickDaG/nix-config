@@ -1,5 +1,4 @@
 {
-  stateVersion,
   inputs,
   nodes,
   minimal,
@@ -19,7 +18,7 @@
     };
     sharedModules = [
       {
-        home.stateVersion = stateVersion;
+        home.stateVersion = "24.05";
         systemd.user.startServices = "sd-switch";
       }
       inputs.nix-index-database.hmModules.nix-index

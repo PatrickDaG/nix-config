@@ -1,7 +1,9 @@
 {
   globals = {
-    modules = [
+    optModules = [
       ../modules/globals.nix
+    ];
+    defModules = [
       ../globals.nix
     ];
     attrkeys = [
