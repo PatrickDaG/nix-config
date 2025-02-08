@@ -68,10 +68,10 @@
             package = pkgs.nvd;
             help = "List package differences between systems";
           }
-          {
-            package = pkgs.vulnix;
-            help = "List vulnerabilities found in your system";
-          }
+          # {
+          #   package = pkgs.vulnix;
+          #   help = "List vulnerabilities found in your system";
+          # }
         ];
         env = [
           {

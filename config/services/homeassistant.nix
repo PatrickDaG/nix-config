@@ -451,6 +451,12 @@
           value_template = "{{value.types|join(\", \")}}|{{value.daysTo}}|{{value.date.strftime(\"%d.%m.%Y\")}}|{{value.date.strftime(\"%a\")}}";
           types = [ "Kompost" ];
         }
+        {
+          platform = "mvglive";
+          nextdeparture = {
+            station = "!secret ha_mvg_station";
+          };
+        }
       ];
     };
     extraPackages =
@@ -475,9 +481,9 @@
     "${nodes.${globals.services.adguardhome.host}.config.wireguard.services.ipv4}" = [
       "adguardhome.internal"
     ];
-    "${nodes.${globals.services.ollama.host}.config.wireguard.services.ipv4}" = [
-      "ollama.internal"
-    ];
+    # "${nodes.${globals.services.ollama.host}.config.wireguard.services.ipv4}" = [
+    #   "ollama.internal"
+    # ];
   };
   age.secrets."home-assistant-secrets.yaml" = {
     rekeyFile = config.node.secretsDir + "/secrets.yaml.age";

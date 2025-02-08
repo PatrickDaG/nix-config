@@ -1,10 +1,10 @@
 diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
-index f60911ebe685f..53aa827cd7363 100644
+index 5293bce9b46f7..10b7dd378de1c 100644
 --- a/nixos/doc/manual/release-notes/rl-2505.section.md
 +++ b/nixos/doc/manual/release-notes/rl-2505.section.md
-@@ -200,6 +200,10 @@
- - `zf` was updated to 0.10.2, which includes breaking changes from the [0.10.0 release](https://github.com/natecraddock/zf/releases/tag/0.10.0).
-   `zf` no longer does Unicode normalization of the input and no longer supports terminal escape sequences in the `ZF_PROMPT` environment variable.
+@@ -429,6 +429,10 @@
+ - `services.netbird.tunnels` was renamed to [`services.netbird.clients`](#opt-services.netbird.clients),
+   hardened (using dedicated less-privileged users) and significantly extended.
  
 +- The `octoprint` service has gained an `enableRaspberryPi` option, which will
 +  be disabled for state versions following 25.05. Users running on Raspberry Pi
@@ -277,7 +277,7 @@ index 2e7c7dbe06428..0000000000000
 -             commandline = data["webcam"]["ffmpegCommandline"]
 -             if not all(
 diff --git a/pkgs/by-name/oc/octoprint/package.nix b/pkgs/by-name/oc/octoprint/package.nix
-index 4d2ab61ecf855..66422e93d1b5c 100644
+index 4a9d9b5d02b7a..5eef44e0b375c 100644
 --- a/pkgs/by-name/oc/octoprint/package.nix
 +++ b/pkgs/by-name/oc/octoprint/package.nix
 @@ -1,5 +1,4 @@
@@ -286,20 +286,19 @@ index 4d2ab61ecf855..66422e93d1b5c 100644
    stdenv,
    callPackage,
    lib,
-@@ -197,12 +196,6 @@ let
-               src = ./pip-path.patch;
+@@ -197,11 +196,6 @@ let
+             (replaceVars ./pip-path.patch {
                pip = "${self.pip}/bin/pip";
              })
 -
 -            # hardcore path to ffmpeg and hide related settings
--            (substituteAll {
--              src = ./ffmpeg-path.patch;
+-            (replaceVars ./ffmpeg-path.patch {
 -              ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
 -            })
            ];
  
            postPatch =
-@@ -266,6 +259,7 @@ let
+@@ -265,6 +259,7 @@ let
                gebner
                WhittlesJr
                gador
