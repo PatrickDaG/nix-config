@@ -114,6 +114,7 @@
       homematicip_local
       waste_collection_schedule
       dwd
+      another_mvg
     ];
 
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
@@ -127,7 +128,9 @@
       weather-chart-card
       hourly-weather
       bar-card
-      #clock-weather-card
+      another_mvg_1
+      another_mvg_2
+      another_mvg_3
     ];
     config = {
       http = {
@@ -451,12 +454,6 @@
           value_template = "{{value.types|join(\", \")}}|{{value.daysTo}}|{{value.date.strftime(\"%d.%m.%Y\")}}|{{value.date.strftime(\"%a\")}}";
           types = [ "Kompost" ];
         }
-        {
-          platform = "mvglive";
-          nextdeparture = {
-            station = "!secret ha_mvg_station";
-          };
-        }
       ];
     };
     extraPackages =
@@ -475,6 +472,7 @@
         devolo-plc-api
         dwdwfsapi
         wled
+        pymvglive
       ];
   };
   networking.hosts = {

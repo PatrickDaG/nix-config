@@ -34,5 +34,17 @@ _inputs: [
             --set QT_QPA_PLATFORM xcb
         '';
     });
+    home-assistant-custom-components = prev.home-assistant-custom-components // {
+      another_mvg = prev.callPackage ./another_mvg.nix { };
+    };
+    home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {
+      another_mvg_1 = prev.callPackage ./another_mvg_l.nix { };
+      another_mvg_2 = prev.callPackage ./another_mvg_l.nix {
+        entrypoint = "content-card-another-mvg-big.js";
+      };
+      another_mvg_3 = prev.callPackage ./another_mvg_l.nix {
+        entrypoint = "content-card-another-mvg-livemap.js";
+      };
+    };
   })
 ]
