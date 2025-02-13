@@ -1,6 +1,5 @@
 {
   lib,
-  options,
   ...
 }:
 let
@@ -13,7 +12,6 @@ in
 {
   options = {
     globals = mkOption {
-      default = { };
       type = types.submodule {
         options = {
           accounts.email = mkOption {

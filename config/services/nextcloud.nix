@@ -77,7 +77,7 @@
     phpOptions."opcache.interned_strings_buffer" = "32";
     settings = {
       default_phone_region = "DE";
-      trusted_proxies = [ nodes.nucnix-nginx.config.wireguard.services.ipv4 ];
+      trusted_proxies = [ globals.wireguard.services.hosts.nucnix-nginx.ipv4 ];
       overwriteprotocol = "https";
       maintenance_window_start = 2;
       enabledPreviewProviders = [
@@ -121,8 +121,7 @@
       "L+ ${config.services.nextcloud.datadir}/config/mailer.config.php - - - - ${mailer-passwd-conf}"
     ];
 
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
   networking = {

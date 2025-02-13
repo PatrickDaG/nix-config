@@ -4,7 +4,7 @@
   ...
 }:
 {
-  wireguard.monitoring.client.via = "nucnix";
+  globals.wireguard.monitoring.hosts.${config.node.name} = { };
 
   networking = {
     useNetworkd = true;

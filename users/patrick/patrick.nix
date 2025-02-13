@@ -97,7 +97,7 @@
       --restrict-filenames
       -P "temp:~/tmp"
       -P "~/videos"
-      -o "%(uploader)s_%(title)s.%(ext)s"
+      -o "%(epoch>%Y-%m-%dT%H:%M:%SZ)s%(uploader)s_%(title)s.%(ext)s"
     '';
     settings = {
       sponsorblock-remove = "sponsor";

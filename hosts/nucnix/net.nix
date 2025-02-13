@@ -232,14 +232,14 @@ in
         from = [ "services" ];
         to = [ "local" ];
         allowedUDPPorts = [
-          config.wireguard.services.server.port
+          globals.wireguard.services.port
         ];
       };
       wireguard-monitor = {
         from = "all";
         to = [ "local" ];
         allowedUDPPorts = [
-          config.wireguard.monitoring.server.port
+          globals.wireguard.monitoring.port
         ];
       };
       # Forward traffic between participants
@@ -255,25 +255,20 @@ in
       };
     };
   };
-  wireguard.services.server = {
+  globals.wireguard.services = {
     host = lib.net.cidr.host 1 globals.net.vlans.services.cidrv4;
-    reservedAddresses = [
-      "10.42.0.0/20"
-      "fd00:1764::/112"
-    ];
-    openFirewall = true;
+    cidrv4 = "10.42.0.0/20";
+    cidrv6 = "fd00:1764::/112";
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
   };
-  wireguard.monitoring = {
-    client.via = mkForce null;
-    server = {
-      host = "wg.${globals.domains.web}";
-      port = 51821;
-      reservedAddresses = [
-        "10.43.0.0/20"
-        "fd00:1765::/112"
-      ];
-      openFirewall = true;
-    };
+  globals.wireguard.monitoring = {
+    host = "wg.${globals.domains.web}";
+    port = 51821;
+    cidrv4 = "10.43.0.0/20";
+    cidrv6 = "fd00:1765::/112";
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
   };
   # Override the wg endpoint to not tunnel the traffic through the router
   networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [

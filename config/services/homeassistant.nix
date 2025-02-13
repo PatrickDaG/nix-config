@@ -30,9 +30,8 @@
     # TODO instead deny the zigbee device
   };
 
-  wireguard.services = {
-    client.via = "nucnix";
-    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+  globals.wireguard.services.hosts.${config.node.name} = {
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       3000
       3001
     ];
@@ -137,7 +136,7 @@
         server_host = [ "0.0.0.0" ];
         server_port = 3000;
         use_x_forwarded_for = true;
-        trusted_proxies = [ nodes.nucnix-nginx.config.wireguard.services.ipv4 ];
+        trusted_proxies = [ globals.wireguard.services.hosts.nucnix-nginx.ipv4 ];
       };
       lovelace.mode = "yaml";
 
@@ -165,7 +164,7 @@
 
       influxdb = {
         api_version = 2;
-        host = nodes.${globals.services.influxdb.host}.config.wireguard.monitoring.ipv4;
+        host = globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4;
         port = 8086;
         max_retries = 10;
         ssl = false;
@@ -476,7 +475,7 @@
       ];
   };
   networking.hosts = {
-    "${nodes.${globals.services.adguardhome.host}.config.wireguard.services.ipv4}" = [
+    "${globals.wireguard.services.hosts.${globals.services.adguardhome.host}.ipv4}" = [
       "adguardhome.internal"
     ];
     # "${nodes.${globals.services.ollama.host}.config.wireguard.services.ipv4}" = [

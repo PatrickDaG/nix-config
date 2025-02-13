@@ -6,8 +6,7 @@
 }:
 {
   imports = [ ./oauth2-proxy.nix ];
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
   environment.persistence."/persist".directories = [

@@ -1,4 +1,4 @@
-{ globals, ... }:
+{ config, globals, ... }:
 {
   services.invidious = {
     enable = true;
@@ -32,9 +32,7 @@
       group = "postgres";
     }
   ];
-
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
 }

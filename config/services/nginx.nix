@@ -6,7 +6,7 @@
   ...
 }:
 let
-  ipOf = name: nodes.${globals.services.${name}.host}.config.wireguard.services.ipv4;
+  ipOf = name: globals.wireguard.services.hosts.${globals.services.${name}.host}.ipv4;
   blockOf =
     hostName:
     {
@@ -96,9 +96,7 @@ let
     ];
 in
 {
-  wireguard.services = {
-    client.via = "nucnix";
-  };
+  globals.wireguard.services.hosts.${config.node.name} = { };
   age.secrets.loki-basic-auth-hashes = {
     inherit (nodes.${globals.services.loki.host}.config.age.secrets.loki-basic-auth-hashes) rekeyFile;
     mode = "440";
@@ -134,7 +132,7 @@ in
       };
 
       upstreams.loki = {
-        servers."${nodes.${globals.services.loki.host}.config.wireguard.services.ipv4}:${
+        servers."${globals.wireguard.services.hosts.${globals.services.loki.host}.ipv4}:${
           toString
             nodes.${globals.services.loki.host}.config.services.loki.configuration.server.http_listen_port
         }" =

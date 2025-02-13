@@ -5,8 +5,7 @@
   ...
 }:
 {
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       80 # dashboard
       3000 # management

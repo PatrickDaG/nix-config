@@ -64,8 +64,7 @@ in
       before = [ "restic-backups-main.service" ];
     };
 
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
@@ -86,7 +85,7 @@ in
       PAPERLESS_URL = "https://${globals.services.paperless.domain}";
       PAPERLESS_ALLOWED_HOSTS = globals.services.paperless.domain;
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${globals.services.paperless.domain}";
-      PAPERLESS_TRUSTED_PROXIES = nodes.nucnix-nginx.config.wireguard.services.ipv4;
+      PAPERLESS_TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
 
       PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
 

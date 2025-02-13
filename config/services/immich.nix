@@ -243,15 +243,14 @@ in
     vcpu = 12;
   };
 
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
 
   networking.nftables.chains.forward.into-immich-container = {
     after = [ "conntrack" ];
     rules = [
-      "iifname services ip saddr ${nodes.nucnix-nginx.config.wireguard.services.ipv4} tcp dport 2283 accept"
+      "iifname services ip saddr ${globals.wireguard.services.hosts.nucnix-nginx.ipv4} tcp dport 2283 accept"
       "iifname podman1 oifname lan-services accept"
     ];
   };

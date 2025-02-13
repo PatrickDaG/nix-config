@@ -1,13 +1,11 @@
 {
   config,
-  nodes,
   globals,
   ...
 }:
 {
   i18n.supportedLocales = [ "all" ];
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
 
@@ -25,7 +23,7 @@
     settings = {
       APP_URL = "https://${globals.services.firefly.domain}";
       TZ = "Europe/Berlin";
-      TRUSTED_PROXIES = nodes.nucnix-nginx.config.wireguard.services.ipv4;
+      TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
       SITE_OWNER = "firefly-admin@${globals.domains.mail_public}";
       APP_KEY_FILE = config.age.secrets.appKey.path;
       AUTHENTICATION_GUARD = "remote_user_guard";

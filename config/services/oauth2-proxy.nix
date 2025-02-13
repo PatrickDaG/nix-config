@@ -5,8 +5,7 @@
   ...
 }:
 {
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3001 ];
   };
   globals.services.oauth2-proxy.host = config.node.name;

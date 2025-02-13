@@ -58,8 +58,7 @@ in
     home = config.services.forgejo.stateDir;
   };
 
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.forgejo.settings.server.HTTP_PORT
     ];

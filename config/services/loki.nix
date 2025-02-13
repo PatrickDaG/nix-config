@@ -1,6 +1,5 @@
 {
   config,
-  globals,
   ...
 }:
 {
@@ -13,9 +12,8 @@
   };
 
   globals.services.loki.host = config.node.name;
-  wireguard.services = {
-    client.via = "nucnix";
-    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+  globals.wireguard.services.hosts.${config.node.name} = {
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.loki.configuration.server.http_listen_port
     ];
   };

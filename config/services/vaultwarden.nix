@@ -111,8 +111,7 @@
     environmentFile = config.age.secrets.vaultwarden-env.path;
   };
 
-  wireguard.services = {
-    client.via = "nucnix";
+  globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.vaultwarden.config.rocketPort
     ];

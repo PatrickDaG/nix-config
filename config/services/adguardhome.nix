@@ -5,12 +5,11 @@
   ...
 }:
 {
-  wireguard.services = {
-    client.via = "nucnix";
-    firewallRuleForNode.${globals.services.nginx.host}.allowedTCPPorts = [
+  globals.wireguard.services.hosts.${config.node.name} = {
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.adguardhome.port
     ];
-    firewallRuleForNode.${globals.services.homeassistant.host}.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-homeassistant.allowedTCPPorts = [
       config.services.adguardhome.port
     ];
   };
