@@ -43,8 +43,9 @@
       loki = uidGid 231;
       promtail = uidGid 232;
       telegraf = uidGid 233;
-      gamemode = uidGid 234;
       adguardhome = uidGid 234;
+      gamemode = uidGid 235;
+      plugdev = uidGid 236;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
       paperless = uidGid 315;

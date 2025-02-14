@@ -61,6 +61,13 @@
       templates.flake = inputs.templates;
     };
   };
+  hm.xdg.configFile."nixpkgs/config.nix".text = ''
+    {
+      allowUnfree = true;
+      segger-jlink.acceptLicense = true;
+    }
+
+  '';
   system = {
     extraSystemBuilderCmds = ''
       ln -sv ${inputs.nixpkgs} $out/nixpkgs

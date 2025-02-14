@@ -166,10 +166,10 @@
         in
         {
           enable = true;
-          iconTheme = {
-            name = "Vimix-Doder";
-            package = pkgs.vimix-icon-theme;
-          };
+          # iconTheme = {
+          #   name = "Vimix-Doder";
+          #   package = pkgs.vimix-icon-theme;
+          # };
 
           gtk2.extraConfig = "gtk-application-prefer-dark-theme = true";
           gtk3.extraConfig = gtk34extraConfig;

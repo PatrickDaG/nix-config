@@ -58,6 +58,14 @@ lib.optionalAttrs (!minimal) {
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
   '';
+  # For embedded development
+  users.groups.plugdev = { };
+  services.udev.packages = [
+    (pkgs.runCommandLocal "probe-rs-udev-rules" { } ''
+      mkdir -p $out/lib/udev/rules.d
+      cp ${./69-probe-rs.rules} $out/lib/udev/rules.d/69-probe-rs.rules
+    '')
+  ];
   nix = {
     distributedBuilds = true;
     buildMachines = [

@@ -1953,11 +1953,11 @@
         "pre-commit-hooks": "pre-commit-hooks_7"
       },
       "locked": {
-        "lastModified": 1739482802,
-        "narHash": "sha256-rW+noiDijx0rFzhr8+tmjRjPek0KI9uW8+/fw7Q5Zio=",
+        "lastModified": 1739562844,
+        "narHash": "sha256-d3gOQFsSvaZBNaoUsPN2zqOWEBBh5BF1jRQc+rxj1As=",
         "ref": "refs/heads/lix-compat",
-        "rev": "468dbb5e352f072eb0a693953f9b05ff2a408c2e",
-        "revCount": 47,
+        "rev": "72dd606d483cbc94f36cf4e9f74e18ce81ab352c",
+        "revCount": 48,
         "type": "git",
         "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
       },

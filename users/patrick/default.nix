@@ -18,6 +18,8 @@ lib.optionalAttrs (!minimal) {
     createHome = true;
     extraGroups = [
       "wheel"
+      "dialout"
+      "plugdev"
       "audio"
       "video"
       "input"
