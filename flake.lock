@@ -1588,19 +1588,6 @@
         "type": "github"
       }
     },
-    "lib-net": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1596309860,
-        "narHash": "sha256-izAzepR/6cDvnRfaa2ceSolMLMwqzQB5x9q62aR5J2g=",
-        "type": "tarball",
-        "url": "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz"
-      }
-    },
     "lix": {
       "inputs": {
         "flake-compat": "flake-compat_7",
@@ -1630,7 +1617,9 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "flakey-profile": "flakey-profile",
-        "lix": "lix_2",
+        "lix": [
+          "lix"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -1648,20 +1637,6 @@
         "ref": "release-2.92",
         "type": "git",
         "url": "https://git.lix.systems/lix-project/nixos-module.git"
-      }
-    },
-    "lix_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1737234286,
-        "narHash": "sha256-pgDJZjj4jpzkFxsqBTI/9Yb0n3gW+DvDtuv9SwQZZcs=",
-        "rev": "079528098f5998ba13c88821a2eca1005c1695de",
-        "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/079528098f5998ba13c88821a2eca1005c1695de.tar.gz?rev=079528098f5998ba13c88821a2eca1005c1695de"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://git.lix.systems/lix-project/lix/archive/release-2.92.tar.gz"
       }
     },
     "mdns": {
@@ -1972,19 +1947,19 @@
       "inputs": {
         "devshell": "devshell_7",
         "flake-parts": "flake-parts_7",
-        "lib-net": "lib-net",
         "nixpkgs": [
           "nixpkgs"
         ],
         "pre-commit-hooks": "pre-commit-hooks_7"
       },
       "locked": {
-        "lastModified": 1739139835,
-        "narHash": "sha256-QPw2oqLWkzUS+ZQaDji71SnImdjhEThq9EBXVR6+Vcs=",
-        "owner": "oddlama",
-        "repo": "nixos-extra-modules",
-        "rev": "0c64bd03fd305dfaa75f04781a342d2e182248ff",
-        "type": "github"
+        "lastModified": 1739482802,
+        "narHash": "sha256-rW+noiDijx0rFzhr8+tmjRjPek0KI9uW8+/fw7Q5Zio=",
+        "ref": "refs/heads/lix-compat",
+        "rev": "468dbb5e352f072eb0a693953f9b05ff2a408c2e",
+        "revCount": 47,
+        "type": "git",
+        "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
       },
       "original": {
         "owner": "oddlama",

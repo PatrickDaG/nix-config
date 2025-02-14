@@ -23,7 +23,7 @@
           inputs.devshell.overlays.default
           inputs.agenix-rekey.overlays.default
           inputs.nixvim.overlays.default
-          #inputs.lix-module.overlays.default
+          inputs.lix-module.overlays.default
         ];
       };
 
