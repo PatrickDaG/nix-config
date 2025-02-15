@@ -100,7 +100,6 @@
       "spotify"
       "matter"
       "esphome"
-      #"zha"
       "mqtt"
       "ollama"
       "solaredge"
@@ -108,6 +107,7 @@
       "wake_word"
       "whisper"
       "wyoming"
+      "zha"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local
