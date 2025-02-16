@@ -9,7 +9,6 @@ let
   inherit (lib)
     flip
     mapAttrsToList
-    mkForce
     mkMerge
     genAttrs
     attrNames

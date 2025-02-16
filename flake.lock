@@ -1953,12 +1953,12 @@
         "pre-commit-hooks": "pre-commit-hooks_7"
       },
       "locked": {
-        "dirtyRev": "1c82491c715073e1067cf312f10f8c1f33578258-dirty",
-        "dirtyShortRev": "1c82491-dirty",
-        "lastModified": 1739645303,
-        "narHash": "sha256-IilufnbERXGXFlGzhsqAkqT/U970SvFf2nJZgbyiiwE=",
-        "type": "git",
-        "url": "file:///home/patrick/repos/nix/nixos-extra-modules"
+        "lastModified": 1739731882,
+        "narHash": "sha256-1EV1gJZ5kvDaFkURINE2fdnxqUFTb0CHXEX8OKrqpLs=",
+        "owner": "oddlama",
+        "repo": "nixos-extra-modules",
+        "rev": "d288c53dd614eb6c298f99a2a8a05b9137d1d39c",
+        "type": "github"
       },
       "original": {
         "owner": "oddlama",

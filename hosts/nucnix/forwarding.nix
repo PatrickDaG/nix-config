@@ -59,6 +59,14 @@ mkMerge [
     ];
     protocol = "tcp";
   })
+  # quic
+  (forward {
+    service = "nginx";
+    ports = [
+      443
+    ];
+    protocol = "udp";
+  })
   (forward {
     service = "forgejo";
     ports = [
