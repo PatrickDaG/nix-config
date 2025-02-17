@@ -501,8 +501,8 @@ in
           ];
         };
 
-        config.resource.spam-filter = "file://${config.services.stalwart-mail.package}/etc/stalwart/spamfilter.toml";
-        config.resource.webadmin = "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
+        spam-filter.resource = "file://${config.services.stalwart-mail.package}/etc/stalwart/spamfilter.toml";
+        webadmin.ressource = "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
         webadmin.path = "/var/cache/stalwart-mail";
 
         certificate.default = {
@@ -511,8 +511,8 @@ in
           default = true;
         };
 
-        lookup.default.hostname = domain;
         server = {
+          hostname = domain;
           tls = {
             certificate = "default";
             ignore-client-order = true;

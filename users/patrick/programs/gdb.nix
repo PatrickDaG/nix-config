@@ -1,20 +1,6 @@
-{ pkgs, ... }:
-let
-  pwndbgWithDebuginfod =
-    (pkgs.pwndbg.override { gdb = pkgs.gdb.override { enableDebuginfod = true; }; }).overrideAttrs
-      (
-        _finalAttrs: previousAttrs: {
-          installPhase =
-            previousAttrs.installPhase
-            + ''
-              ln -s $out/bin/pwndbg $out/bin/gdb
-            '';
-        }
-      );
-in
 {
+  #services.nixseparatedebuginfod.enable = true;
   hm = {
-    home.packages = [ pwndbgWithDebuginfod ];
     home.enableDebugInfo = true;
     xdg.configFile.gdbinit = {
       target = "gdb/gdbinit";

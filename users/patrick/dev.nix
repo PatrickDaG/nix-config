@@ -41,7 +41,6 @@ lib.optionalAttrs (!minimal) {
     man-pages-posix
   ];
 
-  #services.nixseparatedebuginfod.enable = true;
   environment = {
     enableDebugInfo = true;
   };

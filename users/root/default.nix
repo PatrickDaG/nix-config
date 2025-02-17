@@ -23,6 +23,7 @@
     ../patrick/programs/nvim
     ../patrick/programs/pager.nix
     ../patrick/programs/zsh
+    ../patrick/programs/htop.nix
 
   ];
   environment.systemPackages = [ pkgs.neovim ];

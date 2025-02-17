@@ -6,7 +6,8 @@
       #obs-backgroundremoval
       obs-pipewire-audio-capture
       obs-vaapi
-      obs-nvfbc
+      # TODO reenable
+      #obs-nvfbc
     ];
   };
   hm.home.persistence."/state".directories = [

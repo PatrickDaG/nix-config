@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  globals,
+  ...
+}:
 {
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
@@ -12,16 +17,16 @@
     rekeyFile = config.node.secretsDir + "/spotifySecret.age";
   };
   services.your_spotify = {
-    #enable = true;
+    enable = true;
     spotifySecretFile = config.age.secrets.spotifySecret.path;
     settings = {
       SPOTIFY_PUBLIC = "5397a3f2a75949459da343a5e7851bd9";
-      CLIENT_ENDPOINT = "https://sptfy.${config.secrets.secrets.global.domains.web}";
-      API_ENDPOINT = "https://apisptfy.${config.secrets.secrets.global.domains.web}";
+      CLIENT_ENDPOINT = "https://sptfy.${globals.domains.web}";
+      API_ENDPOINT = "https://apisptfy.${globals.domains.web}";
       MONGO_NO_ADMIN_RIGHTS = "false";
     };
     enableLocalDB = true;
-    nginxVirtualHost = "sptfy.${config.secrets.secrets.global.domains.web}";
+    nginxVirtualHost = "sptfy.${globals.domains.web}";
   };
   environment.persistence."/persist".directories = [
     {
