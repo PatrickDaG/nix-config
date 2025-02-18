@@ -149,4 +149,17 @@
         "home"
       ];
     };
+
+  # Zigbee Dongle
+  # This is a very bad idea.
+  # Hopefully no one else adds any usb devices
+  containers.homeassistant.extraFlags = [
+    "--bind=/dev/ttyUSB0"
+  ];
+  containers.homeassistant.allowedDevices = [
+    {
+      modifier = "rw";
+      node = "/dev/ttyUSB0";
+    }
+  ];
 }

@@ -56,6 +56,7 @@
     tree
     rage
     file
+    dua
     ripgrep
     killall
     fd
