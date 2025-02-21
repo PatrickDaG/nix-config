@@ -22,7 +22,12 @@ _inputs: [
       }
     );
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-      (_pythonFinal: _pythonPrev: {
+      (_pythonFinal: pythonPrev: {
+        home-assistant-chip-wheels = pythonPrev.home-assistant-chip-wheels.overrideAttrs {
+          prePatch = ''
+            rm 0002-Use-data-as-platform-storage-location.patch
+          '';
+        };
       })
     ];
 
