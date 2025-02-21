@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 {
@@ -10,9 +9,6 @@
   hm =
     { config, ... }:
     {
-      systemd.user.services = {
-        flameshot.Install.WantedBy = lib.mkForce [ "i3-session.target" ];
-      };
       stylix.targets.i3.enable = true;
       xsession.windowManager.i3 = {
         enable = true;

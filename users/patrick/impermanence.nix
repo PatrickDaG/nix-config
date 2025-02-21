@@ -29,6 +29,7 @@
         ".cache/google-chrome"
         # for netflix
         ".config/disneyplus"
+        ".config/amazon-prime"
 
         ".config/gh"
 

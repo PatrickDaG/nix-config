@@ -45,6 +45,7 @@
       zathura
       zotero
       qmk
+      hyprshot
     ];
   };
   hm.programs.bat.enable = true;
