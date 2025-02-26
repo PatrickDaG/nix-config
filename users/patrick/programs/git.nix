@@ -53,12 +53,25 @@ in
           syntax-theme = "TwoDark";
           tabs = 4;
         };
+        column.ui = "auto";
+        branch.sort = "-committerdate";
+        tag.sort = "version:refname";
         mergetool.prompt = true;
         merge.conflictstyle = "diff3";
         init.defaultBranch = "main";
+        push.followTags = true;
         pull.ff = "only";
         pull.rebase = true;
         push.autoSetupRemote = true;
+        fetch.prune = true;
+        fetch.pruneTags = true;
+        fetch.all = true;
+        commit.verbose = true;
+        rerere.enabled = true;
+        rerere.autoupdate = true;
+        rebase.autoSquash = true;
+        rebase.autoStash = true;
+        rebase.updateRefs = true;
       };
       signing = {
         key = null;
