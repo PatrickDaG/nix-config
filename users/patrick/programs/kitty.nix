@@ -42,6 +42,7 @@
 
       # Set program to open urls with
       open_url_with = "xdg-open";
+      url_prefixes = "file ftp ftps gemini git gopher http https irc ircs kitty mailto news sftp ssh steam";
 
       # Fuck the bell
       enable_audio_bell = "no";
