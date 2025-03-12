@@ -27,7 +27,7 @@
       nextcloud-client
       nix-output-monitor
       nixpkgs-review
-      #orca-slicer
+      orca-slicer
       osu-lazer-bin
       pinentry-gnome3 # for yubikey pinentry
       pdfpc
@@ -46,6 +46,8 @@
       zotero
       qmk
       hyprshot
+      ladybird
+      xautoclick
     ];
   };
   hm.programs.bat.enable = true;
