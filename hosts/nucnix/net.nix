@@ -194,6 +194,7 @@ in
       services = {
         from = [
           "home"
+          "fritz"
         ];
         to = [
           "iot"
