@@ -304,7 +304,6 @@ in
         exec-once = ${float_script}
         env = XCURSOR_SIZE,48
         exec-once = uwsm finalize
-
       '';
     };
   };

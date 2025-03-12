@@ -8,7 +8,11 @@
     enable = true;
     implementation = "broker";
   };
-  xdg.portal = {
+  environment.pathsToLink = [
+    "/share/xdg-desktop-portal"
+    "/share/applications"
+  ];
+  hm.xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
     config.common = {
@@ -24,7 +28,8 @@
       "org.freedesktop.portal.FileChooser" = [ "xdg-desktop-portal-gtk" ];
     };
     extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
+      # automatically added by hyprland module
+      #pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gtk
     ];
   };
