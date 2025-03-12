@@ -54,6 +54,7 @@
     ./waybar
     ./swaync
     ./swww.nix
+    ./niri.nix
   ];
   hm.home.packages = with pkgs; [
     wdisplays
