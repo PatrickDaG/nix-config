@@ -8,10 +8,7 @@
     enable = true;
     implementation = "broker";
   };
-  environment.pathsToLink = [
-    "/share/xdg-desktop-portal"
-    "/share/applications"
-  ];
+  xdg.portal.enable = true;
   hm.xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;

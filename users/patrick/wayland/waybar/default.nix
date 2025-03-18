@@ -44,9 +44,11 @@
       position = "bottom";
       modules-left = [
         "privacy"
-        "hyprland/window"
+        #"hyprland/window"
+        "niri/window"
       ];
-      modules-center = [ "hyprland/workspaces" ];
+      #modules-center = [ "hyprland/workspaces" ];
+      modules-center = [ "niri/workspaces" ];
       modules-right =
         {
           desktopnix = [
@@ -176,7 +178,15 @@
           ];
         };
       };
+      "niri/workspaces" = {
+        format = "{icon}";
+        format-icons.urgent = "";
+        all-outputs = false;
+      };
       "hyprland/window" = {
+        separate-outputs = true;
+      };
+      "niri/window" = {
         separate-outputs = true;
       };
 
