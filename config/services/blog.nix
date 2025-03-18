@@ -20,7 +20,9 @@ let
   '';
 in
 {
-  globals.wireguard.services.hosts.${config.node.name} = { };
+  globals.wireguard.services.hosts.${config.node.name} = {
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
+  };
   environment.systemPackages = [
     pkgs.signal-cli
     pkgs.cargo
