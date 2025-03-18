@@ -1,3 +1,17 @@
+diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
+index 950266de4e351f..669b95f111b672 100644
+--- a/nixos/doc/manual/redirects.json
++++ b/nixos/doc/manual/redirects.json
+@@ -41,6 +41,9 @@
+   "module-services-crab-hole-upstream-options": [
+     "index.html#module-services-crab-hole-upstream-options"
+   ],
++  "module-services-netbird-server-proxy": [
++    "index.html#module-services-netbird-server-proxy"
++  ],
+   "preface": [
+     "index.html#preface"
+   ],
 diff --git a/nixos/modules/services/networking/netbird/dashboard.nix b/nixos/modules/services/networking/netbird/dashboard.nix
 index 788b724231be31..c8f6836f0af930 100644
 --- a/nixos/modules/services/networking/netbird/dashboard.nix
@@ -12,7 +26,7 @@ index 788b724231be31..c8f6836f0af930 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index f05adb671e9923..982fc98b0206dc 100644
+index f05adb671e9923..1f26bf5b1f3168 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
 @@ -38,7 +38,7 @@ let
@@ -83,46 +97,176 @@ index f05adb671e9923..982fc98b0206dc 100644
  
      domain = mkOption {
        type = str;
-@@ -224,7 +228,7 @@ in
-           Stuns = [
+@@ -220,95 +224,93 @@ in
+       inherit (settingsFormat) type;
+ 
+       defaultText = literalExpression ''
+-        defaultSettings = {
+-          Stuns = [
++        Stuns = [
++          {
++            Proto = "udp";
++            URI = "stun:''${cfg.management.turnDomain}:3478";
++            Username = "";
++            Password = null;
++          }
++        ];
++
++        TURNConfig = {
++          Turns = [
              {
                Proto = "udp";
 -              URI = "stun:''${cfg.turnDomain}:3478";
-+              URI = "stun:''${cfg.management.turnDomain}:3478";
-               Username = "";
-               Password = null;
+-              Username = "";
+-              Password = null;
++              URI = "turn:''${cfg.management.turnDomain}:3478";
++              Username = "netbird";
++              Password = "netbird";
              }
-@@ -234,7 +238,7 @@ in
-             Turns = [
-               {
-                 Proto = "udp";
+           ];
+ 
+-          TURNConfig = {
+-            Turns = [
+-              {
+-                Proto = "udp";
 -                URI = "turn:''${cfg.turnDomain}:3478";
-+                URI = "turn:''${cfg.management.turnDomain}:3478";
-                 Username = "netbird";
-                 Password = "netbird";
-               }
-@@ -247,7 +251,7 @@ in
+-                Username = "netbird";
+-                Password = "netbird";
+-              }
+-            ];
+-
+-            CredentialsTTL = "12h";
+-            Secret = "not-secure-secret";
+-            TimeBasedCredentials = false;
+-          };
++          CredentialsTTL = "12h";
++          Secret = "not-secure-secret";
++          TimeBasedCredentials = false;
++        };
  
-           Signal = {
-             Proto = "https";
+-          Signal = {
+-            Proto = "https";
 -            URI = "''${cfg.domain}:443";
-+            URI = "localhost:''${cfg.signal.port}";
-             Username = "";
-             Password = null;
-           };
-@@ -263,9 +267,9 @@ in
-           StoreConfig = { Engine = "sqlite"; };
+-            Username = "";
+-            Password = null;
+-          };
++        Signal = {
++          Proto = "https";
++          URI = "localhost:''${cfg.signal.port}";
++          Username = "";
++          Password = null;
++        };
  
-           HttpConfig = {
+-          ReverseProxy = {
+-            TrustedHTTPProxies = [ ];
+-            TrustedHTTPProxiesCount = 0;
+-            TrustedPeers = [ "0.0.0.0/0" ];
+-          };
++        ReverseProxy = {
++          TrustedHTTPProxies = [ ];
++          TrustedHTTPProxiesCount = 0;
++          TrustedPeers = [ "0.0.0.0/0" ];
++        };
+ 
+-          Datadir = "''${stateDir}/data";
+-          DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
+-          StoreConfig = { Engine = "sqlite"; };
++        Datadir = "/var/lib/netbird-mgmt/data";
++        DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
++        StoreConfig = { Engine = "sqlite"; };
+ 
+-          HttpConfig = {
 -            Address = "127.0.0.1:''${builtins.toString cfg.port}";
-+            Address = "127.0.0.1:''${builtins.toString cfg.management.port}";
-             IdpSignKeyRefreshEnabled = true;
+-            IdpSignKeyRefreshEnabled = true;
 -            OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
-+            OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
+-          };
++        HttpConfig = {
++          Address = "127.0.0.1:''${builtins.toString cfg.management.port}";
++          IdpSignKeyRefreshEnabled = true;
++          OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
++        };
+ 
+-          IdpManagerConfig = {
+-            ManagerType = "none";
+-            ClientConfig = {
+-              Issuer = "";
+-              TokenEndpoint = "";
+-              ClientID = "netbird";
+-              ClientSecret = "";
+-              GrantType = "client_credentials";
+-            };
+-
+-            ExtraConfig = { };
+-            Auth0ClientCredentials = null;
+-            AzureClientCredentials = null;
+-            KeycloakClientCredentials = null;
+-            ZitadelClientCredentials = null;
++        IdpManagerConfig = {
++          ManagerType = "none";
++          ClientConfig = {
++            Issuer = "";
++            TokenEndpoint = "";
++            ClientID = "netbird";
++            ClientSecret = "";
++            GrantType = "client_credentials";
            };
  
-           IdpManagerConfig = {
-@@ -340,11 +344,9 @@ in
+-          DeviceAuthorizationFlow = {
+-            Provider = "none";
+-            ProviderConfig = {
+-              Audience = "netbird";
+-              Domain = null;
+-              ClientID = "netbird";
+-              TokenEndpoint = null;
+-              DeviceAuthEndpoint = "";
+-              Scope = "openid profile email offline_access api";
+-              UseIDToken = false;
+-            };
++          ExtraConfig = { };
++          Auth0ClientCredentials = null;
++          AzureClientCredentials = null;
++          KeycloakClientCredentials = null;
++          ZitadelClientCredentials = null;
++        };
++
++        DeviceAuthorizationFlow = {
++          Provider = "none";
++          ProviderConfig = {
++            Audience = "netbird";
++            Domain = null;
++            ClientID = "netbird";
++            TokenEndpoint = null;
++            DeviceAuthEndpoint = "";
++            Scope = "openid profile email offline_access api";
++            UseIDToken = false;
+           };
++        };
+ 
+-          PKCEAuthorizationFlow = {
+-            ProviderConfig = {
+-              Audience = "netbird";
+-              ClientID = "netbird";
+-              ClientSecret = "";
+-              AuthorizationEndpoint = "";
+-              TokenEndpoint = "";
+-              Scope = "openid profile email offline_access api";
+-              RedirectURLs = "http://localhost:53000";
+-              UseIDToken = false;
+-            };
++        PKCEAuthorizationFlow = {
++          ProviderConfig = {
++            Audience = "netbird";
++            ClientID = "netbird";
++            ClientSecret = "";
++            AuthorizationEndpoint = "";
++            TokenEndpoint = "";
++            Scope = "openid profile email offline_access api";
++            RedirectURLs = "http://localhost:53000";
++            UseIDToken = false;
+           };
+         };
+       '';
+@@ -340,11 +342,9 @@ in
        default = "INFO";
        description = "Log level of the netbird services.";
      };
@@ -135,7 +279,7 @@ index f05adb671e9923..982fc98b0206dc 100644
      warnings =
        concatMap
          (
-@@ -368,7 +370,7 @@ in
+@@ -368,7 +368,7 @@ in
  
      assertions = [
        {
@@ -144,7 +288,7 @@ index f05adb671e9923..982fc98b0206dc 100644
          message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
        }
      ];
-@@ -386,7 +388,7 @@ in
+@@ -386,7 +386,7 @@ in
        serviceConfig = {
          ExecStart = escapeSystemdExecArgs (
            [
@@ -153,7 +297,7 @@ index f05adb671e9923..982fc98b0206dc 100644
              "management"
              # Config file
              "--config"
-@@ -396,28 +398,28 @@ in
+@@ -396,28 +396,28 @@ in
              "${stateDir}/data"
              # DNS domain
              "--dns-domain"
@@ -190,7 +334,7 @@ index f05adb671e9923..982fc98b0206dc 100644
          );
          Restart = "always";
          RuntimeDirectory = "netbird-mgmt";
-@@ -452,27 +454,5 @@ in
+@@ -452,27 +452,5 @@ in
        stopIfChanged = false;
      };
  
@@ -220,10 +364,10 @@ index f05adb671e9923..982fc98b0206dc 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 00000000000000..440f3c1d710a3f
+index 00000000000000..d813221940ce3f
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
-@@ -0,0 +1,104 @@
+@@ -0,0 +1,106 @@
 +{ lib, config, ... }:
 +let
 +  inherit (lib)
@@ -237,7 +381,6 @@ index 00000000000000..440f3c1d710a3f
 +in
 +{
 +  options.services.netbird.server.proxy = {
-+    enable = mkEnableOption "A reverse proxy for netbirds' services";
 +
 +    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 +
@@ -266,7 +409,7 @@ index 00000000000000..440f3c1d710a3f
 +      description = "The public domain to reach the proxy";
 +    };
 +  };
-+  config = mkIf cfg.enable {
++  config = {
 +    services.nginx = mkIf cfg.enableNginx {
 +      enable = true;
 +
@@ -327,6 +470,9 @@ index 00000000000000..440f3c1d710a3f
 +      };
 +    };
 +  };
++  meta.maintainers = with lib.maintainers; [
++    patrickdag
++  ];
 +}
 diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
 new file mode 100644
@@ -458,36 +604,46 @@ index 00000000000000..01c4186505b0c5
 +  };
 +}
 diff --git a/nixos/modules/services/networking/netbird/server.md b/nixos/modules/services/networking/netbird/server.md
-index 3649e97b379e5d..ffda72c0626a46 100644
+index 3649e97b379e5d..91ea0a4fa1b7a2 100644
 --- a/nixos/modules/services/networking/netbird/server.md
 +++ b/nixos/modules/services/networking/netbird/server.md
-@@ -4,9 +4,10 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
+@@ -4,39 +4,57 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
  
  ## Quickstart {#module-services-netbird-server-quickstart}
  
 -To fully setup Netbird as a self-hosted server, we need both a Coturn server and an identity provider, the list of supported SSOs and their setup are available [on Netbird's documentation](https://docs.netbird.io/selfhosted/selfhosted-guide#step-3-configure-identity-provider-idp).
-+To fully setup Netbird as a self-hosted server, we need both a Coturn server and an identity provider,
-+the list of supported SSOs and their setup are available [on Netbird's documentation](https://docs.netbird.io/selfhosted/selfhosted-guide#step-3-configure-identity-provider-idp).
++To fully setup Netbird as a self-hosted server, you need a Coturn or relay server, a netbird-signal server, an identity provider, and
++a netbird management instance.
++A list of supported SSOs and their setup are available [on Netbird's documentation](https://docs.netbird.io/selfhosted/selfhosted-guide#step-3-configure-identity-provider-idp).
  
 -There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config looks like :
 +There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config might look like :
  
  ```nix
  services.netbird.server = {
-@@ -14,7 +15,10 @@ services.netbird.server = {
+   enable = true;
  
++  # Publicly exposed domain
    domain = "netbird.example.selfhosted";
  
 -  enableNginx = true;
-+  dashboard.settings.AUTH_AUTHORITY = "https://sso.example.selfhosted/oauth2/openid/netbird";
-+
++  # website for administration
++  dashboard = {
++    enableNginx = true;
++    settings.AUTH_AUTHORITY = "https://sso.example.selfhosted/oauth2/openid/netbird";
++  };;
+ 
++  # Netbirds own relay implementation
 +  relay.authSecretFile = pkgs.writeText "very secure secret";
 +
- 
++  # Relay using coturn
    coturn = {
      enable = true;
-@@ -24,19 +28,17 @@ services.netbird.server = {
+-
+     passwordFile = "/path/to/a/secret/password";
+   };
  
++  # Backend management api
    management = {
      oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
 -
@@ -504,16 +660,25 @@ index 3649e97b379e5d..ffda72c0626a46 100644
 -      };
 -    };
 +    settings.Signal.URI = "publicly reachable signal endpoint";
++    DataStoreEncryptionKey._secret = pkgs.writeText "another very secure secret";
    };
  };
  ```
 +
 +## Proxy {#module-services-netbird-server-proxy}
-+The proxy allows you to have an nginux proxy in front of your netbird instance.
-+The proxy currently assumes that nginx is server over https.
++The proxy module sets up a unified nginx proxy in front of your netbird instance.
 +
-+Rememeber to set all public options to use the proxy instead of the instance. These include
++> [!CAUTION]
++> The proxy module is completely independent from netbird upstream. If you have any problems with it
++> DO NOT open an issue in any `netbirdio` repositories. Instead open them in `nixos/nixpkgs` and ping the
++> proxy maintainers.
++
++The proxy assumes being hosted over https.
++
++When using the proxy remember to set all public address options to use the proxy host instead of the instance itself. These include:
 +```nix
++server.domain
++management.settings.Signal.URI
 +relay.setting.NB_EXPOSED_ADDRESS
 +
 +```
@@ -642,14 +807,13 @@ index 3122b6c9fe5ffe..cf19439e892713 100644
    };
  }
 diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
-index f684a310426516..f7f5ca3a58aa9f 100644
+index f684a310426516..258d3c91a99fc8 100644
 --- a/nixos/tests/netbird.nix
 +++ b/nixos/tests/netbird.nix
-@@ -1,59 +1,99 @@
+@@ -1,9 +1,14 @@
  import ./make-test-python.nix (
-   { pkgs, lib, ... }:
-+  # kanidm only works over tls so we use these self signed certificates
-+  # generate using `openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout selfcert.key -out selfcert.crt -subj "/CN=example.com" -addext "subjectAltName=DNS:localhost,IP:127.0.0.1"`
+-  { pkgs, lib, ... }:
++  { pkgs, ... }:
 +  let
 +    tls_chain = "${./common/acme/server}/ca.cert.pem";
 +    tls_key = "${./common/acme/server}/ca.key.pem";
@@ -662,16 +826,15 @@ index f684a310426516..f7f5ca3a58aa9f 100644
        nazarewk
      ];
  
-     nodes = {
--      clients =
-+      client =
-         { ... }:
-         {
+@@ -14,6 +19,35 @@ import ./make-test-python.nix (
            services.netbird.enable = true;
--          services.netbird.clients.custom.port = 51819;
-+        };
+           services.netbird.clients.custom.port = 51819;
+         };
 +      kanidm = {
 +        services.kanidm = {
++          # needed since default for nixos 24.11
++          # is kanidm 1.4.6 which is insecure
++          package = pkgs.kanidm_1_5;
 +          enableServer = true;
 +          serverSettings = {
 +            inherit tls_key tls_chain;
@@ -688,47 +851,30 @@ index f684a310426516..f7f5ca3a58aa9f 100644
 +            enable = true;
 +            coturn = {
 +              enable = true;
-+              password = "lel";
++              password = "secure-password";
 +            };
 +            domain = "nixos-test.internal";
 +            dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
 +            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
-+            relay.authSecretFile = (pkgs.writeText "wuppiduppi" "huppiduppi");
++            relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
 +          };
-         };
++        };
      };
  
      # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
-     testScript = ''
--      start_all()
--      def did_start(node, name):
--        node.wait_for_unit(f"{name}.service")
--        node.wait_for_file(f"/var/run/{name}/sock")
--        output = node.succeed(f"{name} status")
--
--        # not sure why, but it can print either of:
--        #  - Daemon status: NeedsLogin
--        #  - Management: Disconnected
--        expected = [
--          "Disconnected",
--          "NeedsLogin",
--        ]
--        assert any(msg in output for msg in expected)
--
--      did_start(clients, "netbird")
--      did_start(clients, "netbird-custom")
+@@ -35,25 +69,15 @@ import ./make-test-python.nix (
+ 
+       did_start(clients, "netbird")
+       did_start(clients, "netbird-custom")
 -    '';
-+        start_all()
-+        def did_start(node, name):
-+          node.wait_for_unit(f"{name}.service")
-+          node.wait_for_file(f"/var/run/{name}/sock")
-+          output = node.succeed(f"{name} status")
  
 -    /*
 -      `netbird status` used to print `Daemon status: NeedsLogin`
 -          https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
 -      as the first line, but now it is just:
--
++      kanidm.start()
++      kanidm.wait_for_unit("kanidm.service")
+ 
 -          Daemon version: 0.26.3
 -          CLI version: 0.26.3
 -          Management: Disconnected
@@ -742,49 +888,16 @@ index f684a310426516..f7f5ca3a58aa9f 100644
 -          Routes: -
 -          Peers count: 0/0 Connected
 -    */
-+          # not sure why, but it can print either of:
-+          #  - Daemon status: NeedsLogin
-+          #  - Management: Disconnected
-+          expected = [
-+            "Disconnected",
-+            "NeedsLogin",
-+          ]
-+          assert any(msg in output for msg in expected)
-+
-+        did_start(clients, "netbird")
-+        did_start(clients, "netbird-custom")
-+
-+      /*
-+        `netbird status` used to print `Daemon status: NeedsLogin`
-+            https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
-+        as the first line, but now it is just:
-+
-+            Daemon version: 0.26.3
-+            CLI version: 0.26.3
-+            Management: Disconnected
-+            Signal: Disconnected
-+            Relays: 0/0 Available
-+            Nameservers: 0/0 Available
-+            FQDN:
-+            NetBird IP: N/A
-+            Interface type: N/A
-+            Quantum resistance: false
-+            Routes: -
-+            Peers count: 0/0 Connected
-+      */
-+        kanidm.start()
-+        kanidm.wait_for_unit("kanidm.service")
-+
-+        server.start()
-+        with subtest("server starting"):
-+          server.wait_for_unit("netbird-management.service")
-+          server.wait_for_unit("netbird-signal.service")
-+          server.wait_for_unit("netbird-relay.service")
++      server.start()
++      with subtest("server starting"):
++        server.wait_for_unit("netbird-management.service")
++        server.wait_for_unit("netbird-signal.service")
++        server.wait_for_unit("netbird-relay.service")
 +    '';
    }
  )
 diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
-index 4325ad1a521078..92d5d1378db7e1 100644
+index 4325ad1a521078..60a4396707e81a 100644
 --- a/pkgs/tools/networking/netbird/default.nix
 +++ b/pkgs/tools/networking/netbird/default.nix
 @@ -18,20 +18,39 @@
@@ -847,16 +960,17 @@ index 4325ad1a521078..92d5d1378db7e1 100644
            installShellCompletion --cmd ${binary} \
              --bash <($out/bin/${binary} completion bash) \
              --fish <($out/bin/${binary} completion fish) \
-@@ -121,10 +141,7 @@ buildGoModule rec {
+@@ -121,10 +141,11 @@ buildGoModule rec {
      changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
      description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
      license = licenses.bsd3;
--    maintainers = with maintainers; [
--      vrifox
--      saturn745
--    ];
-     mainProgram = if ui then "netbird-ui" else "netbird";
-+    maintainers = with maintainers; [ vrifox saturn745 patrickdag ];
++    mainProgram = if ui then "netbird-ui" else "netbird";
+     maintainers = with maintainers; [
+       vrifox
+       saturn745
++      patrickdag
+     ];
+-    mainProgram = if ui then "netbird-ui" else "netbird";
    };
  }
 diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix

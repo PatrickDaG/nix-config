@@ -245,7 +245,6 @@ in
     in
     {
       domain = "${globals.services.netbird.domain}";
-      enable = true;
       enableNginx = true;
       signalAddress = "${ipOf "netbird"}:${toString cfg.signal.port}";
       relayAddress = "${ipOf "netbird"}:${toString cfg.relay.port}";
