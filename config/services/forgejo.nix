@@ -11,7 +11,7 @@ let
     owner = "ai-robots-txt";
     repo = "ai.robots.txt";
     rev = "main";
-    hash = "sha256-zbpaty7IDxebNrv+ulCA0KybfX4ZRHlRkBPitpye+rA=";
+    hash = "sha256-7LPwyfj6ykJcLOWGfjj4qh1JCKPQNBQdvL9Za++jy5M=";
   };
 in
 {
