@@ -1,5 +1,5 @@
 diff --git a/nixos/modules/services/networking/netbird/dashboard.nix b/nixos/modules/services/networking/netbird/dashboard.nix
-index 788b724231be3..c8f6836f0af93 100644
+index 788b724231be31..c8f6836f0af930 100644
 --- a/nixos/modules/services/networking/netbird/dashboard.nix
 +++ b/nixos/modules/services/networking/netbird/dashboard.nix
 @@ -39,7 +39,7 @@ in
@@ -12,7 +12,7 @@ index 788b724231be3..c8f6836f0af93 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index f05adb671e992..982fc98b0206d 100644
+index f05adb671e9923..982fc98b0206dc 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
 @@ -38,7 +38,7 @@ let
@@ -220,7 +220,7 @@ index f05adb671e992..982fc98b0206d 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 0000000000000..440f3c1d710a3
+index 00000000000000..440f3c1d710a3f
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
 @@ -0,0 +1,104 @@
@@ -330,7 +330,7 @@ index 0000000000000..440f3c1d710a3
 +}
 diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
 new file mode 100644
-index 0000000000000..01c4186505b0c
+index 00000000000000..01c4186505b0c5
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/relay.nix
 @@ -0,0 +1,123 @@
@@ -458,7 +458,7 @@ index 0000000000000..01c4186505b0c
 +  };
 +}
 diff --git a/nixos/modules/services/networking/netbird/server.md b/nixos/modules/services/networking/netbird/server.md
-index 3649e97b379e5..ffda72c0626a4 100644
+index 3649e97b379e5d..ffda72c0626a46 100644
 --- a/nixos/modules/services/networking/netbird/server.md
 +++ b/nixos/modules/services/networking/netbird/server.md
 @@ -4,9 +4,10 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
@@ -518,7 +518,7 @@ index 3649e97b379e5..ffda72c0626a4 100644
 +
 +```
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 1725374d03c6b..237f70ba3327f 100644
+index 1725374d03c6bc..362e070416047d 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
 @@ -16,7 +16,7 @@ in
@@ -592,13 +592,13 @@ index 1725374d03c6b..237f70ba3327f 100644
 +      };
 +
 +      relay = {
-+        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
++        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.relay.port}";
 +        enable = mkDefault cfg.enable;
        };
  
        coturn = {
 diff --git a/nixos/modules/services/networking/netbird/signal.nix b/nixos/modules/services/networking/netbird/signal.nix
-index 3122b6c9fe5ff..cf19439e89271 100644
+index 3122b6c9fe5ffe..cf19439e892713 100644
 --- a/nixos/modules/services/networking/netbird/signal.nix
 +++ b/nixos/modules/services/networking/netbird/signal.nix
 @@ -31,14 +31,7 @@ in
@@ -642,7 +642,7 @@ index 3122b6c9fe5ff..cf19439e89271 100644
    };
  }
 diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
-index f684a31042651..f7f5ca3a58aa9 100644
+index f684a310426516..f7f5ca3a58aa9f 100644
 --- a/nixos/tests/netbird.nix
 +++ b/nixos/tests/netbird.nix
 @@ -1,59 +1,99 @@
@@ -784,7 +784,7 @@ index f684a31042651..f7f5ca3a58aa9 100644
    }
  )
 diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
-index a66390a16e3ec..bf51ad02a85fd 100644
+index 4325ad1a521078..92d5d1378db7e1 100644
 --- a/pkgs/tools/networking/netbird/default.nix
 +++ b/pkgs/tools/networking/netbird/default.nix
 @@ -18,20 +18,39 @@
@@ -860,10 +860,10 @@ index a66390a16e3ec..bf51ad02a85fd 100644
    };
  }
 diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
-index 9ef803cc022c2..144af1c99d47a 100644
+index 2ea15c45003e53..a865d5a8406776 100644
 --- a/pkgs/top-level/all-packages.nix
 +++ b/pkgs/top-level/all-packages.nix
-@@ -2831,6 +2831,11 @@ with pkgs;
+@@ -2826,6 +2826,11 @@ with pkgs;
      ui = true;
    };
  

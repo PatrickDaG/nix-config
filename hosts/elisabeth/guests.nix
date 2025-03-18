@@ -119,7 +119,6 @@
     # // mkContainer "ollama" {
     #   enableRenaultFT = true;
     # }
-    # // mkContainer "netbird" { }
 
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }

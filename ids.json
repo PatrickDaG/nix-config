@@ -18,6 +18,7 @@
 	"nucnix-adguardhome": 102,
 	"nucnix-nginx": 103,
 	"nucnix-teamspeak": 104,
+	"nucnix-netbird": 105,
 	"desktopnix": 200,
 	"mailnix": 201,
 	"patricknix": 202

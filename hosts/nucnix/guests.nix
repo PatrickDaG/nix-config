@@ -113,5 +113,6 @@ in
     // mkContainer "adguardhome" { }
     // mkContainer "nginx" { }
     // mkContainer "teamspeak" { }
+    // mkContainer "netbird" { }
     // mkContainer "kanidm" { };
 }

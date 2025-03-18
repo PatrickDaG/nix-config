@@ -111,12 +111,12 @@
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/netbird-mgmt";
-      mode = "440";
+      mode = "770";
       user = "netbird";
     }
     {
       directory = "/var/lib/netbird-main";
-      mode = "440";
+      mode = "770";
       user = "netbird-main";
     }
   ];

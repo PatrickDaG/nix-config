@@ -239,17 +239,17 @@ in
     }
   ];
 
-  # services.netbird.server.proxy =
-  #   let
-  #     cfg = nodes.elisabeth-netbird.config.services.netbird.server;
-  #   in
-  #   {
-  #     domain = "${globals.services.netbird.domain}";
-  #     enable = true;
-  #     enableNginx = true;
-  #     signalAddress = "${nodes.elisabeth-netbird.config.wireguard.services.ipv4}:${toString cfg.signal.port}";
-  #     relayAddress = "${nodes.elisabeth-netbird.config.wireguard.services.ipv4}:${toString cfg.relay.port}";
-  #     managementAddress = "${nodes.elisabeth-netbird.config.wireguard.services.ipv4}:${toString cfg.management.port}";
-  #     dashboardAddress = "${nodes.elisabeth-netbird.config.wireguard.services.ipv4}:80";
-  #   };
+  services.netbird.server.proxy =
+    let
+      cfg = nodes.nucnix-netbird.config.services.netbird.server;
+    in
+    {
+      domain = "${globals.services.netbird.domain}";
+      enable = true;
+      enableNginx = true;
+      signalAddress = "${ipOf "netbird"}:${toString cfg.signal.port}";
+      relayAddress = "${ipOf "netbird"}:${toString cfg.relay.port}";
+      managementAddress = "${ipOf "netbird"}:${toString cfg.management.port}";
+      dashboardAddress = "${ipOf "netbird"}:80";
+    };
 }
