@@ -9,12 +9,14 @@
     implementation = "broker";
   };
   xdg.portal.enable = true;
+  hm.services.gnome-keyring.enable = true;
   hm.xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
     config.common = {
       default = [
-        "hyprland"
+        #"hyprland"
+        "gnome"
         "gtk"
       ];
       "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
@@ -28,6 +30,7 @@
       # automatically added by hyprland module
       #pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
     ];
   };
   services.displayManager.enable = true;
@@ -61,7 +64,8 @@
   # Autostart compositor if on tty1 (once, don't restart after logout)
   hm.programs.zsh.initExtra = lib.mkOrder 9999 ''
     if [[ -t 0 && "$(tty || true)" == /dev/tty1 ]] && uwsm check may-start ; then
-    	exec systemd-cat -t uwsm_start uwsm start -S -F Hyprland
+      # exec systemd-cat -t uwsm_start uwsm start -S -F Hyprland
+      niri-session
     fi
   '';
 }
