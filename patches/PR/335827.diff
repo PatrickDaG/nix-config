@@ -1,5 +1,5 @@
 diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
-index 5293bce9b46f7..10b7dd378de1c 100644
+index 5293bce9b46f79..10b7dd378de1c0 100644
 --- a/nixos/doc/manual/release-notes/rl-2505.section.md
 +++ b/nixos/doc/manual/release-notes/rl-2505.section.md
 @@ -429,6 +429,10 @@
@@ -14,7 +14,7 @@ index 5293bce9b46f7..10b7dd378de1c 100644
  
  ## Other Notable Changes {#sec-release-25.05-notable-changes}
 diff --git a/nixos/modules/services/misc/octoprint.nix b/nixos/modules/services/misc/octoprint.nix
-index 193e4222a37e7..443f29d310abd 100644
+index 193e4222a37e7e..443f29d310abdf 100644
 --- a/nixos/modules/services/misc/octoprint.nix
 +++ b/nixos/modules/services/misc/octoprint.nix
 @@ -6,17 +6,22 @@
@@ -186,7 +186,7 @@ index 193e4222a37e7..443f29d310abd 100644
 +  meta.maintainers = with lib.maintainers; [ patrickdag ];
  }
 diff --git a/nixos/tests/octoprint.nix b/nixos/tests/octoprint.nix
-index 9473797d50475..4499e5e67674a 100644
+index 9473797d504754..4499e5e67674a7 100644
 --- a/nixos/tests/octoprint.nix
 +++ b/nixos/tests/octoprint.nix
 @@ -35,33 +35,40 @@ import ./make-test-python.nix (
@@ -250,7 +250,7 @@ index 9473797d50475..4499e5e67674a 100644
      '';
 diff --git a/pkgs/by-name/oc/octoprint/ffmpeg-path.patch b/pkgs/by-name/oc/octoprint/ffmpeg-path.patch
 deleted file mode 100644
-index 2e7c7dbe06428..0000000000000
+index 2e7c7dbe06428f..00000000000000
 --- a/pkgs/by-name/oc/octoprint/ffmpeg-path.patch
 +++ /dev/null
 @@ -1,22 +0,0 @@
@@ -277,7 +277,7 @@ index 2e7c7dbe06428..0000000000000
 -             commandline = data["webcam"]["ffmpegCommandline"]
 -             if not all(
 diff --git a/pkgs/by-name/oc/octoprint/package.nix b/pkgs/by-name/oc/octoprint/package.nix
-index 4a9d9b5d02b7a..5eef44e0b375c 100644
+index 4a9d9b5d02b7a4..5eef44e0b375c2 100644
 --- a/pkgs/by-name/oc/octoprint/package.nix
 +++ b/pkgs/by-name/oc/octoprint/package.nix
 @@ -1,5 +1,4 @@

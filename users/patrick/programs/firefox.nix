@@ -131,12 +131,12 @@ in
           default = "kagi";
 
           engines = {
-            "Bing".metaData.hidden = true;
-            "Amazon.com".metaData.hidden = true;
-            "Google".metaData.hidden = true;
+            "bing".metaData.hidden = true;
+            "amazondotcom-us".metaData.hidden = true;
+            "google".metaData.hidden = true;
 
             "kagi" = {
-              iconUpdateURL = "https://kagi.com/favicon.ico";
+              icon = "https://kagi.com/favicon.ico";
               updateInterval = 24 * 60 * 60 * 1000; # update every day
               urls = [
                 {

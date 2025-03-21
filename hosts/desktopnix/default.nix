@@ -37,10 +37,6 @@
   services.xserver.xkb = {
     layout = "de";
   };
-  # services.logkeys = {
-  #   enable = true;
-  #   device = "/dev/input/event15";
-  # };
 
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"
@@ -58,6 +54,8 @@
     "loglevel=4"
     "rd.luks=no"
     "nvidia-drm.modeset=1"
+    # ??????????????
+    "nvidia-drm.fbdev=0"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
   zramSwap.enable = true;

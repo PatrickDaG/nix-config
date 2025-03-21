@@ -1,5 +1,5 @@
 diff --git a/pkgs/by-name/yo/your_spotify/package.nix b/pkgs/by-name/yo/your_spotify/package.nix
-index 9ab6e61af77b7..64bbec67a65e9 100644
+index 9ab6e61af77b7a..64bbec67a65e9a 100644
 --- a/pkgs/by-name/yo/your_spotify/package.nix
 +++ b/pkgs/by-name/yo/your_spotify/package.nix
 @@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {

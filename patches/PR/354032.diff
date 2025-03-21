@@ -1,5 +1,5 @@
 diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
-index 950266de4e351f..669b95f111b672 100644
+index 29f7f9d5199671..5a2d2248f354c8 100644
 --- a/nixos/doc/manual/redirects.json
 +++ b/nixos/doc/manual/redirects.json
 @@ -41,6 +41,9 @@
@@ -896,17 +896,30 @@ index f684a310426516..258d3c91a99fc8 100644
 +    '';
    }
  )
-diff --git a/pkgs/tools/networking/netbird/default.nix b/pkgs/tools/networking/netbird/default.nix
-index 4325ad1a521078..60a4396707e81a 100644
---- a/pkgs/tools/networking/netbird/default.nix
-+++ b/pkgs/tools/networking/netbird/default.nix
-@@ -18,20 +18,39 @@
-   UserNotifications,
-   WebKit,
+diff --git a/pkgs/by-name/ne/netbird-server/package.nix b/pkgs/by-name/ne/netbird-server/package.nix
+new file mode 100644
+index 00000000000000..b521e828756735
+--- /dev/null
++++ b/pkgs/by-name/ne/netbird-server/package.nix
+@@ -0,0 +1,6 @@
++{ netbird }:
++
++netbird.override {
++  client = false;
++  server = true;
++}
+diff --git a/pkgs/by-name/ne/netbird/package.nix b/pkgs/by-name/ne/netbird/package.nix
+index 12172892923217..2275cc18224958 100644
+--- a/pkgs/by-name/ne/netbird/package.nix
++++ b/pkgs/by-name/ne/netbird/package.nix
+@@ -13,21 +13,40 @@
+   libXcursor,
+   libXxf86vm,
    ui ? false,
 +  client ? true,
 +  server ? false,
    netbird-ui,
+   versionCheckHook,
  }:
  let
    modules =
@@ -948,9 +961,9 @@ index 4325ad1a521078..60a4396707e81a 100644
 +        { }
 +    );
  in
- buildGoModule rec {
+ buildGoModule (finalAttrs: {
    pname = "netbird";
-@@ -91,7 +110,8 @@ buildGoModule rec {
+@@ -79,7 +98,8 @@ buildGoModule (finalAttrs: {
          ''
            mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
          ''
@@ -960,32 +973,28 @@ index 4325ad1a521078..60a4396707e81a 100644
            installShellCompletion --cmd ${binary} \
              --bash <($out/bin/${binary} completion bash) \
              --fish <($out/bin/${binary} completion fish) \
-@@ -121,10 +141,11 @@ buildGoModule rec {
-     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
-     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
-     license = licenses.bsd3;
-+    mainProgram = if ui then "netbird-ui" else "netbird";
-     maintainers = with maintainers; [
+@@ -99,7 +119,7 @@ buildGoModule (finalAttrs: {
+     versionCheckHook
+   ];
+   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+-  versionCheckProgramArg = "version";
++  versionCheckProgramArg = if server then "--version" else "version";
+   # Disabled for the `netbird-ui` version because it does a network request.
+   doInstallCheck = !ui;
+ 
+@@ -119,7 +139,14 @@ buildGoModule (finalAttrs: {
+     maintainers = with lib.maintainers; [
        vrifox
        saturn745
 +      patrickdag
      ];
 -    mainProgram = if ui then "netbird-ui" else "netbird";
++    mainProgram =
++      if ui then
++        "netbird-ui"
++      else if server then
++        "netbird-mgmt"
++      else
++        "netbird";
    };
- }
-diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
-index 2ea15c45003e53..a865d5a8406776 100644
---- a/pkgs/top-level/all-packages.nix
-+++ b/pkgs/top-level/all-packages.nix
-@@ -2826,6 +2826,11 @@ with pkgs;
-     ui = true;
-   };
- 
-+  netbird-server = netbird.override {
-+    server = true;
-+    client = false;
-+  };
-+
-   skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
- 
-   ibus = callPackage ../tools/inputmethods/ibus { };
+ })
