@@ -6,6 +6,7 @@
   hm.home = {
     packages = with pkgs; [
       bashInteractive
+      bs-manager
       chatterino2
       chromium
       cmatrix

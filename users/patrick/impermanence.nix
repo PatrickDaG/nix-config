@@ -54,6 +54,8 @@
         ".cache/mpv"
 
         ".config/Element"
+        ".config/bs-manager"
+        ".local/share/bs-manager"
 
         ".config/spotify"
         ".cache/spotify"
