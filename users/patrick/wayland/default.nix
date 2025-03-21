@@ -15,20 +15,38 @@
     xdgOpenUsePortal = true;
     config.common = {
       default = [
-        #"hyprland"
-        "gnome"
+        "gtk"
+      ];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+    };
+    config.hyprland = {
+      default = [
+        "hyprland"
         "gtk"
       ];
       "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
       "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
       "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
-      # "org.freedesktop.impl.portal.ScreenCast" = [ "xdg-desktop-portal-wlr" ];
-      # "org.freedesktop.impl.portal.Screenshot" = [ "xdg-desktop-portal-wlr" ];
-      "org.freedesktop.portal.FileChooser" = [ "xdg-desktop-portal-gtk" ];
     };
+    config.niri = {
+      default = [
+        "gtk"
+        "gnome"
+      ];
+      "org.freedesktop.impl.portal.Access" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Notification" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "xdg-desktop-portal-gnome" ];
+      "org.freedesktop.impl.portal.Screenshot" = [ "xdg-desktop-portal-gnome" ];
+    };
+    configPackages = [
+      pkgs.niri
+      pkgs.hyprland
+    ];
     extraPortals = [
       # automatically added by hyprland module
       #pkgs.xdg-desktop-portal-hyprland
+      pkgs.gnome-keyring
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-gnome
     ];

@@ -133,10 +133,10 @@ binds {
         focus-column-left
     }
     Mod+r {
-        focus-window-down
+        focus-window-or-workspace-down
     }
     Mod+l {
-        focus-window-up
+        focus-window-or-workspace-up
     }
     Mod+s {
         focus-column-right
@@ -278,6 +278,12 @@ binds {
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
 	// If the window is already in a column, they will expel it out.
+    Mod+h {
+		focus-column-first
+    }
+    Mod+m {
+		focus-column-last
+    }
     Mod+Shift+h {
         consume-or-expel-window-left
     }
@@ -328,7 +334,7 @@ binds {
     Mod+F {
         toggle-window-floating
     }
-    Mod+Shift+F {
+    Mod+Ctrl+F {
         switch-focus-between-floating-and-tiling
     }
     // Toggle tabbed column display mode.
@@ -383,13 +389,16 @@ binds {
         focus-workspace "default"
     }
     Mod+d {
-        focus-workspace "thunderbird"
+        focus-workspace "mail"
     }
     Mod+u {
         focus-workspace "games"
     }
-    Mod+a {
-        focus-workspace 4
+    Mod+F1 {
+        focus-workspace "ts"
+    }
+    Mod+F3 {
+        focus-workspace "browser"
     }
 }
 workspace "default" {
@@ -407,10 +416,31 @@ workspace "browser" {
 workspace "ts" {
     open-on-output "DVI-D-1"
 }
+
+window-rule {
+    match title="Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox"
+    open-floating true
+	block-out-from "screen-capture"
+}
+
+window-rule {
+    match app-id="thunderbird"
+    open-on-workspace "mail"
+}
+
+window-rule {
+    match app-id="streamlink-twitch-gui"
+    open-on-workspace "ts"
+}
+window-rule {
+    match app-id="TeamSpeak 3"
+    open-on-workspace "ts"
+}
 window-rule {
     match app-id="steam"
     open-on-workspace "games"
 }
+
 prefer-no-csd
 layout {
     gaps 1
