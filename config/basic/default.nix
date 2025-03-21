@@ -42,6 +42,7 @@
     inputs.nixvim.nixosModules.nixvim
     inputs.stylix.nixosModules.stylix
     inputs.elewrap.nixosModules.default
+    inputs.nix-gaming.nixosModules.platformOptimizations
   ];
   age.identityPaths = [ "/state/etc/ssh/ssh_host_ed25519_key" ];
   boot.mode = lib.mkDefault "efi";
