@@ -29,6 +29,7 @@
     #allowedDevices = lib.mkForce ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
     # TODO instead deny the zigbee device
   };
+  services.matter-server.enable = true;
 
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
@@ -582,5 +583,42 @@
         nodes.${globals.services.influxdb.host}.config.age.secrets."hass-influxdb-token-${config.node.name}".path;
     };
   };
+  age.secrets.wg-oma-priv-key = {
+    mode = "440";
+    rekeyFile = config.node.secretsDir + "/wg-oma-priv.age";
+    group = "systemd-network";
+  };
+  age.secrets.wg-oma-pre-key = {
+    mode = "440";
+    rekeyFile = config.node.secretsDir + "/wg-oma-pre.age";
+    group = "systemd-network";
+  };
 
+  systemd.network = {
+    networks."40-wg-oma" = {
+      inherit (config.secrets.secrets.local.wg.oma) address;
+      matchConfig.Name = "wg-oma";
+    };
+    netdevs."40-wg-oma" = {
+      netdevConfig = {
+        Kind = "wireguard";
+        Name = "wg-oma";
+        Description = "Wireguard to add remote devices";
+      };
+      wireguardConfig = {
+        PrivateKeyFile = config.age.secrets.wg-oma-priv-key.path;
+      };
+      wireguardPeers = [
+        {
+          PersistentKeepalive = 25;
+          PresharedKeyFile = config.age.secrets.wg-oma-pre-key.path;
+          inherit (config.secrets.secrets.local.wg.oma)
+            Endpoint
+            AllowedIPs
+            PublicKey
+            ;
+        }
+      ];
+    };
+  };
 }
