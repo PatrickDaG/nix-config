@@ -109,4 +109,19 @@
       cookies-from-browser = "firefox";
     };
   };
+  environment.systemPackages = [
+    (pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves"; })
+  ];
+  services.displayManager = {
+    defaultSession = "niri";
+    sddm = {
+      enable = true;
+      wayland.enable = true;
+      package = pkgs.kdePackages.sddm;
+      theme = "sddm-astronaut-theme";
+      extraPackages = [
+        pkgs.sddm-astronaut
+      ];
+    };
+  };
 }

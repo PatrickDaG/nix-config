@@ -15,12 +15,10 @@ lib.optionalAttrs (!minimal) {
     ./i3.nix
   ];
   #xsession.wallpapers.enable = true;
-  hm.home.file.".xinitrc".source = ./xinitrc;
 
   # Configure keymap in X11
   services.xserver = {
     enable = true;
-    displayManager.startx.enable = true;
     autoRepeatDelay = 235;
     autoRepeatInterval = 60;
     videoDrivers = [ "modesetting" ];

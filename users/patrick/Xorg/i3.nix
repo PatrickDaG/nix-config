@@ -5,6 +5,13 @@
 {
   # import shared sway config
   imports = [ ./sway3.nix ];
+  # To add the session
+  services.xserver.windowManager.i3 = {
+    enable = true;
+    extraSessionCommands = ''
+      xset r rate 235 60
+    '';
+  };
 
   hm =
     { config, ... }:
