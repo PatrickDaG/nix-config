@@ -3,7 +3,7 @@
   services.invidious = {
     enable = true;
     inherit (globals.services.invidious) domain;
-    sig-helper.enable = true;
+    #sig-helper.enable = true;
     settings = {
       external_port = 443;
       https_only = true;
