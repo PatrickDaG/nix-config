@@ -5,6 +5,17 @@
 {
   hm.home = {
     packages = with pkgs; [
+      (aspellWithDicts (
+        dicts: with dicts; [
+          de
+          en
+          en-computers
+          en-science
+          es
+          fr
+          la
+        ]
+      ))
       bashInteractive
       bs-manager
       chatterino2
