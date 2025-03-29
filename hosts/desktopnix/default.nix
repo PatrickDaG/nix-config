@@ -54,8 +54,8 @@
     "loglevel=4"
     "rd.luks=no"
     "nvidia-drm.modeset=1"
-    # ??????????????
-    "nvidia-drm.fbdev=0"
+    # Breaks console -> needs displaymanager
+    "nvidia-drm.fbdev=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
   zramSwap.enable = true;
