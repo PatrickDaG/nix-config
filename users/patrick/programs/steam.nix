@@ -5,16 +5,22 @@
   ...
 }:
 {
+  programs.gamescope = {
+    enable = true;
+    # Not possible inside steam
+    #capSysNice = true;
+  };
   programs.steam = {
     enable = true;
-    package = pkgs.steam.override {
-      extraPkgs =
-        pkgs: with pkgs; [
-          # vampir überlebende braucht diese pkgs
-          libgdiplus
-          cups
-        ];
-    };
+    extraCompatPackages = [
+      pkgs.proton-ge-bin
+    ];
+    extraPackages = [
+      # vampir überlebende braucht diese pkgs
+      pkgs.libgdiplus
+      pkgs.cups
+    ];
+    platformOptimizations.enable = true;
   };
   hm.home.persistence = {
     "/state".directories = [
