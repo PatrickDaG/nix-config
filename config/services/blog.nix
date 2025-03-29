@@ -72,7 +72,7 @@ in
           -c user.email="blog-bot@${globals.domains.mail_public}" \
           commit -m "Automatic commit for blog on $(date -u -I)"
       fi
-      git pull --rebase
+      git pull --rebase --recurse-submodules=yes
       git push
       ${lib.getExe pkgs.zola} -r public build
     '';
