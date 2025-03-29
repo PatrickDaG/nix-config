@@ -426,6 +426,7 @@ window-rule {
 window-rule {
     match app-id="thunderbird"
     open-on-workspace "mail"
+	block-out-from "screen-capture"
 }
 
 window-rule {
@@ -434,6 +435,10 @@ window-rule {
 }
 window-rule {
     match app-id="TeamSpeak 3"
+    open-on-workspace "ts"
+}
+window-rule {
+    match app-id="discord"
     open-on-workspace "ts"
 }
 window-rule {

@@ -9,6 +9,7 @@
     implementation = "broker";
   };
   xdg.portal.enable = true;
+  services.gnome.gnome-keyring.enable = true;
   hm.services.gnome-keyring.enable = true;
   hm.xdg.portal = {
     enable = true;
