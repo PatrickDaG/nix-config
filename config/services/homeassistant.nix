@@ -115,6 +115,7 @@
       waste_collection_schedule
       dwd
       another_mvg
+      solaredge-modbus
     ];
 
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
@@ -406,6 +407,35 @@
             {{ varta_out }}
           '';
         }
+        {
+          name = "Grid Input Power";
+          unit_of_measurement = "W";
+          state_class = "measurement";
+          device_class = "power";
+          state = ''
+            {% if states('sensor.mb_varta_grid_power') | float(0) >= 0 %}
+            {% set varta_in = states('sensor.mb_varta_grid_power') | float(0) %}
+            {% else %}
+            {% set varta_in = 0 %}
+            {% endif %}
+            {{ varta_in }}
+          '';
+
+        }
+        {
+          name = "Grid Output Power";
+          unit_of_measurement = "W";
+          state_class = "measurement";
+          device_class = "power";
+          state = ''
+            {% if states('sensor.mb_varta_grid_power') | float(0) <= 0 %}
+            {% set varta_out = states('sensor.mb_varta_grid_power') | float(0) *-1 %}
+            {% else %}
+            {% set varta_out = 0 %}
+            {% endif %}
+            {{ varta_out }}
+          '';
+        }
       ];
 
       ##Grid
@@ -421,7 +451,46 @@
 
       sensor = [
         {
-
+          platform = "integration";
+          name = "Varta Input Energy";
+          source = "sensor.varta_input_power";
+          unit_prefix = "k";
+          round = 2;
+          max_sub_interval = {
+            minutes = 5;
+          };
+        }
+        {
+          platform = "integration";
+          name = "Varta Output Energy";
+          source = "sensor.varta_output_power";
+          unit_prefix = "k";
+          round = 2;
+          max_sub_interval = {
+            minutes = 5;
+          };
+        }
+        {
+          platform = "integration";
+          name = "Grid Input Energy";
+          source = "sensor.grid_input_power";
+          unit_prefix = "k";
+          round = 2;
+          max_sub_interval = {
+            minutes = 5;
+          };
+        }
+        {
+          platform = "integration";
+          name = "Grid Output Energy";
+          source = "sensor.grid_output_power";
+          unit_prefix = "k";
+          round = 2;
+          max_sub_interval = {
+            minutes = 5;
+          };
+        }
+        {
           platform = "template";
           sensors = {
             mb_varta_status = {
@@ -473,6 +542,8 @@
         dwdwfsapi
         wled
         pymvglive
+        forecast-solar
+        aioelectricitymaps
       ];
   };
   networking.hosts = {

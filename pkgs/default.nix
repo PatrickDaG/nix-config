@@ -40,7 +40,8 @@ _inputs: [
         '';
     });
     home-assistant-custom-components = prev.home-assistant-custom-components // {
-      another_mvg = prev.callPackage ./another_mvg.nix { };
+      another_mvg = prev.home-assistant.python.pkgs.callPackage ./another_mvg.nix { };
+      solaredge-modbus = prev.home-assistant.python.pkgs.callPackage ./solaredge-modbus.nix { };
     };
     home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {
       another_mvg_1 = prev.callPackage ./another_mvg_l.nix { };
