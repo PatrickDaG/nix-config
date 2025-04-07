@@ -2,17 +2,27 @@
 let
   swww-update-wallpaper = pkgs.writeShellApplication {
     name = "swww-update-wallpaper";
-    runtimeInputs = [ pkgs.swww ];
+    runtimeInputs = [
+      pkgs.swww
+      pkgs.jq
+    ];
     text = ''
       FILES=("$HOME/.local/share/wallpapers/"*)
       TYPES=("wipe" "any")
       ANGLES=(0 15 30 45 60 75 90 105 120 135 150 165 180 195 210 225 240 255 270 285 300 315 330 345)
 
-      swww img "''${FILES[RANDOM%''${#FILES[@]}]}" \
-        --transition-type "''${TYPES[RANDOM%''${#TYPES[@]}]}" \
-        --transition-angle "''${ANGLES[RANDOM%''${#ANGLES[@]}]}" \
-        --transition-fps 144 \
-        --transition-duration 1.5
+      ## Display separate Wallpaper per output
+
+      readarray -t MONITORS < <(swww query | cut -d ":" -f 1)
+
+      for i in "''${MONITORS[@]}"; do
+        swww img -o "$i" \
+          "''${FILES[RANDOM%''${#FILES[@]}]}" \
+          --transition-type "''${TYPES[RANDOM%''${#TYPES[@]}]}" \
+          --transition-angle "''${ANGLES[RANDOM%''${#ANGLES[@]}]}" \
+          --transition-fps 144 \
+          --transition-duration 1.5
+      done
     '';
   };
 in

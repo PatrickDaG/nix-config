@@ -29,8 +29,8 @@ writeShellApplication {
     SELECTED=0
 
     function recurse() {
-      #shellcheck disable=SC2207
-    	for i in $(pgrep -P "$1"); do
+      readarray -t CHILDREN < <(pgrep -P "$1")
+    	for i in "''${CHILDREN[@]}"; do
 
     		if [[ "$(readlink -e "/proc/''${i}/exe")" == *"zsh"* ]] && [[ $2 -gt $MAXDEPTH ]]; then
     			SELECTED="$i"
