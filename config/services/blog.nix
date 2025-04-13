@@ -61,6 +61,9 @@ in
   };
 
   systemd.services.blog-update = {
+    # Seems like this has the annoying side effect of making zfs think all files
+    # have been completely changed, thus making snapshots unnecessarily large
+    # (each ~100MB adding up quite quickly
     script = ''
       cd blog
       if (git add . && git diff --quiet && git diff --cached --quiet)
