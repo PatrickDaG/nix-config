@@ -7,7 +7,10 @@
   ...
 }:
 {
-  imports = [ ./wyoming.nix ];
+  imports = [
+    ./wyoming.nix
+    ./zigbee2mqtt.nix
+  ];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/private/esphome";
@@ -26,8 +29,6 @@
     enable = true;
     address = "0.0.0.0";
     port = 3001;
-    #allowedDevices = lib.mkForce ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
-    # TODO instead deny the zigbee device
   };
   services.matter-server.enable = true;
 
@@ -72,6 +73,12 @@
     group = "mosquitto";
     generator.script = "alnum";
   };
+  age.secrets.mosquitto-pw-zigbee2mqtt = {
+    mode = "440";
+    owner = "zigbee2mqtt";
+    group = "mosquitto";
+    generator.script = "alnum";
+  };
   services.mosquitto = {
     enable = true;
     persistence = true;
@@ -79,6 +86,10 @@
       {
         acl = [ "pattern readwrite #" ];
         users = {
+          zigbee2mqtt = {
+            passwordFile = config.age.secrets.mosquitto-pw-zigbee2mqtt.path;
+            acl = [ "readwrite #" ];
+          };
           home_assistant = {
             passwordFile = config.age.secrets.mosquitto-pw-home_assistant.path;
             acl = [ "readwrite #" ];
@@ -108,7 +119,6 @@
       "wake_word"
       "whisper"
       "wyoming"
-      "zha"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local
