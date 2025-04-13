@@ -126,7 +126,7 @@
     // mkContainer "yourspotify" { }
     // mkContainer "blog" { }
 
-    // mkContainer "grafana" { }
+    // mkContainer "grafana" { enablePanzer = true; }
     // mkContainer "vaultwarden" { }
     // mkContainer "homeassistant" {
       vlans = [

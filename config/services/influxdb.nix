@@ -29,7 +29,7 @@ in
     group = "influxdb2";
   };
 
-  environment.persistence."/persist".directories = [
+  environment.persistence."/panzer".directories = [
     {
       directory = "/var/lib/influxdb2";
       user = "influxdb2";
