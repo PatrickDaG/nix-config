@@ -42,6 +42,7 @@ in
         f = "!${gf}";
         crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
       };
+      ignores = [ ".direnv" ];
       extraConfig = {
         core.pager = "${pkgs.delta}/bin/delta";
         delta = {

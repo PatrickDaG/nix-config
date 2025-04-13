@@ -39,6 +39,10 @@
     number = true;
     relativenumber = false;
 
+    # Open new split window to left/down
+    splitbelow = true;
+    splitright = true;
+
     # Keep 2 lines around the cursor.
     scrolloff = 2;
     sidescrolloff = 2;

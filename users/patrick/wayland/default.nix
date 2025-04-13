@@ -10,7 +10,9 @@
   };
   xdg.portal.enable = true;
   services.gnome.gnome-keyring.enable = true;
-  hm.services.gnome-keyring.enable = true;
+  # This adds a user service.
+  # Is that needed? Does the keyring start automatically upon requests?
+  #hm.services.gnome-keyring.enable = true;
   hm.xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;

@@ -23,6 +23,7 @@ lib.optionalAttrs (!minimal) {
       "audio"
       "video"
       "input"
+      "cdrom"
       # TPM settings
       "tss"
     ];
