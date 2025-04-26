@@ -62,6 +62,8 @@
         ".local/share/cargo"
         ".local/share/wallpapers"
         ".factorio"
+
+        ".config/obsidian"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [

@@ -60,6 +60,7 @@
       hyprshot
       ladybird
       xautoclick
+      obsidian
     ];
   };
   hm.programs.bat.enable = true;
