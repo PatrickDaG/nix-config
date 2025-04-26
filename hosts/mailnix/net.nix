@@ -48,7 +48,10 @@ in
       email = globals.accounts.email."1".address;
       dnsProvider = "cloudflare";
       dnsPropagationCheck = true;
-      reloadServices = [ "nginx" ];
+      reloadServices = [
+        "nginx"
+        "stalwart-mail"
+      ];
       credentialFiles = {
         "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
         "CF_ZONE_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
