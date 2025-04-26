@@ -217,6 +217,7 @@
       # oauth2 proxy groups
       groups."rss.access" = { };
       groups."firefly.access" = { };
+      groups."fireflypico.access" = { };
       groups."ollama.access" = { };
       groups."adguardhome.access" = { };
       groups."octoprint.access" = { };
@@ -239,6 +240,11 @@
           "profile"
         ];
         scopeMaps."firefly.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+        scopeMaps."fireflypico.access" = [
           "openid"
           "email"
           "profile"
@@ -269,6 +275,7 @@
           valuesByGroup."adguardhome.access" = [ "adguardhome_access" ];
           valuesByGroup."rss.access" = [ "ttrss_access" ];
           valuesByGroup."firefly.access" = [ "firefly_access" ];
+          valuesByGroup."fireflypico.access" = [ "fireflypico_access" ];
           valuesByGroup."ollama.access" = [ "ollama_access" ];
           valuesByGroup."octoprint.access" = [ "octoprint_access" ];
           valuesByGroup."invidious.access" = [ "invidious_access" ];

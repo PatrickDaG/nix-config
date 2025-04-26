@@ -166,6 +166,26 @@ in
           '';
         };
       };
+      virtualHosts.${globals.services.fireflypico.domain}.locations."/api" = {
+        proxyPass = "http://fireflypico";
+        proxyWebsockets = true;
+        X-Frame-Options = "SAMEORIGIN";
+        extraConfig = ''
+          proxy_set_header X-User  "";
+          proxy_set_header X-Email "";
+        '';
+      };
+      virtualHosts.${globals.services.firefly.domain}.locations."/api" = {
+        proxyPass = "http://firefly";
+        proxyWebsockets = true;
+        X-Frame-Options = "SAMEORIGIN";
+        extraConfig = ''
+          add_header Access-Control-Allow-Origin "https://pico.lel.lol" ;
+          add_header Access-Control-Allow-Methods 'GET, POST, HEAD, OPTIONS';
+          proxy_set_header X-User  "";
+          proxy_set_header X-Email "";
+        '';
+      };
     }
     (blockOf "vaultwarden" { maxBodySize = "1G"; })
     (blockOf "forgejo" { maxBodySize = "1G"; })
@@ -190,6 +210,7 @@ in
     #(proxyProtect "ollama" { })
     (proxyProtect "esphome" { port = 3001; })
     (proxyProtect "firefly" { port = 80; })
+    (proxyProtect "fireflypico" { port = 80; })
     (blockOf "grafana" { })
     (blockOf "apispotify" {
       port = 3000;

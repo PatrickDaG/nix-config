@@ -94,6 +94,9 @@ in
       firefly = {
         domain = "money.${globals.domains.web}";
       };
+      fireflypico = {
+        domain = "pico.${globals.domains.web}";
+      };
       homebox = {
         domain = "homebox.${globals.domains.web}";
       };

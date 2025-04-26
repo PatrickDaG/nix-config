@@ -46,6 +46,7 @@
       adguardhome = uidGid 234;
       gamemode = uidGid 235;
       plugdev = uidGid 236;
+      firefly-pico = uidGid 237;
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
       paperless = uidGid 315;
