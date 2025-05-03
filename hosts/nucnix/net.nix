@@ -66,12 +66,6 @@ in
           };
           vlanConfig.Id = id;
         };
-        "50-bridge-${name}" = {
-          netdevConfig = {
-            Name = "br-${name}";
-            Kind = "bridge";
-          };
-        };
         "50-macvlan-${name}" = {
           netdevConfig = {
             Name = "lan-${name}";
@@ -120,14 +114,6 @@ in
           # This interface should only be used from attached macvtaps.
           # So don't acquire a link local address and only wait for
           # this interface to gain a carrier.
-          networkConfig.LinkLocalAddressing = "no";
-          linkConfig.RequiredForOnline = "carrier";
-          networkConfig = {
-            Bridge = "br-${name}";
-          };
-        };
-        "10-${name}" = {
-          matchConfig.Name = "br-${name}";
           networkConfig.LinkLocalAddressing = "no";
           linkConfig.RequiredForOnline = "carrier";
           networkConfig = {
