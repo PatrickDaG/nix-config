@@ -46,6 +46,7 @@
     "kvm"
     "nixos-test"
   ];
+  i18n.supportedLocales = [ "all" ];
   boot.kernelParams = lib.mkForce [
     "rd.luks.options=timeout=0"
     "rootflags=x-systemd.device-timeout=0"

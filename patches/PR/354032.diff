@@ -1,10 +1,10 @@
 diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
-index 29f7f9d5199671..5a2d2248f354c8 100644
+index be29c7ca049a4b..56ea712840ee35 100644
 --- a/nixos/doc/manual/redirects.json
 +++ b/nixos/doc/manual/redirects.json
-@@ -41,6 +41,9 @@
-   "module-services-crab-hole-upstream-options": [
-     "index.html#module-services-crab-hole-upstream-options"
+@@ -59,6 +59,9 @@
+   "module-services-strfry-reverse-proxy": [
+     "index.html#module-services-strfry-reverse-proxy"
    ],
 +  "module-services-netbird-server-proxy": [
 +    "index.html#module-services-netbird-server-proxy"
@@ -364,10 +364,10 @@ index f05adb671e9923..1f26bf5b1f3168 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 00000000000000..d813221940ce3f
+index 00000000000000..1500d22e5cb7d1
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
-@@ -0,0 +1,106 @@
+@@ -0,0 +1,110 @@
 +{ lib, config, ... }:
 +let
 +  inherit (lib)
@@ -386,7 +386,8 @@ index 00000000000000..d813221940ce3f
 +
 +    signalAddress = mkOption {
 +      type = str;
-+      description = "The external address to reach the signal service.";
++      description = "Address to reach the signal service.";
++      example = "1.2.3.4:1764";
 +    };
 +
 +    relayAddress = mkOption {
@@ -396,17 +397,20 @@ index 00000000000000..d813221940ce3f
 +
 +    managementAddress = mkOption {
 +      type = str;
-+      description = "The external address to reach the dashboard.";
++      description = "Address to reach the dashboard.";
++      example = "1.2.3.4:1766";
 +    };
 +
 +    dashboardAddress = mkOption {
 +      type = str;
-+      description = "The external address to reach the dashboard.";
++      description = "Address to reach the dashboard.";
++      example = "1.2.3.4:1767";
 +    };
 +
 +    domain = mkOption {
 +      type = str;
-+      description = "The public domain to reach the proxy";
++      description = "Domain that hosts the proxy";
++      example = "netbird.selfhosted";
 +    };
 +  };
 +  config = {
@@ -604,10 +608,10 @@ index 00000000000000..01c4186505b0c5
 +  };
 +}
 diff --git a/nixos/modules/services/networking/netbird/server.md b/nixos/modules/services/networking/netbird/server.md
-index 3649e97b379e5d..91ea0a4fa1b7a2 100644
+index 3649e97b379e5d..38fe184b943fa1 100644
 --- a/nixos/modules/services/networking/netbird/server.md
 +++ b/nixos/modules/services/networking/netbird/server.md
-@@ -4,39 +4,57 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
+@@ -4,39 +4,63 @@ NetBird is a VPN built on top of WireGuard® making it easy to create secure pri
  
  ## Quickstart {#module-services-netbird-server-quickstart}
  
@@ -618,34 +622,44 @@ index 3649e97b379e5d..91ea0a4fa1b7a2 100644
  
 -There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config looks like :
 +There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config might look like :
++
++::: {.example}
++
++# Netbird minmal Configuration
  
  ```nix
- services.netbird.server = {
-   enable = true;
+-services.netbird.server = {
+-  enable = true;
++{pkgs, ...}: {
++  services.netbird.server = {
++    enable = true;
  
-+  # Publicly exposed domain
-   domain = "netbird.example.selfhosted";
+-  domain = "netbird.example.selfhosted";
++    # Publicly exposed domain
++    domain = "netbird.example.selfhosted";
  
 -  enableNginx = true;
-+  # website for administration
-+  dashboard = {
-+    enableNginx = true;
-+    settings.AUTH_AUTHORITY = "https://sso.example.selfhosted/oauth2/openid/netbird";
-+  };;
++    # website for administration
++    dashboard = {
++      enableNginx = true;
++      settings.AUTH_AUTHORITY = "https://sso.example.selfhosted/oauth2/openid/netbird";
++    };
  
-+  # Netbirds own relay implementation
-+  relay.authSecretFile = pkgs.writeText "very secure secret";
-+
-+  # Relay using coturn
-   coturn = {
-     enable = true;
--
-     passwordFile = "/path/to/a/secret/password";
-   };
+-  coturn = {
+-    enable = true;
++    # Netbirds own relay implementation
++    relay.authSecretFile = pkgs.writeText "secret-file" "very secure secret";
  
-+  # Backend management api
-   management = {
-     oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
+-    passwordFile = "/path/to/a/secret/password";
+-  };
++    # Relay using coturn
++    coturn = {
++      enable = true;
++      passwordFile = pkgs.writeText "password-file" "very secure password";
++    };
+ 
+-  management = {
+-    oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
 -
 -    settings = {
 -      TURNConfig = {
@@ -658,43 +672,38 @@ index 3649e97b379e5d..91ea0a4fa1b7a2 100644
 -          }
 -        ];
 -      };
--    };
-+    settings.Signal.URI = "publicly reachable signal endpoint";
-+    DataStoreEncryptionKey._secret = pkgs.writeText "another very secure secret";
++    # Backend management api
++    management = {
++      oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
++      settings.Signal.URI = "publicly reachable signal endpoint";
++      DataStoreEncryptionKey._secret = pkgs.writeText "encryption-key" "another very secure secret";
+     };
    };
- };
+-};
++}
  ```
++:::
 +
 +## Proxy {#module-services-netbird-server-proxy}
++
 +The proxy module sets up a unified nginx proxy in front of your netbird instance.
 +
-+> [!CAUTION]
-+> The proxy module is completely independent from netbird upstream. If you have any problems with it
-+> DO NOT open an issue in any `netbirdio` repositories. Instead open them in `nixos/nixpkgs` and ping the
-+> proxy maintainers.
++::: {.warning}
++The proxy module is completely independent from netbird upstream.
++If you have any problems with it DO NOT open an issue in any `netbirdio` repositories. Instead open them in [`nixos/nixpkgs`](https://github.com/nixos/nixpkgs/issues) and ping the proxy maintainers.
++:::
 +
 +The proxy assumes being hosted over https.
 +
 +When using the proxy remember to set all public address options to use the proxy host instead of the instance itself. These include:
-+```nix
-+server.domain
-+management.settings.Signal.URI
-+relay.setting.NB_EXPOSED_ADDRESS
 +
-+```
++- {option}`server.domain`
++- {option}`management.settings.Signal.URI`
++- {option}`relay.setting.NB_EXPOSED_ADDRESS`
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 1725374d03c6bc..362e070416047d 100644
+index 5865e06f18d0c2..362e070416047d 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
-@@ -16,7 +16,7 @@ in
- 
- {
-   meta = {
--    maintainers = with lib.maintainers; [patrickdag];
-+    maintainers = with lib.maintainers; [ patrickdag ];
-     doc = ./server.md;
-   };
- 
 @@ -26,12 +26,12 @@ in
      ./dashboard.nix
      ./management.nix
@@ -719,7 +728,7 @@ index 1725374d03c6bc..362e070416047d 100644
  
          managementServer = "https://${cfg.domain}";
        };
-@@ -53,31 +52,35 @@ in
+@@ -53,13 +52,13 @@ in
          {
            domain = mkDefault cfg.domain;
            enable = mkDefault cfg.enable;
@@ -735,19 +744,7 @@ index 1725374d03c6bc..362e070416047d 100644
              TURNConfig.Turns = mkDefault [
                {
                  Proto = "udp";
-                 URI = "turn:${turnDomain}:${builtins.toString turnPort}";
-                 Username = "netbird";
-                 Password =
--                  if (cfg.coturn.password != null)
--                  then cfg.coturn.password
--                  else {_secret = cfg.coturn.passwordFile;};
-+                  if (cfg.coturn.password != null) then
-+                    cfg.coturn.password
-+                  else
-+                    { _secret = cfg.coturn.passwordFile; };
-               }
-             ];
-           };
+@@ -76,9 +75,12 @@ in
          });
  
        signal = {
@@ -909,7 +906,7 @@ index 00000000000000..b521e828756735
 +  server = true;
 +}
 diff --git a/pkgs/by-name/ne/netbird/package.nix b/pkgs/by-name/ne/netbird/package.nix
-index 12172892923217..2275cc18224958 100644
+index faee3cb4e78ab2..7404fe2620fbc0 100644
 --- a/pkgs/by-name/ne/netbird/package.nix
 +++ b/pkgs/by-name/ne/netbird/package.nix
 @@ -13,21 +13,40 @@

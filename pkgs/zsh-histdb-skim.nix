@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-lJ2kpIXPHE8qP0EBnLuyvatWMtepBobNAC09e7itGas=";
   };
-  cargoHash = "sha256-BMy9Shy9KAx5+VbvH2WaA0wMFUNM5dqU/dssUNE1NWY=";
+  cargoHash = "sha256-dqTYJkKnvjzkV124XZHzDV58rjLhNz+Nc3Jj5gSaJas=";
   postInstall = ''
     substituteInPlace zsh-histdb-skim-vendored.zsh \
     --replace-fail "zsh-histdb-skim" "$out/bin/zsh-histdb-skim"

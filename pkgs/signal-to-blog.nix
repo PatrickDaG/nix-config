@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-MBKLx67Ivsk7E/6H75xj8zpeXzG+zXGBsEfHzn10YHk=";
   };
 
-  cargoHash = "sha256-PhKvww+L49ZyiEJmyJJEhte7npMyfG0Y1z8dPjkchn0=";
+  cargoHash = "sha256-uW27QQHeyOqyjnniV5IcTzpG9ZxB9SCFFfRq96hPnRs=";
   meta.mainProgram = "signal-to-blog";
 
 }

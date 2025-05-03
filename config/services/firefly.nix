@@ -61,12 +61,9 @@
     enableNginx = true;
     virtualHost = globals.services.fireflypico.domain;
     settings = {
-      LOG_CHANNEL = "syslog";
       APP_URL = "https://${globals.services.fireflypico.domain}";
       TZ = "Europe/Berlin";
       FIREFLY_URL = config.services.firefly-iii.settings.APP_URL;
-      TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
-      SITE_OWNER = "firefly-admin@${globals.domains.mail_public}";
       APP_KEY_FILE = config.age.secrets.appKeyPico.path;
     };
   };

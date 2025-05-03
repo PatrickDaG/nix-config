@@ -1,8 +1,8 @@
 diff --git a/nixos/modules/services/networking/networkd-dispatcher.nix b/nixos/modules/services/networking/networkd-dispatcher.nix
-index 99b56609a70f40..4aa5be5433d792 100644
+index 99b56609a70f40..eb874447bb3afa 100644
 --- a/nixos/modules/services/networking/networkd-dispatcher.nix
 +++ b/nixos/modules/services/networking/networkd-dispatcher.nix
-@@ -103,21 +103,28 @@ in
+@@ -103,21 +103,29 @@ in
  
      services.networkd-dispatcher.extraArgs =
        let
@@ -21,8 +21,8 @@ index 99b56609a70f40..4aa5be5433d792 100644
 -            ) cfg.onState)
 -          ) cfg.rules;
 -        };
-+        scriptDir =
-+          pkgs.runCommand "networkd-dispatcher-script-dir" { } ''
++        scriptDir = pkgs.runCommand "networkd-dispatcher-script-dir" { } (
++          ''
 +            mkdir $out
 +          ''
 +          + (lib.concatStrings (
@@ -42,7 +42,8 @@ index 99b56609a70f40..4aa5be5433d792 100644
 +                '') cfg.onState
 +              ))
 +            ) cfg.rules
-+          ));
++          ))
++        );
        in
        [
          "--verbose"

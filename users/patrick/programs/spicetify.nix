@@ -6,7 +6,7 @@ in
   hm.programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.retroBlur;
-    colorScheme = "Purple";
+    colorScheme = "purple";
 
     enabledExtensions = with spicePkgs.extensions; [
       fullAppDisplay

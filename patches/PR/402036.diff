@@ -1,5 +1,5 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index ed6265a77435..50ae8a2dce04 100644
+index ed6265a77435c4..50ae8a2dce0455 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
 @@ -1525,6 +1525,7 @@
@@ -12,10 +12,10 @@ index ed6265a77435..50ae8a2dce04 100644
    ./services/web-apps/freshrss.nix
 diff --git a/nixos/modules/services/web-apps/firefly-pico.nix b/nixos/modules/services/web-apps/firefly-pico.nix
 new file mode 100644
-index 000000000000..042cae7fb517
+index 00000000000000..ad1d1a2d6ccafc
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/firefly-pico.nix
-@@ -0,0 +1,408 @@
+@@ -0,0 +1,419 @@
 +{
 +  pkgs,
 +  config,
@@ -174,7 +174,7 @@ index 000000000000..042cae7fb517
 +        }
 +      '';
 +      description = ''
-+        Options for the Firefly III PHP pool. See the documentation on <literal>php-fpm.conf</literal>
++        Options for the Firefly-Pico PHP pool. See the documentation on <literal>php-fpm.conf</literal>
 +        for details on configuration directives.
 +      '';
 +    };
@@ -182,24 +182,23 @@ index 000000000000..042cae7fb517
 +    settings = lib.mkOption {
 +      default = { };
 +      description = ''
-+        Options for firefly-iii configuration. Refer to
-+        <https://github.com/firefly-iii/firefly-iii/blob/main/.env.example> for
++        Options for firefly-Pico configuration. Refer to
++        <https://github.com/cioraneanu/firefly-pico/blob/main/back/.env.example> for
 +        details on supported values. All <option>_FILE values supported by
 +        upstream are supported here.
 +
-+        APP_URL will be the same as `services.firefly-iii.virtualHost` if the
-+        former is unset in `services.firefly-iii.settings`.
++        APP_URL will be the same as `services.firefly-pico.virtualHost` if the
++        former is unset in `services.firefly-pico.settings`.
 +      '';
 +      example = lib.literalExpression ''
 +        {
 +          APP_ENV = "production";
 +          APP_KEY_FILE = "/var/secrets/firefly-pico-app-key.txt";
-+          SITE_OWNER = "mail@example.com";
 +          DB_CONNECTION = "mysql";
 +          DB_HOST = "db";
 +          DB_PORT = 3306;
-+          DB_DATABASE = "firefly";
-+          DB_USERNAME = "firefly";
++          DB_DATABASE = "firefly-pico";
++          DB_USERNAME = "firefly-pico";
 +          DB_PASSWORD_FILE = "/var/secrets/firefly-pico-mysql-password.txt";
 +        }
 +      '';
@@ -212,6 +211,15 @@ index 000000000000..042cae7fb517
 +          ]
 +        );
 +        options = {
++          LOG_CHANNEL = lib.mkOption {
++            type = lib.types.str;
++            default = "syslog";
++            example = "single";
++            description = ''
++              The output channel for your firefly-pico backend logs.
++              For available drivers see <https://laravel.com/docs/12.x/logging#available-channel-drivers>.
++            '';
++          };
 +          DB_CONNECTION = lib.mkOption {
 +            type = lib.types.enum [
 +              "sqlite"
@@ -246,12 +254,12 @@ index 000000000000..042cae7fb517
 +              else if cfg.settings.DB_CONNECTION == "mysql" then
 +                "firefly-pico"
 +              else
-+                cfg.dataDir + "storage/database/database.sqlite";
++                cfg.dataDir + "/storage/database/database.sqlite";
 +            defaultText = ''
-+              `cfg.dataDir + "storage/database/database.sqlite` if DB_CONNECTION is "sqlite", `firefly-pico` if "mysql" or "pgsql"
++              `cfg.dataDir + "/storage/database/database.sqlite` if DB_CONNECTION is "sqlite", `firefly-pico` if "mysql" or "pgsql"
 +            '';
 +            description = ''
-+              The absolute path or name of your firefly-pico database.
++              The absolute path to, in case of sqlite, or name of your firefly-pico database.
 +            '';
 +          };
 +          DB_PORT = lib.mkOption {
@@ -313,7 +321,10 @@ index 000000000000..042cae7fb517
 +            example = ''
 +              https://firefly.example
 +            '';
-+            description = '''';
++            description = ''
++              The public URL of your firefly-iii api instance. Has to be reachable by the client
++              opening firefly-pico.
++            '';
 +          };
 +        };
 +      };
@@ -426,7 +437,7 @@ index 000000000000..042cae7fb517
 +}
 diff --git a/pkgs/by-name/fi/firefly-pico/frontend.nix b/pkgs/by-name/fi/firefly-pico/frontend.nix
 new file mode 100644
-index 000000000000..86ddcc0b143f
+index 00000000000000..86ddcc0b143f2d
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/frontend.nix
 @@ -0,0 +1,50 @@
@@ -482,7 +493,7 @@ index 000000000000..86ddcc0b143f
 +})
 diff --git a/pkgs/by-name/fi/firefly-pico/package.nix b/pkgs/by-name/fi/firefly-pico/package.nix
 new file mode 100644
-index 000000000000..d648718950e5
+index 00000000000000..d648718950e550
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/package.nix
 @@ -0,0 +1,73 @@
