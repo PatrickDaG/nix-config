@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [ ./starfish.nix ];
   # save history in xdg data home
@@ -31,15 +31,17 @@
           save = 1000000;
           share = false;
         };
-        initExtra = builtins.readFile ./zshrc;
         # This needs to be loaded befor zsh-fast-syntax-highlighting
         # is sourced as that overwrites all widgets to redraw with highlighting
-        initExtraFirst = ''
-          if autoload history-search-end; then
-          	zle -N history-beginning-search-backward-end history-search-end
-          	zle -N history-beginning-search-forward-end  history-search-end
-          fi
-        '';
+        initContent = lib.mkMerge [
+          (lib.mkBefore ''
+            if autoload history-search-end; then
+            	zle -N history-beginning-search-backward-end history-search-end
+            	zle -N history-beginning-search-forward-end  history-search-end
+            fi
+          '')
+          (builtins.readFile ./zshrc)
+        ];
         plugins = [
           {
             name = "fzf-tab";

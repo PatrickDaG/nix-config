@@ -52,7 +52,7 @@ lib.optionalAttrs (!minimal) {
     info.enable = false;
     nixos.enable = false;
   };
-  hm.programs.zsh.initExtra = ''
+  hm.programs.zsh.initContent = lib.mkBefore ''
     gpg-connect-agent /bye
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
     umask 077
