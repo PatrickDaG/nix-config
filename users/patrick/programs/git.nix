@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  globals,
+  ...
+}:
 let
   gf = lib.getExe (
     pkgs.writeShellApplication {
@@ -27,6 +32,16 @@ let
 in
 {
   hm = {
+    programs.jujutsu = {
+      enable = true;
+      settings = {
+        revset-aliases."immutable_heads()" = "builtins_immutable_heads() | (trunk().. & ~mine())";
+        user = {
+          email = "patrickdag@${globals.domains.mail_public}";
+          name = "Patrick";
+        };
+      };
+    };
     programs.gitui.enable = true;
     programs.git = {
       enable = true;
