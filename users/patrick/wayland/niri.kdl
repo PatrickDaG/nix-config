@@ -388,17 +388,44 @@ binds {
     Mod+j {
         focus-workspace "default"
     }
+    Mod+Shift+j {
+        move-window-to-workspace "default"
+    }
     Mod+d {
         focus-workspace "mail"
+    }
+    Mod+Shift+d {
+        move-window-to-workspace "mail"
     }
     Mod+u {
         focus-workspace "games"
     }
+    Mod+Shift+u {
+        move-window-to-workspace "games"
+    }
     Mod+F1 {
-        focus-workspace "ts"
+        focus-workspace "twitch"
+    }
+    Mod+Shift+F1 {
+        move-window-to-workspace "twitch"
+    }
+    Mod+F2 {
+        focus-workspace "comms"
+    }
+    Mod+Shift+F2 {
+        move-window-to-workspace "comms"
     }
     Mod+F3 {
         focus-workspace "browser"
+    }
+    Mod+Shift+F3 {
+        move-window-to-workspace "browser"
+    }
+    Mod+F4 {
+        focus-workspace "notes"
+    }
+    Mod+Shift+F4 {
+        move-window-to-workspace "notes"
     }
 }
 workspace "default" {
@@ -413,38 +440,68 @@ workspace "games" {
 workspace "browser" {
     open-on-output "HDMI-A-1"
 }
-workspace "ts" {
+workspace "notes" {
+    open-on-output "HDMI-A-1"
+}
+workspace "twitch" {
+    open-on-output "DVI-D-1"
+}
+workspace "comms" {
     open-on-output "DVI-D-1"
 }
 
 window-rule {
-    match title="Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox"
-    open-floating true
-	block-out-from "screen-capture"
+    match app-id="firefox"
+    open-on-workspace "default"
 }
-
 window-rule {
     match app-id="thunderbird"
     open-on-workspace "mail"
 	block-out-from "screen-capture"
 }
-
-window-rule {
-    match app-id="streamlink-twitch-gui"
-    open-on-workspace "ts"
-}
-window-rule {
-    match app-id="TeamSpeak 3"
-    open-on-workspace "ts"
-}
-window-rule {
-    match app-id="discord"
-    open-on-workspace "ts"
-}
 window-rule {
     match app-id="steam"
     open-on-workspace "games"
 }
+
+window-rule {
+    match app-id="streamlink-twitch-gui"
+    open-on-workspace "twitch"
+}
+window-rule {
+    match app-id="TeamSpeak 3"
+    open-on-workspace "comms"
+}
+window-rule {
+    match app-id="Element"
+    open-on-workspace "comms"
+}
+window-rule {
+    match app-id="signal"
+    open-on-workspace "comms"
+}
+window-rule {
+    match app-id="discord"
+    open-on-workspace "comms"
+}
+
+window-rule {
+    match app-id="obsidian"
+    open-on-workspace "notes"
+	block-out-from "screen-capture"
+}
+
+window-rule {
+    match app-id="Zotero"
+    open-on-workspace "notes"
+	block-out-from "screen-capture"
+}
+
+spawn-at-startup "zotero"
+spawn-at-startup "ts3client"
+spawn-at-startup "obsidian"
+spawn-at-startup "firefox"
+spawn-at-startup "thunderbird"
 
 prefer-no-csd
 layout {
