@@ -35,13 +35,29 @@ in
     programs.jujutsu = {
       enable = true;
       settings = {
-        revset-aliases."immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        revset-aliases = {
+          "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+          "closest_bookmark(to)" = "heads(::to & bookmarks())";
+        };
+        aliases = {
+          tug = [
+            "bookmark"
+            "move"
+            "--from"
+            "closest_bookmark(@-)"
+            "--to"
+            "@-"
+          ];
+        };
         signing = {
           # Only sign on push
           behaviour = "drop";
           backend = "gpg";
         };
-        git.sign-on-push = true;
+        git = {
+          sign-on-push = true;
+          push-new-bookmarks = true;
+        };
         ui = {
           default-command = "log";
           paginate = "never";
