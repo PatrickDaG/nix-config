@@ -36,6 +36,12 @@ in
       enable = true;
       settings = {
         revset-aliases."immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        signing = {
+          # Only sign on push
+          behaviour = "drop";
+          backend = "gpg";
+        };
+        git.sign-on-push = true;
         ui = {
           default-command = "log";
           paginate = "never";
