@@ -60,6 +60,7 @@ in
         };
         ui = {
           default-command = "log";
+          # Why no paginate if longer than a page??
           paginate = "never";
         };
         user = {

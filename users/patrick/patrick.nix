@@ -74,7 +74,7 @@
     xdg.configFile."mpv/mpv.conf".text = ''
       vo=gpu-next
       hwdec=auto-safe
-      volume=80
+      volume=50
     '';
     xdg.configFile."mpv/input.conf".text = ''
       UP add volume 2
