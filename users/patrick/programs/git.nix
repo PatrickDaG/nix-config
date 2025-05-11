@@ -32,6 +32,10 @@ let
 in
 {
   hm = {
+    home.packages = [
+      # try for jujutsu
+      pkgs.meld
+    ];
     programs.jujutsu = {
       enable = true;
       settings = {
@@ -62,6 +66,7 @@ in
           default-command = "log";
           # Why no paginate if longer than a page??
           paginate = "never";
+          diff-editor = ":builtin";
         };
         user = {
           email = "patrick@${globals.domains.mail_public}";
