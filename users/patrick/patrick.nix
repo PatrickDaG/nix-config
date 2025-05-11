@@ -61,6 +61,7 @@
       ladybird
       xautoclick
       obsidian
+      pandoc # for obsidian
     ];
   };
   hm.programs.bat.enable = true;

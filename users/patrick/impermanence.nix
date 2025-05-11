@@ -8,7 +8,9 @@
       directories = [
         "repos"
         "Downloads"
+
         "Zotero"
+        ".zotero"
 
         ".config/ts3client"
 
