@@ -1,7 +1,9 @@
+// FIXME What if xwayland satellite uses different display?
 spawn-at-startup "xwayland-satellite"
 environment {
     DISPLAY ":0"
 }
+
 input {
     keyboard {
         xkb {
@@ -12,7 +14,6 @@ input {
         repeat-rate 60
     }
     touchpad {
-        // off
         tap
         dwt
         dwtp
@@ -20,67 +21,11 @@ input {
         accel-profile "flat"
     }
     mouse {
-        // off
-        // natural-scroll
         accel-speed 0.2
         accel-profile "flat"
- // scroll-factor 1.0
-                // scroll-method "no-scroll"
-                // scroll-button 273
-                // left-handed
-                // middle-emulation
-    }
-    trackpoint {
- // off
-                // natural-scroll
-                // accel-speed 0.2
-                // accel-profile "flat"
-                // scroll-method "on-button-down"
-                // scroll-button 273
-                // middle-emulation
-
-    }
-    trackball {
- // off
-                // natural-scroll
-                // accel-speed 0.2
-                // accel-profile "flat"
-                // scroll-method "on-button-down"
-                // scroll-button 273
-                // left-handed
-                // middle-emulation
-
-    }
-    tablet {
-        map-to-output "DP-3"
     }
     disable-power-key-handling
     workspace-auto-back-and-forth
-}
-// "DVI-D-1,preferred,0x0,1"
-// "HDMI-A-1,preferred,0x1080,1"
-// "DP-3,2560x1440@144.00Hz,1920x540,1"
-// # Thank you NVIDIA for this generous, free-of-charge, extra monitor that
-// # doesn't exist and crashes yoru session sometimes when moving a window to it.
-// "Unknown-1, disable"
-output "DP-3" {
-    mode "2560x1440@143.998"
-    //scale 2.0
-    position x=1920 y=540
-    variable-refresh-rate on-demand=true
-}
-output "HDMI-A-1" {
-    //mode "1920x1080@120.030"
-    //scale 2.0
-    position x=0 y=1080
-}
-output "DVI-D-1" {
-    //mode "1920x1080@120.030"
-    //scale 2.0
-    position x=0 y=0
-}
-output "Unknown-1" {
-    off
 }
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
@@ -98,17 +43,11 @@ binds {
         show-hotkey-overlay
     }
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T {
-        spawn "kitty"
-    }
+    Mod+T { spawn "kitty" }
     Mod+c { spawn "clone-term"; }
     Mod+b { spawn "firefox"; }
-    Menu {
-        spawn "fuzzel"
-    }
-    Super+Alt+L {
-        spawn "systemctl suspend"
-    }
+    Menu { spawn "fuzzel" }
+    Super+Alt+L { spawn "systemctl suspend" }
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
     // Mod+T { spawn "bash" "-c" "notify-send hello && exec alacritty"; }
@@ -126,257 +65,72 @@ binds {
     XF86AudioMicMute allow-when-locked=true {
         spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"
     }
-    Mod+Q {
-        close-window
-    }
-    Mod+n {
-        focus-column-left
-    }
-    Mod+r {
-        focus-window-or-workspace-down
-    }
-    Mod+l {
-        focus-window-or-workspace-up
-    }
-    Mod+s {
-        focus-column-right
-    }
-    Mod+Shift+n {
-        move-column-left
-    }
-    Mod+Shift+r {
-        move-window-down
-    }
-    Mod+Shift+l {
-        move-window-up
-    }
-    Mod+Shift+s {
-        move-column-right
-    }
-    // Alternative commands that move across workspaces when reaching
-    // the first or last window in a column.
-    // Mod+J     { focus-window-or-workspace-down; }
-    // Mod+K     { focus-window-or-workspace-up; }
-    // Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
-    // Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
-    Mod+Home {
-        focus-column-first
-    }
-    Mod+End {
-        focus-column-last
-    }
-    Mod+Ctrl+Home {
-        move-column-to-first
-    }
-    Mod+Ctrl+End {
-        move-column-to-last
-    }
-    Mod+Ctrl+n {
-        focus-monitor-left
-    }
-    Mod+Ctrl+r {
-        focus-monitor-down
-    }
-    Mod+Ctrl+l {
-        focus-monitor-up
-    }
-    Mod+Ctrl+s {
-        focus-monitor-right
-    }
-    Mod+Shift+Ctrl+n {
-        move-column-to-monitor-left
-    }
-    Mod+Shift+Ctrl+r {
-        move-column-to-monitor-down
-    }
-    Mod+Shift+Ctrl+l {
-        move-column-to-monitor-up
-    }
-    Mod+Shift+Ctrl+s {
-        move-column-to-monitor-right
-    }
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
-    // ...
-    // And you can also move a whole workspace to another monitor:
-    // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
-    // ...
-    Mod+Period {
-        focus-workspace-down
-    }
-    Mod+comma {
-        focus-workspace-up
-    }
-    Mod+Shift+Period {
-        move-column-to-workspace-down
-    }
-    Mod+Shift+comma {
-        move-column-to-workspace-up
-    }
-    Mod+Ctrl+Period {
-        move-workspace-down
-    }
-    Mod+Ctrl+comma {
-        move-workspace-up
-    }
-    // You can bind mouse wheel scroll ticks using the following syntax.
-    // These binds will change direction based on the natural-scroll setting.
-    //
-    // To avoid scrolling through workspaces really fast, you can use
-    // the cooldown-ms property. The bind will be rate-limited to this value.
-    // You can set a cooldown on any bind, but it's most useful for the wheel.
-    Mod+WheelScrollDown cooldown-ms=150 {
-        focus-workspace-down
-    }
-    Mod+WheelScrollUp cooldown-ms=150 {
-        focus-workspace-up
-    }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 {
-        move-column-to-workspace-down
-    }
-    Mod+Ctrl+WheelScrollUp cooldown-ms=150 {
-        move-column-to-workspace-up
-    }
-    Mod+WheelScrollRight {
-        focus-column-right
-    }
-    Mod+WheelScrollLeft {
-        focus-column-left
-    }
-    Mod+Ctrl+WheelScrollRight {
-        move-column-right
-    }
-    Mod+Ctrl+WheelScrollLeft {
-        move-column-left
-    }
-    // Usually scrolling up and down with Shift in applications results in
-    // horizontal scrolling; these binds replicate that.
-    Mod+Shift+WheelScrollDown {
-        focus-column-right
-    }
-    Mod+Shift+WheelScrollUp {
-        focus-column-left
-    }
-    Mod+Ctrl+Shift+WheelScrollDown {
-        move-column-right
-    }
-    Mod+Ctrl+Shift+WheelScrollUp {
-        move-column-left
-    }
-    // Similarly, you can bind touchpad scroll "ticks".
-    // Touchpad scrolling is continuous, so for these binds it is split into
-    // discrete intervals.
-    // These binds are also affected by touchpad's natural-scroll, so these
-    // example binds are "inverted", since we have natural-scroll enabled for
-    // touchpads by default.
-    // Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
-    // Mod+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Ctrl+1 { move-window-to-workspace 1; }
-    // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
-    // The following binds move the focused window in and out of a column.
-    // If the window is alone, they will consume it into the nearby column to the side.
-	// If the window is already in a column, they will expel it out.
-    Mod+h {
-		focus-column-first
-    }
-    Mod+m {
-		focus-column-last
-    }
-    Mod+Shift+h {
-        consume-or-expel-window-left
-    }
-    Mod+Shift+m {
-        consume-or-expel-window-right
-    }
-    // Consume one window from the right to the bottom of the focused column.
-    //Mod+Comma  { consume-window-into-column; }
-    // Expel the bottom window from the focused column to the right.
-    //Mod+Period { expel-window-from-column; }
-    //Mod+R { switch-preset-column-width; }
-    //Mod+Shift+R { switch-preset-window-height; }
-    //Mod+Ctrl+R { reset-window-height; }
-    Mod+V {
-        maximize-column
-    }
-    Mod+return {
-        fullscreen-window
-    }
-    // Expand the focused column to space not taken up by other fully visible columns.
-    // Makes the column "fill the rest of the space".
-    Mod+Ctrl+V {
-        expand-column-to-available-width
-    }
-    //Mod+C { center-column; }
-    // Finer width adjustments.
-    // This command can also:
-    // * set width in pixels: "1000"
-    // * adjust width in pixels: "-5" or "+5"
-    // * set width as a percentage of screen width: "25%"
-    // * adjust width as a percentage of screen width: "-10%" or "+10%"
-    // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
-    // set-column-width "100" will make the column occupy 200 physical screen pixels.
-    Mod+Minus {
-        set-column-width "-10%"
-    }
-    Mod+Shift+0 {
-        set-column-width "+10%"
-    }
-    // Finer height adjustments when in column with other windows.
-    // Mod+Shift+Minus {
-    //     set-window-height "-10%"
-    // }
-    // Mod+Shift+Equal {
-    //     set-window-height "+10%"
-    // }
-    // Move the focused window between the floating and the tiling layout.
-    Mod+F {
-        toggle-window-floating
-    }
-    Mod+Ctrl+F {
-        switch-focus-between-floating-and-tiling
-    }
-    // Toggle tabbed column display mode.
-    // Windows in this column will appear as vertical tabs,
-    // rather than stacked on top of each other.
+    Mod+Q { close-window }
+    Mod+n { focus-column-left }
+    Mod+r { focus-window-or-workspace-down }
+    Mod+l { focus-window-or-workspace-up }
+    Mod+s { focus-column-right }
+    Mod+Shift+n { move-column-left }
+    Mod+Shift+r { move-window-down }
+    Mod+Shift+l { move-window-up }
+    Mod+Shift+s { move-column-right }
+    Mod+Home { focus-column-first }
+    Mod+End { focus-column-last }
+    Mod+Ctrl+Home { move-column-to-first }
+    Mod+Ctrl+End { move-column-to-last }
+    Mod+Ctrl+n { focus-monitor-left }
+    Mod+Ctrl+r { focus-monitor-down }
+    Mod+Ctrl+l { focus-monitor-up }
+    Mod+Ctrl+s { focus-monitor-right }
+    Mod+Shift+Ctrl+n { move-column-to-monitor-left }
+    Mod+Shift+Ctrl+r { move-column-to-monitor-down }
+    Mod+Shift+Ctrl+l { move-column-to-monitor-up }
+    Mod+Shift+Ctrl+s { move-column-to-monitor-right }
+    Mod+Period { focus-workspace-down }
+    Mod+comma { focus-workspace-up }
+    Mod+Shift+Period { move-column-to-workspace-down }
+    Mod+Shift+comma { move-column-to-workspace-up }
+    Mod+Ctrl+Period { move-workspace-down }
+    Mod+Ctrl+comma { move-workspace-up }
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down }
+    Mod+Ctrl+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up }
+    Mod+WheelScrollRight { focus-column-right }
+    Mod+WheelScrollLeft { focus-column-left }
+    Mod+Ctrl+WheelScrollRight { move-column-right }
+    Mod+Ctrl+WheelScrollLeft { move-column-left }
+    Mod+Shift+WheelScrollDown { focus-column-right }
+    Mod+Shift+WheelScrollUp { focus-column-left }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right }
+    Mod+Ctrl+Shift+WheelScrollUp { move-column-left }
+    Mod+h { focus-column-first }
+    Mod+m { focus-column-last }
+    Mod+Shift+h { consume-or-expel-window-left }
+    Mod+Shift+m { consume-or-expel-window-right }
+    Mod+V { maximize-column }
+    Mod+return { fullscreen-window }
+    Mod+Ctrl+V { expand-column-to-available-width }
+    Mod+Minus { set-column-width "-10%" }
+    Mod+Shift+0 { set-column-width "+10%" }
+
+    Mod+F { toggle-window-floating }
+    Mod+Ctrl+F { switch-focus-between-floating-and-tiling }
+
     Mod+y { toggle-column-tabbed-display; }
-    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
-    Print {
-        screenshot
-    }
-    Ctrl+Print {
-        screenshot-screen
-    }
-    Alt+Print {
-        screenshot-window
-    }
-    // Applications such as remote-desktop clients and software KVM switches may
-    // request that niri stops processing the keyboard shortcuts defined here
-    // so they may, for example, forward the key presses as-is to a remote machine.
-    // It's a good idea to bind an escape hatch to toggle the inhibitor,
-    // so a buggy application can't hold your session hostage.
-    //
-    // The allow-inhibiting=false property can be applied to other binds as well,
-    // which ensures niri always processes them, even when an inhibitor is active.
-    Mod+Escape allow-inhibiting=false {
-        toggle-keyboard-shortcuts-inhibit
-    }
+
+    Print { screenshot }
+    Ctrl+Print { screenshot-screen }
+    Alt+Print { screenshot-window }
+
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit }
+
     // The quit action will show a confirmation dialog to avoid accidental exits.
-    Mod+Ctrl+Escape {
-        quit
-    }
+    Mod+Ctrl+Escape { quit }
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
-    Mod+Shift+P {
-        power-off-monitors
-    }
+    Mod+Shift+P { power-off-monitors }
+
     // You can refer to workspaces by index. However, keep in mind that
     // niri is a dynamic workspace system, so these commands are kind of
     // "best effort". Trying to refer to a workspace index bigger than
@@ -385,75 +139,33 @@ binds {
     //
     // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
     // will all refer to the 3rd workspace.
-    Mod+j {
-        focus-workspace "default"
-    }
-    Mod+Shift+j {
-        move-window-to-workspace "default"
-    }
-    Mod+d {
-        focus-workspace "mail"
-    }
-    Mod+Shift+d {
-        move-window-to-workspace "mail"
-    }
-    Mod+u {
-        focus-workspace "games"
-    }
-    Mod+Shift+u {
-        move-window-to-workspace "games"
-    }
-    Mod+F1 {
-        focus-workspace "twitch"
-    }
-    Mod+Shift+F1 {
-        move-window-to-workspace "twitch"
-    }
-    Mod+F2 {
-        focus-workspace "comms"
-    }
-    Mod+Shift+F2 {
-        move-window-to-workspace "comms"
-    }
-    Mod+F3 {
-        focus-workspace "browser"
-    }
-    Mod+Shift+F3 {
-        move-window-to-workspace "browser"
-    }
-    Mod+F4 {
-        focus-workspace "notes"
-    }
-    Mod+Shift+F4 {
-        move-window-to-workspace "notes"
-    }
-}
-workspace "default" {
-    open-on-output "DP-3"
-}
-workspace "mail" {
-    open-on-output "DP-3"
-}
-workspace "games" {
-    open-on-output "DP-3"
-}
-workspace "browser" {
-    open-on-output "HDMI-A-1"
-}
-workspace "notes" {
-    open-on-output "HDMI-A-1"
-}
-workspace "twitch" {
-    open-on-output "DVI-D-1"
-}
-workspace "comms" {
-    open-on-output "DVI-D-1"
+    Mod+j { focus-workspace "default" }
+    Mod+Shift+j { move-window-to-workspace "default" }
+
+    Mod+d { focus-workspace "mail" }
+    Mod+Shift+d { move-window-to-workspace "mail" }
+
+    Mod+u { focus-workspace "games" }
+    Mod+Shift+u { move-window-to-workspace "games" }
+
+    Mod+F1 { focus-workspace "twitch" }
+    Mod+Shift+F1 { move-window-to-workspace "twitch" }
+
+    Mod+F2 { focus-workspace "comms" }
+    Mod+Shift+F2 { move-window-to-workspace "comms" }
+
+    Mod+F3 { focus-workspace "browser" }
+    Mod+Shift+F3 { move-window-to-workspace "browser" }
+
+    Mod+F4 { focus-workspace "notes" }
+    Mod+Shift+F4 { move-window-to-workspace "notes" }
 }
 
 window-rule {
     match app-id="firefox"
     open-on-workspace "default"
 }
+
 window-rule {
     match app-id="thunderbird"
     open-on-workspace "mail"
@@ -464,10 +176,12 @@ window-rule {
     open-on-workspace "games"
 }
 
+
 window-rule {
     match app-id="streamlink-twitch-gui"
     open-on-workspace "twitch"
 }
+
 window-rule {
     match app-id="TeamSpeak 3"
     open-on-workspace "comms"
@@ -490,7 +204,6 @@ window-rule {
     open-on-workspace "notes"
 	block-out-from "screen-capture"
 }
-
 window-rule {
     match app-id="Zotero"
     open-on-workspace "notes"
@@ -498,10 +211,8 @@ window-rule {
 }
 
 spawn-at-startup "zotero"
-spawn-at-startup "ts3client"
 spawn-at-startup "obsidian"
 spawn-at-startup "firefox"
-spawn-at-startup "thunderbird"
 
 prefer-no-csd
 hotkey-overlay {
