@@ -66,28 +66,6 @@ in
           ];
         };
 
-      mkMicrovm =
-        guestName:
-        {
-          vlans ? [ "services" ],
-          ...
-        }@cfg:
-        {
-          ${guestName} = mkGuest guestName cfg // {
-            backend = "microvm";
-            microvm = {
-              system = "x86_64-linux";
-              interfaces = listToAttrs (flip map vlans (x: (nameValuePair "mv-${x}" { hostLink = "lan-${x}"; })));
-              baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
-            };
-            extraSpecialArgs = {
-              inherit (inputs.self) nodes globals;
-              inherit (inputs.self.pkgs.x86_64-linux) lib;
-              inherit inputs minimal;
-            };
-          };
-        };
-
       mkContainer =
         guestName:
         {

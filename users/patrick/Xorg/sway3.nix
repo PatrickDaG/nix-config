@@ -8,9 +8,6 @@ let
   nconfig = config;
 in
 # shared sway/i3 config
-let
-  nixConfig = config;
-in
 {
   hm =
     { config, ... }:

@@ -1,7 +1,6 @@
 {
   lib,
-  config,
-  pkgs, # not unused needed for the usage of attrs later to contains pkgs
+  config, # not unused needed for the usage of attrs later to contains pkgs
   ...
 }@attrs:
 let

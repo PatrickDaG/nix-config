@@ -3,19 +3,25 @@
   imports = [
     inputs.devshell.flakeModule
     inputs.pre-commit-hooks.flakeModule
+    inputs.treefmt-nix.flakeModule
   ];
 
   perSystem =
     { config, pkgs, ... }:
     {
-      pre-commit.settings.hooks = {
-        nixfmt-rfc-style = {
-          enable = true;
+      pre-commit.settings.hooks.treefmt.enable = true;
+      treefmt = {
+        projectRootFile = "flake.nix";
+        programs = {
+          nixfmt = {
+            enable = true;
+          };
+          deadnix.enable = true;
+          statix.enable = true;
+          keep-sorted.enable = true;
+          shellcheck.enable = true;
         };
-        deadnix.enable = true;
-        statix.enable = true;
       };
-      formatter = pkgs.nixfmt-rfc-style;
       devshells.default = {
         packages = with pkgs; [
           # Nix
@@ -32,6 +38,10 @@
         ];
         commands = [
           {
+            package = config.treefmt.build.wrapper;
+            help = "Format all files";
+          }
+          {
             package = pkgs.symlinkJoin {
               name = "locker";
               paths = [
@@ -45,24 +55,8 @@
             help = "update nix configurations";
           }
           {
-            package = pkgs.nixfmt-rfc-style;
-            help = "Format nix code";
-          }
-          {
-            package = pkgs.statix;
-            help = "Linter for nix";
-          }
-          {
-            package = pkgs.deadnix;
-            help = "Remove dead nix code";
-          }
-          {
             package = pkgs.nix-tree;
             help = "Show nix closure tree";
-          }
-          {
-            package = pkgs.update-nix-fetchgit;
-            help = "Update fetcher inside nix files";
           }
           {
             package = pkgs.nvd;

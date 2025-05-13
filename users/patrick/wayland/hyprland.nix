@@ -6,10 +6,8 @@
 }:
 let
   inherit (lib)
-    mkMerge
     optionals
     elem
-    mkIf
     flip
     concatMap
     ;

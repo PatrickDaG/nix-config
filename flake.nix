@@ -83,6 +83,10 @@
     };
 
     templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-topology.url = "github:oddlama/nix-topology";
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 function die {
 	echo "error: $*" >&2
 	exit 1
