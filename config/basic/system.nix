@@ -72,4 +72,13 @@
   environment.ldso32 = null;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  # Define an option for different hosts
+  # expects an attrset containing optionally an key 'all' for shared config between
+  # all hosts and attrkeys corresponding to the host name for specialized config
+  lib.misc.mkPerHost =
+    arg:
+    lib.mkMerge (
+      (lib.optional (arg ? "all") arg.all)
+      ++ (lib.optional (arg ? "${config.node.name}") arg."${config.node.name}")
+    );
 }

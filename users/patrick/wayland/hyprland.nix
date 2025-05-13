@@ -55,13 +55,15 @@ in
     programs.bash.enable = true;
 
     # Force use of nvidia gpu on desktopnix
-    home.sessionVariables = mkIf (config.node.name == "desktopnix") {
-      AQ_DRM_DEVICES = "/dev/dri/card1";
+    home.sessionVariables = config.lib.misc.mkPerHost {
+      desktopnix = {
+        AQ_DRM_DEVICES = "/dev/dri/card1";
+      };
     };
     wayland.windowManager.hyprland = {
       enable = true;
-      settings = mkMerge [
-        {
+      settings = config.lib.misc.mkPerHost {
+        all = {
           input = {
             kb_layout = "de";
             kb_variant = "nodeadkeys";
@@ -239,8 +241,8 @@ in
             "workspace 7,class:^(signal)$"
             "workspace 7,class:^(TelegramDesktop)$"
           ];
-        }
-        (mkIf (config.node.name == "desktopnix") {
+        };
+        desktopnix = {
           input.tablet = {
             output = "DP-3";
           };
@@ -264,8 +266,8 @@ in
             "9, monitor:HDMI-A-1"
           ];
           env = [ "HYPRLAND_FLOAT_LOCATION,3800 680" ];
-        })
-        (mkIf (config.node.name == "patricknix") {
+        };
+        patricknix = {
           monitor = [
             "eDP-1,preferred,0x0,2"
             # Thank you NVIDIA for this generous, free-of-charge, extra monitor that
@@ -284,8 +286,8 @@ in
             "9, monitor:eDP-1"
           ];
           env = [ "HYPRLAND_FLOAT_LOCATION,1400 200" ];
-        })
-      ];
+        };
+      };
       extraConfig = ''
         submap=resize
         binde=,right,resizeactive,80 0

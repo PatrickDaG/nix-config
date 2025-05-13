@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  nixConfig = config;
+  nconfig = config;
 in
 {
   # import shared i3 config
@@ -16,8 +16,8 @@ in
           "-Dlegacy-wl-drm"
         ];
         enable = true;
-        config =
-          {
+        config = nconfig.lib.misc.mkPerHost {
+          all = {
             assigns = {
               "2:d" = [ { app_id = "^firefox$"; } ];
             };
@@ -63,42 +63,40 @@ in
                 "${modifier}+b" = lib.mkForce "exec uwsm app firefox";
                 "${modifier}+m" = lib.mkForce "exec uwsm app thunderbird";
               };
-          }
-          // {
-            desktopnix = {
-              output = {
-                DVI-D-1 = {
-                  mode = "1920x1080@60Hz";
-                  pos = "0,0";
-                };
-                HDMI-A-1 = {
-                  mode = "1920x1080@60Hz";
-                  pos = "0,1080";
-                };
-                DP-3 = {
-                  mode = "2560x1440@143.998Hz";
-                  pos = "1920,720";
-                  adaptive_sync = "on";
-                  allow_tearing = "yes";
-                  max_render_time = "off";
-                };
+          };
+          desktopnix = {
+            output = {
+              DVI-D-1 = {
+                mode = "1920x1080@60Hz";
+                pos = "0,0";
+              };
+              HDMI-A-1 = {
+                mode = "1920x1080@60Hz";
+                pos = "0,1080";
+              };
+              DP-3 = {
+                mode = "2560x1440@143.998Hz";
+                pos = "1920,720";
+                adaptive_sync = "on";
+                allow_tearing = "yes";
+                max_render_time = "off";
               };
             };
-            patricknix = {
-              output = {
-                "Acer Technologies XB271HU #ASP7ytE/6A7d" = {
-                  mode = "2560x1440@59.951Hz";
-                  pos = "0,0";
-                };
-                "AU Optronics 0x30EB Unknown" = {
-                  mode = "3840x2160@60.002Hz";
-                  pos = "2560,0";
-                  scale = "2";
-                };
+          };
+          patricknix = {
+            output = {
+              "Acer Technologies XB271HU #ASP7ytE/6A7d" = {
+                mode = "2560x1440@59.951Hz";
+                pos = "0,0";
+              };
+              "AU Optronics 0x30EB Unknown" = {
+                mode = "3840x2160@60.002Hz";
+                pos = "2560,0";
+                scale = "2";
               };
             };
-          }
-          .${nixConfig.node.name} or { };
+          };
+        };
         extraConfig =
           let
             cfg = config.wayland.windowManager.sway.config;

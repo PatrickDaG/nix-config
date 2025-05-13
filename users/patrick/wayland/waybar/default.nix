@@ -16,29 +16,25 @@
   hm.programs.waybar = {
     enable = true;
     systemd.enable = true;
-    style =
-      (
-        {
-          desktopnix = ''
-            * {
-            	/* `otf-font-awesome` is required to be installed for icons */
-            	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
-            	font-size: 13px;
-            	transition-duration: .1s;
-            }
-          '';
-          patricknix = ''
-            * {
-            	/* `otf-font-awesome` is required to be installed for icons */
-            	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
-            	font-size: 10px;
-            	transition-duration: .1s;
-            }
-          '';
+    style = config.lib.misc.mkPerHost {
+      all = builtins.readFile ./waybar.css;
+      desktopnix = ''
+        * {
+        	/* `otf-font-awesome` is required to be installed for icons */
+        	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
+        	font-size: 13px;
+        	transition-duration: .1s;
         }
-        .${config.node.name} or ""
-      )
-      + builtins.readFile ./waybar.css;
+      '';
+      patricknix = ''
+        * {
+        	/* `otf-font-awesome` is required to be installed for icons */
+        	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
+        	font-size: 10px;
+        	transition-duration: .1s;
+        }
+      '';
+    };
     settings.main = {
       layer = "top";
       position = "bottom";
@@ -49,31 +45,29 @@
       ];
       #modules-center = [ "hyprland/workspaces" ];
       modules-center = [ "niri/workspaces" ];
-      modules-right =
-        {
-          desktopnix = [
-            "cpu"
-            "memory"
-            "wireplumber"
-            "network"
-            "clock"
-            "custom/notification"
-            "tray"
-          ];
-          patricknix = [
-            "cpu"
-            "memory"
-            "wireplumber"
-            "network"
-            "bluetooth"
-            "backlight"
-            "battery"
-            "clock"
-            "custom/notification"
-            "tray"
-          ];
-        }
-        .${config.node.name} or [ ];
+      modules-right = config.lib.misc.mkPerHost {
+        desktopnix = [
+          "cpu"
+          "memory"
+          "wireplumber"
+          "network"
+          "clock"
+          "custom/notification"
+          "tray"
+        ];
+        patricknix = [
+          "cpu"
+          "memory"
+          "wireplumber"
+          "network"
+          "bluetooth"
+          "backlight"
+          "battery"
+          "clock"
+          "custom/notification"
+          "tray"
+        ];
+      };
 
       battery = {
         interval = 1;

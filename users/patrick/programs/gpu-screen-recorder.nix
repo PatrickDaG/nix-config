@@ -100,8 +100,8 @@ in
       #PartOf = ["graphical-session.target"];
     };
     Service = {
-      Environment =
-        [
+      Environment = config.lib.misc.mkPerHost {
+        all = [
           "GSR_CONTAINER=mkv"
           "GSR_QUALITY=ultra"
           "GSR_FRAMERATE=144"
@@ -113,10 +113,11 @@ in
           "GSR_MAKEFOLDERS=no"
           "GSR_COLOR_RANGE=full"
           "GSR_FPSPPS=no"
-        ]
-        ++ lib.optionals (config.node.name == "desktopnix") [
+        ];
+        desktopnix = [
           "GSR_WINDOW=DP-3" # Primary monitor
         ];
+      };
 
       ExecStart = lib.getExe start-service;
       ExecStopPost = lib.getExe on-stop-service;

@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  nconfig = config;
+in
 # shared sway/i3 config
 let
   nixConfig = config;
@@ -70,7 +73,7 @@ in
                 }
               );
           in
-          {
+          nconfig.lib.misc.mkPerHost {
             "desktopnix" =
               output "DP-3" [
                 "j"
@@ -94,8 +97,7 @@ in
               "a"
               "x"
             ];
-          }
-          .${nixConfig.node.name} or [ ];
+          };
 
         keybindings =
           (lib.attrsets.mergeAttrsList (
@@ -110,7 +112,7 @@ in
                   "${modifier}+Shift+${key}" = "move container to workspace ${x.workspace}";
                 }
               )
-            ) cfg.workspaceOutputAssign
+            ) config.xsession.windowManager.i3.config.workspaceOutputAssign
           ))
           // {
             "${modifier}+t" = "exec ${terminal}";
