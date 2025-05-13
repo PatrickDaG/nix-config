@@ -8,15 +8,15 @@
         "$username"
         "$hostname"
         " $directory "
-        "($git_branch )"
-        "($git_commit )"
-        "$git_state"
+        #"($git_branch )"
+        #"($git_commit )"
+        #"$git_state"
         "$git_status"
         "$character"
       ];
 
       right_format = lib.concatStrings [
-        #"($nix_shell )"
+        "($nix_shell )"
         "($cmd_duration )"
         "($status )"
         "($jobs)"
@@ -69,8 +69,7 @@
       };
 
       nix_shell = {
-        heuristic = true;
-        format = "[$symbol$state( \($name\))]($style)";
+        format = "[$symbol $name]($style)";
       };
 
       cmd_duration = {
