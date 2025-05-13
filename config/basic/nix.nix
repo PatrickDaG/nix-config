@@ -13,7 +13,6 @@
         "@nix-build"
       ];
       system-features = [
-        "recursive-nix"
         "repl-flake"
         "big-parallel"
       ];
@@ -43,7 +42,7 @@
     distributedBuilds = true;
     extraOptions = ''
       builders-use-substitutes = true
-      experimental-features = nix-command flakes recursive-nix
+      experimental-features = nix-command flakes
       flake-registry = /etc/nix/registry.json
     '';
     nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];

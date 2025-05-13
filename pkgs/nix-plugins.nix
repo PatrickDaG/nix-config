@@ -5,6 +5,7 @@
   nix,
   cmake,
   pkg-config,
+  capnproto,
   boost,
 }:
 
@@ -15,8 +16,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "patrickdag";
     repo = "nix-plugins";
-    rev = "1ae8d0c7faa187c388bdebc54ed05c9722d26f11";
-    hash = "sha256-+IKZyjpDlDJVVm/wg03XpS6w0NdwIoFPFHNJ55WvAsI=";
+    rev = "c85627e50bf92807091321029fca3f700c3f13e2";
+    hash = "sha256-lfQ+tDrNj8+nMw1mUl4ombjxdRpIKmAvcimxN4n1Iyo=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     nix
     boost
+    capnproto
   ];
 
   meta = {
