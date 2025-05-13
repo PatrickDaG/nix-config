@@ -11,7 +11,9 @@
         #"($git_branch )"
         #"($git_commit )"
         #"$git_state"
-        "$git_status"
+        #"$git_status"
+        ''(''${custom.jj} )''
+        ''(''${custom.jjstate} )''
         "$character"
       ];
 
@@ -69,12 +71,44 @@
       };
 
       nix_shell = {
-        format = "[$symbol $name]($style)";
+        format = "[󰜗 $name]($style)";
       };
 
       cmd_duration = {
         format = "[ $duration]($style)";
         style = "yellow";
+      };
+      custom.jj = {
+        command = ''
+            jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 --template '
+            separate(" ",
+              change_id.shortest(4),
+              bookmarks,
+              "|",
+              concat(
+                if(conflict, "💥"),
+                if(divergent, "🚧"),
+                if(hidden, "👻"),
+                if(immutable, "🔒"),
+              ),
+              raw_escape_sequence("\x1b[1;32m") ++ if(empty, "(empty)"),
+              raw_escape_sequence("\x1b[1;32m") ++ coalesce(
+                truncate_end(29, description.first_line(), "…"),
+                "(no desc)",
+              ) ++ raw_escape_sequence("\x1b[0m"),
+            )
+          '
+        '';
+        symbol = "jj";
+        detect_folders = [ ".jj" ];
+        format = "[$output]($style)";
+      };
+
+      custom.jjstate = {
+        detect_folders = [ ".jj" ];
+        command = ''
+          jj log -r@ -n1 --no-graph -T "" --stat | tail -n1 | sd "(\d+) files? changed, (\d+) insertions?\(\+\), (\d+) deletions?\(-\)" ' ''${1}m ''${2}+ ''${3}-' | sd " 0." ""
+        '';
       };
 
       status = {
