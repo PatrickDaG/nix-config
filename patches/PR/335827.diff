@@ -1,10 +1,10 @@
 diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
-index 5293bce9b46f79..10b7dd378de1c0 100644
+index 27c96d4e3883b1..66bf1692f8d538 100644
 --- a/nixos/doc/manual/release-notes/rl-2505.section.md
 +++ b/nixos/doc/manual/release-notes/rl-2505.section.md
-@@ -429,6 +429,10 @@
- - `services.netbird.tunnels` was renamed to [`services.netbird.clients`](#opt-services.netbird.clients),
-   hardened (using dedicated less-privileged users) and significantly extended.
+@@ -460,6 +460,10 @@
+   As a result, all sections previously defined under `services.rsyncd.settings` must now be put in `services.rsyncd.settings.sections`.
+   Global settings must now be placed in `services.rsyncd.settings.globalSection` instead of `services.rsyncd.settings.global`.
  
 +- The `octoprint` service has gained an `enableRaspberryPi` option, which will
 +  be disabled for state versions following 25.05. Users running on Raspberry Pi
@@ -14,7 +14,7 @@ index 5293bce9b46f79..10b7dd378de1c0 100644
  
  ## Other Notable Changes {#sec-release-25.05-notable-changes}
 diff --git a/nixos/modules/services/misc/octoprint.nix b/nixos/modules/services/misc/octoprint.nix
-index 193e4222a37e7e..443f29d310abdf 100644
+index 45c631a36dfd0f..ac1f13270dddf3 100644
 --- a/nixos/modules/services/misc/octoprint.nix
 +++ b/nixos/modules/services/misc/octoprint.nix
 @@ -6,17 +6,22 @@
@@ -46,7 +46,7 @@ index 193e4222a37e7e..443f29d310abdf 100644
 -  cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 +  configFile = formatType.generate "octoprint-config.yaml" cfg.settings;
  
-   pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
+   pluginsEnv = cfg.package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
  
 @@ -72,18 +77,32 @@ in
          description = "State directory of the daemon.";
@@ -277,7 +277,7 @@ index 2e7c7dbe06428f..00000000000000
 -             commandline = data["webcam"]["ffmpegCommandline"]
 -             if not all(
 diff --git a/pkgs/by-name/oc/octoprint/package.nix b/pkgs/by-name/oc/octoprint/package.nix
-index 4a9d9b5d02b7a4..5eef44e0b375c2 100644
+index 951b69d5c4de4a..d98013d6f6abae 100644
 --- a/pkgs/by-name/oc/octoprint/package.nix
 +++ b/pkgs/by-name/oc/octoprint/package.nix
 @@ -1,5 +1,4 @@
@@ -286,7 +286,7 @@ index 4a9d9b5d02b7a4..5eef44e0b375c2 100644
    stdenv,
    callPackage,
    lib,
-@@ -197,11 +196,6 @@ let
+@@ -148,11 +147,6 @@ let
              (replaceVars ./pip-path.patch {
                pip = "${self.pip}/bin/pip";
              })
@@ -298,8 +298,8 @@ index 4a9d9b5d02b7a4..5eef44e0b375c2 100644
            ];
  
            postPatch =
-@@ -265,6 +259,7 @@ let
-               gebner
+@@ -213,6 +207,7 @@ let
+               abbradar
                WhittlesJr
                gador
 +              patrickdag

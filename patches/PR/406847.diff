@@ -1,0 +1,988 @@
+diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
+index ebbd62adee7ca1..651fd0fae85de4 100644
+--- a/nixos/doc/manual/release-notes/rl-2505.section.md
++++ b/nixos/doc/manual/release-notes/rl-2505.section.md
+@@ -126,6 +126,8 @@
+ 
+ - [vivid](https://github.com/sharkdp/vivid), a generator for LS_COLOR. Available as [programs.vivid](#opt-programs.vivid.enable).
+ 
++- [ente](https://github.com/ente-io/ente), a service that provides a fully open source, end-to-end encrypted platform for photos and videos. Available as [services.ente.api](#opt-services.ente.api.enable) and  [services.ente.web](#opt-services.ente.web.enable).
++
+ - [matrix-alertmanager](https://github.com/jaywink/matrix-alertmanager), a bot to receive Alertmanager webhook events and forward them to chosen Matrix rooms. Available as [services.matrix-alertmanager](options.html#opt-services.matrix-alertmanager.enable).
+ 
+ - [waagent](https://github.com/Azure/WALinuxAgent), the Microsoft Azure Linux Agent (waagent) manages Linux provisioning and VM interaction with the Azure Fabric Controller. Available with [services.waagent](options.html#opt-services.waagent.enable).
+diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
+index 9fb36ff6e10f8e..5170afc0e9ac06 100644
+--- a/nixos/modules/module-list.nix
++++ b/nixos/modules/module-list.nix
+@@ -1533,6 +1533,7 @@
+   ./services/web-apps/echoip.nix
+   ./services/web-apps/eintopf.nix
+   ./services/web-apps/engelsystem.nix
++  ./services/web-apps/ente.nix
+   ./services/web-apps/ethercalc.nix
+   ./services/web-apps/fider.nix
+   ./services/web-apps/filesender.nix
+diff --git a/nixos/modules/services/web-apps/ente.md b/nixos/modules/services/web-apps/ente.md
+new file mode 100644
+index 00000000000000..c05868ce26f311
+--- /dev/null
++++ b/nixos/modules/services/web-apps/ente.md
+@@ -0,0 +1,155 @@
++# Ente.io {#module-services-ente}
++
++[Ente](https://ente.io/) is a service that provides a fully open source,
++end-to-end encrypted platform for photos and videos.
++
++## Quickstart {#module-services-ente-quickstart}
++
++To host ente, you need the following things:
++- S3 storage server (either external or self-hosted via minio)
++- Several subdomains pointing to your server:
++  - accounts.example.com
++  - albums.example.com
++  - api.example.com
++  - cast.example.com
++  - photos.example.com
++  - s3.example.com
++
++The following example shows how to setup ente with a self-hosted S3 storage via minio.
++You can host the minio s3 storage on the same server as ente, but as this isn't
++a requirement the example shows the minio and ente setup separately.
++We assume that the minio server will be reachable at `https://s3.example.com`.
++
++```nix
++{
++  # Enable minio
++  services.minio = {
++    enable = true;
++    # This must match the region in ente's config!
++    region = "us-east-1";
++    # Please use agenix or sops-nix to store a secret file containing
++    # your desired minio root user and password.
++    #
++    # MINIO_ROOT_USER=your_root_user
++    # MINIO_ROOT_PASSWORD=a_randomly_generated_long_password
++    rootCredentialsFile = "/run/secrets/minio-credentials-full";
++  };
++
++  systemd.services.minio.environment.MINIO_SERVER_URL = "https://s3.example.com";
++
++  # Proxy for minio
++  networking.firewall.allowedTCPPorts = [ 80 443 ];
++  services.nginx = {
++    recommendedProxySettings = true;
++    virtualHosts."s3.example.com" = {
++      forceSSL = true;
++      useACME = true;
++      locations."/".proxyPass = "http://localhost:9000";
++      # determine max file upload size
++      extraConfig = ''
++        client_max_body_size 16G;
++        proxy_buffering off;
++        proxy_request_buffering off;
++      '';
++    };
++  };
++}
++```
++
++And the configuration for ente:
++
++```nix
++{
++  services.ente = {
++    web = {
++      enable = true;
++      domains = {
++        accounts = "accounts.example.com";
++        albums = "albums.example.com";
++        cast = "cast.example.com";
++        photos = "photos.example.com";
++      };
++    };
++    api = {
++      enable = true;
++      nginx.enable = true;
++      # Create a local postgres database and set the necessary config in ente
++      enableLocalDB = true;
++      domain = "api.example.com";
++      settings = {
++        s3 = {
++          use_path_style_urls = true;
++          b2-eu-cen = {
++            endpoint = "https://s3.example.com";
++            region = "us-east-1";
++            bucket = "b2-eu-cen";
++          };
++        };
++      };
++      # All of these are secrets, please make sure to not include them directly
++      # in the config. They would be publicly readable in the nix store.
++      # Use agenix, sops-nix or an equivalent secret management solution.
++      settingsSecret = {
++        s3.b2-eu-cen = {
++          key = pkgs.writeText "minio_user" "minio_user";
++          secret = pkgs.writeText "minio_pw" "minio_pw";
++        };
++        key = {
++          encryption = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
++          hash = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
++        };
++        jwt.secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
++      };
++    };
++  };
++
++  networking.firewall.allowedTCPPorts = [ 80 443 ];
++  services.nginx = {
++    recommendedProxySettings = true; # This is important!
++    virtualHosts."accounts.${domain}".enableACME = true;
++    virtualHosts."albums.${domain}".enableACME = true;
++    virtualHosts."api.${domain}".enableACME = true;
++    virtualHosts."cast.${domain}".enableACME = true;
++    virtualHosts."photos.${domain}".enableACME = true;
++  };
++}
++```
++
++If you have a mail server or smtp relay, you can optionally configure
++`services.ente.api.settings.smtp` so ente can send you emails (registration code and possibly
++other events). This is optional.
++
++After starting the minio server, make sure the bucket exists:
++
++```
++mc config host add minio https://s3.example.com root_user root_password --api s3v4
++mc mb -p minio/b2-eu-cen
++```
++
++Now ente should be ready to go under `https://photos.example.com`.
++
++## Registering users {#module-services-ente-registering-users}
++
++Now you can open photos.example.com and register your user(s).
++Beware that the first created account will be considered to be the admin account,
++which among some other things allows you to use `ente-cli` to increase storage limits for any user.
++
++If you have configured smtp, you will get a mail with a verification code,
++otherwise you can find the code in the server logs.
++
++```
++journalctl -eu ente
++[...]
++ente # [  157.145165] ente[982]: INFO[0141]email.go:130 sendViaTransmail Skipping sending email to a@a.a: Verification code: 134033
++```
++
++After you have registered your users, you can set
++`settings.internal.disable-registration = true;` to prevent
++further signups.
++
++## Increasing storage limit {#module-services-ente-increasing-storage-limit}
++
++By default, all users will be on the free plan which is the only plan
++available. While adding new plans is possible in theory, it requires some
++manual database operations which isn't worthwhile. Instead, use `ente-cli`
++with your admin user to modify the storage limit.
+diff --git a/nixos/modules/services/web-apps/ente.nix b/nixos/modules/services/web-apps/ente.nix
+new file mode 100644
+index 00000000000000..7f402b6fe316ee
+--- /dev/null
++++ b/nixos/modules/services/web-apps/ente.nix
+@@ -0,0 +1,370 @@
++{
++  config,
++  lib,
++  pkgs,
++  ...
++}:
++let
++  inherit (lib)
++    getExe
++    mapAttrsRecursive
++    mkDefault
++    mkEnableOption
++    mkIf
++    mkMerge
++    mkOption
++    mkPackageOption
++    optional
++    recursiveUpdate
++    types
++    ;
++
++  cfgApi = config.services.ente.api;
++  cfgWeb = config.services.ente.web;
++
++  webPackage =
++    enteApp:
++    cfgWeb.package.override {
++      inherit enteApp;
++      enteMainUrl = "https://${cfgWeb.domains.photos}";
++      extraBuildEnv = {
++        NEXT_PUBLIC_ENTE_ENDPOINT = "https://${cfgApi.domain}";
++        NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT = cfgApi.settings.apps.public-albums;
++        NEXT_TELEMETRY_DISABLED = "1";
++      };
++    };
++
++  defaultUser = "ente";
++  defaultGroup = "ente";
++  dataDir = "/var/lib/ente";
++
++  yamlFormat = pkgs.formats.yaml { };
++
++  # Generate settings yaml with empty strings at any position where a secret
++  # will be used, this is required by museum.
++  settingsYaml = yamlFormat.generate "museum.yaml" (
++    recursiveUpdate cfgApi.settings (mapAttrsRecursive (_: _: "") cfgApi.settingsSecret)
++  );
++
++  # Generate a secret settings yaml which associates the file containing the
++  # secret for each setting.
++  secretFilesYaml = yamlFormat.generate "museum-secrets.yaml" cfgApi.settingsSecret;
++in
++{
++  options.services.ente = {
++    web = {
++      enable = mkEnableOption "Ente web frontend (Photos, Albums)";
++      package = mkPackageOption pkgs "ente-web" { };
++
++      domains = {
++        accounts = mkOption {
++          type = types.str;
++          description = "The domain under which the accounts frontend will be served. Must be https.";
++        };
++
++        cast = mkOption {
++          type = types.str;
++          description = "The domain under which the cast frontend will be served. Must be https.";
++        };
++
++        albums = mkOption {
++          type = types.str;
++          description = "The domain under which the albums frontend will be served. Must be https.";
++        };
++
++        photos = mkOption {
++          type = types.str;
++          description = "The domain under which the photos frontend will be served. Must be https.";
++        };
++      };
++    };
++
++    api = {
++      enable = mkEnableOption "Museum (API server for ente.io)";
++      package = mkPackageOption pkgs "museum" { };
++      nginx.enable = mkEnableOption "nginx proxy for the API server";
++
++      user = mkOption {
++        type = types.str;
++        default = defaultUser;
++        description = "User under which museum runs.";
++      };
++
++      group = mkOption {
++        type = types.str;
++        default = defaultGroup;
++        description = "Group under which museum runs.";
++      };
++
++      domain = mkOption {
++        type = types.str;
++        description = "The domain under which the api will be served.";
++      };
++
++      enableLocalDB = mkEnableOption "the automatic creation of a local postgres database for museum.";
++
++      settings = mkOption {
++        description = ''
++          Museum yaml configuration.
++          Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
++        '';
++        default = { };
++        type = types.submodule {
++          freeformType = yamlFormat.type;
++          options = {
++            apps = {
++              public-albums = mkOption {
++                type = types.str;
++                default = "https://albums.ente.io";
++                description = ''
++                  If you're running a self hosted instance and wish to serve public links,
++                  set this to the URL where your albums web app is running.
++                '';
++              };
++
++              cast = mkOption {
++                type = types.str;
++                default = "https://cast.ente.io";
++                description = ''
++                  Set this to the URL where your cast page is running.
++                  This is for browser and chromecast casting support.
++                '';
++              };
++
++              accounts = mkOption {
++                type = types.str;
++                default = "https://accounts.ente.io";
++                description = ''
++                  Set this to the URL where your accounts page is running.
++                  This is primarily for passkey support.
++                '';
++              };
++            };
++
++            db = {
++              host = mkOption {
++                type = types.str;
++                description = "The database host";
++              };
++
++              port = mkOption {
++                type = types.port;
++                default = 5432;
++                description = "The database port";
++              };
++
++              name = mkOption {
++                type = types.str;
++                description = "The database name";
++              };
++
++              user = mkOption {
++                type = types.str;
++                description = "The database user";
++              };
++            };
++          };
++        };
++      };
++
++      settingsSecret = mkOption {
++        description = ''
++          Museum yaml configuration overrides. Similar to
++          {option}`services.ente.api.settings`, but values specified here must
++          be files. The file content will automatically be loaded at runtime and
++          used to set/override the associated yaml setting. Useful to specify
++          secrets. Values will always be strings.
++
++          Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
++        '';
++        default = { };
++        type = types.submodule {
++          freeformType =
++            let
++              recursiveAttrsOrPath = types.lazyAttrsOf (types.either types.path recursiveAttrsOrPath) // {
++                description = "recursive attrs or path";
++              };
++            in
++            recursiveAttrsOrPath;
++        };
++      };
++    };
++  };
++
++  config = mkMerge [
++    (mkIf cfgApi.enable {
++      services.postgresql = mkIf cfgApi.enableLocalDB {
++        enable = true;
++        ensureUsers = [
++          {
++            name = "ente";
++            ensureDBOwnership = true;
++          }
++        ];
++        ensureDatabases = [ "ente" ];
++      };
++
++      services.ente.api.settings = {
++        log-file = mkDefault "";
++        db = mkIf cfgApi.enableLocalDB {
++          host = "/run/postgresql";
++          port = 5432;
++          name = "ente";
++          user = "ente";
++        };
++      };
++
++      systemd.services.ente = {
++        description = "Ente.io Museum API Server";
++        after = [ "network.target" ] ++ optional cfgApi.enableLocalDB "postgresql.service";
++        requires = optional cfgApi.enableLocalDB "postgresql.service";
++        wantedBy = [ "multi-user.target" ];
++
++        preStart = ''
++          # Load secret values and merge over base settings
++          BASE_FILE=${settingsYaml} \
++            ${getExe pkgs.yq-go} 'load(strenv(BASE_FILE)) * ((.. | select(kind == "scalar")) |= load_str(.))' ${secretFilesYaml} \
++            > /run/ente/local.yaml
++
++          mkdir -p ${dataDir}/configurations
++          ln -sTf /run/ente/local.yaml ${dataDir}/configurations/local.yaml
++        '';
++
++        serviceConfig = {
++          ExecStart = getExe cfgApi.package;
++          Type = "simple";
++          Restart = "on-failure";
++
++          AmbientCapablities = [ ];
++          CapabilityBoundingSet = [ ];
++          LockPersonality = true;
++          MemoryDenyWriteExecute = true;
++          NoNewPrivileges = true;
++          PrivateMounts = true;
++          PrivateTmp = true;
++          PrivateUsers = false;
++          ProcSubset = "pid";
++          ProtectClock = true;
++          ProtectControlGroups = true;
++          ProtectHome = true;
++          ProtectHostname = true;
++          ProtectKernelLogs = true;
++          ProtectKernelModules = true;
++          ProtectKernelTunables = true;
++          ProtectProc = "invisible";
++          ProtectSystem = "strict";
++          RestrictAddressFamilies = [
++            "AF_INET"
++            "AF_INET6"
++            "AF_NETLINK"
++            "AF_UNIX"
++          ];
++          RestrictNamespaces = true;
++          RestrictRealtime = true;
++          RestrictSUIDSGID = true;
++          SystemCallArchitectures = "native";
++          SystemCallFilter = "@system-service";
++          UMask = "077";
++
++          BindReadOnlyPaths = [
++            "${cfgApi.package}/share/museum/migrations:${dataDir}/migrations"
++            "${cfgApi.package}/share/museum/mail-templates:${dataDir}/mail-templates"
++          ];
++
++          User = cfgApi.user;
++          Group = cfgApi.group;
++
++          SyslogIdentifier = "ente";
++          StateDirectory = "ente";
++          WorkingDirectory = dataDir;
++          RuntimeDirectory = "ente";
++        };
++
++        # Environment MUST be called local, otherwise we cannot log to stdout
++        environment = {
++          ENVIRONMENT = "local";
++          GIN_MODE = "release";
++        };
++      };
++
++      users = {
++        users = mkIf (cfgApi.user == defaultUser) {
++          ${defaultUser} = {
++            description = "ente.io museum service user";
++            inherit (cfgApi) group;
++            isSystemUser = true;
++            home = dataDir;
++          };
++        };
++        groups = mkIf (cfgApi.group == defaultGroup) { ${defaultGroup} = { }; };
++      };
++
++      services.nginx = mkIf cfgApi.nginx.enable {
++        enable = true;
++        upstreams.museum = {
++          servers."localhost:8080" = { };
++          extraConfig = ''
++            zone museum 64k;
++            keepalive 20;
++          '';
++        };
++
++        virtualHosts.${cfgApi.domain} = {
++          forceSSL = mkDefault true;
++          locations."/".proxyPass = "http://museum";
++          extraConfig = ''
++            client_max_body_size 4M;
++          '';
++        };
++      };
++    })
++    (mkIf cfgWeb.enable {
++      services.ente.api.settings = {
++        apps = {
++          accounts = "https://${cfgWeb.domains.accounts}";
++          cast = "https://${cfgWeb.domains.cast}";
++          public-albums = "https://${cfgWeb.domains.albums}";
++        };
++
++        webauthn = {
++          rpid = cfgWeb.domains.accounts;
++          rporigins = [ "https://${cfgWeb.domains.accounts}" ];
++        };
++      };
++
++      services.nginx =
++        let
++          domainFor = app: cfgWeb.domains.${app};
++        in
++        {
++          enable = true;
++          virtualHosts.${domainFor "accounts"} = {
++            forceSSL = mkDefault true;
++            locations."/" = {
++              root = webPackage "accounts";
++              tryFiles = "$uri $uri.html /index.html";
++            };
++          };
++          virtualHosts.${domainFor "cast"} = {
++            forceSSL = mkDefault true;
++            locations."/" = {
++              root = webPackage "cast";
++              tryFiles = "$uri $uri.html /index.html";
++            };
++          };
++          virtualHosts.${domainFor "photos"} = {
++            serverAliases = [
++              (domainFor "albums") # the albums app is shared with the photos frontend
++            ];
++            forceSSL = mkDefault true;
++            locations."/" = {
++              root = webPackage "photos";
++              tryFiles = "$uri $uri.html /index.html";
++            };
++          };
++        };
++    })
++  ];
++
++  meta.maintainers = with lib.maintainers; [ oddlama ];
++}
+diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
+index c2793c276fa425..2e945f93628a8e 100644
+--- a/nixos/tests/all-tests.nix
++++ b/nixos/tests/all-tests.nix
+@@ -427,6 +427,7 @@ in
+   endlessh = handleTest ./endlessh.nix { };
+   endlessh-go = handleTest ./endlessh-go.nix { };
+   engelsystem = handleTest ./engelsystem.nix { };
++  ente = runTest ./ente;
+   enlightenment = handleTest ./enlightenment.nix { };
+   env = handleTest ./env.nix { };
+   envfs = handleTest ./envfs.nix { };
+diff --git a/nixos/tests/ente/acme.test.cert.pem b/nixos/tests/ente/acme.test.cert.pem
+new file mode 100644
+index 00000000000000..e7c82d2f73d683
+--- /dev/null
++++ b/nixos/tests/ente/acme.test.cert.pem
+@@ -0,0 +1,15 @@
++-----BEGIN CERTIFICATE-----
++MIICRDCCAcqgAwIBAgIIBx6YLUwhT34wCgYIKoZIzj0EAwMwIDEeMBwGA1UEAxMV
++bWluaWNhIHJvb3QgY2EgNjRhYWY2MB4XDTI1MDUxMzA4NTMyMVoXDTQ1MDUxMzA4
++NTMyMVowFDESMBAGA1UEAxMJYWNtZS50ZXN0MHYwEAYHKoZIzj0CAQYFK4EEACID
++YgAEcuBBV1FZ9s6D3Iz3+K07BwtcSqDOmk5WGsuL/owdeIQkT5OhqdZ+0v4TA6V3
++HLb9fyaEeZ6cG8vX4fMy6wIMi1E38o1cfiTYLjS9mU/GVN+eTsnYdUS8g7uz8p0e
++C0X2o4HcMIHZMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYI
++KwYBBQUHAwIwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBTNdPze2U/U7/72ULml
++V/K/73d2xTB5BgNVHREEcjBwgglhY21lLnRlc3SCEmFjY291bnRzLmFjbWUudGVz
++dIIQYWxidW1zLmFjbWUudGVzdIINYXBpLmFjbWUudGVzdIIOY2FzdC5hY21lLnRl
++c3SCEHBob3Rvcy5hY21lLnRlc3SCDHMzLmFjbWUudGVzdDAKBggqhkjOPQQDAwNo
++ADBlAjB9Eao+y/Wzy+mMw4e4P2OidFxDFv8o1jDlCN5mvXBQrlAoSKVwgkpreKsd
++R/3iaacCMQC7CS3XKJVRbOtI6CjVHs7SV9fwCqJ6EaLcUjeNcigxcSRKGfG1ntl+
++bt0LubZZd+c=
++-----END CERTIFICATE-----
+diff --git a/nixos/tests/ente/acme.test.key.pem b/nixos/tests/ente/acme.test.key.pem
+new file mode 100644
+index 00000000000000..c3b4abe92243f6
+--- /dev/null
++++ b/nixos/tests/ente/acme.test.key.pem
+@@ -0,0 +1,6 @@
++-----BEGIN PRIVATE KEY-----
++MIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDB631W2iczyfu4h/4f/
++721JKAsYRAnxLV7oYSUv9rFC+z8CPC7T74Lzmoccr0mR72WhZANiAARy4EFXUVn2
++zoPcjPf4rTsHC1xKoM6aTlYay4v+jB14hCRPk6Gp1n7S/hMDpXcctv1/JoR5npwb
++y9fh8zLrAgyLUTfyjVx+JNguNL2ZT8ZU355Oydh1RLyDu7PynR4LRfY=
++-----END PRIVATE KEY-----
+diff --git a/nixos/tests/ente/ca.cert.pem b/nixos/tests/ente/ca.cert.pem
+new file mode 100644
+index 00000000000000..a97a510bb2f635
+--- /dev/null
++++ b/nixos/tests/ente/ca.cert.pem
+@@ -0,0 +1,13 @@
++-----BEGIN CERTIFICATE-----
++MIIB/DCCAYKgAwIBAgIIZKr2ScoFkWAwCgYIKoZIzj0EAwMwIDEeMBwGA1UEAxMV
++bWluaWNhIHJvb3QgY2EgNjRhYWY2MCAXDTI1MDUxMzA4NTMyMVoYDzIxMjUwNTEz
++MDg1MzIxWjAgMR4wHAYDVQQDExVtaW5pY2Egcm9vdCBjYSA2NGFhZjYwdjAQBgcq
++hkjOPQIBBgUrgQQAIgNiAAST7GqqY2N7XW9SDHXkNOhbLMaIBTtdCpmu4AAEjRzS
++/KozwcGfWf98GyMJ+t8bFg9f0mCbWrl1TVhIb3eV7k7oadJYvBNljIBnnkKgmw1b
++nzIE0qbzcRWmz0m5ReFNkGCjgYYwgYMwDgYDVR0PAQH/BAQDAgKEMB0GA1UdJQQW
++MBQGCCsGAQUFBwMBBggrBgEFBQcDAjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1Ud
++DgQWBBTNdPze2U/U7/72ULmlV/K/73d2xTAfBgNVHSMEGDAWgBTNdPze2U/U7/72
++ULmlV/K/73d2xTAKBggqhkjOPQQDAwNoADBlAjBto95DikOxFmQEv/c5dCbz4eYW
++dsB78N+m2nrMgx10pzOvXNkvrt/D3mUbbnZI1DMCMQDQKQ+qPUF+PdDdSc21v778
++4Sokp/5SNBUVm7CT0I7OiPTtuLc//r6SK8d9VBQArx0=
++-----END CERTIFICATE-----
+diff --git a/nixos/tests/ente/ca.key.pem b/nixos/tests/ente/ca.key.pem
+new file mode 100644
+index 00000000000000..aacdbe5ef78d18
+--- /dev/null
++++ b/nixos/tests/ente/ca.key.pem
+@@ -0,0 +1,6 @@
++-----BEGIN PRIVATE KEY-----
++MIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDCIBDkk1pfjwxBpwex2
++2izySRuBmJ4Za2aRtbnTbPevhHYs0WL8LTPID47dAt0erFihZANiAAST7GqqY2N7
++XW9SDHXkNOhbLMaIBTtdCpmu4AAEjRzS/KozwcGfWf98GyMJ+t8bFg9f0mCbWrl1
++TVhIb3eV7k7oadJYvBNljIBnnkKgmw1bnzIE0qbzcRWmz0m5ReFNkGA=
++-----END PRIVATE KEY-----
+diff --git a/nixos/tests/ente/default.nix b/nixos/tests/ente/default.nix
+new file mode 100644
+index 00000000000000..3f4357b107d6b1
+--- /dev/null
++++ b/nixos/tests/ente/default.nix
+@@ -0,0 +1,141 @@
++{ lib, pkgs, ... }:
++let
++  accessKey = "BKIKJAA5BMMU2RHO6IBB";
++  secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
++  rootCredentialsFile = pkgs.writeText "minio-credentials-full" ''
++    MINIO_ROOT_USER=${accessKey}
++    MINIO_ROOT_PASSWORD=${secretKey}
++  '';
++
++  certs = import ./snakeoil-certs.nix;
++  domain = certs.domain;
++in
++{
++  name = "ente";
++  meta.maintainers = [ lib.maintainers.oddlama ];
++
++  nodes.minio =
++    { ... }:
++    {
++      environment.systemPackages = [ pkgs.minio-client ];
++      services.minio = {
++        enable = true;
++        inherit rootCredentialsFile;
++      };
++
++      networking.firewall.allowedTCPPorts = [
++        9000
++      ];
++
++      systemd.services.minio.environment = {
++        MINIO_SERVER_URL = "https://s3.${domain}";
++      };
++    };
++
++  nodes.ente =
++    {
++      config,
++      nodes,
++      lib,
++      ...
++    }:
++    {
++      security.pki.certificateFiles = [ certs.ca.cert ];
++
++      networking.extraHosts = ''
++        ${config.networking.primaryIPAddress} accounts.${domain} albums.${domain} api.${domain} cast.${domain} photos.${domain} s3.${domain}
++      '';
++
++      networking.firewall.allowedTCPPorts = [
++        80
++        443
++      ];
++
++      services.nginx = {
++        recommendedProxySettings = true;
++        virtualHosts =
++          lib.genAttrs
++            [
++              "accounts.${domain}"
++              "albums.${domain}"
++              "api.${domain}"
++              "cast.${domain}"
++              "photos.${domain}"
++            ]
++            (_: {
++              sslCertificate = certs.${domain}.cert;
++              sslCertificateKey = certs.${domain}.key;
++            })
++          // {
++            "s3.${domain}" = {
++              forceSSL = true;
++              sslCertificate = certs.${domain}.cert;
++              sslCertificateKey = certs.${domain}.key;
++              locations."/".proxyPass = "http://${nodes.minio.networking.primaryIPAddress}:9000";
++              extraConfig = ''
++                client_max_body_size 32M;
++                proxy_buffering off;
++                proxy_request_buffering off;
++              '';
++            };
++          };
++      };
++
++      services.ente = {
++        web = {
++          enable = true;
++          domains = {
++            accounts = "accounts.${domain}";
++            albums = "albums.${domain}";
++            cast = "cast.${domain}";
++            photos = "photos.${domain}";
++          };
++        };
++        api = {
++          enable = true;
++          nginx.enable = true;
++          enableLocalDB = true;
++          domain = "api.${domain}";
++          settingsSecret = {
++            s3.b2-eu-cen = {
++              key = pkgs.writeText "accesskey" accessKey;
++              secret = pkgs.writeText "secretkey" secretKey;
++            };
++            key = {
++              encryption = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
++              hash = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
++            };
++            jwt.secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
++          };
++          settings = {
++            s3 = {
++              use_path_style_urls = true;
++              b2-eu-cen = {
++                endpoint = "https://s3.${domain}";
++                region = "us-east-1";
++                bucket = "b2-eu-cen";
++              };
++            };
++          };
++        };
++      };
++    };
++
++  testScript = ''
++    minio.start()
++    minio.wait_for_unit("minio.service")
++    minio.wait_for_open_port(9000)
++
++    # Create a test bucket on the server
++    minio.succeed("mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4")
++    minio.succeed("mc mb -p minio/b2-eu-cen")
++
++    # Start ente
++    ente.start()
++    ente.wait_for_unit("ente.service")
++    ente.wait_for_unit("nginx.service")
++
++    # Wait until photos app is up
++    ente.wait_until_succeeds("curl -Ls https://photos.${domain}/ | grep -q 'Ente Photos'", timeout=30)
++  '';
++}
+diff --git a/nixos/tests/ente/generate-certs.nix b/nixos/tests/ente/generate-certs.nix
+new file mode 100644
+index 00000000000000..d0af53f82abc78
+--- /dev/null
++++ b/nixos/tests/ente/generate-certs.nix
+@@ -0,0 +1,36 @@
++# Minica can provide a CA key and cert, plus a key
++# and cert for our fake CA server's Web Front End (WFE).
++{
++  pkgs ? import <nixpkgs> { },
++  minica ? pkgs.minica,
++  mkDerivation ? pkgs.stdenv.mkDerivation,
++}:
++let
++  conf = import ./snakeoil-certs.nix;
++  domain = conf.domain;
++in
++mkDerivation {
++  name = "test-certs";
++  buildInputs = [
++    (minica.overrideAttrs (_old: {
++      prePatch = ''
++        sed -i 's_NotAfter: time.Now().AddDate(2, 0, 30),_NotAfter: time.Now().AddDate(20, 0, 0),_' main.go
++      '';
++    }))
++  ];
++  dontUnpack = true;
++
++  buildPhase = ''
++    minica \
++      --ca-key ca.key.pem \
++      --ca-cert ca.cert.pem \
++      --domains ${domain},accounts.${domain},albums.${domain},api.${domain},cast.${domain},photos.${domain},s3.${domain}
++  '';
++
++  installPhase = ''
++    mkdir -p $out
++    mv ca.*.pem $out/
++    mv ${domain}/key.pem $out/${domain}.key.pem
++    mv ${domain}/cert.pem $out/${domain}.cert.pem
++  '';
++}
+diff --git a/nixos/tests/ente/snakeoil-certs.nix b/nixos/tests/ente/snakeoil-certs.nix
+new file mode 100644
+index 00000000000000..405627979feef7
+--- /dev/null
++++ b/nixos/tests/ente/snakeoil-certs.nix
+@@ -0,0 +1,14 @@
++let
++  domain = "acme.test";
++in
++{
++  inherit domain;
++  ca = {
++    cert = ./ca.cert.pem;
++    key = ./ca.key.pem;
++  };
++  "${domain}" = {
++    cert = ./. + "/${domain}.cert.pem";
++    key = ./. + "/${domain}.key.pem";
++  };
++}
+diff --git a/pkgs/by-name/en/ente-web/package.nix b/pkgs/by-name/en/ente-web/package.nix
+index 3c8515170b4332..71453b82af9eae 100644
+--- a/pkgs/by-name/en/ente-web/package.nix
++++ b/pkgs/by-name/en/ente-web/package.nix
+@@ -8,10 +8,17 @@
+   yarnBuildHook,
+   nix-update-script,
+-  extraBuildEnv ? { },
++  extraBuildEnv ? { NEXT_PUBLIC_ENTE_ENDPOINT = "ctie1"; NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT = "ctie2"; NEXT_TELEMETRY_DISABLED = "1"; },
++  # This package contains serveral sub-applications. This specifies which of them you want to build.
++  enteApp ? "photos",
++  # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
++  # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you
++  # can set this parameter to override these occurrences with your own url. Must include the schema.
++  # Example: https://my-ente.example.com
++  enteMainUrl ? "ctiectiectie",
+ }:
+ 
+ stdenv.mkDerivation (finalAttrs: {
+-  pname = "ente-web";
++  pname = "ente-web-${enteApp}";
+   version = "1.0.4";
+ 
+   src = fetchFromGitHub {
+@@ -38,14 +45,31 @@ stdenv.mkDerivation (finalAttrs: {
+   # See: https://github.com/ente-io/ente/blob/main/web/apps/photos/.env
+   env = extraBuildEnv;
+ 
+-  installPhase = ''
+-    runHook preInstall
++  # Replace hardcoded ente.io urls if desired
++  postPatch = lib.optionalString (enteMainUrl != null) ''
++    substituteInPlace \
++      apps/payments/src/services/billing.ts \
++      apps/photos/src/pages/shared-albums.tsx \
++      --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
+ 
+-    cp -r apps/photos/out $out
+-
+-    runHook postInstall
++    substituteInPlace \
++      apps/accounts/src/pages/index.tsx \
++      --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
+   '';
+ 
++  yarnBuildScript = "build:${enteApp}";
++  installPhase =
++    let
++      distName = if enteApp == "payments" then "dist" else "out";
++    in
++    ''
++      runHook preInstall
++
++      cp -r apps/${enteApp}/${distName} $out
++
++      runHook postInstall
++    '';
++
+   passthru.updateScript = nix-update-script {
+     extraArgs = [
+       "--version-regex"
+@@ -54,12 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
+   };
+ 
+   meta = {
+-    description = "Web client for Ente Photos";
++    description = "Ente application web frontends";
+     homepage = "https://ente.io/";
+     changelog = "https://github.com/ente-io/ente/releases";
+     license = lib.licenses.agpl3Only;
+     maintainers = with lib.maintainers; [
+       pinpox
++      oddlama
+     ];
+     platforms = lib.platforms.all;
+   };
+diff --git a/pkgs/by-name/mu/museum/package.nix b/pkgs/by-name/mu/museum/package.nix
+index ca4fccd5251bc7..4b0587d2de44ef 100644
+--- a/pkgs/by-name/mu/museum/package.nix
++++ b/pkgs/by-name/mu/museum/package.nix
+@@ -5,9 +5,10 @@
+   libsodium,
+   buildGoModule,
+   nix-update-script,
++  nixosTests,
+ }:
+ 
+-buildGoModule rec {
++buildGoModule (finalAttrs: {
+   pname = "museum";
+   version = "1.0.4";
+ 
+@@ -15,13 +16,13 @@ buildGoModule rec {
+     owner = "ente-io";
+     repo = "ente";
+     sparseCheckout = [ "server" ];
+-    rev = "photos-v${version}";
++    rev = "photos-v${finalAttrs.version}";
+     hash = "sha256-tFXOLzGGMrjVImOOl3RGaX3i/FwhjbGqKRdxv/xxKTs=";
+   };
+ 
+   vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
+ 
+-  sourceRoot = "${src.name}/server";
++  sourceRoot = "${finalAttrs.src.name}/server";
+ 
+   nativeBuildInputs = [
+     pkg-config
+@@ -41,21 +42,26 @@ buildGoModule rec {
+       $out/share/museum
+   '';
+ 
+-  passthru.updateScript = nix-update-script {
+-    extraArgs = [
+-      "--version-regex"
+-      "photos-v(.*)"
+-    ];
++  passthru = {
++    tests.ente = nixosTests.ente;
++    updateScript = nix-update-script {
++      extraArgs = [
++        "--version-regex"
++        "photos-v(.*)"
++      ];
++    };
+   };
+ 
+   meta = {
+     description = "API server for ente.io";
+     homepage = "https://github.com/ente-io/ente/tree/main/server";
++    changelog = "https://github.com/ente-io/ente/releases/tag/photos-v${finalAttrs.version}";
+     license = lib.licenses.agpl3Only;
+     maintainers = with lib.maintainers; [
+       pinpox
++      oddlama
+     ];
+     mainProgram = "museum";
+     platforms = lib.platforms.linux;
+   };
+-}
++})

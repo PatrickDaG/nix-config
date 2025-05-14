@@ -1,10 +1,10 @@
 diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
-index be29c7ca049a4b..56ea712840ee35 100644
+index 2c9b0242e9e8c7..ab1251bcd75103 100644
 --- a/nixos/doc/manual/redirects.json
 +++ b/nixos/doc/manual/redirects.json
-@@ -59,6 +59,9 @@
-   "module-services-strfry-reverse-proxy": [
-     "index.html#module-services-strfry-reverse-proxy"
+@@ -65,6 +65,9 @@
+   "module-services-dump1090-fa-configuration": [
+     "index.html#module-services-dump1090-fa-configuration"
    ],
 +  "module-services-netbird-server-proxy": [
 +    "index.html#module-services-netbird-server-proxy"
@@ -26,35 +26,15 @@ index 788b724231be31..c8f6836f0af930 100644
      domain = mkOption {
        type = str;
 diff --git a/nixos/modules/services/networking/netbird/management.nix b/nixos/modules/services/networking/netbird/management.nix
-index f05adb671e9923..1f26bf5b1f3168 100644
+index f05adb671e9923..8ea8e01f993f5e 100644
 --- a/nixos/modules/services/networking/netbird/management.nix
 +++ b/nixos/modules/services/networking/netbird/management.nix
-@@ -38,7 +38,7 @@ let
-     Stuns = [
-       {
-         Proto = "udp";
--        URI = "stun:${cfg.turnDomain}:3478";
-+        URI = "stun:${cfg.management.turnDomain}:3478";
-         Username = "";
-         Password = null;
-       }
-@@ -48,7 +48,7 @@ let
-       Turns = [
-         {
-           Proto = "udp";
--          URI = "turn:${cfg.turnDomain}:${builtins.toString cfg.turnPort}";
-+          URI = "turn:${cfg.management.turnDomain}:${builtins.toString cfg.management.turnPort}";
-           Username = "netbird";
-           Password = "netbird";
-         }
-@@ -58,10 +58,14 @@ let
+@@ -58,10 +58,12 @@ let
        Secret = "not-secure-secret";
        TimeBasedCredentials = false;
      };
 +    Relay = {
-+      Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
 +      CredentialsTTL = "24h";
-+      Secret._secret = cfg.relay.authSecretFile;
 +    };
  
      Signal = {
@@ -63,32 +43,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
        Username = "";
        Password = null;
      };
-@@ -79,9 +83,9 @@ let
-     };
- 
-     HttpConfig = {
--      Address = "127.0.0.1:${builtins.toString cfg.port}";
-+      Address = "127.0.0.1:${builtins.toString cfg.management.port}";
-       IdpSignKeyRefreshEnabled = true;
--      OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
-+      OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
-     };
- 
-     IdpManagerConfig = {
-@@ -128,18 +132,18 @@ let
-     };
-   };
- 
--  managementConfig = recursiveUpdate defaultSettings cfg.settings;
-+  managementConfig = recursiveUpdate defaultSettings cfg.management.settings;
- 
-   managementFile = settingsFormat.generate "config.json" managementConfig;
- 
--  cfg = config.services.netbird.server.management;
-+  cfg = config.services.netbird.server;
- in
- 
- {
+@@ -139,7 +141,7 @@ in
    options.services.netbird.server.management = {
      enable = mkEnableOption "Netbird Management Service";
  
@@ -97,7 +52,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
  
      domain = mkOption {
        type = str;
-@@ -220,95 +224,93 @@ in
+@@ -220,95 +222,92 @@ in
        inherit (settingsFormat) type;
  
        defaultText = literalExpression ''
@@ -106,7 +61,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 +        Stuns = [
 +          {
 +            Proto = "udp";
-+            URI = "stun:''${cfg.management.turnDomain}:3478";
++            URI = "stun:''${cfg.turnDomain}:3478";
 +            Username = "";
 +            Password = null;
 +          }
@@ -119,7 +74,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 -              URI = "stun:''${cfg.turnDomain}:3478";
 -              Username = "";
 -              Password = null;
-+              URI = "turn:''${cfg.management.turnDomain}:3478";
++              URI = "turn:''${cfg.turnDomain}:3478";
 +              Username = "netbird";
 +              Password = "netbird";
              }
@@ -152,7 +107,6 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 -          };
 +        Signal = {
 +          Proto = "https";
-+          URI = "localhost:''${cfg.signal.port}";
 +          Username = "";
 +          Password = null;
 +        };
@@ -171,7 +125,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 -          Datadir = "''${stateDir}/data";
 -          DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
 -          StoreConfig = { Engine = "sqlite"; };
-+        Datadir = "/var/lib/netbird-mgmt/data";
++        Datadir = "${stateDir}/data";
 +        DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
 +        StoreConfig = { Engine = "sqlite"; };
  
@@ -181,9 +135,9 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 -            OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
 -          };
 +        HttpConfig = {
-+          Address = "127.0.0.1:''${builtins.toString cfg.management.port}";
++          Address = "127.0.0.1:''${builtins.toString cfg.port}";
 +          IdpSignKeyRefreshEnabled = true;
-+          OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
++          OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
 +        };
  
 -          IdpManagerConfig = {
@@ -266,7 +220,7 @@ index f05adb671e9923..1f26bf5b1f3168 100644
            };
          };
        '';
-@@ -340,11 +342,9 @@ in
+@@ -340,8 +339,6 @@ in
        default = "INFO";
        description = "Log level of the netbird services.";
      };
@@ -274,67 +228,8 @@ index f05adb671e9923..1f26bf5b1f3168 100644
 -    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
    };
  
--  config = mkIf cfg.enable {
-+  config = mkIf cfg.management.enable {
-     warnings =
-       concatMap
-         (
-@@ -368,7 +368,7 @@ in
- 
-     assertions = [
-       {
--        assertion = cfg.port != cfg.metricsPort;
-+        assertion = cfg.management.port != cfg.management.metricsPort;
-         message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
-       }
-     ];
-@@ -386,7 +386,7 @@ in
-       serviceConfig = {
-         ExecStart = escapeSystemdExecArgs (
-           [
--            (getExe' cfg.package "netbird-mgmt")
-+            (getExe' cfg.management.package "netbird-mgmt")
-             "management"
-             # Config file
-             "--config"
-@@ -396,28 +396,28 @@ in
-             "${stateDir}/data"
-             # DNS domain
-             "--dns-domain"
--            cfg.dnsDomain
-+            cfg.management.dnsDomain
-             # Port to listen on
-             "--port"
--            cfg.port
-+            cfg.management.port
-             # Port the internal prometheus server listens on
-             "--metrics-port"
--            cfg.metricsPort
-+            cfg.management.metricsPort
-             # Log to stdout
-             "--log-file"
-             "console"
-             # Log level
-             "--log-level"
--            cfg.logLevel
-+            cfg.management.logLevel
-             #
-             "--idp-sign-key-refresh-enabled"
-             # Domain for internal resolution
-             "--single-account-mode-domain"
--            cfg.singleAccountModeDomain
-+            cfg.management.singleAccountModeDomain
-           ]
--          ++ (optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
--          ++ (optional cfg.disableSingleAccountMode "--disable-single-account-mode")
--          ++ cfg.extraOptions
-+          ++ (optional cfg.management.disableAnonymousMetrics "--disable-anonymous-metrics")
-+          ++ (optional cfg.management.disableSingleAccountMode "--disable-single-account-mode")
-+          ++ cfg.management.extraOptions
-         );
-         Restart = "always";
-         RuntimeDirectory = "netbird-mgmt";
-@@ -452,27 +452,5 @@ in
+   config = mkIf cfg.enable {
+@@ -452,27 +449,5 @@ in
        stopIfChanged = false;
      };
  
@@ -364,10 +259,10 @@ index f05adb671e9923..1f26bf5b1f3168 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 00000000000000..1500d22e5cb7d1
+index 00000000000000..175730b925897e
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,116 @@
 +{ lib, config, ... }:
 +let
 +  inherit (lib)
@@ -376,13 +271,13 @@ index 00000000000000..1500d22e5cb7d1
 +    mkOption
 +    mkDefault
 +    ;
-+  inherit (lib.types) str;
++  inherit (lib.types) str nullOr;
 +  cfg = config.services.netbird.server.proxy;
 +in
 +{
 +  options.services.netbird.server.proxy = {
 +
-+    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
++    enableNginx = mkEnableOption "the nginx reverse proxy as a complete, singular frontend for the server components of the Netbird overlay network";
 +
 +    signalAddress = mkOption {
 +      type = str;
@@ -397,13 +292,18 @@ index 00000000000000..1500d22e5cb7d1
 +
 +    managementAddress = mkOption {
 +      type = str;
-+      description = "Address to reach the dashboard.";
++      description = "Address to reach the management api.";
 +      example = "1.2.3.4:1766";
 +    };
 +
 +    dashboardAddress = mkOption {
-+      type = str;
-+      description = "Address to reach the dashboard.";
++      type = nullOr str;
++      default = null;
++      description = ''
++        Address to reach the dashboard.
++        If set to null, the default, it will not forward the dashboard,
++        use this if you want to host the proxy on the same host as the dasboard.
++      '';
 +      example = "1.2.3.4:1767";
 +    };
 +
@@ -428,10 +328,11 @@ index 00000000000000..1500d22e5cb7d1
 +          grpc_set_header         X-Forwarded-For $proxy_add_x_forwarded_for;
 +        '';
 +        locations = {
-+          "/" = {
-+            proxyPass = "http://${cfg.dashboardAddress}";
-+            proxyWebsockets = true;
-+          };
++          "/" =
++            mkIf cfg.dashboardAddress != null {
++              proxyPass = "http://${cfg.dashboardAddress}";
++              proxyWebsockets = true;
++            };
 +          "/api".proxyPass = "http://${cfg.managementAddress}";
 +
 +          "/management.ManagementService/".extraConfig = ''
@@ -480,7 +381,7 @@ index 00000000000000..1500d22e5cb7d1
 +}
 diff --git a/nixos/modules/services/networking/netbird/relay.nix b/nixos/modules/services/networking/netbird/relay.nix
 new file mode 100644
-index 00000000000000..01c4186505b0c5
+index 00000000000000..4d96ba80afc8e4
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/relay.nix
 @@ -0,0 +1,123 @@
@@ -549,7 +450,7 @@ index 00000000000000..01c4186505b0c5
 +        An attribute set that will be set as the environment for the process.
 +        Used for runtime configuration.
 +        The exact values sadly aren't documented anywhere.
-+        A starting point when searching for valid values is this [source file](https://github.com/netbirdio/netbird/blob/main/relay/cmd/root.go)
++        A starting point when searching for valid values is this [source file](https://github.com/netbirdio/netbird/blob/main/relay/cmd/root.go).
 +      '';
 +    };
 +
@@ -701,7 +602,7 @@ index 3649e97b379e5d..38fe184b943fa1 100644
 +- {option}`management.settings.Signal.URI`
 +- {option}`relay.setting.NB_EXPOSED_ADDRESS`
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 5865e06f18d0c2..362e070416047d 100644
+index 5865e06f18d0c2..613b8649656aaf 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
 @@ -26,12 +26,12 @@ in
@@ -728,23 +629,29 @@ index 5865e06f18d0c2..362e070416047d 100644
  
          managementServer = "https://${cfg.domain}";
        };
-@@ -53,13 +52,13 @@ in
+@@ -53,11 +52,19 @@ in
          {
            domain = mkDefault cfg.domain;
            enable = mkDefault cfg.enable;
 -          enableNginx = mkDefault cfg.enableNginx;
          }
++        // (optionalAttrs cfg.signal.enable {
++          settings.Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
++        })
++        // (optionalAttrs cfg.relay.enable {
++          settings.Relay = {
++            Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
++            Secret._secret = cfg.relay.authSecretFile;
++          };
++        })
          // (optionalAttrs cfg.coturn.enable rec {
            turnDomain = cfg.domain;
 -          turnPort = config.services.coturn.tls-listening-port;
 +          turnPort = config.services.coturn.listening-port;
            # We cannot merge a list of attrsets so we have to redefine the whole list
            settings = {
-+            Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
              TURNConfig.Turns = mkDefault [
-               {
-                 Proto = "udp";
-@@ -76,9 +75,12 @@ in
+@@ -76,9 +83,12 @@ in
          });
  
        signal = {
@@ -906,10 +813,10 @@ index 00000000000000..b521e828756735
 +  server = true;
 +}
 diff --git a/pkgs/by-name/ne/netbird/package.nix b/pkgs/by-name/ne/netbird/package.nix
-index faee3cb4e78ab2..7404fe2620fbc0 100644
+index 9ec81aa17401e5..86d8bdd9585a18 100644
 --- a/pkgs/by-name/ne/netbird/package.nix
 +++ b/pkgs/by-name/ne/netbird/package.nix
-@@ -13,21 +13,40 @@
+@@ -13,21 +13,25 @@
    libXcursor,
    libXxf86vm,
    ui ? false,
@@ -919,7 +826,7 @@ index faee3cb4e78ab2..7404fe2620fbc0 100644
    versionCheckHook,
  }:
  let
-   modules =
+-  modules =
 -    if ui then
 -      {
 -        "client/ui" = "netbird-ui";
@@ -930,37 +837,23 @@ index faee3cb4e78ab2..7404fe2620fbc0 100644
 -        management = "netbird-mgmt";
 -        signal = "netbird-signal";
 -      };
-+    { }
-+    // (
-+      if ui then
-+        {
-+          "client/ui" = "netbird-ui";
-+        }
-+      else
-+        { }
-+    )
-+    // (
-+      if client then
-+        {
-+          client = "netbird";
-+        }
-+      else
-+        { }
-+    )
-+    // (
-+      if server then
-+        {
-+          management = "netbird-mgmt";
-+          signal = "netbird-signal";
-+          relay = "netbird-relay";
-+        }
-+      else
-+        { }
-+    );
++  modules = lib.attrsets.mergeAttrsList [
++    (lib.attrsets.optionalAttrs ui {
++      "client/ui" = "netbird-ui";
++    })
++    (lib.attrsets.optionalAttrs client {
++      client = "netbird";
++    })
++    (lib.attrsets.optionalAttrs server {
++      management = "netbird-mgmt";
++      signal = "netbird-signal";
++      relay = "netbird-relay";
++    })
++  ];
  in
  buildGoModule (finalAttrs: {
    pname = "netbird";
-@@ -79,7 +98,8 @@ buildGoModule (finalAttrs: {
+@@ -79,7 +83,8 @@ buildGoModule (finalAttrs: {
          ''
            mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
          ''
@@ -970,7 +863,7 @@ index faee3cb4e78ab2..7404fe2620fbc0 100644
            installShellCompletion --cmd ${binary} \
              --bash <($out/bin/${binary} completion bash) \
              --fish <($out/bin/${binary} completion fish) \
-@@ -99,7 +119,7 @@ buildGoModule (finalAttrs: {
+@@ -99,7 +104,7 @@ buildGoModule (finalAttrs: {
      versionCheckHook
    ];
    versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
@@ -979,10 +872,10 @@ index faee3cb4e78ab2..7404fe2620fbc0 100644
    # Disabled for the `netbird-ui` version because it does a network request.
    doInstallCheck = !ui;
  
-@@ -119,7 +139,14 @@ buildGoModule (finalAttrs: {
-     maintainers = with lib.maintainers; [
+@@ -120,7 +125,14 @@ buildGoModule (finalAttrs: {
        vrifox
        saturn745
+       loc
 +      patrickdag
      ];
 -    mainProgram = if ui then "netbird-ui" else "netbird";

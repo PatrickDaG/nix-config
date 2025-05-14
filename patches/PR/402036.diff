@@ -1,11 +1,11 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index ed6265a77435c4..50ae8a2dce0455 100644
+index 073f8ebede1aa0..217b3e06a65500 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1525,6 +1525,7 @@
+@@ -1538,6 +1538,7 @@
    ./services/web-apps/filesender.nix
-   ./services/web-apps/firefly-iii.nix
    ./services/web-apps/firefly-iii-data-importer.nix
+   ./services/web-apps/firefly-iii.nix
 +  ./services/web-apps/firefly-pico.nix
    ./services/web-apps/flarum.nix
    ./services/web-apps/fluidd.nix
@@ -435,6 +435,141 @@ index 00000000000000..ad1d1a2d6ccafc
 +    };
 +  };
 +}
+diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
+index f0e816446511c2..3dc66e7567dacd 100644
+--- a/nixos/tests/all-tests.nix
++++ b/nixos/tests/all-tests.nix
+@@ -470,6 +470,7 @@ in
+   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
+   firefly-iii = runTest ./firefly-iii.nix;
+   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
++  firefly-pico = runTest ./firefly-pico.nix;
+   firefox = runTest {
+     imports = [ ./firefox.nix ];
+     _module.args.firefoxPackage = pkgs.firefox;
+diff --git a/nixos/tests/firefly-pico.nix b/nixos/tests/firefly-pico.nix
+new file mode 100644
+index 00000000000000..376938f3d818a5
+--- /dev/null
++++ b/nixos/tests/firefly-pico.nix
+@@ -0,0 +1,117 @@
++{ lib, ... }:
++
++let
++  db-pass = "Test2Test2";
++  app-key = "TestTestTestTestTestTestTestTest";
++in
++{
++  name = "firefly-pico";
++  meta.maintainers = [ lib.maintainers.patrickdag ];
++
++  nodes.fireflySqlite =
++    { config, ... }:
++    {
++      environment.etc = {
++        "firefly-pico-appkey".text = app-key;
++      };
++      services.firefly-pico = {
++        enable = true;
++        enableNginx = true;
++        settings = {
++          APP_KEY_FILE = "/etc/firefly-iii-appkey";
++          LOG_CHANNEL = "stdout";
++          FIREFLY_URL = "localhost";
++        };
++      };
++    };
++
++  nodes.fireflyPostgresql =
++    { config, pkgs, ... }:
++    {
++      environment.etc = {
++        "firefly-pico-appkey".text = app-key;
++        "postgres-pass".text = db-pass;
++      };
++      services.firefly-pico = {
++        enable = true;
++        enableNginx = true;
++        settings = {
++          APP_KEY_FILE = "/etc/firefly-pico-appkey";
++          LOG_CHANNEL = "stdout";
++          SITE_OWNER = "mail@example.com";
++          DB_CONNECTION = "pgsql";
++          DB_DATABASE = "firefly";
++          DB_USERNAME = "firefly";
++          DB_PASSWORD_FILE = "/etc/postgres-pass";
++          PGSQL_SCHEMA = "firefly";
++          FIREFLY_URL = "localhost";
++        };
++      };
++
++      services.postgresql = {
++        enable = true;
++        package = pkgs.postgresql_16;
++        authentication = ''
++          local all postgres peer
++          local firefly firefly password
++        '';
++        initialScript = pkgs.writeText "firefly-init.sql" ''
++          CREATE USER "firefly" WITH LOGIN PASSWORD '${db-pass}';
++          CREATE DATABASE "firefly" WITH OWNER "firefly";
++          \c firefly
++          CREATE SCHEMA AUTHORIZATION firefly;
++        '';
++      };
++    };
++
++  nodes.fireflyMysql =
++    { config, pkgs, ... }:
++    {
++      environment.etc = {
++        "firefly-pico-appkey".text = app-key;
++        "mysql-pass".text = db-pass;
++      };
++      services.firefly-pico = {
++        enable = true;
++        enableNginx = true;
++        settings = {
++          APP_KEY_FILE = "/etc/firefly-pico-appkey";
++          LOG_CHANNEL = "stdout";
++          DB_CONNECTION = "mysql";
++          DB_DATABASE = "firefly";
++          DB_USERNAME = "firefly";
++          DB_PASSWORD_FILE = "/etc/mysql-pass";
++          DB_SOCKET = "/run/mysqld/mysqld.sock";
++          FIREFLY_URL = "localhost";
++        };
++      };
++
++      services.mysql = {
++        enable = true;
++        package = pkgs.mariadb;
++        initialScript = pkgs.writeText "firefly-init.sql" ''
++          create database firefly DEFAULT CHARACTER SET utf8mb4;
++          create user 'firefly'@'localhost' identified by '${db-pass}';
++          grant all on firefly.* to 'firefly'@'localhost';
++        '';
++        settings.mysqld.character-set-server = "utf8mb4";
++      };
++    };
++
++  testScript = ''
++    fireflySqlite.wait_for_unit("phpfpm-firefly-pico.service")
++    fireflySqlite.wait_for_unit("nginx.service")
++    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Pico'")
++    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/api/test | grep 'Test!'")
++    fireflyPostgresql.wait_for_unit("phpfpm-firefly-pico.service")
++    fireflyPostgresql.wait_for_unit("nginx.service")
++    fireflyPostgresql.wait_for_unit("postgresql.service")
++    fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Pico'")
++    fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/api/test | grep 'Test!'")
++    fireflyMysql.wait_for_unit("phpfpm-firefly-pico.service")
++    fireflyMysql.wait_for_unit("nginx.service")
++    fireflyMysql.wait_for_unit("mysql.service")
++    fireflyMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Pico'")
++    fireflyMysql.succeed("curl -fvvv -Ls http://localhost/api/test | grep 'Test!'")
++  '';
++}
 diff --git a/pkgs/by-name/fi/firefly-pico/frontend.nix b/pkgs/by-name/fi/firefly-pico/frontend.nix
 new file mode 100644
 index 00000000000000..86ddcc0b143f2d
@@ -493,7 +628,7 @@ index 00000000000000..86ddcc0b143f2d
 +})
 diff --git a/pkgs/by-name/fi/firefly-pico/package.nix b/pkgs/by-name/fi/firefly-pico/package.nix
 new file mode 100644
-index 00000000000000..d648718950e550
+index 00000000000000..983013a67fa2c8
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/package.nix
 @@ -0,0 +1,73 @@
@@ -561,12 +696,12 @@ index 00000000000000..d648718950e550
 +
 +  meta = {
 +    changelog = "https://github.com/cioraneanu/firefly-pico/releases/tag/${finalAttrs.version}";
-+    description = "Firefly III: a personal finances manager";
++    description = "Delightful Firefly III companion web app for effortless transaction tracking";
 +    homepage = "https://github.com/cioraneanu/firefly-pico";
 +    license = lib.licenses.agpl3Only;
 +    maintainers = [
 +      lib.maintainers.patrickdag
 +    ];
-+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
++    hydraPlatforms = lib.platforms.all;
 +  };
 +})

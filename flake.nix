@@ -57,6 +57,11 @@
       # should use system nixpkgs instead of their own
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niri = {
+      #url = "github:sodiboo/niri-flake";
+      url = "github:patrickdag/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     agenix = {
       url = "github:ryantm/agenix";
