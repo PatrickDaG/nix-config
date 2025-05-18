@@ -1,4 +1,8 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 let
   nconfig = config;
 in
@@ -339,28 +343,37 @@ in
           outputs."Unknown-1" = {
             enable = false;
           };
-          workspaces."default" = {
-            open-on-output = "DP-3";
-          };
-          workspaces."mail" = {
-            open-on-output = "DP-3";
-          };
-          workspaces."games" = {
-            open-on-output = "DP-3";
-          };
+          workspaces = {
+            "1default" = {
+              name = "default";
+              open-on-output = "DP-3";
+            };
+            "2mail" = {
+              name = "mail";
+              open-on-output = "DP-3";
+            };
+            "3games" = {
+              name = "games";
+              open-on-output = "DP-3";
+            };
 
-          workspaces."browser" = {
-            open-on-output = "HDMI-A-1";
-          };
-          workspaces."notes" = {
-            open-on-output = "HDMI-A-1";
-          };
+            "1browser" = {
+              name = "browser";
+              open-on-output = "HDMI-A-1";
+            };
+            "2notes" = {
+              name = "notes";
+              open-on-output = "HDMI-A-1";
+            };
 
-          workspaces."twitch" = {
-            open-on-output = "DVI-D-1";
-          };
-          workspaces."comms" = {
-            open-on-output = "DVI-D-1";
+            "1twitch" = {
+              name = "twitch";
+              open-on-output = "DVI-D-1";
+            };
+            "2comms" = {
+              name = "comms";
+              open-on-output = "DVI-D-1";
+            };
           };
 
           spawn-at-startup = [ { command = [ "thunderbird" ]; } ];
@@ -372,4 +385,8 @@ in
         pkgs.scripts.clone-term
       ];
     };
+  # The package provides a .service file, that does contain a 'WantedBy = graphical-session.target'
+  # But this does not get parsed and linked to actually, which would enable it.
+  # This should take care of that part
+  systemd.user.services.xwayland-satellite.wantedBy = [ "graphical-session.target" ];
 }
