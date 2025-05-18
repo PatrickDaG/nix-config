@@ -7,9 +7,11 @@
 }:
 let
   priv_domain = globals.domains.mail_private;
+  priv_domain2 = globals.domains.mail_private2;
   domain = globals.domains.mail_public;
   mailDomains = [
     priv_domain
+    priv_domain2
     domain
   ];
   mailBackupDir = "/var/cache/mail-backup";

@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   globals,
   pkgs,
@@ -9,6 +8,7 @@ let
   domain = globals.domains.mail_public;
   idmailDomain = globals.services.idmail.domain;
   priv_domain = globals.domains.mail_private;
+  priv_domain2 = globals.domains.mail_private2;
 
   mkRandomSecret = {
     generator.script = "alnum";
@@ -43,7 +43,7 @@ in
   };
 
   services.idmail = {
-    package = inputs.idmail.packages.${pkgs.system}.default;
+    package = pkgs.idmail;
     enable = true;
     # Stalwart will change permissions due to SQLite implementation.
     # Therefore, run as stalwart-mail since we don't allow reading
@@ -62,6 +62,11 @@ in
           public = true;
         };
         "${priv_domain}" = {
+          owner = "admin";
+          catch_all = "catch-all@${domain}";
+          public = false;
+        };
+        "${priv_domain2}" = {
           owner = "admin";
           catch_all = "catch-all@${domain}";
           public = false;

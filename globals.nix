@@ -140,7 +140,7 @@ in
         domain = "esp.${globals.domains.web}";
       };
       idmail = {
-        domain = "alias.${globals.domains.web}";
+        domain = "alias.${globals.domains.mail_public}";
       };
     };
   };
