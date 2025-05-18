@@ -24,6 +24,7 @@ lib.optionalAttrs (!minimal) {
       "video"
       "input"
       "cdrom"
+      "disk"
       # TPM settings
       "tss"
     ];

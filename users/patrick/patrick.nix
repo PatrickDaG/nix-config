@@ -16,6 +16,7 @@
           la
         ]
       ))
+      #keep-sorted start
       bashInteractive
       bs-manager
       chatterino2
@@ -62,6 +63,8 @@
       xautoclick
       obsidian
       pandoc # for obsidian
+      makemkv
+      #keep-sorted end
     ];
   };
   hm.programs.bat.enable = true;
