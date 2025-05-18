@@ -74,11 +74,8 @@ lib.optionalAttrs (!minimal) {
         sshUser = "build";
         system = "aarch64-linux";
         sshKey = "/run/builder-unlock/mailnix";
-        supportedFeatures = [
-          "big-parallel"
-          #"kvm"
-        ];
-        publicHostKey = builtins.readFile "${pkgs.runCommand "base64HoseKey" { }
+        supportedFeatures = [ ];
+        publicHostKey = builtins.readFile "${pkgs.runCommand "MailnixHostKey" { }
           ''${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out''
         }";
       }
