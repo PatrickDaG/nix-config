@@ -1,21 +1,21 @@
-diff --git a/nixos/doc/manual/release-notes/rl-2505.section.md b/nixos/doc/manual/release-notes/rl-2505.section.md
-index ebbd62adee7ca1..651fd0fae85de4 100644
---- a/nixos/doc/manual/release-notes/rl-2505.section.md
-+++ b/nixos/doc/manual/release-notes/rl-2505.section.md
-@@ -126,6 +126,8 @@
+diff --git a/nixos/doc/manual/release-notes/rl-2511.section.md b/nixos/doc/manual/release-notes/rl-2511.section.md
+index 2eeaff371d16b6..b11335926a3ca3 100644
+--- a/nixos/doc/manual/release-notes/rl-2511.section.md
++++ b/nixos/doc/manual/release-notes/rl-2511.section.md
+@@ -10,7 +10,7 @@
  
- - [vivid](https://github.com/sharkdp/vivid), a generator for LS_COLOR. Available as [programs.vivid](#opt-programs.vivid.enable).
+ <!-- To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead. -->
  
+-- Create the first release note entry in this section!
 +- [ente](https://github.com/ente-io/ente), a service that provides a fully open source, end-to-end encrypted platform for photos and videos. Available as [services.ente.api](#opt-services.ente.api.enable) and  [services.ente.web](#opt-services.ente.web.enable).
-+
- - [matrix-alertmanager](https://github.com/jaywink/matrix-alertmanager), a bot to receive Alertmanager webhook events and forward them to chosen Matrix rooms. Available as [services.matrix-alertmanager](options.html#opt-services.matrix-alertmanager.enable).
  
- - [waagent](https://github.com/Azure/WALinuxAgent), the Microsoft Azure Linux Agent (waagent) manages Linux provisioning and VM interaction with the Azure Fabric Controller. Available with [services.waagent](options.html#opt-services.waagent.enable).
+ ## Backward Incompatibilities {#sec-release-25.11-incompatibilities}
+ 
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index 9fb36ff6e10f8e..5170afc0e9ac06 100644
+index ddf258c61a14e8..1383e0ef093d08 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1533,6 +1533,7 @@
+@@ -1534,6 +1534,7 @@
    ./services/web-apps/echoip.nix
    ./services/web-apps/eintopf.nix
    ./services/web-apps/engelsystem.nix
@@ -25,10 +25,10 @@ index 9fb36ff6e10f8e..5170afc0e9ac06 100644
    ./services/web-apps/filesender.nix
 diff --git a/nixos/modules/services/web-apps/ente.md b/nixos/modules/services/web-apps/ente.md
 new file mode 100644
-index 00000000000000..c05868ce26f311
+index 00000000000000..944d07e066426a
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/ente.md
-@@ -0,0 +1,155 @@
+@@ -0,0 +1,175 @@
 +# Ente.io {#module-services-ente}
 +
 +[Ente](https://ente.io/) is a service that provides a fully open source,
@@ -107,6 +107,10 @@ index 00000000000000..c05868ce26f311
 +      # Create a local postgres database and set the necessary config in ente
 +      enableLocalDB = true;
 +      domain = "api.example.com";
++      # You can hide secrets by setting xyz._secret = file instead of xyz = value.
++      # Make sure to not include any of the secrets used here directly
++      # in your config. They would be publicly readable in the nix store.
++      # Use agenix, sops-nix or an equivalent secret management solution.
 +      settings = {
 +        s3 = {
 +          use_path_style_urls = true;
@@ -114,22 +118,18 @@ index 00000000000000..c05868ce26f311
 +            endpoint = "https://s3.example.com";
 +            region = "us-east-1";
 +            bucket = "b2-eu-cen";
++            key._secret = pkgs.writeText "minio_user" "minio_user";
++            secret._secret = pkgs.writeText "minio_pw" "minio_pw";
 +          };
 +        };
-+      };
-+      # All of these are secrets, please make sure to not include them directly
-+      # in the config. They would be publicly readable in the nix store.
-+      # Use agenix, sops-nix or an equivalent secret management solution.
-+      settingsSecret = {
-+        s3.b2-eu-cen = {
-+          key = pkgs.writeText "minio_user" "minio_user";
-+          secret = pkgs.writeText "minio_pw" "minio_pw";
-+        };
 +        key = {
-+          encryption = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
-+          hash = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
++          # generate with: openssl rand -base64 32
++          encryption._secret = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
++          # generate with: openssl rand -base64 64
++          hash._secret = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
 +        };
-+        jwt.secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
++        # generate with: openssl rand -base64 32
++        jwt.secret._secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
 +      };
 +    };
 +  };
@@ -184,22 +184,42 @@ index 00000000000000..c05868ce26f311
 +available. While adding new plans is possible in theory, it requires some
 +manual database operations which isn't worthwhile. Instead, use `ente-cli`
 +with your admin user to modify the storage limit.
++
++## iOS background sync
++
++On iOS, background sync is achived via a silent notification sent by the server
++every 30 minutes that allows the phone to sync for about 30 seconds, enough for
++all but the largest videos to be synced on background (if the app is brought to
++foreground though, sync will resume as normal). To achive this however, a
++Firebase account is needed. In the settings option, configure credentials-dir
++to point towards the directory where the JSON containing the Firebase
++credentials are stored.
++
++```nix
++{
++  # This directory should contain your fcm-service-account.json file
++  services.ente.api.settings = {
++    credentials-dir = "/path/to/credentials";
++    # [...]
++  };
++}
++```
 diff --git a/nixos/modules/services/web-apps/ente.nix b/nixos/modules/services/web-apps/ente.nix
 new file mode 100644
-index 00000000000000..7f402b6fe316ee
+index 00000000000000..845932d48f3229
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/ente.nix
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,355 @@
 +{
 +  config,
 +  lib,
 +  pkgs,
++  utils,
 +  ...
 +}:
 +let
 +  inherit (lib)
 +    getExe
-+    mapAttrsRecursive
 +    mkDefault
 +    mkEnableOption
 +    mkIf
@@ -207,7 +227,6 @@ index 00000000000000..7f402b6fe316ee
 +    mkOption
 +    mkPackageOption
 +    optional
-+    recursiveUpdate
 +    types
 +    ;
 +
@@ -220,8 +239,8 @@ index 00000000000000..7f402b6fe316ee
 +      inherit enteApp;
 +      enteMainUrl = "https://${cfgWeb.domains.photos}";
 +      extraBuildEnv = {
-+        NEXT_PUBLIC_ENTE_ENDPOINT = "https://${cfgApi.domain}";
-+        NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT = cfgApi.settings.apps.public-albums;
++        NEXT_PUBLIC_ENTE_ENDPOINT = "https://${cfgWeb.domains.api}";
++        NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT = "https://${cfgWeb.domains.albums}";
 +        NEXT_TELEMETRY_DISABLED = "1";
 +      };
 +    };
@@ -231,16 +250,6 @@ index 00000000000000..7f402b6fe316ee
 +  dataDir = "/var/lib/ente";
 +
 +  yamlFormat = pkgs.formats.yaml { };
-+
-+  # Generate settings yaml with empty strings at any position where a secret
-+  # will be used, this is required by museum.
-+  settingsYaml = yamlFormat.generate "museum.yaml" (
-+    recursiveUpdate cfgApi.settings (mapAttrsRecursive (_: _: "") cfgApi.settingsSecret)
-+  );
-+
-+  # Generate a secret settings yaml which associates the file containing the
-+  # secret for each setting.
-+  secretFilesYaml = yamlFormat.generate "museum-secrets.yaml" cfgApi.settingsSecret;
 +in
 +{
 +  options.services.ente = {
@@ -249,24 +258,33 @@ index 00000000000000..7f402b6fe316ee
 +      package = mkPackageOption pkgs "ente-web" { };
 +
 +      domains = {
++        api = mkOption {
++          type = types.str;
++          description = ''
++            The domain under which the api is served. This will NOT serve the api itself,
++            but is a required setting to host the frontends! This will automatically be set
++            for you if you enable both the api server and web frontends.
++          '';
++        };
++
 +        accounts = mkOption {
 +          type = types.str;
-+          description = "The domain under which the accounts frontend will be served. Must be https.";
++          description = "The domain under which the accounts frontend will be served.";
 +        };
 +
 +        cast = mkOption {
 +          type = types.str;
-+          description = "The domain under which the cast frontend will be served. Must be https.";
++          description = "The domain under which the cast frontend will be served.";
 +        };
 +
 +        albums = mkOption {
 +          type = types.str;
-+          description = "The domain under which the albums frontend will be served. Must be https.";
++          description = "The domain under which the albums frontend will be served.";
 +        };
 +
 +        photos = mkOption {
 +          type = types.str;
-+          description = "The domain under which the photos frontend will be served. Must be https.";
++          description = "The domain under which the photos frontend will be served.";
 +        };
 +      };
 +    };
@@ -297,8 +315,8 @@ index 00000000000000..7f402b6fe316ee
 +
 +      settings = mkOption {
 +        description = ''
-+          Museum yaml configuration.
-+          Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
++          Museum yaml configuration. Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
++          You can specify secret values in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
 +        '';
 +        default = { };
 +        type = types.submodule {
@@ -358,28 +376,6 @@ index 00000000000000..7f402b6fe316ee
 +          };
 +        };
 +      };
-+
-+      settingsSecret = mkOption {
-+        description = ''
-+          Museum yaml configuration overrides. Similar to
-+          {option}`services.ente.api.settings`, but values specified here must
-+          be files. The file content will automatically be loaded at runtime and
-+          used to set/override the associated yaml setting. Useful to specify
-+          secrets. Values will always be strings.
-+
-+          Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
-+        '';
-+        default = { };
-+        type = types.submodule {
-+          freeformType =
-+            let
-+              recursiveAttrsOrPath = types.lazyAttrsOf (types.either types.path recursiveAttrsOrPath) // {
-+                description = "recursive attrs or path";
-+              };
-+            in
-+            recursiveAttrsOrPath;
-+        };
-+      };
 +    };
 +  };
 +
@@ -396,6 +392,7 @@ index 00000000000000..7f402b6fe316ee
 +        ensureDatabases = [ "ente" ];
 +      };
 +
++      services.ente.web.domains.api = mkIf cfgWeb.enable cfgApi.domain;
 +      services.ente.api.settings = {
 +        log-file = mkDefault "";
 +        db = mkIf cfgApi.enableLocalDB {
@@ -413,11 +410,10 @@ index 00000000000000..7f402b6fe316ee
 +        wantedBy = [ "multi-user.target" ];
 +
 +        preStart = ''
-+          # Load secret values and merge over base settings
-+          BASE_FILE=${settingsYaml} \
-+            ${getExe pkgs.yq-go} 'load(strenv(BASE_FILE)) * ((.. | select(kind == "scalar")) |= load_str(.))' ${secretFilesYaml} \
-+            > /run/ente/local.yaml
++          # Generate config including secret values. YAML is a superset of JSON, so we can use this here.
++          ${utils.genJqSecretsReplacementSnippet cfgApi.settings "/run/ente/local.yaml"}
 +
++          # Setup paths
 +          mkdir -p ${dataDir}/configurations
 +          ln -sTf /run/ente/local.yaml ${dataDir}/configurations/local.yaml
 +        '';
@@ -511,7 +507,7 @@ index 00000000000000..7f402b6fe316ee
 +      };
 +    })
 +    (mkIf cfgWeb.enable {
-+      services.ente.api.settings = {
++      services.ente.api.settings = mkIf cfgApi.enable {
 +        apps = {
 +          accounts = "https://${cfgWeb.domains.accounts}";
 +          cast = "https://${cfgWeb.domains.cast}";
@@ -535,6 +531,9 @@ index 00000000000000..7f402b6fe316ee
 +            locations."/" = {
 +              root = webPackage "accounts";
 +              tryFiles = "$uri $uri.html /index.html";
++              extraConfig = ''
++                add_header Access-Control-Allow-Origin 'https://${cfgWeb.domains.api}';
++              '';
 +            };
 +          };
 +          virtualHosts.${domainFor "cast"} = {
@@ -542,6 +541,9 @@ index 00000000000000..7f402b6fe316ee
 +            locations."/" = {
 +              root = webPackage "cast";
 +              tryFiles = "$uri $uri.html /index.html";
++              extraConfig = ''
++                add_header Access-Control-Allow-Origin 'https://${cfgWeb.domains.api}';
++              '';
 +            };
 +          };
 +          virtualHosts.${domainFor "photos"} = {
@@ -552,6 +554,9 @@ index 00000000000000..7f402b6fe316ee
 +            locations."/" = {
 +              root = webPackage "photos";
 +              tryFiles = "$uri $uri.html /index.html";
++              extraConfig = ''
++                add_header Access-Control-Allow-Origin 'https://${cfgWeb.domains.api}';
++              '';
 +            };
 +          };
 +        };
@@ -561,7 +566,7 @@ index 00000000000000..7f402b6fe316ee
 +  meta.maintainers = with lib.maintainers; [ oddlama ];
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index c2793c276fa425..2e945f93628a8e 100644
+index 41e7a6d35a9782..e4a790ef3e4c42 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
 @@ -427,6 +427,7 @@ in
@@ -638,10 +643,10 @@ index 00000000000000..aacdbe5ef78d18
 +-----END PRIVATE KEY-----
 diff --git a/nixos/tests/ente/default.nix b/nixos/tests/ente/default.nix
 new file mode 100644
-index 00000000000000..3f4357b107d6b1
+index 00000000000000..04531e91ef5ced
 --- /dev/null
 +++ b/nixos/tests/ente/default.nix
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,139 @@
 +{ lib, pkgs, ... }:
 +let
 +  accessKey = "BKIKJAA5BMMU2RHO6IBB";
@@ -740,17 +745,6 @@ index 00000000000000..3f4357b107d6b1
 +          nginx.enable = true;
 +          enableLocalDB = true;
 +          domain = "api.${domain}";
-+          settingsSecret = {
-+            s3.b2-eu-cen = {
-+              key = pkgs.writeText "accesskey" accessKey;
-+              secret = pkgs.writeText "secretkey" secretKey;
-+            };
-+            key = {
-+              encryption = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
-+              hash = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
-+            };
-+            jwt.secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
-+          };
 +          settings = {
 +            s3 = {
 +              use_path_style_urls = true;
@@ -758,8 +752,15 @@ index 00000000000000..3f4357b107d6b1
 +                endpoint = "https://s3.${domain}";
 +                region = "us-east-1";
 +                bucket = "b2-eu-cen";
++                key._secret = pkgs.writeText "accesskey" accessKey;
++                secret._secret = pkgs.writeText "secretkey" secretKey;
 +              };
 +            };
++            key = {
++              encryption._secret = pkgs.writeText "encryption" "T0sn+zUVFOApdX4jJL4op6BtqqAfyQLH95fu8ASWfno=";
++              hash._secret = pkgs.writeText "hash" "g/dBZBs1zi9SXQ0EKr4RCt1TGr7ZCKkgrpjyjrQEKovWPu5/ce8dYM6YvMIPL23MMZToVuuG+Z6SGxxTbxg5NQ==";
++            };
++            jwt.secret._secret = pkgs.writeText "jwt" "i2DecQmfGreG6q1vBj5tCokhlN41gcfS2cjOs9Po-u8=";
 +          };
 +        };
 +      };
@@ -779,6 +780,8 @@ index 00000000000000..3f4357b107d6b1
 +    ente.wait_for_unit("ente.service")
 +    ente.wait_for_unit("nginx.service")
 +
++    # Wait until api is up
++    ente.wait_until_succeeds("journalctl --since -2m --unit ente.service --grep 'We have lift-off.'", timeout=30)
 +    # Wait until photos app is up
 +    ente.wait_until_succeeds("curl -Ls https://photos.${domain}/ | grep -q 'Ente Photos'", timeout=30)
 +  '';
@@ -852,15 +855,14 @@ index 3c8515170b4332..71453b82af9eae 100644
 @@ -8,10 +8,17 @@
    yarnBuildHook,
    nix-update-script,
--  extraBuildEnv ? { },
-+  extraBuildEnv ? { NEXT_PUBLIC_ENTE_ENDPOINT = "ctie1"; NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT = "ctie2"; NEXT_TELEMETRY_DISABLED = "1"; },
+   extraBuildEnv ? { },
 +  # This package contains serveral sub-applications. This specifies which of them you want to build.
 +  enteApp ? "photos",
 +  # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
 +  # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you
 +  # can set this parameter to override these occurrences with your own url. Must include the schema.
 +  # Example: https://my-ente.example.com
-+  enteMainUrl ? "ctiectiectie",
++  enteMainUrl ? null,
  }:
  
  stdenv.mkDerivation (finalAttrs: {

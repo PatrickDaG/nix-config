@@ -259,10 +259,10 @@ index f05adb671e9923..8ea8e01f993f5e 100644
  }
 diff --git a/nixos/modules/services/networking/netbird/proxy.nix b/nixos/modules/services/networking/netbird/proxy.nix
 new file mode 100644
-index 00000000000000..175730b925897e
+index 00000000000000..75f2f68a01fb7f
 --- /dev/null
 +++ b/nixos/modules/services/networking/netbird/proxy.nix
-@@ -0,0 +1,116 @@
+@@ -0,0 +1,115 @@
 +{ lib, config, ... }:
 +let
 +  inherit (lib)
@@ -328,11 +328,10 @@ index 00000000000000..175730b925897e
 +          grpc_set_header         X-Forwarded-For $proxy_add_x_forwarded_for;
 +        '';
 +        locations = {
-+          "/" =
-+            mkIf cfg.dashboardAddress != null {
-+              proxyPass = "http://${cfg.dashboardAddress}";
-+              proxyWebsockets = true;
-+            };
++          "/" = mkIf (cfg.dashboardAddress != null) {
++            proxyPass = "http://${cfg.dashboardAddress}";
++            proxyWebsockets = true;
++          };
 +          "/api".proxyPass = "http://${cfg.managementAddress}";
 +
 +          "/management.ManagementService/".extraConfig = ''
