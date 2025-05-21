@@ -24,5 +24,6 @@
     rg = "rg -S";
 
     zf = "zathura --fork";
+    flop = "poweroff";
   };
 }

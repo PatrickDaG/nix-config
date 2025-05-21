@@ -81,6 +81,11 @@ in
               hw-address = "00:0c:c6:06:7a:70";
               ip-address = net.cidr.host 20 subnet;
             }
+            {
+              # solaredge
+              hw-address = "84:d6:c5:12:20:84";
+              ip-address = net.cidr.host 21 subnet;
+            }
           ];
         }
       );

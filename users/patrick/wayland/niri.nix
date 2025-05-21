@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }:
 let
@@ -320,7 +321,7 @@ in
             #scale 2.0
             position = {
               x = 1920;
-              y = 540;
+              y = 200;
             };
             variable-refresh-rate = "on-demand";
           };
@@ -384,9 +385,29 @@ in
         pkgs.xwayland-satellite-stable
         pkgs.scripts.clone-term
       ];
+      # The package provides a .service file, that does contain a 'WantedBy = graphical-session.target'
+      # But this does not get parsed and linked to actually, which would enable it.
+      # This should take care of that part
+      systemd.user.services.xwayland-satellite = {
+        # /etc/profiles/per-user/patrick/share/systemd/user/xwayland-satellite.service
+        Unit = {
+          Description = "Xwayland outside your Wayland";
+          BindsTo = "graphical-session.target";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          Requisite = "graphical-session.target";
+        };
+
+        Service = {
+          Type = "notify";
+          NotifyAccess = "all";
+          ExecStart = lib.getExe pkgs.xwayland-satellite;
+          StandardOutput = "journal";
+        };
+
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
+      };
     };
-  # The package provides a .service file, that does contain a 'WantedBy = graphical-session.target'
-  # But this does not get parsed and linked to actually, which would enable it.
-  # This should take care of that part
-  systemd.user.services.xwayland-satellite.wantedBy = [ "graphical-session.target" ];
 }
