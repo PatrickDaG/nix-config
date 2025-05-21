@@ -601,10 +601,18 @@ index 3649e97b379e5d..38fe184b943fa1 100644
 +- {option}`management.settings.Signal.URI`
 +- {option}`relay.setting.NB_EXPOSED_ADDRESS`
 diff --git a/nixos/modules/services/networking/netbird/server.nix b/nixos/modules/services/networking/netbird/server.nix
-index 5865e06f18d0c2..613b8649656aaf 100644
+index 5865e06f18d0c2..e4b17ac61499a8 100644
 --- a/nixos/modules/services/networking/netbird/server.nix
 +++ b/nixos/modules/services/networking/netbird/server.nix
-@@ -26,12 +26,12 @@ in
+@@ -7,6 +7,7 @@ let
+     mkIf
+     mkOption
+     optionalAttrs
++    mkMerge
+     ;
+ 
+   inherit (lib.types) str;
+@@ -26,12 +27,12 @@ in
      ./dashboard.nix
      ./management.nix
      ./signal.nix
@@ -620,7 +628,7 @@ index 5865e06f18d0c2..613b8649656aaf 100644
  
      domain = mkOption {
        type = str;
-@@ -44,7 +44,6 @@ in
+@@ -44,20 +45,27 @@ in
        dashboard = {
          domain = mkDefault cfg.domain;
          enable = mkDefault cfg.enable;
@@ -628,30 +636,38 @@ index 5865e06f18d0c2..613b8649656aaf 100644
  
          managementServer = "https://${cfg.domain}";
        };
-@@ -53,11 +52,19 @@ in
+ 
+-      management =
++      management = mkMerge [
          {
            domain = mkDefault cfg.domain;
            enable = mkDefault cfg.enable;
 -          enableNginx = mkDefault cfg.enableNginx;
          }
-+        // (optionalAttrs cfg.signal.enable {
+-        // (optionalAttrs cfg.coturn.enable rec {
++        (mkIf cfg.signal.enable {
 +          settings.Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
 +        })
-+        // (optionalAttrs cfg.relay.enable {
++        (mkIf cfg.relay.enable {
 +          settings.Relay = {
 +            Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
 +            Secret._secret = cfg.relay.authSecretFile;
 +          };
 +        })
-         // (optionalAttrs cfg.coturn.enable rec {
++        (mkIf cfg.coturn.enable rec {
            turnDomain = cfg.domain;
 -          turnPort = config.services.coturn.tls-listening-port;
 +          turnPort = config.services.coturn.listening-port;
            # We cannot merge a list of attrsets so we have to redefine the whole list
            settings = {
              TURNConfig.Turns = mkDefault [
-@@ -76,9 +83,12 @@ in
-         });
+@@ -73,12 +81,16 @@ in
+               }
+             ];
+           };
+-        });
++        })
++      ];
  
        signal = {
 -        domain = mkDefault cfg.domain;
