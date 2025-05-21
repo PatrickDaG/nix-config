@@ -142,6 +142,9 @@ in
       idmail = {
         domain = "alias.${globals.domains.mail_public}";
       };
+      jellyfin = {
+        domain = "jellyfin.${globals.domains.web}";
+      };
     };
   };
 }

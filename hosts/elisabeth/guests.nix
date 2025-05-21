@@ -16,40 +16,51 @@
           enablePanzer ? false,
           enableRenaultFT ? false,
           enableBunker ? false,
-          enableSharedPaperless ? false,
+          # make sure this doesn't contain any sets called one of
+          # state | persist | panzer | bunker | renaultft
+          shared ? [ ],
           vlans ? [ "services" ],
           ...
         }:
         {
           autostart = true;
-          zfs."/state" = {
-            pool = "rpool";
-            dataset = "local/guests/${guestName}";
-          };
-          zfs."/persist" = {
-            pool = "rpool";
-            dataset = "safe/guests/${guestName}";
-          };
-          zfs."/panzer" = lib.mkIf enablePanzer {
-            pool = "panzer";
-            dataset = "safe/guests/${guestName}";
-          };
-          zfs."/renaultft" = lib.mkIf enableRenaultFT {
-            pool = "renaultft";
-            dataset = "safe/guests/${guestName}";
-          };
-          # kinda not necesarry should be removed on next reimaging
-          zfs."/bunker" = lib.mkIf enableBunker {
-            pool = "panzer";
-            dataset = "bunker/guests/${guestName}";
-          };
-          zfs."/paperless" = lib.mkIf enableSharedPaperless {
-            pool = "panzer";
-            dataset = "bunker/shared/paperless";
-          };
+          zfs =
+            {
+              "/state" = {
+                pool = "rpool";
+                dataset = "local/guests/${guestName}";
+              };
+              "/persist" = {
+                pool = "rpool";
+                dataset = "safe/guests/${guestName}";
+              };
+              "/panzer" = lib.mkIf enablePanzer {
+                pool = "panzer";
+                dataset = "safe/guests/${guestName}";
+              };
+              "/renaultft" = lib.mkIf enableRenaultFT {
+                pool = "renaultft";
+                dataset = "safe/guests/${guestName}";
+              };
+              # kinda not necesarry should be removed on next reimaging
+              "/bunker" = lib.mkIf enableBunker {
+                pool = "panzer";
+                dataset = "bunker/guests/${guestName}";
+              };
+            }
+            // lib.listToAttrs (
+              lib.flip lib.map shared (
+                { name, pool }:
+                lib.nameValuePair "/${name}" {
+                  inherit pool;
+                  dataset = "safe/shared/${name}";
+                }
+              )
+            );
           modules = [
             ../../config/basic
             ../../config/services/${guestName}.nix
+            inputs.microvm.nixosModules.microvm-options
             {
               node.secretsDir = config.node.secretsDir + "/${guestName}";
               globals.services.${guestName}.host = "${config.node.name}-${guestName}";
@@ -136,14 +147,37 @@
       ];
     }
     // mkContainer "nextcloud" { enablePanzer = true; }
-    // mkContainer "paperless" { enableSharedPaperless = true; }
+    // mkContainer "paperless" {
+      shared = [
+        {
+          name = "paperless";
+          pool = "panzer";
+        }
+      ];
+    }
     // mkContainer "forgejo" { enablePanzer = true; }
     // mkMicrovm "immich" { enablePanzer = true; }
+    // mkContainer "jellyfin" {
+      shared = [
+        {
+          name = "jellyfin";
+          pool = "renaultft";
+        }
+      ];
+    }
     // mkContainer "samba" {
       enablePanzer = true;
-      enableRenaultFT = true;
       enableBunker = true;
-      enableSharedPaperless = true;
+      shared = [
+        {
+          name = "paperless";
+          pool = "panzer";
+        }
+        {
+          name = "jellyfin";
+          pool = "renaultft";
+        }
+      ];
       vlans = [
         "home"
       ];

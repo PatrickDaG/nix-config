@@ -188,6 +188,15 @@ in
       };
     }
     (blockOf "vaultwarden" { maxBodySize = "1G"; })
+    (blockOf "jellyfin" {
+      maxBodySize = "10G";
+      port = 8096;
+      virtualHostExtraConfig = ''
+        allow ${globals.net.vlans.home.cidrv4} ;
+        allow ${globals.net.vlans.home.cidrv6} ;
+        deny all ;
+      '';
+    })
     (blockOf "forgejo" { maxBodySize = "1G"; })
     (blockOf "immich" {
       maxBodySize = "5G";
@@ -201,7 +210,11 @@ in
       port = 3001;
       allowedGroup = false;
     })
-    (blockOf "paperless" { maxBodySize = "5G"; })
+    (lib.recursiveUpdate (blockOf "paperless" { maxBodySize = "5G"; }) {
+      # Paperless allowed hosts disallows ip based access
+      # django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '10.42.0.10:3000'. You may need to add '10.42.0.10' to ALLOWED_HOSTS.
+      upstreams."paperless".monitoring.enable = false;
+    })
     (proxyProtect "ttrss" { port = 80; })
     (proxyProtect "invidious" { })
     (blockOf "yourspotify" { port = 80; })

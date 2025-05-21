@@ -80,28 +80,37 @@ in
               "force directory mode" = "0770";
               # Might be necessary for windows user to be able to open thing in smb
               "acl allow execute always" = "no";
-            } // cfg;
+            };
           in
           {
-            "${name}" = config // {
-              "path" = "/media/smb/${name}";
-            };
+            "${name}" =
+              config
+              // {
+                "path" = "/media/smb/${name}";
+              }
+              // cfg;
           }
           // lib.optionalAttrs hasBunker {
-            "${name}-important" = config // {
-              "path" = "/media/smb/${name}-important";
-              "#persistRoot" = "/bunker";
-            };
+            "${name}-important" =
+              config
+              // {
+                "path" = "/media/smb/${name}-important";
+                "#persistRoot" = "/bunker";
+              }
+              // cfg;
           }
           // lib.optionalAttrs hasPaperless {
-            "${name}-paperless" = config // {
-              "path" = "/media/smb/${name}-paperless";
-              "#paperless" = true;
-              "force user" = "paperless";
-              "force group" = "paperless";
-              # Empty to prevent imperamence setting a persistence folder
-              "#persistRoot" = "";
-            };
+            "${name}-paperless" =
+              config
+              // {
+                "path" = "/media/smb/${name}-paperless";
+                "#paperless" = true;
+                "force user" = "paperless";
+                "force group" = "paperless";
+                # Empty to prevent impermanence setting a persistence folder
+                "#persistRoot" = "";
+              }
+              // cfg;
           };
       in
       lib.mkMerge [
@@ -172,31 +181,42 @@ in
           hasBunker = true;
           hasPaperless = true;
         } { })
-        (mkShare
-          {
-            name = "printer";
-            user = "printer";
-            group = "printer";
-          }
-          {
-          }
-        )
+        (mkShare {
+          name = "printer";
+          user = "printer";
+          group = "printer";
+        } { })
         (mkShare {
           name = "family-data";
           user = "family";
           group = "family";
         } { })
+        # (mkShare
+        #   {
+        #     name = "media";
+        #     user = "family";
+        #     group = "family";
+        #     persistRoot = "/renaultft";
+        #   }
+        #   {
+        #     "guest ok" = "yes";
+        #     "read only" = "yes";
+        #     "write list" = "@family";
+        #   }
+        # )
         (mkShare
           {
             name = "media";
-            user = "family";
-            group = "family";
-            persistRoot = "/renaultft";
+            user = "jellyfin";
+            group = "jellyfin";
+            persistRoot = "";
           }
           {
             "guest ok" = "yes";
             "read only" = "yes";
             "write list" = "@family";
+            "valid users" = "familiy @family";
+            "path" = "/jellyfin/media";
           }
         )
       ];
@@ -225,7 +245,12 @@ in
             group = "${user}";
           };
         }))
-        ++ [ { paperless.isNormalUser = lib.mkForce false; } ]
+        ++ [
+          {
+            paperless.isNormalUser = lib.mkForce false;
+            jellyfin.isNormalUser = lib.mkForce false;
+          }
+        ]
       );
       groups = lib.mkMerge (
         (lib.flip map groups (group: {
@@ -336,6 +361,15 @@ in
         };
       }
     )
+    ++ [
+      {
+        "10-smb-jellyfin"."/jellyfin/media".d = {
+          user = "jellyfin";
+          group = "jellyfin";
+          mode = "0770";
+        };
+      }
+    ]
   );
   environment.persistence = lib.mkMerge (
     lib.flatten [
