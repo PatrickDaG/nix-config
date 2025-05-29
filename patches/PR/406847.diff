@@ -1,28 +1,28 @@
 diff --git a/nixos/doc/manual/release-notes/rl-2511.section.md b/nixos/doc/manual/release-notes/rl-2511.section.md
-index 2eeaff371d16b6..b11335926a3ca3 100644
+index 8ce0ca415f586e..c9b7ae758e5f13 100644
 --- a/nixos/doc/manual/release-notes/rl-2511.section.md
 +++ b/nixos/doc/manual/release-notes/rl-2511.section.md
-@@ -10,7 +10,7 @@
+@@ -17,6 +17,8 @@
+ - [LACT](https://github.com/ilya-zlobintsev/LACT), a GPU monitoring and configuration tool, can now be enabled through [services.lact.enable](#opt-services.lact.enable).
+   Note that for LACT to work properly on AMD GPU systems, you need to enable [hardware.amdgpu.overdrive.enable](#opt-hardware.amdgpu.overdrive.enable).
  
- <!-- To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead. -->
- 
--- Create the first release note entry in this section!
 +- [ente](https://github.com/ente-io/ente), a service that provides a fully open source, end-to-end encrypted platform for photos and videos. Available as [services.ente.api](#opt-services.ente.api.enable) and  [services.ente.web](#opt-services.ente.web.enable).
++
+ - [SuiteNumérique Docs](https://github.com/suitenumerique/docs), a collaborative note taking, wiki and documentation web platform and alternative to Notion or Outline. Available as [services.lasuite-docs](#opt-services.lasuite-docs.enable).
  
  ## Backward Incompatibilities {#sec-release-25.11-incompatibilities}
- 
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index ddf258c61a14e8..1383e0ef093d08 100644
+index b618a08fc37933..12696f9beab0ab 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1534,6 +1534,7 @@
+@@ -1535,6 +1535,7 @@
    ./services/web-apps/echoip.nix
    ./services/web-apps/eintopf.nix
    ./services/web-apps/engelsystem.nix
 +  ./services/web-apps/ente.nix
    ./services/web-apps/ethercalc.nix
    ./services/web-apps/fider.nix
-   ./services/web-apps/filesender.nix
+   ./services/web-apps/filebrowser.nix
 diff --git a/nixos/modules/services/web-apps/ente.md b/nixos/modules/services/web-apps/ente.md
 new file mode 100644
 index 00000000000000..944d07e066426a
@@ -206,10 +206,10 @@ index 00000000000000..944d07e066426a
 +```
 diff --git a/nixos/modules/services/web-apps/ente.nix b/nixos/modules/services/web-apps/ente.nix
 new file mode 100644
-index 00000000000000..845932d48f3229
+index 00000000000000..aa48ac0e2c9b42
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/ente.nix
-@@ -0,0 +1,355 @@
+@@ -0,0 +1,362 @@
 +{
 +  config,
 +  lib,
@@ -260,6 +260,7 @@ index 00000000000000..845932d48f3229
 +      domains = {
 +        api = mkOption {
 +          type = types.str;
++          example = "api.ente.example.com";
 +          description = ''
 +            The domain under which the api is served. This will NOT serve the api itself,
 +            but is a required setting to host the frontends! This will automatically be set
@@ -269,21 +270,25 @@ index 00000000000000..845932d48f3229
 +
 +        accounts = mkOption {
 +          type = types.str;
++          example = "accounts.ente.example.com";
 +          description = "The domain under which the accounts frontend will be served.";
 +        };
 +
 +        cast = mkOption {
 +          type = types.str;
++          example = "cast.ente.example.com";
 +          description = "The domain under which the cast frontend will be served.";
 +        };
 +
 +        albums = mkOption {
 +          type = types.str;
++          example = "albums.ente.example.com";
 +          description = "The domain under which the albums frontend will be served.";
 +        };
 +
 +        photos = mkOption {
 +          type = types.str;
++          example = "photos.ente.example.com";
 +          description = "The domain under which the photos frontend will be served.";
 +        };
 +      };
@@ -308,6 +313,7 @@ index 00000000000000..845932d48f3229
 +
 +      domain = mkOption {
 +        type = types.str;
++        example = "api.ente.example.com";
 +        description = "The domain under which the api will be served.";
 +      };
 +
@@ -457,6 +463,7 @@ index 00000000000000..845932d48f3229
 +          BindReadOnlyPaths = [
 +            "${cfgApi.package}/share/museum/migrations:${dataDir}/migrations"
 +            "${cfgApi.package}/share/museum/mail-templates:${dataDir}/mail-templates"
++            "${cfgApi.package}/share/museum/web-templates:${dataDir}/web-templates"
 +          ];
 +
 +          User = cfgApi.user;
@@ -566,17 +573,17 @@ index 00000000000000..845932d48f3229
 +  meta.maintainers = with lib.maintainers; [ oddlama ];
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index 41e7a6d35a9782..e4a790ef3e4c42 100644
+index a91b390baa9184..545e767f1aff0b 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
-@@ -427,6 +427,7 @@ in
-   endlessh = handleTest ./endlessh.nix { };
-   endlessh-go = handleTest ./endlessh-go.nix { };
-   engelsystem = handleTest ./engelsystem.nix { };
+@@ -428,6 +428,7 @@ in
+   endlessh-go = runTest ./endlessh-go.nix;
+   engelsystem = runTest ./engelsystem.nix;
+   enlightenment = runTest ./enlightenment.nix;
 +  ente = runTest ./ente;
-   enlightenment = handleTest ./enlightenment.nix { };
-   env = handleTest ./env.nix { };
-   envfs = handleTest ./envfs.nix { };
+   env = runTest ./env.nix;
+   envfs = runTest ./envfs.nix;
+   envoy = runTest {
 diff --git a/nixos/tests/ente/acme.test.cert.pem b/nixos/tests/ente/acme.test.cert.pem
 new file mode 100644
 index 00000000000000..e7c82d2f73d683
@@ -849,7 +856,7 @@ index 00000000000000..405627979feef7
 +  };
 +}
 diff --git a/pkgs/by-name/en/ente-web/package.nix b/pkgs/by-name/en/ente-web/package.nix
-index 3c8515170b4332..71453b82af9eae 100644
+index 45f93496ccf364..12238d18827048 100644
 --- a/pkgs/by-name/en/ente-web/package.nix
 +++ b/pkgs/by-name/en/ente-web/package.nix
 @@ -8,10 +8,17 @@
@@ -868,7 +875,7 @@ index 3c8515170b4332..71453b82af9eae 100644
  stdenv.mkDerivation (finalAttrs: {
 -  pname = "ente-web";
 +  pname = "ente-web-${enteApp}";
-   version = "1.0.4";
+   version = "1.0.10";
  
    src = fetchFromGitHub {
 @@ -38,14 +45,31 @@ stdenv.mkDerivation (finalAttrs: {
@@ -924,7 +931,7 @@ index 3c8515170b4332..71453b82af9eae 100644
      platforms = lib.platforms.all;
    };
 diff --git a/pkgs/by-name/mu/museum/package.nix b/pkgs/by-name/mu/museum/package.nix
-index ca4fccd5251bc7..4b0587d2de44ef 100644
+index cf9efdfc0b4500..71ed0aa9303b56 100644
 --- a/pkgs/by-name/mu/museum/package.nix
 +++ b/pkgs/by-name/mu/museum/package.nix
 @@ -5,9 +5,10 @@
@@ -937,7 +944,7 @@ index ca4fccd5251bc7..4b0587d2de44ef 100644
 -buildGoModule rec {
 +buildGoModule (finalAttrs: {
    pname = "museum";
-   version = "1.0.4";
+   version = "1.0.10";
  
 @@ -15,13 +16,13 @@ buildGoModule rec {
      owner = "ente-io";
@@ -945,7 +952,7 @@ index ca4fccd5251bc7..4b0587d2de44ef 100644
      sparseCheckout = [ "server" ];
 -    rev = "photos-v${version}";
 +    rev = "photos-v${finalAttrs.version}";
-     hash = "sha256-tFXOLzGGMrjVImOOl3RGaX3i/FwhjbGqKRdxv/xxKTs=";
+     hash = "sha256-CX12JrKlI7FMizk29LXO5e5i7pmgjzni/RY97020UZg=";
    };
  
    vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
@@ -955,7 +962,7 @@ index ca4fccd5251bc7..4b0587d2de44ef 100644
  
    nativeBuildInputs = [
      pkg-config
-@@ -41,21 +42,26 @@ buildGoModule rec {
+@@ -42,21 +43,26 @@ buildGoModule rec {
        $out/share/museum
    '';
  

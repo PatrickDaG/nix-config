@@ -1,8 +1,8 @@
 diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
-index 2c9b0242e9e8c7..ab1251bcd75103 100644
+index 44ab6c6b860cc7..03d7d6f1b9a223 100644
 --- a/nixos/doc/manual/redirects.json
 +++ b/nixos/doc/manual/redirects.json
-@@ -65,6 +65,9 @@
+@@ -71,6 +71,9 @@
    "module-services-dump1090-fa-configuration": [
      "index.html#module-services-dump1090-fa-configuration"
    ],
@@ -13,7 +13,7 @@ index 2c9b0242e9e8c7..ab1251bcd75103 100644
      "index.html#preface"
    ],
 diff --git a/nixos/modules/services/networking/netbird/dashboard.nix b/nixos/modules/services/networking/netbird/dashboard.nix
-index 788b724231be31..c8f6836f0af930 100644
+index 8d1cbe7f6de1cf..fab07d72ddc026 100644
 --- a/nixos/modules/services/networking/netbird/dashboard.nix
 +++ b/nixos/modules/services/networking/netbird/dashboard.nix
 @@ -39,7 +39,7 @@ in
@@ -726,95 +726,105 @@ index 3122b6c9fe5ffe..cf19439e892713 100644
    };
  }
 diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
-index f684a310426516..258d3c91a99fc8 100644
+index 581c6eeeab2e88..5d236b9ca8cde3 100644
 --- a/nixos/tests/netbird.nix
 +++ b/nixos/tests/netbird.nix
-@@ -1,9 +1,14 @@
- import ./make-test-python.nix (
--  { pkgs, lib, ... }:
-+  { pkgs, ... }:
-+  let
-+    tls_chain = "${./common/acme/server}/ca.cert.pem";
-+    tls_key = "${./common/acme/server}/ca.key.pem";
-+  in
-   {
-     name = "netbird";
+@@ -1,8 +1,13 @@
+-{ pkgs, lib, ... }:
++{ pkgs, ... }:
++let
++  tls_chain = "${./common/acme/server}/ca.cert.pem";
++  tls_key = "${./common/acme/server}/ca.key.pem";
++in
+ {
+   name = "netbird";
  
-     meta.maintainers = with pkgs.lib.maintainers; [
-+      patrickdag
-       nazarewk
-     ];
+   meta.maintainers = with pkgs.lib.maintainers; [
++    patrickdag
+     nazarewk
+   ];
  
-@@ -14,6 +19,35 @@ import ./make-test-python.nix (
-           services.netbird.enable = true;
-           services.netbird.clients.custom.port = 51819;
-         };
-+      kanidm = {
-+        services.kanidm = {
-+          # needed since default for nixos 24.11
-+          # is kanidm 1.4.6 which is insecure
-+          package = pkgs.kanidm_1_5;
-+          enableServer = true;
-+          serverSettings = {
-+            inherit tls_key tls_chain;
-+            domain = "localhost";
-+            origin = "https://localhost";
-+          };
+@@ -13,6 +18,41 @@
+         services.netbird.enable = true;
+         services.netbird.clients.custom.port = 51819;
+       };
++    kanidm = {
++      services.kanidm = {
++        # needed since default for nixos 24.11
++        # is kanidm 1.4.6 which is insecure
++        package = pkgs.kanidm_1_5;
++        enableServer = true;
++        serverSettings = {
++          inherit tls_key tls_chain;
++          domain = "localhost";
++          origin = "https://localhost";
 +        };
 +      };
-+      server =
-+        { ... }:
-+        {
-+          # netbirds needs an openid identity provider
-+          services.netbird.server = {
++    };
++    server =
++      { ... }:
++      {
++        # netbirds needs an openid identity provider
++        services.netbird.server = {
++          enable = true;
++          coturn = {
 +            enable = true;
-+            coturn = {
-+              enable = true;
-+              password = "secure-password";
-+            };
-+            domain = "nixos-test.internal";
-+            dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
-+            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
++             coturn = {
++               enable = true;
++               password = "secure-password";
++             };
++             domain = "nixos-test.internal";
++             dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
++             management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
 +            relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
 +          };
++          domain = "nixos-test.internal";
++          dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
++          management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
 +        };
-     };
++      };
+   };
  
-     # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
-@@ -35,25 +69,15 @@ import ./make-test-python.nix (
+   # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
+@@ -32,26 +72,17 @@
+       ]
+       assert any(msg in output for msg in expected)
  
-       did_start(clients, "netbird")
-       did_start(clients, "netbird-custom")
--    '';
+-    did_start(clients, "netbird")
+-    did_start(clients, "netbird-custom")
+-  '';
++       did_start(clients, "netbird")
++       did_start(clients, "netbird-custom")
  
--    /*
--      `netbird status` used to print `Daemon status: NeedsLogin`
--          https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
--      as the first line, but now it is just:
+-  /*
+-    `netbird status` used to print `Daemon status: NeedsLogin`
+-        https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
+-    as the first line, but now it is just:
 +      kanidm.start()
 +      kanidm.wait_for_unit("kanidm.service")
  
--          Daemon version: 0.26.3
--          CLI version: 0.26.3
--          Management: Disconnected
--          Signal: Disconnected
--          Relays: 0/0 Available
--          Nameservers: 0/0 Available
--          FQDN:
--          NetBird IP: N/A
--          Interface type: N/A
--          Quantum resistance: false
--          Routes: -
--          Peers count: 0/0 Connected
--    */
+-        Daemon version: 0.26.3
+-        CLI version: 0.26.3
+-        Management: Disconnected
+-        Signal: Disconnected
+-        Relays: 0/0 Available
+-        Nameservers: 0/0 Available
+-        FQDN:
+-        NetBird IP: N/A
+-        Interface type: N/A
+-        Quantum resistance: false
+-        Routes: -
+-        Peers count: 0/0 Connected
+-  */
+-}
 +      server.start()
 +      with subtest("server starting"):
 +        server.wait_for_unit("netbird-management.service")
 +        server.wait_for_unit("netbird-signal.service")
 +        server.wait_for_unit("netbird-relay.service")
 +    '';
-   }
- )
++  }
++)
 diff --git a/pkgs/by-name/ne/netbird-server/package.nix b/pkgs/by-name/ne/netbird-server/package.nix
 new file mode 100644
 index 00000000000000..b521e828756735
@@ -828,7 +838,7 @@ index 00000000000000..b521e828756735
 +  server = true;
 +}
 diff --git a/pkgs/by-name/ne/netbird/package.nix b/pkgs/by-name/ne/netbird/package.nix
-index 9ec81aa17401e5..86d8bdd9585a18 100644
+index 8adbee3c88e910..90e70f250891f8 100644
 --- a/pkgs/by-name/ne/netbird/package.nix
 +++ b/pkgs/by-name/ne/netbird/package.nix
 @@ -13,21 +13,25 @@

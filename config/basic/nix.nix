@@ -1,6 +1,6 @@
 {
   inputs,
-pkgs,
+  pkgs,
   ...
 }:
 {

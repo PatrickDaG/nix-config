@@ -1,8 +1,8 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index 073f8ebede1aa0..217b3e06a65500 100644
+index 79f5c22f5b981d..23baaf159cb7f9 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1538,6 +1538,7 @@
+@@ -1542,6 +1542,7 @@
    ./services/web-apps/filesender.nix
    ./services/web-apps/firefly-iii-data-importer.nix
    ./services/web-apps/firefly-iii.nix
@@ -436,7 +436,7 @@ index 00000000000000..ad1d1a2d6ccafc
 +  };
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index f0e816446511c2..3dc66e7567dacd 100644
+index a91b390baa9184..928389b68a845a 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
 @@ -470,6 +470,7 @@ in

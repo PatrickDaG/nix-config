@@ -17,6 +17,7 @@
         ]
       ))
       #keep-sorted start
+      amazon
       bashInteractive
       bs-manager
       chatterino2
@@ -25,25 +26,31 @@
       cowsay
       discord
       disneyplus
-      amazon
       element-desktop
       feh
       figlet
       galaxy-buds-client
       gh
       gh-dash
+      helvum
       hexyl
       hyperfine
-      helvum
+      hyprshot
+      jjui
+      ladybird
+      makemkv
       mpv
       netflix
       nextcloud-client
       nix-output-monitor
       nixpkgs-review
+      obsidian
       orca-slicer
       osu-lazer-bin
-      pinentry-gnome3 # for yubikey pinentry
+      pandoc # for obsidian
       pdfpc
+      pinentry-gnome3 # for yubikey pinentry
+      qmk
       signal-desktop
       streamlink
       streamlink-twitch-gui-bin
@@ -53,17 +60,11 @@
       via
       wcurl
       webcord
+      xautoclick
       xournalpp
       ytdlp-pot-provider
       zathura
       zotero
-      qmk
-      hyprshot
-      ladybird
-      xautoclick
-      obsidian
-      pandoc # for obsidian
-      makemkv
       #keep-sorted end
     ];
   };

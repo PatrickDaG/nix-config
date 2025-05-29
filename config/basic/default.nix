@@ -42,11 +42,11 @@
     inputs.idmail.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
     inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.niri.nixosModules.niri
     inputs.nix-gaming.nixosModules.platformOptimizations
     inputs.nix-topology.nixosModules.default
     #inputs.lix-module.nixosModules.default
     inputs.nixos-nftables-firewall.nixosModules.default
-    inputs.niri.nixosModules.niri
     inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
     inputs.nixvim.nixosModules.nixvim
     inputs.stylix.nixosModules.stylix
