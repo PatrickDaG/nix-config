@@ -82,11 +82,21 @@ mkMerge [
     ];
     protocol = "udp";
   })
+  # (forward {
+  #   service = "netbird";
+  #   ports = [
+  #     3478
+  #     5349
+  #   ];
+  #   protocol = "udp";
+  # })
   (forward {
-    service = "netbird";
+    service = "headscale";
     ports = [
-      3478
-      5349
+        # headscale stun
+        3478
+        # tailscale
+        41641
     ];
     protocol = "udp";
   })

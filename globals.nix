@@ -145,6 +145,10 @@ in
       jellyfin = {
         domain = "jellyfin.${globals.domains.web}";
       };
+      headscale = {
+        domain = "scale.${globals.domains.web}";
+        ip = 17;
+      };
     };
   };
 }

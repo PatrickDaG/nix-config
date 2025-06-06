@@ -67,7 +67,7 @@ These are notable external flakes which this config depend upon
 
 
 
-## How-To
+## How-To                                                                            PP-Bizon | Facility Sketch
 
 ### Add additional hosts
 
@@ -87,6 +87,20 @@ These are notable external flakes which this config depend upon
 4. Export all zpools and reboot into system
 6. Retrieve hostkeys using `ssh-keyscan <host> | grep -o 'ssh-ed25519.*' > host/<target>/secrets/host.pub`
 5. Deploy system
+
+### Add new services
+1. Add service config to `config/services/<service>`
+    1. Add Impermanence
+    1. Add allowed ports
+1. Add id to `ids.json`
+2. Add UID to `config/basic/users.nix`
+2. Add definitions to `globals.nix`
+2. Add Container/VM to `hosts/<host>/guests.nix`
+3. Run `agenix generate && agenix rekey`
+4. Deploy system
+5. Fetch ssh hostkey using `ssh-keyscan`
+5. Rekey again `agenix rekey`
+6. Deploy again
 
 ### Add secureboot to new systems
 

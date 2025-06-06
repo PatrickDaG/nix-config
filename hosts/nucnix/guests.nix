@@ -92,5 +92,9 @@ in
     // mkContainer "nginx" { }
     // mkContainer "teamspeak" { }
     // mkContainer "netbird" { }
-    // mkContainer "kanidm" { };
+    // mkContainer "kanidm" { }
+    // mkContainer "headscale" { };
+
+  # Tailscale needs tun access
+  containers.headscale.enableTun = true;
 }

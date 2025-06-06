@@ -48,6 +48,7 @@
       plugdev = uidGid 236;
       firefly-pico = uidGid 237;
       jellyfin = uidGid 238;
+      headscale = uidGid 239;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
@@ -58,6 +59,7 @@
         gid = 330;
       };
       patrick = uidGid 1000;
+
       smb = uidGid 2000;
       david = uidGid 2004;
       helen = uidGid 2001;

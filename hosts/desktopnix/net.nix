@@ -31,28 +31,46 @@
   };
   environment.persistence."/state".directories = [
     "/etc/mullvad-vpn"
-    {
-      directory = "/var/lib/netbird-main";
-      user = "netbird-main";
-      group = "netbird-main";
-      mode = "770";
-    }
+    # {
+    #   directory = "/var/lib/netbird-main";
+    #   user = "netbird-main";
+    #   group = "netbird-main";
+    #   mode = "770";
+    # }
   ];
-  services.netbird = {
-    ui.enable = false;
-    clients.main = {
-      port = 51820;
-      environment = {
-        NB_MANAGEMENT_URL = "https://netbird.${globals.domains.web}";
-        NB_ADMIN_URL = "https://netbird.${globals.domains.web}";
-        NB_HOSTNAME = "desktopnix";
-        # TODO remove once netbird client is merged
-        NB_STATE_DIR = "/var/lib/netbird-main";
-      };
-    };
-  };
+  # services.netbird = {
+  #   ui.enable = false;
+  #   clients.main = {
+  #     port = 51820;
+  #     environment = {
+  #       NB_MANAGEMENT_URL = "https://netbird.${globals.domains.web}";
+  #       NB_ADMIN_URL = "https://netbird.${globals.domains.web}";
+  #       NB_HOSTNAME = "desktopnix";
+  #       # TODO remove once netbird client is merged
+  #       NB_STATE_DIR = "/var/lib/netbird-main";
+  #     };
+  #   };
+  # };
   users.users."patrick".extraGroups = [ "netbird-main" ];
   meta.telegraf.availableMonitoringNetworks = [
     "home"
   ];
+  # generated using
+  # 'headscale preauthkeys create -e 99y --reusable -u 1 --tags "tag:server"'
+  age.secrets.authKeyFile = {
+    rekeyFile = config.node.secretsDir + "/authkey.age";
+  };
+  services.tailscale = {
+    enable = true;
+    extraDaemonFlags = [ "--no-logs-no-support" ];
+    disableTaildrop = true;
+    authKeyFile = config.age.secrets.authKeyFile.path;
+    extraUpFlags = [
+      "--login-server=${"https://${globals.services.headscale.domain}"}"
+      "--shields-up"
+      "--accept-routes"
+      "--accept-dns"
+      "--operator=patrick"
+    ];
+  };
 }
