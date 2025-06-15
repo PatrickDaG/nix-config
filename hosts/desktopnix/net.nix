@@ -73,4 +73,12 @@
       "--operator=patrick"
     ];
   };
+  environment.persistence."/state".files = [
+    {
+      file = "/var/lib/tailscale/tailscaled.state";
+      parentDirectory = {
+        mode = "750";
+      };
+    }
+  ];
 }

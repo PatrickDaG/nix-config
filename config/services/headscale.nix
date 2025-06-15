@@ -87,4 +87,12 @@
       "--advertise-routes=10.99.0.0/16"
     ];
   };
+  environment.persistence."/state".files = [
+    {
+      file = "/var/lib/tailscale/tailscaled.state";
+      parentDirectory = {
+        mode = "750";
+      };
+    }
+  ];
 }
