@@ -726,7 +726,7 @@ index 3122b6c9fe5ffe..cf19439e892713 100644
    };
  }
 diff --git a/nixos/tests/netbird.nix b/nixos/tests/netbird.nix
-index 581c6eeeab2e88..5d236b9ca8cde3 100644
+index 581c6eeeab2e88..99adc3264a2e02 100644
 --- a/nixos/tests/netbird.nix
 +++ b/nixos/tests/netbird.nix
 @@ -1,8 +1,13 @@
@@ -769,13 +769,13 @@ index 581c6eeeab2e88..5d236b9ca8cde3 100644
 +          enable = true;
 +          coturn = {
 +            enable = true;
-+             coturn = {
-+               enable = true;
-+               password = "secure-password";
-+             };
-+             domain = "nixos-test.internal";
-+             dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
-+             management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
++            coturn = {
++              enable = true;
++              password = "secure-password";
++            };
++            domain = "nixos-test.internal";
++            dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
++            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
 +            relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
 +          };
 +          domain = "nixos-test.internal";
@@ -786,7 +786,7 @@ index 581c6eeeab2e88..5d236b9ca8cde3 100644
    };
  
    # TODO: confirm the whole solution is working end-to-end when netbird server is implemented
-@@ -32,26 +72,17 @@
+@@ -32,26 +72,16 @@
        ]
        assert any(msg in output for msg in expected)
  
@@ -816,15 +816,13 @@ index 581c6eeeab2e88..5d236b9ca8cde3 100644
 -        Routes: -
 -        Peers count: 0/0 Connected
 -  */
--}
 +      server.start()
 +      with subtest("server starting"):
 +        server.wait_for_unit("netbird-management.service")
 +        server.wait_for_unit("netbird-signal.service")
 +        server.wait_for_unit("netbird-relay.service")
-+    '';
-+  }
-+)
++  '';
+ }
 diff --git a/pkgs/by-name/ne/netbird-server/package.nix b/pkgs/by-name/ne/netbird-server/package.nix
 new file mode 100644
 index 00000000000000..b521e828756735

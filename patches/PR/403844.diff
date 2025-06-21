@@ -1,5 +1,5 @@
 diff --git a/pkgs/by-name/ne/netbird-dashboard/package.nix b/pkgs/by-name/ne/netbird-dashboard/package.nix
-index 0670d3333e6bce..fcd2f4df65fce9 100644
+index f16f1d5e2e515d..e696c9130df2e4 100644
 --- a/pkgs/by-name/ne/netbird-dashboard/package.nix
 +++ b/pkgs/by-name/ne/netbird-dashboard/package.nix
 @@ -6,16 +6,16 @@
@@ -22,13 +22,12 @@ index 0670d3333e6bce..fcd2f4df65fce9 100644
    npmFlags = [ "--legacy-peer-deps" ];
  
    installPhase = ''
-@@ -30,6 +30,9 @@ buildNpmPackage rec {
+@@ -30,6 +30,8 @@ buildNpmPackage rec {
      description = "NetBird Management Service Web UI Panel";
      homepage = "https://github.com/netbirdio/dashboard";
      license = licenses.bsd3;
--    maintainers = with maintainers; [ vrifox ];
+-    maintainers = with maintainers; [ ];
 +    maintainers = with maintainers; [
-+      vrifox
 +      patrickdag
 +    ];
    };
