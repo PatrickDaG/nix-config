@@ -141,4 +141,30 @@
       ];
     };
   };
+  boot.plymouth = {
+    enable = true;
+    theme = "rings";
+    themePackages = with pkgs; [
+      # By default we would install all themes
+      (adi1090x-plymouth-themes.override {
+        selected_themes = [
+          "circuit"
+          "colorful_sliced"
+          "deus_ex"
+          "dna"
+          "dragon"
+          "ibm"
+          "lone"
+          "rings"
+          "rings_2"
+          "square"
+        ];
+      })
+    ];
+  };
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+  ];
+  boot.loader.timeout = 0;
 }

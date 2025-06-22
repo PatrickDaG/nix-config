@@ -134,11 +134,24 @@
         };
         inherit (config.stylix) polarity;
         targets = {
+          #keep-sorted start
           gtk.enable = true;
           bat.enable = true;
+          btop.enable = true;
           dunst.enable = true;
           zathura.enable = true;
           xresources.enable = true;
+          font-packages.enable = true;
+          fontconfig.enable = true;
+          fzf.enable =true;
+          ghostty.enable = true;
+          gitui.enable = true;
+          starship.enable =true;
+          hyprland.enable = true;
+          mpv.enable = true;
+          swaync.enable = true;
+          waybar.enable = true;
+          #keep-sorted end
         };
       };
 
