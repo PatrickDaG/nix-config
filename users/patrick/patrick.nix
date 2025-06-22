@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
@@ -164,7 +165,6 @@
   };
   boot.kernelParams = [
     "quiet"
-    "splash"
   ];
   boot.loader.timeout = 0;
 }
