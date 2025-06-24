@@ -166,5 +166,5 @@
   boot.kernelParams = [
     "quiet"
   ];
-  boot.loader.timeout = 0;
+  boot.loader.timeout = 2;
 }

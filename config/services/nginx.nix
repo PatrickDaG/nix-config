@@ -106,7 +106,7 @@ in
     {
       enable = true;
       recommendedSetup = true;
-      virtualHosts."${globals.services.netbird.domain}".useACMEHost = "web";
+      # virtualHosts."${globals.services.netbird.domain}".useACMEHost = "web";
       upstreams.fritz = {
         servers."${lib.net.cidr.host 1 "10.99.2.0/24"}:443" = { };
         extraConfig = ''
@@ -274,16 +274,16 @@ in
     }
   ];
 
-  services.netbird.server.proxy =
-    let
-      cfg = nodes.nucnix-netbird.config.services.netbird.server;
-    in
-    {
-      domain = "${globals.services.netbird.domain}";
-      enableNginx = true;
-      signalAddress = "${ipOf "netbird"}:${toString cfg.signal.port}";
-      relayAddress = "${ipOf "netbird"}:${toString cfg.relay.port}";
-      managementAddress = "${ipOf "netbird"}:${toString cfg.management.port}";
-      dashboardAddress = "${ipOf "netbird"}:80";
-    };
+  # services.netbird.server.proxy =
+  #   let
+  #     cfg = nodes.nucnix-netbird.config.services.netbird.server;
+  #   in
+  #   {
+  #     domain = "${globals.services.netbird.domain}";
+  #     enableNginx = true;
+  #     signalAddress = "${ipOf "netbird"}:${toString cfg.signal.port}";
+  #     relayAddress = "${ipOf "netbird"}:${toString cfg.relay.port}";
+  #     managementAddress = "${ipOf "netbird"}:${toString cfg.management.port}";
+  #     dashboardAddress = "${ipOf "netbird"}:80";
+  #   };
 }

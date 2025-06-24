@@ -91,7 +91,7 @@ in
     // mkContainer "adguardhome" { }
     // mkContainer "nginx" { }
     // mkContainer "teamspeak" { }
-    // mkContainer "netbird" { }
+    #// mkContainer "netbird" { }
     // mkContainer "kanidm" { }
     // mkContainer "headscale" { };
 
