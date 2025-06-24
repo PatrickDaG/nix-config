@@ -8,9 +8,13 @@
   environment.persistence."/state".directories = [
     "/var/lib/iwd"
     "/etc/mullvad-vpn"
+    # {
+    #   directory = "/var/lib/netbird-main";
+    #   user = "netbird-main";
+    # }
     {
-      directory = "/var/lib/netbird-main";
-      user = "netbird-main";
+      directory = "/var/lib/tailscale";
+      mode = "750";
     }
   ];
   age.secrets.eduroam = {
@@ -78,15 +82,28 @@
     enable = true;
     package = pkgs.mullvad-vpn;
   };
-  services.netbird = {
-    clients.main = {
-      port = 51820;
-      environment = {
-        NB_MANAGEMENT_URL = "https://netbird.${globals.domains.web}";
-        NB_ADMIN_URL = "https://netbird.${globals.domains.web}";
-        NB_HOSTNAME = "patricknix";
-      };
-    };
+  # services.netbird = {
+  #   clients.main = {
+  #     port = 51820;
+  #     environment = {
+  #       NB_MANAGEMENT_URL = "https://netbird.${globals.domains.web}";
+  #       NB_ADMIN_URL = "https://netbird.${globals.domains.web}";
+  #       NB_HOSTNAME = "patricknix";
+  #     };
+  #   };
+  # };
+  # users.users."patrick".extraGroups = [ "netbird-main" ];
+  services.tailscale = {
+    enable = true;
+    extraDaemonFlags = [ "--no-logs-no-support" ];
+    disableTaildrop = true;
+    #authKeyFile = config.age.secrets.authKeyFile.path;
+    extraUpFlags = [
+      "--login-server=${"https://${globals.services.headscale.domain}"}"
+      "--shields-up"
+      "--accept-routes"
+      "--accept-dns"
+      "--operator=patrick"
+    ];
   };
-  users.users."patrick".extraGroups = [ "netbird-main" ];
 }

@@ -37,6 +37,10 @@
     #   group = "netbird-main";
     #   mode = "770";
     # }
+    {
+      directory = "/var/lib/tailscale";
+      mode = "750";
+    }
   ];
   # services.netbird = {
   #   ui.enable = false;
@@ -51,7 +55,7 @@
   #     };
   #   };
   # };
-  users.users."patrick".extraGroups = [ "netbird-main" ];
+  # users.users."patrick".extraGroups = [ "netbird-main" ];
   meta.telegraf.availableMonitoringNetworks = [
     "home"
   ];
@@ -65,20 +69,16 @@
     extraDaemonFlags = [ "--no-logs-no-support" ];
     disableTaildrop = true;
     authKeyFile = config.age.secrets.authKeyFile.path;
-    extraUpFlags = [
-      "--login-server=${"https://${globals.services.headscale.domain}"}"
-      "--shields-up"
-      "--accept-routes"
+    # These get applied everytime
+    extraSetFlags = [
       "--accept-dns"
+      "--accept-routes"
+      "--shields-up"
       "--operator=patrick"
     ];
+    # These only on reauth
+    extraUpFlags = [
+      "--login-server=${"https://${globals.services.headscale.domain}"}"
+    ];
   };
-  environment.persistence."/state".files = [
-    {
-      file = "/var/lib/tailscale/tailscaled.state";
-      parentDirectory = {
-        mode = "750";
-      };
-    }
-  ];
 }

@@ -9,8 +9,22 @@
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.headscale.port ];
   };
+  networking.nftables.firewall = {
+    zones = {
+      tailscale.interfaces = [ "tailscale0" ];
+      services = {
+        ipv4Addresses = [ globals.net.vlans.services.cidrv4 ];
+      };
+    };
+    rules.forward-tailscale = {
+      from = [ "tailscale" ];
+      to = [ "services" ];
+      verdict = "accept";
+    };
+  };
   networking.firewall.allowedUDPPorts = [
     3478
+    (config.services.tailscale.port)
   ]; # STUN/TURN server
   services.headscale = {
     enable = true;
@@ -19,8 +33,8 @@
     settings = {
       server_url = "https://${globals.services.headscale.domain}";
       dns = {
-        base_domain = "internal.${globals.domains.web}";
-        nameservers.split.${globals.domains.web} = [ "10.99.20.10" ];
+        base_domain = "internal";
+        nameservers.split."lel.lol" = [ "10.99.20.10" ];
         override_local_dns = false;
       };
       oidc = {
@@ -33,7 +47,7 @@
       # relay server
       derp.server = {
         enabled = true;
-        urls = [ ]; # Don't use tailscale DERP server
+        #urls = [ ]; # Don't use tailscale DERP server
         stun_listen_addr = "0.0.0.0:3478";
       };
       policy.path = (pkgs.formats.json { }).generate "headscale.json" {
@@ -45,14 +59,14 @@
             "patrick@"
           ];
         };
-        # acls = [
-        #   {
-        #     action = "accept";
-        #     src = [ "*" ];
-        #     dst = [ "*:*" ];
-        #   }
-        # ];
-        autoApprovers.routes."10.99.0.0/16" = [ "tag:server" ];
+        acls = [
+          {
+            action = "accept";
+            src = [ "*" ];
+            dst = [ "*:*" ];
+          }
+        ];
+        autoApprovers.routes."10.99.20.0/24" = [ "tag:server" ];
       };
     };
   };
@@ -67,6 +81,10 @@
       mode = "770";
       user = "headscale";
       group = "headscale";
+    }
+    {
+      directory = "/var/lib/tailscale";
+      mode = "750";
     }
   ];
 
@@ -84,15 +102,7 @@
     authKeyFile = config.age.secrets.authKeyFile.path;
     extraUpFlags = [
       "--login-server=${"https://${globals.services.headscale.domain}"}"
-      "--advertise-routes=10.99.0.0/16"
+      "--advertise-routes=10.99.20.0/24"
     ];
   };
-  environment.persistence."/state".files = [
-    {
-      file = "/var/lib/tailscale/tailscaled.state";
-      parentDirectory = {
-        mode = "750";
-      };
-    }
-  ];
 }
