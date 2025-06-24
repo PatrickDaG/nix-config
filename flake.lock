@@ -2314,11 +2314,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1749312937,
-        "narHash": "sha256-zSF0ZBsq2Zbct71PmKuQyBRi/U9vOAc4nLek4VsfuIk=",
+        "lastModified": 1750786936,
+        "narHash": "sha256-0gcaNPQcGrrbo9P8/CqqKNAUO9hJSl2S8mglJUJhwdE=",
         "ref": "refs/heads/main",
-        "rev": "ccb06ddcdd2f09256313b2297bff385200a96e83",
-        "revCount": 33,
+        "rev": "262a77b7cb2600d276e1c7c8757afeb218246926",
+        "revCount": 34,
         "type": "git",
         "url": "https://forge.lel.lol/patrick/nixp-meta.git"
       },

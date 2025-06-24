@@ -98,29 +98,29 @@ in
     };
   };
 
-  systemd.services.signal-to-blog = {
-    script = ''
-      ${lib.getExe pkgs.signal-to-blog} \
-      --allowed-sender "${config.secrets.secrets.local.allowedSender}" \
-      --data-folder "signal-data" \
-      --output-folder ~/blog/public/content/journal/ \
-      --url "https://blog.lel.lol/journal" \
-      --timezone 2
-    '';
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.signal-cli ];
-    serviceConfig = {
-      Requires = "blog";
-      Type = "oneshot";
-      User = "blog";
-      Group = "blog";
-      StateDirectory = "blog";
-      WorkingDirectory = "/var/lib/blog/";
-      LimitNOFILE = "1048576";
-      PrivateTmp = true;
-      PrivateDevices = true;
-      StateDirectoryMode = "0700";
-    };
-  };
+  # systemd.services.signal-to-blog = {
+  #   script = ''
+  #     ${lib.getExe pkgs.signal-to-blog} \
+  #     --allowed-sender "${config.secrets.secrets.local.allowedSender}" \
+  #     --data-folder "signal-data" \
+  #     --output-folder ~/blog/public/content/journal/ \
+  #     --url "https://blog.lel.lol/journal" \
+  #     --timezone 2
+  #   '';
+  #   wantedBy = [ "multi-user.target" ];
+  #   path = [ pkgs.signal-cli ];
+  #   serviceConfig = {
+  #     Requires = "blog";
+  #     Type = "oneshot";
+  #     User = "blog";
+  #     Group = "blog";
+  #     StateDirectory = "blog";
+  #     WorkingDirectory = "/var/lib/blog/";
+  #     LimitNOFILE = "1048576";
+  #     PrivateTmp = true;
+  #     PrivateDevices = true;
+  #     StateDirectoryMode = "0700";
+  #   };
+  # };
 
 }
