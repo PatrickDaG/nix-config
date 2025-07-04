@@ -78,7 +78,7 @@ in
             }
             {
               # varta
-              hw-address = "00:0c:c6:06:7a:70";
+              hw-address = "00:0c:c6:0b:59:22";
               ip-address = net.cidr.host 20 subnet;
             }
             {
