@@ -38,7 +38,7 @@
       hyperfine
       hyprshot
       jjui
-      ladybird
+      #ladybird
       makemkv
       mpv
       netflix
@@ -59,7 +59,6 @@
       telegram-desktop
       timer
       via
-      wcurl
       webcord
       xautoclick
       xournalpp

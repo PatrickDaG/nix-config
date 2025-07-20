@@ -6,6 +6,8 @@
     { config, ... }:
     {
       home.sessionVariables.HISTDB_FILE = "${config.xdg.dataHome}/zsh/history.db";
+      # Completely disable caching
+      home.sessionVariables.COMMA_CACHING = "0";
 
       # has to be enabled to support zsh reverse search
       programs.fzf.enable = true;

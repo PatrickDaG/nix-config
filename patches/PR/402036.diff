@@ -1,8 +1,8 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index 79f5c22f5b981d..23baaf159cb7f9 100644
+index 036490c9589a8c..96908a5061de7d 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1542,6 +1542,7 @@
+@@ -1550,6 +1550,7 @@
    ./services/web-apps/filesender.nix
    ./services/web-apps/firefly-iii-data-importer.nix
    ./services/web-apps/firefly-iii.nix
@@ -436,10 +436,10 @@ index 00000000000000..ad1d1a2d6ccafc
 +  };
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index a91b390baa9184..928389b68a845a 100644
+index 60d118cba38f7a..9af8f196300064 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
-@@ -470,6 +470,7 @@ in
+@@ -482,6 +482,7 @@ in
    filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
    firefly-iii = runTest ./firefly-iii.nix;
    firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;

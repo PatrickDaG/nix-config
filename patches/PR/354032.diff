@@ -1,8 +1,8 @@
 diff --git a/nixos/doc/manual/redirects.json b/nixos/doc/manual/redirects.json
-index 44ab6c6b860cc7..03d7d6f1b9a223 100644
+index 95470dcdb81635..a7c29b97f6ceb5 100644
 --- a/nixos/doc/manual/redirects.json
 +++ b/nixos/doc/manual/redirects.json
-@@ -71,6 +71,9 @@
+@@ -86,6 +86,9 @@
    "module-services-dump1090-fa-configuration": [
      "index.html#module-services-dump1090-fa-configuration"
    ],
@@ -13,7 +13,7 @@ index 44ab6c6b860cc7..03d7d6f1b9a223 100644
      "index.html#preface"
    ],
 diff --git a/nixos/modules/services/networking/netbird/dashboard.nix b/nixos/modules/services/networking/netbird/dashboard.nix
-index 8d1cbe7f6de1cf..fab07d72ddc026 100644
+index cc1ab9f46ff1a0..5dabbc5ce2a102 100644
 --- a/nixos/modules/services/networking/netbird/dashboard.nix
 +++ b/nixos/modules/services/networking/netbird/dashboard.nix
 @@ -39,7 +39,7 @@ in
@@ -836,7 +836,7 @@ index 00000000000000..b521e828756735
 +  server = true;
 +}
 diff --git a/pkgs/by-name/ne/netbird/package.nix b/pkgs/by-name/ne/netbird/package.nix
-index 8adbee3c88e910..90e70f250891f8 100644
+index cfcfcb423ce67c..e43614e6caeccf 100644
 --- a/pkgs/by-name/ne/netbird/package.nix
 +++ b/pkgs/by-name/ne/netbird/package.nix
 @@ -13,21 +13,25 @@
@@ -895,8 +895,8 @@ index 8adbee3c88e910..90e70f250891f8 100644
    # Disabled for the `netbird-ui` version because it does a network request.
    doInstallCheck = !ui;
  
-@@ -120,7 +125,14 @@ buildGoModule (finalAttrs: {
-       vrifox
+@@ -119,7 +124,14 @@ buildGoModule (finalAttrs: {
+     maintainers = with lib.maintainers; [
        saturn745
        loc
 +      patrickdag
