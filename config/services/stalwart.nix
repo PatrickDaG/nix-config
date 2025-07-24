@@ -137,21 +137,21 @@ in
         keepalive 2;
       '';
     };
-    virtualHosts =
-      {
-        ${domain} = {
-          forceSSL = true;
-          useACMEHost = domain;
-          extraConfig = ''
-            client_max_body_size 512M;
-          '';
-          locations."/" = {
-            proxyPass = "http://stalwart";
-            proxyWebsockets = true;
-          };
+    virtualHosts = {
+      ${domain} = {
+        forceSSL = true;
+        useACMEHost = domain;
+        extraConfig = ''
+          client_max_body_size 512M;
+        '';
+        locations."/" = {
+          proxyPass = "http://stalwart";
+          proxyWebsockets = true;
         };
-      }
-      // lib.genAttrs
+      };
+    }
+    //
+      lib.genAttrs
         [
           "autoconfig.${domain}"
           "autodiscover.${domain}"
@@ -197,7 +197,7 @@ in
         ReadWritePaths = [ config.services.idmail.dataDir ];
         ExecStart = lib.mkForce [
           ""
-          "${cfg.package}/bin/stalwart-mail --config=/run/stalwart-mail/config.toml"
+          "${lib.getExe cfg.package} --config=/run/stalwart-mail/config.toml"
         ];
         RestartSec = "60"; # Retry every minute
       };
@@ -222,6 +222,7 @@ in
         config.local-keys = [
           "store.*"
           "directory.*"
+          "config.local-keys.*"
           "tracer.*"
           "server.*"
           "!server.blocked-ip.*"
@@ -237,6 +238,9 @@ in
           "certificate.*"
           "auth.dkim.*"
           "signature.*"
+          "imap.*"
+          "session.*"
+          "resolver.*"
         ];
 
         authentication.fallback-admin = {
@@ -502,10 +506,6 @@ in
             "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
           ];
         };
-
-        spam-filter.resource = "file://${config.services.stalwart-mail.package}/etc/stalwart/spamfilter.toml";
-        webadmin.ressource = "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
-        webadmin.path = "/var/cache/stalwart-mail";
 
         certificate.default = {
           cert = "%{file:${config.security.acme.certs.${domain}.directory}/fullchain.pem}%";
