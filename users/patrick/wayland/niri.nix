@@ -206,6 +206,11 @@ in
               matches = [ { app-id = "streamlink-twitch-gui"; } ];
               open-on-workspace = "twitch";
             }
+            {
+              matches = [ { app-id = "mpv"; } ];
+              open-on-workspace = "twitch";
+              default-column-width.proportion = 0.9;
+            }
 
             {
               matches = [ { app-id = "TeamSpeak 3"; } ];
