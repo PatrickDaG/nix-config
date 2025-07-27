@@ -402,6 +402,8 @@ in
           PartOf = "graphical-session.target";
           After = "graphical-session.target";
           Requisite = "graphical-session.target";
+          # always keep running else all xwayland windows crash
+          X-SwitchMethod= "keep-old";
         };
 
         Service = {
