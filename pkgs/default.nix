@@ -14,13 +14,24 @@ _inputs: [
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
-        postInstall =
-          (neovimPrev.postInstall or "")
-          + ''
-            wrapProgram $out/bin/nvim --add-flags "--clean"
-          '';
+        postInstall = (neovimPrev.postInstall or "") + ''
+          wrapProgram $out/bin/nvim --add-flags "--clean"
+        '';
       }
     );
+    sd-switch = prev.rustPlatform.buildRustPackage {
+      pname = "sd-switch";
+
+      src = prev.fetchFromGitea {
+        domain = "forge.lel.lol";
+        owner = "patrick";
+        repo = "sd-switch";
+        rev = "master";
+        hash = "sha256-pfwuM+ZCYiGnHiMtqvCIsBCZ1d2WoNEzL8wy6fMmyA0=";
+      };
+      version = "0.5.4-pre";
+      cargoHash = "sha256-4FD3aTEVi5s8TsAJrycxRwRro9Thk1PIsqD7Naja+/Q=";
+    };
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (_pythonFinal: pythonPrev: {
         home-assistant-chip-wheels = pythonPrev.home-assistant-chip-wheels.overrideAttrs {
@@ -32,12 +43,10 @@ _inputs: [
     ];
 
     path-of-building = prev.path-of-building.overrideAttrs (old: {
-      postFixup =
-        (old.postFixup or "")
-        + ''
-          wrapProgram $out/bin/pobfrontend \
-            --set QT_QPA_PLATFORM xcb
-        '';
+      postFixup = (old.postFixup or "") + ''
+        wrapProgram $out/bin/pobfrontend \
+          --set QT_QPA_PLATFORM xcb
+      '';
     });
     home-assistant-custom-components = prev.home-assistant-custom-components // {
       another_mvg = prev.home-assistant.python.pkgs.callPackage ./another_mvg.nix { };
