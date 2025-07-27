@@ -71,6 +71,11 @@ in
               "--to"
               "@-"
             ];
+            l = [
+              "log"
+              "--limit-number"
+              "15"
+            ];
             rebase-all = [
               "rebase"
               "--source"
@@ -105,7 +110,7 @@ in
             push-new-bookmarks = true;
           };
           ui = {
-            default-command = "log";
+            default-command = "l";
             # Why no paginate if longer than a page??
             paginate = "never";
             diff-editor = ":builtin";
@@ -135,6 +140,13 @@ in
         ignores = [ ".direnv" ];
         extraConfig = {
           core.pager = "${pkgs.delta}/bin/delta";
+          core.askpass = lib.getExe pkgs.pinentry-gnome3;
+          user = {
+            name = "Patrick";
+            email = globals.accounts.email."1".address;
+            signingkey = globals.accounts.email."1".address;
+          };
+          sendemail.identity = globals.accounts.email."1".address;
           delta = {
             hyperlinks = true;
             keep-plus-minus-markers = true;
