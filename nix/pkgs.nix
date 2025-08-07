@@ -25,9 +25,9 @@
           inputs.nixvim.overlays.default
           inputs.niri.overlays.niri
           (_: prev: {
-            nix-plugins = prev.nix-plugins.override {
-              nix = prev.lixPackageSets.latest.lix;
-            };
+            # nix-plugins = prev.nix-plugins.override {
+            #   nix = prev.lixPackageSets.latest.lix;
+            # };
           })
         ];
       };

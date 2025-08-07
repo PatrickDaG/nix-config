@@ -5,7 +5,7 @@
 }:
 {
   nix = {
-    package = pkgs.lixPackageSets.latest.lix;
+    #package = pkgs.lixPackageSets.latest.lix;
     channel.enable = false;
     settings = {
       auto-optimise-store = true;
