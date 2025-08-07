@@ -73,7 +73,7 @@ in
             ];
             l = [
               "log"
-              "--limit-number"
+              "--limit"
               "15"
             ];
             rebase-all = [
