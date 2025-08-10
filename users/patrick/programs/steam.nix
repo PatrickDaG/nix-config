@@ -10,6 +10,8 @@
     # Not possible inside steam
     #capSysNice = true;
   };
+  services.ratbagd.enable = true;
+  hm.home.packages = [ pkgs.piper ];
   programs.steam = {
     enable = true;
     extraCompatPackages = [
