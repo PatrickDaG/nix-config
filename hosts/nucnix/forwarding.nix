@@ -90,14 +90,14 @@ mkMerge [
   #   ];
   #   protocol = "udp";
   # })
-  (forward {
-    service = "headscale";
-    ports = [
-      # headscale stun
-      3478
-      # tailscale
-      41641
-    ];
-    protocol = "udp";
-  })
+  # (forward {
+  #   service = "headscale";
+  #   ports = [
+  #     # headscale stun
+  #     3478
+  #     # tailscale
+  #     41641
+  #   ];
+  #   protocol = "udp";
+  # })
 ]

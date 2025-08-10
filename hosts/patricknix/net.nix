@@ -93,17 +93,17 @@
   #   };
   # };
   # users.users."patrick".extraGroups = [ "netbird-main" ];
-  services.tailscale = {
-    enable = true;
-    extraDaemonFlags = [ "--no-logs-no-support" ];
-    disableTaildrop = true;
-    #authKeyFile = config.age.secrets.authKeyFile.path;
-    extraUpFlags = [
-      "--login-server=${"https://${globals.services.headscale.domain}"}"
-      "--shields-up"
-      "--accept-routes"
-      "--accept-dns"
-      "--operator=patrick"
-    ];
-  };
+  # services.tailscale = {
+  #   enable = true;
+  #   extraDaemonFlags = [ "--no-logs-no-support" ];
+  #   disableTaildrop = true;
+  #   #authKeyFile = config.age.secrets.authKeyFile.path;
+  #   extraUpFlags = [
+  #     "--login-server=${"https://${globals.services.headscale.domain}"}"
+  #     "--shields-up"
+  #     "--accept-routes"
+  #     "--accept-dns"
+  #     "--operator=patrick"
+  #   ];
+  # };
 }
