@@ -94,6 +94,9 @@ in
       firefly = {
         domain = "money.${globals.domains.web}";
       };
+      firefly-data-importer = {
+        domain = "ff-import.${globals.domains.web}";
+      };
       fireflypico = {
         domain = "pico.${globals.domains.web}";
       };

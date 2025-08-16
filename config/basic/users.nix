@@ -22,7 +22,7 @@
       acme = uidGid 212;
       nextcloud = uidGid 213;
       redis-nextcloud = uidGid 214;
-      radicale = uidGid 215;
+      # Oupsi ensure vaultwarden and forgejo never share files
       git = uidGid 215;
       vaultwarden = uidGid 215;
       redis-paperless = uidGid 216;
@@ -49,6 +49,8 @@
       firefly-pico = uidGid 237;
       jellyfin = uidGid 238;
       headscale = uidGid 239;
+      firefly-iii-data-importer = uidGid 240;
+      radicale = uidGid 241;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
@@ -58,6 +60,7 @@
       nix-build = {
         gid = 330;
       };
+
       patrick = uidGid 1000;
 
       smb = uidGid 2000;

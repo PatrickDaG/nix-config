@@ -225,6 +225,7 @@ in
     (proxyProtect "esphome" { port = 3001; })
     (proxyProtect "firefly" { port = 80; })
     (proxyProtect "fireflypico" { port = 80; })
+    (blockOf "firefly-data-importer" { port = 80; })
     (blockOf "grafana" { })
     (blockOf "apispotify" {
       port = 3000;
