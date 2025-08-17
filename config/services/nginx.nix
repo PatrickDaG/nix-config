@@ -37,11 +37,10 @@ let
           proxyWebsockets = true;
           X-Frame-Options = "SAMEORIGIN";
         };
-        extraConfig =
-          ''
-            client_max_body_size ${maxBodySize} ;
-          ''
-          + virtualHostExtraConfig;
+        extraConfig = ''
+          client_max_body_size ${maxBodySize} ;
+        ''
+        + virtualHostExtraConfig;
       };
     };
   proxyProtect =
@@ -225,7 +224,14 @@ in
     (proxyProtect "esphome" { port = 3001; })
     (proxyProtect "firefly" { port = 80; })
     (proxyProtect "fireflypico" { port = 80; })
-    (blockOf "firefly-data-importer" { port = 80; })
+    (blockOf "firefly-data-importer" {
+      port = 80;
+      virtualHostExtraConfig = ''
+        allow ${globals.net.vlans.home.cidrv4} ;
+        allow ${globals.net.vlans.home.cidrv6} ;
+        deny all ;
+      '';
+    })
     (blockOf "grafana" { })
     (blockOf "apispotify" {
       port = 3000;
