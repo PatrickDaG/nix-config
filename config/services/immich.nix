@@ -7,7 +7,7 @@
   ...
 }:
 let
-  version = "v1.125.7";
+  version = "v1.138.1";
   immichDomain = "immich.${globals.domains.web}";
 
   ipImmichMachineLearning = "10.89.0.10";
@@ -299,11 +299,12 @@ in
   systemd.services."podman-immich_machine_learning" = serviceConfig;
 
   virtualisation.oci-containers.containers."immich_postgres" = {
-    image = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+    image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.1-pgvectors0.2.0";
     environment = {
       POSTGRES_DB = environment.DB_DATABASE_NAME;
       POSTGRES_PASSWORD_FILE = environment.DB_PASSWORD_FILE;
       POSTGRES_USER = environment.DB_USERNAME;
+      POSTGRES_INITDB_ARGS = "--data-checksums";
     };
     volumes = [
       "${pgdata_folder}:/var/lib/postgresql/data:rw"
@@ -318,7 +319,7 @@ in
   };
   systemd.services."podman-immich_postgres" = serviceConfig;
   virtualisation.oci-containers.containers."immich_redis" = {
-    image = "redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5";
+    image = "docker.io/valkey/valkey:8-bookworm@sha256:42cba146593a5ea9a622002c1b7cba5da7be248650cbb64ecb9c6c33d29794b1";
     log-driver = "journald";
     extraOptions = [
       "--network-alias=immich_redis"
