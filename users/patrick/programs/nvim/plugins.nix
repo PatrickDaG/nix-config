@@ -84,7 +84,9 @@
       nixvimInjections = true;
     };
     #treesitter-context.enable = true;
-    vim-matchup.enable = true;
+    # freezes nvim nononono
+    # https://github.com/andymass/vim-matchup/issues/302
+    #vim-matchup.enable = true;
     comment.enable = true;
     # Fzf picker for arbitrary stuff
     telescope = {
