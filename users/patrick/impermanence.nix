@@ -21,6 +21,8 @@
 
         ".config/OrcaSlicer"
 
+        ".cache/typst"
+
         ".config/streamcontroller"
         ".local/share/streamcontroller"
         #TODO: remove once merged
