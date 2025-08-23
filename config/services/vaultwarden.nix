@@ -95,6 +95,8 @@
       rocketAddress = "0.0.0.0";
       rocketPort = 3000;
 
+      allowedConnectSrc = "https://${globals.services.idmail.domain}";
+
       signupsAllowed = false;
       passwordIterations = 1000000;
       invitationsAllowed = true;
