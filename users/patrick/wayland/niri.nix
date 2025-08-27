@@ -74,15 +74,22 @@ in
             "Mod+n".action = focus-column-left;
             "Mod+left".action = focus-column-left;
             "Mod+Shift+n".action = move-column-left;
+            "Mod+Shift+left".action = move-column-left;
+
             "Mod+r".action = focus-window-or-workspace-down;
             "Mod+down".action = focus-window-or-workspace-down;
             "Mod+Shift+r".action = move-window-down;
+            "Mod+Shift+down".action = move-window-down;
+
             "Mod+l".action = focus-window-or-workspace-up;
             "Mod+up".action = focus-window-or-workspace-up;
             "Mod+Shift+l".action = move-window-up;
+            "Mod+Shift+up".action = move-window-up;
+
             "Mod+s".action = focus-column-right;
             "Mod+right".action = focus-column-right;
             "Mod+Shift+s".action = move-column-right;
+            "Mod+Shift+right".action = move-column-right;
 
             "Mod+h".action = focus-column-first;
             "Mod+Shift+h".action = consume-or-expel-window-left;
