@@ -185,7 +185,23 @@ in
           proxy_set_header X-Email "";
         '';
       };
+
+      upstreams.firezone-api = {
+        servers."${ipOf "firezone"}:${toString nodes.nucnix-firezone.config.services.firezone.server.api.port}" = { };
+        extraConfig = ''
+          zone firezone 64k;
+          keepalive 2;
+        '';
+      };
+      virtualHosts.${globals.services.firezone.domain} = {
+        locations."/api/" = {
+          # The trailing slash is important to strip the location prefix from the request
+          proxyPass = "http://firezone-api/";
+          proxyWebsockets = true;
+        };
+      };
     }
+    (blockOf "firezone" { })
     (blockOf "vaultwarden" { maxBodySize = "1G"; })
     (blockOf "jellyfin" {
       maxBodySize = "10G";

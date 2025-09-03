@@ -4,7 +4,6 @@ _inputs: [
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
-    firezone = prev.callPackage ./firezone.nix { };
     ytdlp-pot-provider = prev.callPackage ./ytdlp-pot-provider.nix { };
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };

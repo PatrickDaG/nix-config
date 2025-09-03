@@ -38,6 +38,11 @@
       mode = "440";
       group = "kanidm";
     };
+    oauth2-firezone = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-paperless = {
       generator.script = "alnum";
       mode = "440";
@@ -213,6 +218,25 @@
         enableLocalhostRedirects = true;
         enableLegacyCrypto = true;
         scopeMaps."netbird.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+      };
+
+      groups."firezone.access" = { };
+      systems.oauth2.firezon = {
+        public = true;
+        displayName = "firezone";
+        originUrl = [
+          "https://${globals.services.firezone.domain}/peers"
+          "https://${globals.services.firezone.domain}/add-peers"
+        ];
+        originLanding = "https://${globals.services.firezone.domain}/";
+        preferShortUsername = true;
+        enableLocalhostRedirects = true;
+        enableLegacyCrypto = true;
+        scopeMaps."firezone.access" = [
           "openid"
           "email"
           "profile"

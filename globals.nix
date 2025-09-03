@@ -152,6 +152,10 @@ in
         domain = "scale.${globals.domains.web}";
         ip = 17;
       };
+      firezone = {
+        domain = "fz.${globals.domains.web}";
+        ip = 18;
+      };
     };
   };
 }
