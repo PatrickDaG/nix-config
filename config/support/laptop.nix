@@ -1,9 +1,9 @@
 {
   services = {
-    logind.extraConfig = ''
-      IdleAction=suspend
-      IdleActionSec=300
-    '';
+    logind.settings.Login = {
+      IdleAction = "suspend";
+      IdleActionSec = 300;
+    };
     physlock = {
       enable = true;
       muteKernelMessages = true;

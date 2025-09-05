@@ -15,12 +15,7 @@ in
       stylix.targets.niri.enable = true;
       programs.niri.settings = nconfig.lib.misc.mkPerHost {
         all = {
-          # spawn-at-startup = [
-          #           { command = ["xwayland-satellite"];}];
-          # FIXME What if xwayland satellite uses different display?
-          environment = {
-            DISPLAY = ":0";
-          };
+          xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite-stable;
 
           input = {
             keyboard = {
@@ -395,34 +390,7 @@ in
         patricknix = { };
       };
       home.packages = [
-        pkgs.xwayland-satellite-stable
         pkgs.scripts.clone-term
       ];
-      # The package provides a .service file, that does contain a 'WantedBy = graphical-session.target'
-      # But this does not get parsed and linked to actually, which would enable it.
-      # This should take care of that part
-      systemd.user.services.xwayland-satellite = {
-        # /etc/profiles/per-user/patrick/share/systemd/user/xwayland-satellite.service
-        Unit = {
-          Description = "Xwayland outside your Wayland";
-          BindsTo = "graphical-session.target";
-          PartOf = "graphical-session.target";
-          After = "graphical-session.target";
-          Requisite = "graphical-session.target";
-          # always keep running else all xwayland windows crash
-          X-SwitchMethod= "keep-old";
-        };
-
-        Service = {
-          Type = "notify";
-          NotifyAccess = "all";
-          ExecStart = lib.getExe pkgs.xwayland-satellite;
-          StandardOutput = "journal";
-        };
-
-        Install = {
-          WantedBy = [ "graphical-session.target" ];
-        };
-      };
     };
 }

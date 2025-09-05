@@ -53,8 +53,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
-      #url = "github:sodiboo/niri-flake";
-      url = "github:patrickdag/niri-flake";
+      url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -52,6 +52,7 @@
       firefly-iii-data-importer = uidGid 240;
       radicale = uidGid 241;
       kea = uidGid 242;
+      lpadmin = uidGid 243;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;

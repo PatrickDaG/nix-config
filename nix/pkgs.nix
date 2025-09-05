@@ -1,4 +1,9 @@
-{ inputs, self, ... }:
+{
+  inputs,
+  self,
+  lib,
+  ...
+}:
 {
   imports = [
     (
@@ -17,6 +22,9 @@
       _module.args.pkgs = import self.nixpkgs-patched {
         inherit system;
         config.allowUnfree = true;
+        config.permittedInsecurePackages = lib.trace "teamspeak böse" [
+          "qtwebengine-5.15.19"
+        ];
         overlays = (import ../pkgs inputs) ++ [
           inputs.nix-topology.overlays.default
           inputs.nixos-extra-modules.overlays.default
