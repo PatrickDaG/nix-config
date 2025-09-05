@@ -23,7 +23,7 @@
       }
       inputs.nix-index-database.homeModules.nix-index
       inputs.nixos-extra-modules.modules.home-manager.default
-      inputs.nixvim.homeManagerModules.nixvim
+      inputs.nixvim.homeModules.nixvim
       inputs.spicetify-nix.homeManagerModules.default
     ];
   };

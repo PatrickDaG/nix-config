@@ -26,7 +26,7 @@
 
       programs.zsh = {
         enable = true;
-        dotDir = ".config/zsh";
+        dotDir = "${config.xdg.configHome}/zsh";
         history = {
           extended = true;
           path = "${config.xdg.dataHome}/zsh/zsh_history";
