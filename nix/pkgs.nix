@@ -1,6 +1,6 @@
 {
   inputs,
-  self,
+  config,
   lib,
   ...
 }:
@@ -19,7 +19,7 @@
   perSystem =
     { pkgs, system, ... }:
     {
-      _module.args.pkgs = import self.nixpkgs-patched {
+      _module.args.pkgs = import config.node.nixpkgs {
         inherit system;
         config.allowUnfree = true;
         config.permittedInsecurePackages = lib.trace "teamspeak böse" [
@@ -32,7 +32,7 @@
           inputs.agenix-rekey.overlays.default
           inputs.nixvim.overlays.default
           inputs.niri.overlays.niri
-          (_: prev: {
+          (_: _prev: {
             # nix-plugins = prev.nix-plugins.override {
             #   nix = prev.lixPackageSets.latest.lix;
             # };
