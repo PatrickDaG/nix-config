@@ -37,14 +37,18 @@ in
     in
     {
       enable = true;
-      package = pkgs.firefox.overrideAttrs (old: {
-        buildCommand =
-          old.buildCommand
-          + ''
+      package =
+        (pkgs.firefox.overrideAttrs (old: {
+          buildCommand = old.buildCommand + ''
             substituteInPlace $out/bin/firefox \
               --replace "exec -a" ${escapeShellArg envStr}" exec -a"
           '';
-      });
+        })).override
+           {
+            nativeMessagingHosts = [
+              pkgs.tridactyl-native
+            ];
+          };
       profiles.patrick = {
         userChrome = ''
           #TabsToolbar {
