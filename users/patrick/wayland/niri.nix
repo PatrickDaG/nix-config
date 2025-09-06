@@ -245,7 +245,6 @@ in
           ];
 
           spawn-at-startup = [
-            { command = [ "zotero" ]; }
             { command = [ "obsidian" ]; }
             { command = [ "firefox" ]; }
           ];
@@ -385,9 +384,27 @@ in
             };
           };
 
-          spawn-at-startup = [ { command = [ "thunderbird" ]; } ];
+          spawn-at-startup = [
+            { command = [ "thunderbird" ]; }
+            { command = [ "zotero" ]; }
+          ];
         };
-        patricknix = { };
+        patricknix = {
+          outputs."eDP-1" = {
+            scale = 2.0;
+          };
+          workspaces = {
+            "1default" = {
+              name = "default";
+              open-on-output = "eDP-1";
+            };
+            "2notes" = {
+              name = "notes";
+              open-on-output = "eDP-1";
+            };
+          };
+        };
+
       };
       home.packages = [
         pkgs.scripts.clone-term
