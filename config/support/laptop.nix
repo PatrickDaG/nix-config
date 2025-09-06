@@ -1,8 +1,15 @@
 {
   services = {
     logind.settings.Login = {
-      IdleAction = "suspend";
-      IdleActionSec = 300;
+      LidSwitch = "ignore";
+      LidSwitchDocked = "ignore";
+      LidSwitchExternalPower = "ignore";
+      HandlePowerKey = "suspend";
+      HandleSuspendKey = "suspend";
+      HandleHibernateKey = "suspend";
+      PowerKeyIgnoreInhibited = "yes";
+      SuspendKeyIgnoreInhibited = "yes";
+      HibernateKeyIgnoreInhibited = "yes";
     };
     physlock = {
       enable = true;
