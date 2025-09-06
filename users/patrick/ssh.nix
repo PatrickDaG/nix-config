@@ -17,6 +17,7 @@
   hm.home.sessionVariables.SSH_ASKPASS = lib.getExe pkgs.pinentry-gnome3;
   hm.programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks =
       let
         identityFile = [
@@ -40,6 +41,7 @@
           inherit identityFile;
           controlMaster = "auto";
           controlPersist = "5s";
+          controlPath = "~/.ssh/master-%r@%n:%p";
         };
       };
   };
