@@ -187,7 +187,8 @@ in
       };
 
       upstreams.firezone-api = {
-        servers."${ipOf "firezone"}:${toString nodes.nucnix-firezone.config.services.firezone.server.api.port}" = { };
+        servers."${ipOf "firezone"}:${toString nodes.nucnix-firezone.config.services.firezone.server.api.port}" =
+          { };
         extraConfig = ''
           zone firezone 64k;
           keepalive 2;

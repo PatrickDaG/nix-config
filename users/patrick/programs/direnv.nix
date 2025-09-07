@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+_:
 {
   hm.programs.direnv = {
     enable = true;

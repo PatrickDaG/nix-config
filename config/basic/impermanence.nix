@@ -63,7 +63,8 @@ in
     files = [
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_ed25519_key.pub"
-    ] ++ lib.lists.optionals (!config.boot.isContainer) [ "/etc/machine-id" ];
+    ]
+    ++ lib.lists.optionals (!config.boot.isContainer) [ "/etc/machine-id" ];
     directories = [
       "/var/log"
       "/var/lib/systemd"

@@ -60,73 +60,71 @@ in
     boot.initrd.systemd.extraBin = {
       jq = lib.getExe pkgs.jq;
     };
-    boot.initrd.systemd.services =
-      {
-        check-pcrs = mkIf (config.systemIdentity.pcr15 != null) {
-          script = ''
-            echo "Checking PCR 15 value"
-            if [[ $(systemd-analyze pcrs 15 --json=short | jq -r ".[0].sha256") != "${config.systemIdentity.pcr15}" ]] ; then
-              echo "PCR 15 check failed"
-              exit 1
-            else
-              echo "PCR 15 check suceed"
-            fi
-          '';
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
-          unitConfig.DefaultDependencies = "no";
-          after = [ "cryptsetup.target" ];
-          before = [ "sysroot.mount" ];
-          requiredBy = [ "sysroot.mount" ];
+    boot.initrd.systemd.services = {
+      check-pcrs = mkIf (config.systemIdentity.pcr15 != null) {
+        script = ''
+          echo "Checking PCR 15 value"
+          if [[ $(systemd-analyze pcrs 15 --json=short | jq -r ".[0].sha256") != "${config.systemIdentity.pcr15}" ]] ; then
+            echo "PCR 15 check failed"
+            exit 1
+          else
+            echo "PCR 15 check suceed"
+          fi
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
         };
-      }
-      // (listToAttrs (
-        foldl' (
-          acc: attrs:
-          let
-            extraOpts = attrs.value.crypttabExtraOpts ++ (optional attrs.value.allowDiscards "discard");
-            cfg = config.boot.initrd.systemd;
-          in
-          [
-            (nameValuePair "cryptsetup-${attrs.name}" {
-              unitConfig = {
-                Description = "Cryptography setup for ${attrs.name}";
-                DefaultDependencies = "no";
-                IgnoreOnIsolate = true;
-                Conflicts = [ "umount.target" ];
-                BindsTo = "${utils.escapeSystemdPath attrs.value.device}.device";
-              };
-              serviceConfig = {
-                Type = "oneshot";
-                RemainAfterExit = true;
-                TimeoutSec = "infinity";
-                KeyringMode = "shared";
-                OOMScoreAdjust = 500;
-                ImportCredential = "cryptsetup.*";
-                ExecStart = ''${cfg.package}/bin/systemd-cryptsetup attach '${attrs.name}' '${attrs.value.device}' '-' '${concatStringsSep "," extraOpts}' '';
-                ExecStop = ''${cfg.package}/bin/systemd-cryptsetup detach '${attrs.name}' '';
-              };
-              after =
-                [
-                  "cryptsetup-pre.target"
-                  "systemd-udevd-kernel.socket"
-                  "${utils.escapeSystemdPath attrs.value.device}.device"
-                ]
-                ++ (optional cfg.tpm2.enable "systemd-tpm2-setup-early.service")
-                ++ optional (acc != [ ]) "${(head acc).name}.service";
-              before = [
-                "blockdev@dev-mapper-${attrs.name}.target"
-                "cryptsetup.target"
-                "umount.target"
-              ];
-              wants = [ "blockdev@dev-mapper-${attrs.name}.target" ];
-              requiredBy = [ "sysroot.mount" ];
-            })
-          ]
-          ++ acc
-        ) [ ] (sortOn (x: x.name) (lib.attrsets.attrsToList config.boot.initrd.luks.devices))
-      ));
+        unitConfig.DefaultDependencies = "no";
+        after = [ "cryptsetup.target" ];
+        before = [ "sysroot.mount" ];
+        requiredBy = [ "sysroot.mount" ];
+      };
+    }
+    // (listToAttrs (
+      foldl' (
+        acc: attrs:
+        let
+          extraOpts = attrs.value.crypttabExtraOpts ++ (optional attrs.value.allowDiscards "discard");
+          cfg = config.boot.initrd.systemd;
+        in
+        [
+          (nameValuePair "cryptsetup-${attrs.name}" {
+            unitConfig = {
+              Description = "Cryptography setup for ${attrs.name}";
+              DefaultDependencies = "no";
+              IgnoreOnIsolate = true;
+              Conflicts = [ "umount.target" ];
+              BindsTo = "${utils.escapeSystemdPath attrs.value.device}.device";
+            };
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              TimeoutSec = "infinity";
+              KeyringMode = "shared";
+              OOMScoreAdjust = 500;
+              ImportCredential = "cryptsetup.*";
+              ExecStart = ''${cfg.package}/bin/systemd-cryptsetup attach '${attrs.name}' '${attrs.value.device}' '-' '${concatStringsSep "," extraOpts}' '';
+              ExecStop = ''${cfg.package}/bin/systemd-cryptsetup detach '${attrs.name}' '';
+            };
+            after = [
+              "cryptsetup-pre.target"
+              "systemd-udevd-kernel.socket"
+              "${utils.escapeSystemdPath attrs.value.device}.device"
+            ]
+            ++ (optional cfg.tpm2.enable "systemd-tpm2-setup-early.service")
+            ++ optional (acc != [ ]) "${(head acc).name}.service";
+            before = [
+              "blockdev@dev-mapper-${attrs.name}.target"
+              "cryptsetup.target"
+              "umount.target"
+            ];
+            wants = [ "blockdev@dev-mapper-${attrs.name}.target" ];
+            requiredBy = [ "sysroot.mount" ];
+          })
+        ]
+        ++ acc
+      ) [ ] (sortOn (x: x.name) (lib.attrsets.attrsToList config.boot.initrd.luks.devices))
+    ));
   };
 }

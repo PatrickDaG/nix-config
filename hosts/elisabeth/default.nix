@@ -21,7 +21,8 @@
 
     ./net.nix
     ./fs.nix
-  ] ++ lib.lists.optionals (!minimal) [ ./guests.nix ];
+  ]
+  ++ lib.lists.optionals (!minimal) [ ./guests.nix ];
   services.xserver = {
     xkb = {
       layout = "de";

@@ -172,23 +172,22 @@ in
 
           cursor.no_warps = true;
           debug.disable_logs = false;
-          env =
-            [
-              "NIXOS_OZONE_WL,1"
-              "MOZ_ENABLE_WAYLAND,1"
-              "_JAVA_AWT_WM_NONREPARENTING,1"
-              "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-              "QT_QPA_PLATFORM,wayland;xcb"
-              "GDK_BACKEND,wayland"
-              "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
-              "XDG_SESSION_TYPE,wayland"
-              "TERMINAL,uwsm app -- kitty"
-            ]
-            ++ optionals (elem "nvidia" config.services.xserver.videoDrivers) [
-              # See https://wiki.hyprland.org/Nvidia/
-              "LIBVA_DRIVER_NAME,nvidia"
-              "GBM_BACKEND,nvidia-drm"
-            ];
+          env = [
+            "NIXOS_OZONE_WL,1"
+            "MOZ_ENABLE_WAYLAND,1"
+            "_JAVA_AWT_WM_NONREPARENTING,1"
+            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+            "QT_QPA_PLATFORM,wayland;xcb"
+            "GDK_BACKEND,wayland"
+            "WLR_DRM_NO_ATOMIC,1" # retest on newest nvidia driver
+            "XDG_SESSION_TYPE,wayland"
+            "TERMINAL,uwsm app -- kitty"
+          ]
+          ++ optionals (elem "nvidia" config.services.xserver.videoDrivers) [
+            # See https://wiki.hyprland.org/Nvidia/
+            "LIBVA_DRIVER_NAME,nvidia"
+            "GBM_BACKEND,nvidia-drm"
+          ];
           bindm = [
             # mouse movements
             "SUPER, mouse:272, movewindow"

@@ -44,7 +44,7 @@ in
               --replace "exec -a" ${escapeShellArg envStr}" exec -a"
           '';
         })).override
-           {
+          {
             nativeMessagingHosts = [
               pkgs.tridactyl-native
             ];

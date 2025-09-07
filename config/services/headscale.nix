@@ -24,7 +24,7 @@
   };
   networking.firewall.allowedUDPPorts = [
     3478
-    (config.services.tailscale.port)
+    config.services.tailscale.port
   ]; # STUN/TURN server
   services.headscale = {
     enable = true;

@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 {
@@ -28,6 +27,7 @@
       discord
       disneyplus
       element-desktop
+      espeak
       feh
       figlet
       galaxy-buds-client
@@ -50,7 +50,6 @@
       osu-lazer-bin
       pandoc # for obsidian
       pdfpc
-      espeak
       pinentry-gnome3 # for yubikey pinentry
       qmk
       signal-desktop

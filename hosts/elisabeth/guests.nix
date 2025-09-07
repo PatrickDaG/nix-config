@@ -24,39 +24,38 @@
         }:
         {
           autostart = true;
-          zfs =
-            {
-              "/state" = {
-                pool = "rpool";
-                dataset = "local/guests/${guestName}";
-              };
-              "/persist" = {
-                pool = "rpool";
-                dataset = "safe/guests/${guestName}";
-              };
-              "/panzer" = lib.mkIf enablePanzer {
-                pool = "panzer";
-                dataset = "safe/guests/${guestName}";
-              };
-              "/renaultft" = lib.mkIf enableRenaultFT {
-                pool = "renaultft";
-                dataset = "safe/guests/${guestName}";
-              };
-              # kinda not necesarry should be removed on next reimaging
-              "/bunker" = lib.mkIf enableBunker {
-                pool = "panzer";
-                dataset = "bunker/guests/${guestName}";
-              };
-            }
-            // lib.listToAttrs (
-              lib.flip lib.map shared (
-                { name, pool }:
-                lib.nameValuePair "/${name}" {
-                  inherit pool;
-                  dataset = "safe/shared/${name}";
-                }
-              )
-            );
+          zfs = {
+            "/state" = {
+              pool = "rpool";
+              dataset = "local/guests/${guestName}";
+            };
+            "/persist" = {
+              pool = "rpool";
+              dataset = "safe/guests/${guestName}";
+            };
+            "/panzer" = lib.mkIf enablePanzer {
+              pool = "panzer";
+              dataset = "safe/guests/${guestName}";
+            };
+            "/renaultft" = lib.mkIf enableRenaultFT {
+              pool = "renaultft";
+              dataset = "safe/guests/${guestName}";
+            };
+            # kinda not necesarry should be removed on next reimaging
+            "/bunker" = lib.mkIf enableBunker {
+              pool = "panzer";
+              dataset = "bunker/guests/${guestName}";
+            };
+          }
+          // lib.listToAttrs (
+            lib.flip lib.map shared (
+              { name, pool }:
+              lib.nameValuePair "/${name}" {
+                inherit pool;
+                dataset = "safe/shared/${name}";
+              }
+            )
+          );
           modules = [
             ../../config/basic
             ../../config/services/${guestName}.nix

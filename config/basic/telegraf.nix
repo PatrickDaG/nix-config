@@ -39,7 +39,8 @@ in
     # Monitor anything that can only be monitored from this node
     meta.telegraf.availableMonitoringNetworks = [
       "local-${config.node.name}"
-    ] ++ (lib.optional (config.node.type == "host") "internet");
+    ]
+    ++ (lib.optional (config.node.type == "host") "internet");
 
     nodes.${globals.services.influxdb.host} = {
       # Mirror the original secret on the influx host
@@ -113,143 +114,142 @@ in
             bucket = "telegraf";
           };
         };
-        inputs =
-          {
-            conntrack = { };
-            cpu = { };
-            disk = { };
-            diskio = mkIf (!config.boot.isContainer) { };
-            internal = { };
-            interrupts = { };
-            kernel = { };
-            kernel_vmstat = { };
-            linux_sysctl_fs = { };
-            mem = { };
-            net = {
-              ignore_protocol_stats = true;
-            };
-            netstat = { };
-            nstat = { };
-            processes = { };
-            swap = { };
-            system = { };
-            systemd_units = {
-              unittype = "service";
-            };
-            temp = mkIf (config.node.type == "host") { };
-            wireguard = { };
+        inputs = {
+          conntrack = { };
+          cpu = { };
+          disk = { };
+          diskio = mkIf (!config.boot.isContainer) { };
+          internal = { };
+          interrupts = { };
+          kernel = { };
+          kernel_vmstat = { };
+          linux_sysctl_fs = { };
+          mem = { };
+          net = {
+            ignore_protocol_stats = true;
+          };
+          netstat = { };
+          nstat = { };
+          processes = { };
+          swap = { };
+          system = { };
+          systemd_units = {
+            unittype = "service";
+          };
+          temp = mkIf (config.node.type == "host") { };
+          wireguard = { };
 
-            ping = mkIfNotEmpty (
-              concatLists (
-                flip mapAttrsToList globals.monitoring.ping (
-                  name: pingCfg:
-                  optionals (elem pingCfg.network cfg.availableMonitoringNetworks) (
-                    concatLists (
-                      forEach
-                        [
-                          "hostv4"
-                          "hostv6"
-                        ]
-                        (
-                          attr:
-                          optional (pingCfg.${attr} != null) {
-                            interval = "1m";
-                            method = "native";
-                            urls = [ pingCfg.${attr} ];
-                            ipv4 = attr == "hostv4";
-                            ipv6 = attr == "hostv6";
-                            tags = {
-                              inherit name;
-                              inherit (pingCfg) network;
-                              ip_version = if attr == "hostv4" then "v4" else "v6";
-                            };
-                            fieldinclude = [
-                              "percent_packet_loss"
-                              "average_response_ms"
-                            ];
-                          }
-                        )
-                    )
+          ping = mkIfNotEmpty (
+            concatLists (
+              flip mapAttrsToList globals.monitoring.ping (
+                name: pingCfg:
+                optionals (elem pingCfg.network cfg.availableMonitoringNetworks) (
+                  concatLists (
+                    forEach
+                      [
+                        "hostv4"
+                        "hostv6"
+                      ]
+                      (
+                        attr:
+                        optional (pingCfg.${attr} != null) {
+                          interval = "1m";
+                          method = "native";
+                          urls = [ pingCfg.${attr} ];
+                          ipv4 = attr == "hostv4";
+                          ipv6 = attr == "hostv6";
+                          tags = {
+                            inherit name;
+                            inherit (pingCfg) network;
+                            ip_version = if attr == "hostv4" then "v4" else "v6";
+                          };
+                          fieldinclude = [
+                            "percent_packet_loss"
+                            "average_response_ms"
+                          ];
+                        }
+                      )
                   )
                 )
               )
-            );
+            )
+          );
 
-            http_response = mkIfNotEmpty (
-              concatLists (
-                flip mapAttrsToList globals.monitoring.http (
-                  name: httpCfg:
-                  optional (elem httpCfg.network cfg.availableMonitoringNetworks) {
-                    interval = "1m";
-                    urls = toList httpCfg.url;
-                    method = "GET";
-                    response_status_code = httpCfg.expectedStatus;
-                    response_string_match = mkIf (httpCfg.expectedBodyRegex != null) httpCfg.expectedBodyRegex;
-                    insecure_skip_verify = httpCfg.skipTlsVerification;
-                    follow_redirects = true;
-                    tags = {
-                      inherit name;
-                      inherit (httpCfg) network;
-                    };
-                  }
-                )
+          http_response = mkIfNotEmpty (
+            concatLists (
+              flip mapAttrsToList globals.monitoring.http (
+                name: httpCfg:
+                optional (elem httpCfg.network cfg.availableMonitoringNetworks) {
+                  interval = "1m";
+                  urls = toList httpCfg.url;
+                  method = "GET";
+                  response_status_code = httpCfg.expectedStatus;
+                  response_string_match = mkIf (httpCfg.expectedBodyRegex != null) httpCfg.expectedBodyRegex;
+                  insecure_skip_verify = httpCfg.skipTlsVerification;
+                  follow_redirects = true;
+                  tags = {
+                    inherit name;
+                    inherit (httpCfg) network;
+                  };
+                }
               )
-            );
+            )
+          );
 
-            dns_query = mkIfNotEmpty (
-              concatLists (
-                flip mapAttrsToList globals.monitoring.dns (
-                  name: dnsCfg:
-                  optional (elem dnsCfg.network cfg.availableMonitoringNetworks) {
-                    interval = "1m";
-                    servers = [ dnsCfg.server ];
-                    domains = [ dnsCfg.domain ];
-                    record_type = dnsCfg.record-type;
-                    tags = {
-                      inherit name;
-                      inherit (dnsCfg) network;
-                    };
-                  }
-                )
+          dns_query = mkIfNotEmpty (
+            concatLists (
+              flip mapAttrsToList globals.monitoring.dns (
+                name: dnsCfg:
+                optional (elem dnsCfg.network cfg.availableMonitoringNetworks) {
+                  interval = "1m";
+                  servers = [ dnsCfg.server ];
+                  domains = [ dnsCfg.domain ];
+                  record_type = dnsCfg.record-type;
+                  tags = {
+                    inherit name;
+                    inherit (dnsCfg) network;
+                  };
+                }
               )
-            );
+            )
+          );
 
-            net_response = mkIfNotEmpty (
-              concatLists (
-                flip mapAttrsToList globals.monitoring.tcp (
-                  name: tcpCfg:
-                  optional (elem tcpCfg.network cfg.availableMonitoringNetworks) {
-                    interval = "1m";
-                    address = "${tcpCfg.host}:${toString tcpCfg.port}";
-                    protocol = "tcp";
-                    tags = {
-                      inherit name;
-                      inherit (tcpCfg) network;
-                    };
-                    fieldexclude = [
-                      "result_type"
-                      "string_found"
-                    ];
-                  }
-                )
+          net_response = mkIfNotEmpty (
+            concatLists (
+              flip mapAttrsToList globals.monitoring.tcp (
+                name: tcpCfg:
+                optional (elem tcpCfg.network cfg.availableMonitoringNetworks) {
+                  interval = "1m";
+                  address = "${tcpCfg.host}:${toString tcpCfg.port}";
+                  protocol = "tcp";
+                  tags = {
+                    inherit name;
+                    inherit (tcpCfg) network;
+                  };
+                  fieldexclude = [
+                    "result_type"
+                    "string_found"
+                  ];
+                }
               )
-            );
-          }
-          // optionalAttrs config.services.smartd.enable {
-            sensors = { };
-            smart = {
-              attributes = true;
-              path_nvme = config.security.elewrap.telegraf-nvme.path;
-              path_smartctl = config.security.elewrap.telegraf-smartctl.path;
-              use_sudo = false;
-            };
-          }
-          // optionalAttrs config.services.nginx.enable {
-            nginx.urls = [ "http://localhost/nginx_status" ];
-          }
-          // optionalAttrs (config.networking.wireless.enable || config.networking.wireless.iwd.enable) {
-            wireless = { };
+            )
+          );
+        }
+        // optionalAttrs config.services.smartd.enable {
+          sensors = { };
+          smart = {
+            attributes = true;
+            path_nvme = config.security.elewrap.telegraf-nvme.path;
+            path_smartctl = config.security.elewrap.telegraf-smartctl.path;
+            use_sudo = false;
           };
+        }
+        // optionalAttrs config.services.nginx.enable {
+          nginx.urls = [ "http://localhost/nginx_status" ];
+        }
+        // optionalAttrs (config.networking.wireless.enable || config.networking.wireless.iwd.enable) {
+          wireless = { };
+        };
       };
     };
 
