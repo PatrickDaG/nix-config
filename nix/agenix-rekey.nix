@@ -3,7 +3,6 @@
   imports = [ inputs.agenix-rekey.flakeModule ];
   flake = {
     secretsConfig = {
-      # This should be a link to one of the age public keys in './keys'
       masterIdentities = [ ../keys/PatC.pub ];
       extraEncryptionPubkeys = [ ../secrets/recipients.txt ];
     };

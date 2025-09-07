@@ -13,6 +13,7 @@
 
     ../../config/basic
 
+    #keep-sorted start
     ../../config/support/bluetooth.nix
     ../../config/support/nintendo.nix
     ../../config/support/nvidia.nix
@@ -21,8 +22,10 @@
     ../../config/support/printing.nix
     ../../config/support/secureboot.nix
     ../../config/support/vr.nix
+    ../../config/support/wine.nix
     ../../config/support/yubikey.nix
     ../../config/support/zfs.nix
+    #keep-sorted end
 
     ./net.nix
     ./fs.nix

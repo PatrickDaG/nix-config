@@ -10,6 +10,7 @@
 
     ../../config/basic
 
+    #keep-sorted start
     ../../config/support/bluetooth.nix
     ../../config/support/laptop.nix
     ../../config/support/nvidia.nix
@@ -19,7 +20,9 @@
     ../../config/support/printing.nix
     ../../config/support/secureboot.nix
     ../../config/support/yubikey.nix
+    ../../config/support/wine.nix
     ../../config/support/zfs.nix
+    #keep-sorted end
 
     ./net.nix
     ./fs.nix

@@ -2,9 +2,11 @@
   lib,
   minimal,
   pkgs,
+  inputs,
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  imports = [ inputs.nix-gaming.nixosModules.pipewireLowLatency ];
   # Sadly does not seem to do anything yet
   #musnix = {
   #  enable = true;
@@ -26,7 +28,10 @@ lib.optionalAttrs (!minimal) {
     alsa.enable = true;
     jack.enable = true;
     pulse.enable = true;
-    extraConfig.pipewire."99-allowed-rates"."context.properties"."default.clock.allowed-rates" = [
+    lowLatency = {
+      enable = true;
+    };
+    extraConfig.pipewire."99-allowed-rates".context.properties.default.clock.allowed-rates = [
       44100
       48000
       88200

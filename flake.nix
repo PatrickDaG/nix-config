@@ -129,9 +129,10 @@
       nixos-generators,
       nixos-extra-modules,
       nix-topology,
+      flake-parts,
       ...
     }@inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./nix/agenix-rekey.nix
         ./nix/devshell.nix
@@ -156,8 +157,8 @@
             import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
               {
                 inherit pkgs;
-                nixosConfigurations = inputs.self.nodes;
-                decryptIdentity = builtins.head self.secretsConfig.masterIdentities;
+                nixosConfigurations = self.nodes;
+                decryptIdentity = ../keys/PatC.pub;
               };
           packages.live-iso = nixos-generators.nixosGenerate {
             inherit pkgs;
