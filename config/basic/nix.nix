@@ -31,7 +31,6 @@
         "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc="
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
         (builtins.readFile ../../secrets/nix-key.pub)
-        # configuration.nix
       ];
       cores = 0;
       max-jobs = "auto";

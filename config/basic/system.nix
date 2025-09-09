@@ -23,7 +23,8 @@
         || lib.trace "Missing pubkey for ${config.node.name}: ${toString pubkeyPath} not found, using dummy replacement key for now." false
       ) pubkeyPath;
     generatedSecretsDir = config.node.secretsDir + "/generated/";
-    cacheDir = "/var/tmp/agenix-rekey/\"$UID\"";
+    # Can't have any other UID anyway
+    cacheDir = "/var/tmp/agenix-rekey/1000";
   };
   security.sudo.enable = false;
   security.tpm2 = {
