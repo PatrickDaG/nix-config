@@ -29,6 +29,33 @@ let
       '';
     }
   );
+  learnSmartCard = lib.getExe (
+    pkgs.writeShellApplication {
+      name = "learnSmartCard";
+      runtimeInputs = [
+        pkgs.yubikey-manager
+      ];
+      text = ''
+        # 1. Grab the first (or only) serial
+        serial=$(ykman list --serials | head -n1 | tr -d '[:space:]')
+
+        # 2. Decide what to do
+        USER=""
+        case "$serial" in
+          23010997)
+            gpg -u "DE0DE86932AC0E918EA523FFBD8ADBAA5C02D50C" "$@"
+            ;;
+          15489049)
+            gpg -u "5E4C3D7480C235FE2F0BD23F7DD6A72EC899617D" "$@"
+            ;;
+          *)
+            echo "Unknown YubiKey serial: $serial" >&2
+            gpg "$@"
+            ;;
+        esac
+      '';
+    }
+  );
 in
 {
   hm =
@@ -104,6 +131,7 @@ in
             # Only sign on push
             behavior = "drop";
             backend = "gpg";
+            backends.gpg.program = learnSmartCard;
           };
           git = {
             sign-on-push = true;
@@ -147,6 +175,7 @@ in
             signingkey = globals.accounts.email."1".address;
           };
           sendemail.identity = globals.accounts.email."1".address;
+          gpg.openpgp.program = learnSmartCard;
           delta = {
             hyperlinks = true;
             keep-plus-minus-markers = true;
