@@ -137,7 +137,6 @@
         ./nix/agenix-rekey.nix
         ./nix/devshell.nix
         ./nix/globals.nix
-        ./nix/hosts.nix
         ./nix/pkgs.nix
         ./nix/patch.nix
         nix-topology.flakeModule

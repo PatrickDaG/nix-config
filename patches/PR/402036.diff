@@ -1,8 +1,8 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index 036490c9589a8c..96908a5061de7d 100644
+index 93a649314d6a48..5dd64b190b7048 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
-@@ -1550,6 +1550,7 @@
+@@ -1571,6 +1571,7 @@
    ./services/web-apps/filesender.nix
    ./services/web-apps/firefly-iii-data-importer.nix
    ./services/web-apps/firefly-iii.nix
@@ -12,10 +12,10 @@ index 036490c9589a8c..96908a5061de7d 100644
    ./services/web-apps/freshrss.nix
 diff --git a/nixos/modules/services/web-apps/firefly-pico.nix b/nixos/modules/services/web-apps/firefly-pico.nix
 new file mode 100644
-index 00000000000000..ad1d1a2d6ccafc
+index 00000000000000..26bde10c0d3ab6
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/firefly-pico.nix
-@@ -0,0 +1,419 @@
+@@ -0,0 +1,421 @@
 +{
 +  pkgs,
 +  config,
@@ -349,7 +349,8 @@ index 00000000000000..ad1d1a2d6ccafc
 +        "pm.min_spare_servers" = lib.mkDefault 2;
 +        "pm.max_spare_servers" = lib.mkDefault 4;
 +        "pm.max_requests" = lib.mkDefault 500;
-+      } // cfg.poolConfig;
++      }
++      // cfg.poolConfig;
 +    };
 +
 +    systemd.services.firefly-pico-setup = {
@@ -362,7 +363,8 @@ index 00000000000000..ad1d1a2d6ccafc
 +      serviceConfig = {
 +        ExecStart = firefly-pico-maintenance;
 +        RemainAfterExit = true;
-+      } // commonServiceConfig;
++      }
++      // commonServiceConfig;
 +      unitConfig.JoinsNamespaceOf = "phpfpm-firefly-pico.service";
 +      restartTriggers = [ cfg.package ];
 +      partOf = [ "phpfpm-firefly-pico.service" ];
@@ -436,10 +438,10 @@ index 00000000000000..ad1d1a2d6ccafc
 +  };
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index 60d118cba38f7a..9af8f196300064 100644
+index 3c6f89dcb2aeeb..d77b6e42ec7391 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
-@@ -482,6 +482,7 @@ in
+@@ -523,6 +523,7 @@ in
    filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
    firefly-iii = runTest ./firefly-iii.nix;
    firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
@@ -572,7 +574,7 @@ index 00000000000000..376938f3d818a5
 +}
 diff --git a/pkgs/by-name/fi/firefly-pico/frontend.nix b/pkgs/by-name/fi/firefly-pico/frontend.nix
 new file mode 100644
-index 00000000000000..86ddcc0b143f2d
+index 00000000000000..deeb59656ae932
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/frontend.nix
 @@ -0,0 +1,50 @@
@@ -605,7 +607,7 @@ index 00000000000000..86ddcc0b143f2d
 +    inherit (finalAttrs) src;
 +    sourceRoot = "source/front";
 +    name = "${finalAttrs.pname}-npm-deps";
-+    hash = "sha256-+YpWPp0ufPuuSkTn0WDD2E80S9bs5ZTQ8TzFFtgfTqU=";
++    hash = "sha256-ryxQgnh+Rj5BoSFwKIdhFa99ziVDt4UwVMHvMeIcDSU=";
 +  };
 +
 +  passthru = {
@@ -628,7 +630,7 @@ index 00000000000000..86ddcc0b143f2d
 +})
 diff --git a/pkgs/by-name/fi/firefly-pico/package.nix b/pkgs/by-name/fi/firefly-pico/package.nix
 new file mode 100644
-index 00000000000000..983013a67fa2c8
+index 00000000000000..8b59c3d0de439a
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/package.nix
 @@ -0,0 +1,73 @@
@@ -646,13 +648,13 @@ index 00000000000000..983013a67fa2c8
 +
 +stdenvNoCC.mkDerivation (finalAttrs: {
 +  pname = "firefly-pico";
-+  version = "1.7.0";
++  version = "1.9.0";
 +
 +  src = fetchFromGitHub {
 +    owner = "cioraneanu";
 +    repo = "firefly-pico";
 +    tag = "${finalAttrs.version}";
-+    hash = "sha256-Ef64WZYAtViW5lCSCtTzjs6KJL7BxW9innqLSy0N2xQ=";
++    hash = "sha256-5hpvXg6EjjsvKXMXzFQpJCX4FQjnhwu7eQrERN+mZhE=";
 +  };
 +  sourceRoot = "source/back";
 +
@@ -672,7 +674,7 @@ index 00000000000000..983013a67fa2c8
 +    composerNoScripts = true;
 +    composerStrictValidation = true;
 +    strictDeps = true;
-+    vendorHash = "sha256-hwbmsvD91lX/vYa1Xk1WEo8pB6b+DTRDVd2DJ7TjocI=";
++    vendorHash = "sha256-eVPMfIpA0PX+jOdgtscKObgi8WPtAh7CsvHsUEzzv8Q=";
 +  };
 +
 +  passthru = {

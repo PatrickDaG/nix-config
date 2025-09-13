@@ -545,7 +545,7 @@
         aiosolaredge
         zlib-ng
         stringcase
-        hahomematic
+        aiohomematic
         pymodbus
         hatasmota
         pyipp

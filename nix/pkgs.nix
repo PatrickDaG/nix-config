@@ -2,9 +2,13 @@
   inputs,
   config,
   lib,
+  self,
   ...
 }:
 {
+  node.path = ../. + "/hosts";
+  node.nixpkgs = self.nixpkgs-patched;
+
   imports = [
     (
       { lib, flake-parts-lib, ... }:

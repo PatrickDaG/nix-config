@@ -242,6 +242,11 @@ in
           "session.*"
           "resolver.*"
         ];
+        spam-filter.resource = lib.mkDefault "file://${config.services.stalwart-mail.package.spam-filter}/spam-filter.toml";
+        webadmin = {
+          path = "/var/cache/stalwart-mail";
+          resource = lib.mkDefault "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
+        };
 
         authentication.fallback-admin = {
           user = "admin";

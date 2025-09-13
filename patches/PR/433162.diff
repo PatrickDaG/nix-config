@@ -1,3 +1,16 @@
+diff --git a/nixos/doc/manual/release-notes/rl-2511.section.md b/nixos/doc/manual/release-notes/rl-2511.section.md
+index eea2496154959e..2049e546f76c1f 100644
+--- a/nixos/doc/manual/release-notes/rl-2511.section.md
++++ b/nixos/doc/manual/release-notes/rl-2511.section.md
+@@ -169,6 +169,8 @@
+ 
+ - `i18n.inputMethod.fcitx5.plasma6Support` has been removed because qt6 is the only one used for fcitx5-configtool now.
+ 
++- `firezone` has changed how the `Everyone` group behaves. Service Accounts are no longer considered part of `Everyone`.
++
+ - The `boot.readOnlyNixStore` has been removed. Control over bind mount options on `/nix/store` is now offered by the `boot.nixStoreMountOpts` option.
+ 
+ - The Postfix module has been updated and likely requires configuration changes:
 diff --git a/nixos/modules/services/networking/firezone/provision.exs b/nixos/modules/services/networking/firezone/provision.exs
 index d8e60d32cf323c..9651140525e27b 100644
 --- a/nixos/modules/services/networking/firezone/provision.exs
@@ -12,10 +25,10 @@ index d8e60d32cf323c..9651140525e27b 100644
                {:ok, actor_group}
              {:existing, _account} ->
 diff --git a/nixos/modules/services/networking/firezone/server.nix b/nixos/modules/services/networking/firezone/server.nix
-index 3206d1d30e769f..7025e15bcb2da5 100644
+index 3206d1d30e769f..518c90bbb9e3d9 100644
 --- a/nixos/modules/services/networking/firezone/server.nix
 +++ b/nixos/modules/services/networking/firezone/server.nix
-@@ -923,9 +923,11 @@ in
+@@ -923,9 +923,13 @@ in
            {
              name = "firezone";
              ensureDBOwnership = true;
@@ -23,6 +36,8 @@ index 3206d1d30e769f..7025e15bcb2da5 100644
            }
          ];
          ensureDatabases = [ "firezone" ];
++        # Firezone uses an internal replication strategy
++        # that depends on a logical wal
 +        settings.wal_level = "logical";
        };
  
