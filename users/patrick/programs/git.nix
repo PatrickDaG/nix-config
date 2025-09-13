@@ -43,7 +43,7 @@ let
         USER=""
         case "$serial" in
           23010997)
-            gpg -u "DE0DE86932AC0E918EA523FFBD8ADBAA5C02D50C" "$@"
+            gpg -u "D00D847207456602C24209C453E76B2F373CCD13" "$@"
             ;;
           15489049)
             gpg -u "5E4C3D7480C235FE2F0BD23F7DD6A72EC899617D" "$@"
