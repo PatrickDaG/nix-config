@@ -190,7 +190,8 @@ zstyle ':completion:*' insert-tab false
 zstyle ':completion:*'                 verbose true
 
 # match uppercase from lowercase
-zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
+# Makes shits shit langsam
+#zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
 
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
