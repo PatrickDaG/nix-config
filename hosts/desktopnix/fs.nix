@@ -38,7 +38,15 @@
       };
     };
     zpool = with lib.disko.zfs; {
-      rpool = mkZpool { datasets = impermanenceZfsDatasets; };
+      rpool = mkZpool {
+        datasets = impermanenceZfsDatasets // {
+          "local/tmp" = filesystem "/tmp" // {
+            options = {
+              sync = "disabled";
+            };
+          };
+        };
+      };
       panzer = mkZpool {
         datasets = {
           "local" = unmountable;
@@ -57,4 +65,5 @@
     enable = true;
     pcr15 = "dc9b7fa0d2a0ef5441bb8bfb7b2103b9f45f1143d87f69929c12cf7a3cc35ccf";
   };
+  boot.tmp.useTmpfs = lib.mkForce false;
 }
