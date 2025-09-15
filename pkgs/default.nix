@@ -28,6 +28,7 @@ _inputs: [
         rev = "master";
         hash = "sha256-pfwuM+ZCYiGnHiMtqvCIsBCZ1d2WoNEzL8wy6fMmyA0=";
       };
+      meta.mainProgram = "sd-switch";
       version = "0.5.4-pre";
       cargoHash = "sha256-4FD3aTEVi5s8TsAJrycxRwRro9Thk1PIsqD7Naja+/Q=";
     };
