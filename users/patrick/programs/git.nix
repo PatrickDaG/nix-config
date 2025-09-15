@@ -31,26 +31,55 @@ let
   );
   learnSmartCard = lib.getExe (
     pkgs.writeShellApplication {
+      # Does not work
+      # Do have to set order
+        # Remove keys and then reimport them
       name = "learnSmartCard";
       runtimeInputs = [
         pkgs.yubikey-manager
       ];
       text = ''
+        args=()
+
+        # remove the user we have gotten
+        while [ $# -gt 0 ]; do
+            arg=$1
+            shift
+
+            # Handle combined options ending with 'u' (e.g., -bsau)
+            if [[ $arg == -* && ''${#arg} -gt 2 && ''${arg: -1} == "u" ]]; then
+                if [[ $# -gt 0 ]] && [[ "$1" == "patrick@${globals.domains.mail_public}" ]]; then
+                    # Remove trailing 'u' from combined option
+                    args+=("''${arg%?}")
+                    shift  # Skip 'user'
+                    continue
+                fi
+            # Handle standalone '-u'
+            elif [[ "$arg" == "-u" ]]; then
+                if [ $# -gt 0 ] && [ "$1" == "patrick@${globals.domains.mail_public}" ]; then
+                    shift  # Skip 'patrick'
+                    continue
+                fi
+            fi
+
+            # Keep argument if no match
+            args+=("$arg")
+        done
+
         # 1. Grab the first (or only) serial
         serial=$(ykman list --serials | head -n1 | tr -d '[:space:]')
 
         # 2. Decide what to do
-        USER=""
         case "$serial" in
           23010997)
-            gpg -u "D00D847207456602C24209C453E76B2F373CCD13" "$@"
+            exec gpg -u "D00D847207456602C24209C453E76B2F373CCD13" "''${args[@]}"
             ;;
           15489049)
-            gpg -u "5E4C3D7480C235FE2F0BD23F7DD6A72EC899617D" "$@"
+            exec gpg -u "26031A25A16D8CF791F8AD34451F95EFB8BECD0F" "''${args[@]}"
             ;;
           *)
             echo "Unknown YubiKey serial: $serial" >&2
-            gpg "$@"
+            exec gpg "''${args[@]}"
             ;;
         esac
       '';
@@ -102,6 +131,8 @@ in
               "log"
               "--limit"
               "15"
+              "--revisions"
+              "::"
             ];
             rebase-all = [
               "rebase"
@@ -172,7 +203,7 @@ in
           user = {
             name = "Patrick";
             email = globals.accounts.email."1".address;
-            signingkey = globals.accounts.email."1".address;
+            #signingkey = globals.accounts.email."1".address;
           };
           sendemail.identity = globals.accounts.email."1".address;
           gpg.openpgp.program = learnSmartCard;
