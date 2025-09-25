@@ -95,7 +95,7 @@
       rocketAddress = "0.0.0.0";
       rocketPort = 3000;
 
-      allowedConnectSrc = "https://${globals.services.idmail.domain}";
+      allowedConnectSrc = "https://${globals.services.idmail.domain}/api/ ";
 
       signupsAllowed = false;
       passwordIterations = 1000000;
