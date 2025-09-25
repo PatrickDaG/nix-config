@@ -93,7 +93,6 @@ in
     // mkContainer "teamspeak" { }
     #// mkContainer "netbird" { }
     #// mkContainer "headscale" { }
-    // mkContainer "firezone" { }
     // mkContainer "kanidm" { };
 
   # Tailscale needs tun access

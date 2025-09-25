@@ -8,12 +8,9 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "256M") // {
-              device = "${device}-part1";
-            };
-            rpool = (partLuksZfs "drive" "rpool" "100%") // {
-              device = "${device}-part2";
-            };
+            grub = partGrub;
+            bios = partBoot "512M";
+            rpool = partLuksZfs config.secrets.secrets.local.disko.drive "rpool" "100%";
           };
         };
       };
@@ -27,4 +24,6 @@
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
+  boot.loader.grub.devices = [ "/dev/disk/by-id/${config.secrets.secrets.local.disko.drive}" ];
+
 }

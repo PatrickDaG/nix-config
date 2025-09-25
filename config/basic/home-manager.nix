@@ -2,6 +2,7 @@
   inputs,
   nodes,
   minimal,
+  lib,
   ...
 }:
 {
@@ -21,10 +22,19 @@
         home.stateVersion = "24.05";
         systemd.user.startServices = "sd-switch";
       }
+      #keep-sorted start
       inputs.nix-index-database.homeModules.nix-index
       inputs.nixos-extra-modules.modules.home-manager.default
       inputs.nixvim.homeModules.nixvim
       inputs.spicetify-nix.homeManagerModules.default
+      #keep-sorted end
+    ]
+    #If not minimal the stylix nixos module takes care of this
+    ++ lib.optionals minimal [
+      inputs.stylix.homeModules.stylix
+      {
+        stylix.overlays.enable = false;
+      }
     ];
   };
   # HM zsh needs this or else the startup order is fucked

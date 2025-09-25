@@ -71,7 +71,6 @@ These are notable external flakes which this config depend upon
 
 ### Add additional hosts
 
-1. Add host definition to `hosts.toml`
 2. Create host configuration in `hosts/<name>`
     1. Create and fill `default.nix`
     1. Fill `net.nix`
