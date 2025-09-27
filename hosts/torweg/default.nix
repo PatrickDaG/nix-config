@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  lib,
+  minimal,
+  ...
+}:
 {
   imports = [
     ../../config/basic
@@ -7,7 +11,8 @@
 
     ./net.nix
     ./fs.nix
-  ];
+  ]
+  ++ lib.lists.optionals (!minimal) [ ../../config/services/firezone.nix ];
   boot = {
     initrd.availableKernelModules = [
       "virtio_pci"

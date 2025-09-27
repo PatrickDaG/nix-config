@@ -34,6 +34,10 @@
           hostname = globals.hosts.mailnix.ip;
           user = "root";
         };
+        "torweg" = {
+          hostname = globals.hosts.torweg.ip;
+          user = "root";
+        };
 
         "*" = {
           user = "root";

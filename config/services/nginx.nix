@@ -6,7 +6,12 @@
   ...
 }:
 let
-  ipOf = name: globals.wireguard.services.hosts.${globals.services.${name}.host}.ipv4;
+  ipOf =
+    name:
+    if name == "firezone" then
+      globals.wireguard.services-extern.hosts.${globals.services.${name}.host}.ipv4
+    else
+      globals.wireguard.services.hosts.${globals.services.${name}.host}.ipv4;
   blockOf =
     hostName:
     {
@@ -96,6 +101,7 @@ let
 in
 {
   globals.wireguard.services.hosts.${config.node.name} = { };
+  globals.wireguard.services-extern.hosts.${config.node.name} = { };
   age.secrets.loki-basic-auth-hashes = {
     inherit (nodes.${globals.services.loki.host}.config.age.secrets.loki-basic-auth-hashes) rekeyFile;
     mode = "440";
@@ -187,7 +193,7 @@ in
       };
 
       upstreams.firezone-api = {
-        servers."${ipOf "firezone"}:${toString nodes.nucnix-firezone.config.services.firezone.server.api.port}" =
+        servers."${ipOf "firezone"}:${toString nodes.torweg.config.services.firezone.server.api.port}" =
           { };
         extraConfig = ''
           zone firezone 64k;

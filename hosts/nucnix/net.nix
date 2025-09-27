@@ -22,24 +22,23 @@ in
     ./ddclient.nix
   ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  networking.nftables.firewall.zones = mkMerge [
-    {
-      fritz.interfaces = [ "vlan-fritz" ];
-      wg-services.interfaces = [ "services" ];
-      printer.ipv4Addresses = [
-        (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
-      ];
-      smb.ipv4Addresses = [
-        (lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4)
-      ];
-      adguard.ipv4Addresses = [
-        (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
-      ];
-    }
-    (genAttrs (attrNames globals.net.vlans) (name: {
-      interfaces = [ "lan-${name}" ];
-    }))
-  ];
+  networking.nftables.firewall.zones = {
+    fritz.interfaces = [ "vlan-fritz" ];
+    wg-services.interfaces = [ "services" ];
+    firezone.interfaces = [ "tun-firezone" ];
+    printer.ipv4Addresses = [
+      (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
+    ];
+    smb.ipv4Addresses = [
+      (lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4)
+    ];
+    adguard.ipv4Addresses = [
+      (lib.net.cidr.host globals.services.adguardhome.ip globals.net.vlans.services.cidrv4)
+    ];
+  }
+  // (genAttrs (attrNames globals.net.vlans) (name: {
+    interfaces = [ "lan-${name}" ];
+  }));
   systemd.network.netdevs = mkMerge (
     [
       {
@@ -140,104 +139,129 @@ in
       }
     ))
   );
-  networking.nftables.firewall = {
-    snippets.nnf-ssh.enable = lib.mkForce false;
-    rules = {
-      mdns = {
-        from = [
-          "home"
-          "services"
-          "devices"
-          "guests"
-          "iot"
-        ];
-        to = [ "local" ];
-        allowedUDPPorts = [ 5353 ];
+  networking.nftables = {
+    firewall = {
+      snippets.nnf-ssh.enable = lib.mkForce false;
+      rules = {
+        mdns = {
+          from = [
+            "home"
+            "services"
+            "devices"
+            "guests"
+            "iot"
+          ];
+          to = [ "local" ];
+          allowedUDPPorts = [ 5353 ];
+        };
+        fritz-home-bridge = {
+          from = [
+            "fritz"
+          ];
+          to = [ "home" ];
+          verdict = "accept";
+        };
+        printer-smb = {
+          from = [
+            "printer"
+            "fritz"
+          ];
+          to = [ "smb" ];
+          allowedTCPPorts = [ 445 ];
+        };
+        ssh = {
+          from = [
+            "fritz"
+            "home"
+          ];
+          to = [ "local" ];
+          allowedTCPPorts = [ 22 ];
+        };
+        services = {
+          from = [
+            "home"
+            "fritz"
+          ];
+          to = [
+            "iot"
+            "services"
+            "devices"
+            "fritz"
+          ];
+          late = true;
+          verdict = "accept";
+        };
+        dns = {
+          from = [
+            "home"
+            "devices"
+            "fritz"
+            "guests"
+            "services"
+            "fritz"
+          ];
+          to = [ "adguard" ];
+          allowedUDPPorts = [ 53 ];
+        };
+        internet = {
+          from = [
+            "home"
+            "devices"
+            "guests"
+            "services"
+          ];
+          to = [ "fritz" ];
+          late = true;
+          verdict = "accept";
+        };
+        wireguard-services = {
+          from = [ "services" ];
+          to = [ "local" ];
+          allowedUDPPorts = [
+            globals.wireguard.services.port
+          ];
+        };
+        wireguard-monitor = {
+          from = "all";
+          to = [ "local" ];
+          allowedUDPPorts = [
+            globals.wireguard.monitoring.port
+          ];
+        };
+        # masquerade firezone traffic
+        masquerade-firezone = {
+          from = [ "firezone" ];
+          to = [ "services" ];
+          # masquerade = true; NOTE: custom rule below for ip4 + ip6
+          late = true; # Only accept after any rejects have been processed
+          verdict = "accept";
+        };
+
+        # Forward traffic between participants
+        forward-services-wireguard = {
+          from = [ "wg-services" ];
+          to = [ "wg-services" ];
+          verdict = "accept";
+        };
+        forward-monitoring-wireguard = {
+          from = [ "wg-monitoring" ];
+          to = [ "wg-monitoring" ];
+          verdict = "accept";
+        };
       };
-      fritz-home-bridge = {
-        from = [
-          "fritz"
-        ];
-        to = [ "home" ];
-        verdict = "accept";
-      };
-      printer-smb = {
-        from = [
-          "printer"
-          "fritz"
-        ];
-        to = [ "smb" ];
-        allowedTCPPorts = [ 445 ];
-      };
-      ssh = {
-        from = [
-          "fritz"
-          "home"
-        ];
-        to = [ "local" ];
-        allowedTCPPorts = [ 22 ];
-      };
-      services = {
-        from = [
-          "home"
-          "fritz"
-        ];
-        to = [
-          "iot"
-          "services"
-          "devices"
-          "fritz"
-        ];
+    };
+    chains.postrouting = {
+      masquerade-firezone = {
+        after = [ "hook" ];
         late = true;
-        verdict = "accept";
-      };
-      dns = {
-        from = [
-          "home"
-          "devices"
-          "fritz"
-          "guests"
-          "services"
-          "fritz"
-        ];
-        to = [ "adguard" ];
-        allowedUDPPorts = [ 53 ];
-      };
-      internet = {
-        from = [
-          "home"
-          "devices"
-          "guests"
-          "services"
-        ];
-        to = [ "fritz" ];
-        late = true;
-        verdict = "accept";
-      };
-      wireguard-services = {
-        from = [ "services" ];
-        to = [ "local" ];
-        allowedUDPPorts = [
-          globals.wireguard.services.port
-        ];
-      };
-      wireguard-monitor = {
-        from = "all";
-        to = [ "local" ];
-        allowedUDPPorts = [
-          globals.wireguard.monitoring.port
-        ];
-      };
-      # Forward traffic between participants
-      forward-services-swireguard = {
-        from = [ "wg-services" ];
-        to = [ "wg-services" ];
-        verdict = "accept";
-      };
-      forward-monitoring-wireguard = {
-        from = [ "wg-monitoring" ];
-        to = [ "wg-monitoring" ];
-        verdict = "accept";
+        rules = lib.singleton (
+          lib.concatStringsSep " " [
+            "meta protocol { ip, ip6 }"
+            (lib.head config.networking.nftables.firewall.zones.firezone.ingressExpression)
+            (lib.head config.networking.nftables.firewall.zones.services.egressExpression)
+            "masquerade random"
+          ]
+        );
       };
     };
   };
@@ -266,7 +290,6 @@ in
   };
 
   boot.initrd = {
-
     availableKernelModules = [
       "8021q"
     ];
@@ -326,4 +349,15 @@ in
   meta.telegraf.availableMonitoringNetworks = [
     "home"
   ];
+
+  # NOTE: state: this token is a manually created gateway token
+  age.secrets.firezone-gateway-token = {
+    rekeyFile = config.node.secretsDir + "/firezone-gateway-token.age";
+  };
+  services.firezone.gateway = {
+    enable = true;
+    name = "ward"; # Oupsi
+    apiUrl = "wss://${globals.services.firezone.domain}/api/";
+    tokenFile = config.age.secrets.firezone-gateway-token.path;
+  };
 }

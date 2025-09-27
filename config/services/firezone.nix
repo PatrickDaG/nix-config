@@ -26,7 +26,7 @@ let
   };
 in
 {
-  globals.wireguard.services.hosts.${config.node.name} = {
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
       config.services.firezone.server.api.port
       config.services.firezone.server.web.port
@@ -34,7 +34,7 @@ in
   };
   age.secrets.firezone-smtp-password.generator.script = "alnum";
 
-  # NOTE: state: this token is from a manually created service account
+  # NOTE: state: this token is a manually created relay token
   age.secrets.firezone-relay-token = {
     rekeyFile = config.node.secretsDir + "/firezone-relay-token.age";
   };
@@ -67,8 +67,7 @@ in
       host = "smtp.${globals.domains.mail_public}";
       port = 465;
       implicitTls = true;
-      #passwordFile = config.age.secrets.firezone-smtp-password.path;
-      passwordFile = pkgs.writeText "lol" "lel";
+      passwordFile = config.age.secrets.firezone-smtp-password.path;
     };
 
     provision = {
@@ -144,19 +143,26 @@ in
     };
 
     domain.settings.ERLANG_DISTRIBUTION_PORT = 9003;
-    api.externalUrl = "https://${globals.services.firezone.domain}/api/";
-    web.externalUrl = "https://${globals.services.firezone.domain}/";
+    api = {
+      address = "0.0.0.0";
+      externalUrl = "https://${globals.services.firezone.domain}/api/";
+    };
+    web = {
+      port = 3000;
+      address = "0.0.0.0";
+      externalUrl = "https://${globals.services.firezone.domain}/";
+    };
   };
 
-  # services.firezone.relay = {
-  #   enable = true;
-  #   name = "nucnix";
-  #   apiUrl = "wss://${globals.services.firezone.domain}/api/";
-  #   tokenFile = config.age.secrets.firezone-relay-token.path;
-  #   publicIpv4 = lib.net.cidr.ip config.repo.secrets.local.networking.interfaces.wan.hostCidrv4;
-  #   publicIpv6 = lib.net.cidr.ip config.repo.secrets.local.networking.interfaces.wan.hostCidrv6;
-  #   openFirewall = true;
-  # };
+  services.firezone.relay = {
+    enable = true;
+    name = "nucnix";
+    apiUrl = "wss://${globals.services.firezone.domain}/api/";
+    tokenFile = config.age.secrets.firezone-relay-token.path;
+    publicIpv4 = lib.net.cidr.ip config.secrets.secrets.local.networking.interfaces.lan01.hostCidrv4;
+    publicIpv6 = lib.net.cidr.ip config.secrets.secrets.local.networking.interfaces.lan01.hostCidrv6;
+    openFirewall = true;
+  };
 
   systemd.services.firezone-relay.environment.HEALTH_CHECK_ADDR = "127.0.0.1:17999";
 

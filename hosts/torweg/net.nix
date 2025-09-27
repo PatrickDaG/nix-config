@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  globals,
   ...
 }:
 let
@@ -39,4 +40,37 @@ in
   meta.telegraf.availableMonitoringNetworks = [
     "internet"
   ];
+  globals.wireguard.services-extern = {
+    host = icfg.hostCidrv4;
+    port = 51822;
+    cidrv4 = "10.44.0.0/20";
+    cidrv6 = "fd00:1766::/112";
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
+  };
+  networking.nftables.firewall.zones = {
+    wg-services-extern.interfaces = [ "services-extern" ];
+  };
+  networking.nftables.firewall = {
+    snippets.nnf-ssh.enable = lib.mkForce false;
+    rules = {
+      ssh = {
+        from = [ "untrusted" ];
+        to = [ "local" ];
+        allowedTCPPorts = [ 22 ];
+      };
+      wireguard-services-extern = {
+        from = [ "untrusted" ];
+        to = [ "local" ];
+        allowedUDPPorts = [
+          globals.wireguard.services-extern.port
+        ];
+      };
+      forward-services-wireguard = {
+        from = [ "wg-services-extern" ];
+        to = [ "wg-services-extern" ];
+        verdict = "accept";
+      };
+    };
+  };
 }

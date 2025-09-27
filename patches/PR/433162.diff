@@ -25,10 +25,18 @@ index d8e60d32cf323c..9651140525e27b 100644
                {:ok, actor_group}
              {:existing, _account} ->
 diff --git a/nixos/modules/services/networking/firezone/server.nix b/nixos/modules/services/networking/firezone/server.nix
-index 3206d1d30e769f..518c90bbb9e3d9 100644
+index 3206d1d30e769f..09d22feb6d8d72 100644
 --- a/nixos/modules/services/networking/firezone/server.nix
 +++ b/nixos/modules/services/networking/firezone/server.nix
-@@ -923,9 +923,13 @@ in
+@@ -546,7 +546,6 @@ in
+                     };
+                 in
+                 {
+-                  flow_activities = mkFeatureOption "flow_activities" true;
+                   policy_conditions = mkFeatureOption "policy_conditions" true;
+                   multi_site_resources = mkFeatureOption "multi_site_resources" true;
+                   traffic_filters = mkFeatureOption "traffic_filters" true;
+@@ -923,9 +922,13 @@ in
            {
              name = "firezone";
              ensureDBOwnership = true;

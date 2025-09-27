@@ -6,13 +6,6 @@
   minimal,
   ...
 }:
-let
-  inherit (lib)
-    listToAttrs
-    flip
-    nameValuePair
-    ;
-in
 {
   guests =
     let
@@ -91,10 +84,5 @@ in
     // mkContainer "adguardhome" { }
     // mkContainer "nginx" { }
     // mkContainer "teamspeak" { }
-    #// mkContainer "netbird" { }
-    #// mkContainer "headscale" { }
     // mkContainer "kanidm" { };
-
-  # Tailscale needs tun access
-  #containers.headscale.enableTun = true;
 }

@@ -153,8 +153,8 @@ in
         ip = 17;
       };
       firezone = {
+        host = "torweg";
         domain = "fz.${globals.domains.web}";
-        ip = 18;
       };
     };
   };
