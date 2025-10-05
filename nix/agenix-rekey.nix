@@ -3,7 +3,7 @@
   imports = [ inputs.agenix-rekey.flakeModule ];
   flake = {
     secretsConfig = {
-      masterIdentities = [ ../keys/PatC.pub ../keys/PatA.pub ];
+      masterIdentities = [ "/run/yubikey/age-key" ../keys/PatC.pub ../keys/PatA.pub ];
       extraEncryptionPubkeys = [ ../secrets/recipients.txt ];
     };
   };
