@@ -25,7 +25,6 @@ in
   networking.nftables.firewall.zones = {
     fritz.interfaces = [ "vlan-fritz" ];
     wg-services.interfaces = [ "services" ];
-    firezone.interfaces = [ "tun-firezone" ];
     printer.ipv4Addresses = [
       (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
     ];
@@ -228,15 +227,6 @@ in
             globals.wireguard.monitoring.port
           ];
         };
-        # masquerade firezone traffic
-        masquerade-firezone = {
-          from = [ "firezone" ];
-          to = [ "services" ];
-          # masquerade = true; NOTE: custom rule below for ip4 + ip6
-          late = true; # Only accept after any rejects have been processed
-          verdict = "accept";
-        };
-
         # Forward traffic between participants
         forward-services-wireguard = {
           from = [ "wg-services" ];
@@ -248,20 +238,6 @@ in
           to = [ "wg-monitoring" ];
           verdict = "accept";
         };
-      };
-    };
-    chains.postrouting = {
-      masquerade-firezone = {
-        after = [ "hook" ];
-        late = true;
-        rules = lib.singleton (
-          lib.concatStringsSep " " [
-            "meta protocol { ip, ip6 }"
-            (lib.head config.networking.nftables.firewall.zones.firezone.ingressExpression)
-            (lib.head config.networking.nftables.firewall.zones.services.egressExpression)
-            "masquerade random"
-          ]
-        );
       };
     };
   };
@@ -349,15 +325,4 @@ in
   meta.telegraf.availableMonitoringNetworks = [
     "home"
   ];
-
-  # NOTE: state: this token is a manually created gateway token
-  age.secrets.firezone-gateway-token = {
-    rekeyFile = config.node.secretsDir + "/firezone-gateway-token.age";
-  };
-  services.firezone.gateway = {
-    enable = true;
-    name = "ward"; # Oupsi
-    apiUrl = "wss://${globals.services.firezone.domain}/api/";
-    tokenFile = config.age.secrets.firezone-gateway-token.path;
-  };
 }

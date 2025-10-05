@@ -22,6 +22,7 @@
 	"nucnix-netbird": 105,
 	"nucnix-headscale": 106,
 	"nucnix-firezone": 107,
+	"nucnix-firezone-gateway": 108,
 	"desktopnix": 200,
 	"mailnix": 201,
 	"patricknix": 202,
