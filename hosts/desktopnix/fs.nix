@@ -40,7 +40,7 @@
     zpool = with lib.disko.zfs; {
       rpool = mkZpool {
         datasets = impermanenceZfsDatasets // {
-          "local/tmp" = filesystem "/tmp" // {
+          "local/tmp" = lib.recursiveUpdate (filesystem "/tmp") {
             options = {
               sync = "disabled";
             };
