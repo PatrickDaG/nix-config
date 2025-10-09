@@ -12,8 +12,9 @@
     protocol = "Cloudflare";
     username = "token";
     usev4 = "webv4, webv4='https://cloudflare.com/cdn-cgi/trace', webv4-skip='ip='";
+    # TODO: enable ipv6
     usev6 = "";
     passwordFile = config.age.secrets.cloudflare_token_dns.path;
-    domains = [ globals.domains.web ];
+    domains = [ "home.${globals.domains.web}" ];
   };
 }

@@ -156,6 +156,10 @@ in
         host = "torweg";
         domain = "fz.${globals.domains.web}";
       };
+      elisabeth = {
+        domain = "home.${globals.domains.web}";
+        ip = 19;
+      };
     };
   };
 }

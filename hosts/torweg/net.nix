@@ -8,7 +8,9 @@ let
   icfg = config.secrets.secrets.local.networking.interfaces.lan01;
 in
 {
+  imports = [ ./forwarding.nix ];
   networking.hostId = config.secrets.secrets.local.networking.hostId;
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
   boot.initrd.systemd.network = {
     enable = true;

@@ -9,6 +9,8 @@
     ../../config/support/initrd-ssh.nix
     ../../config/support/zfs.nix
 
+    ../../config/services/nginx.nix
+
     ./net.nix
     ./fs.nix
   ]

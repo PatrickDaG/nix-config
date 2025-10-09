@@ -82,4 +82,38 @@ mkMerge [
     ];
     protocol = "udp";
   })
+  {
+    networking.nftables = {
+      chains = {
+        prerouting.port-forward = {
+          after = [ "hook" ];
+          rules = [
+            "iifname vlan-fritz tcp dport 23 redirect to 22"
+            "iifname vlan-fritz ip6 tcp dport 24 dnat to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv6}:22"
+            "iifname vlan-fritz ip tcp dport 24 dnat to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv4}:22"
+          ];
+        };
+      };
+      firewall = {
+        rules = {
+          "forward-ssh-nuc" = {
+            from = [
+              "fritz"
+            ];
+            to = [ "local" ];
+            "allowedTCPPorts" = [ 22 ];
+          };
+        };
+        rules = {
+          "forward-ssh-elisabeth" = {
+            from = [
+              "fritz"
+            ];
+            to = [ "home" ];
+            "allowedTCPPorts" = [ 22 ];
+          };
+        };
+      };
+    };
+  }
 ]
