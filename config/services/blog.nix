@@ -23,13 +23,11 @@ in
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
   };
-  environment.systemPackages = [
-    pkgs.signal-cli
-    pkgs.cargo
-  ];
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
+    firewallRuleForNode.torweg.allowedTCPPorts = [ 80 ];
+  };
   services.nginx = {
     enable = true;
-    user = "blog";
     virtualHosts."blog.lel.lol" = {
       root = "/var/lib/blog/blog/public/public";
     };
@@ -42,7 +40,7 @@ in
     {
       directory = "/var/lib/blog";
       user = "blog";
-      group = "blog";
+      group = "nginx";
       mode = "0700";
     }
   ];
@@ -53,10 +51,9 @@ in
       OnUnitActiveSec = "1m";
     };
   };
-  users.groups.blog = { };
   users.users.blog = {
     isSystemUser = true;
-    group = "blog";
+    group = "nginx";
     home = "/var/lib/blog";
   };
 
@@ -87,7 +84,7 @@ in
       Requires = "blog";
       Type = "oneshot";
       User = "blog";
-      Group = "blog";
+      Group = "nginx";
       StateDirectory = "blog";
       WorkingDirectory = "/var/lib/blog";
       LimitNOFILE = "1048576";
@@ -97,30 +94,4 @@ in
       ExecStartPre = prestart;
     };
   };
-
-  # systemd.services.signal-to-blog = {
-  #   script = ''
-  #     ${lib.getExe pkgs.signal-to-blog} \
-  #     --allowed-sender "${config.secrets.secrets.local.allowedSender}" \
-  #     --data-folder "signal-data" \
-  #     --output-folder ~/blog/public/content/journal/ \
-  #     --url "https://blog.lel.lol/journal" \
-  #     --timezone 2
-  #   '';
-  #   wantedBy = [ "multi-user.target" ];
-  #   path = [ pkgs.signal-cli ];
-  #   serviceConfig = {
-  #     Requires = "blog";
-  #     Type = "oneshot";
-  #     User = "blog";
-  #     Group = "blog";
-  #     StateDirectory = "blog";
-  #     WorkingDirectory = "/var/lib/blog/";
-  #     LimitNOFILE = "1048576";
-  #     PrivateTmp = true;
-  #     PrivateDevices = true;
-  #     StateDirectoryMode = "0700";
-  #   };
-  # };
-
 }
