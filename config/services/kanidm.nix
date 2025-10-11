@@ -200,25 +200,6 @@
         };
       };
 
-      groups."netbird.access" = { };
-      systems.oauth2.netbird = {
-        public = true;
-        displayName = "Netbird";
-        originUrl = [
-          "https://${globals.services.netbird.domain}/peers"
-          "https://${globals.services.netbird.domain}/add-peers"
-        ];
-        originLanding = "https://${globals.services.netbird.domain}/";
-        preferShortUsername = true;
-        enableLocalhostRedirects = true;
-        enableLegacyCrypto = true;
-        scopeMaps."netbird.access" = [
-          "openid"
-          "email"
-          "profile"
-        ];
-      };
-
       groups."firezone.access" = { };
       systems.oauth2.firezone = {
         public = true;

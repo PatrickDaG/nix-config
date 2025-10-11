@@ -39,7 +39,7 @@ These are services I've set up
 🔒 SSO | [Kanidm](./config/services/kanidm.nix) | Secure single sign on Identity Provider
 📧 E-Mail | [Stalwart](./config/services/stalwart.nix) | All in one mail server
 🎧 Communication | [Teamspeak](./config/services/murmur.nix) | Selfhosted teamspeak server for secure and always available communication
-🌐 VPN | [Netbird](./config/services/netbird.nix) | Easy to use peer to peer VPN solution based on wireguard
+🌐 VPN | [Firezone](./config/services/firezone.nix) | Easy to use peer to peer VPN solution based on wireguard
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
 🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learnig supported document organizing plattform
 📁 NAS | [Samba](./config/services/samba.nix) | Local network shared storage
