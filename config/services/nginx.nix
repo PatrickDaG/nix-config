@@ -110,29 +110,6 @@ in
     {
       enable = true;
       recommendedSetup = true;
-      upstreams.fritz = {
-        servers."${lib.net.cidr.host 1 "10.99.2.0/24"}:443" = { };
-        extraConfig = ''
-          zone fritz 64k ;
-          keepalive 5 ;
-        '';
-      };
-      virtualHosts.${globals.services.fritz.domain} = {
-        forceSSL = true;
-        useACMEHost = "web";
-        locations."/" = {
-          proxyPass = "https://fritz";
-          proxyWebsockets = true;
-          X-Frame-Options = "SAMEORIGIN";
-        };
-        extraConfig = ''
-          client_max_body_size 512M ;
-          proxy_ssl_verify off ;
-          allow ${globals.net.vlans.home.cidrv4} ;
-          allow ${globals.net.vlans.home.cidrv6} ;
-          deny all ;
-        '';
-      };
 
       upstreams.loki = {
         servers."${globals.wireguard.services.hosts.${globals.services.loki.host}.ipv4}:${
@@ -171,6 +148,31 @@ in
       };
 
     }
+    (lib.mkIf (!public) {
+      upstreams.fritz = {
+        servers."${lib.net.cidr.host 1 "10.99.2.0/24"}:443" = { };
+        extraConfig = ''
+          zone fritz 64k ;
+          keepalive 5 ;
+        '';
+      };
+      virtualHosts.${globals.services.fritz.domain} = {
+        forceSSL = true;
+        useACMEHost = "web";
+        locations."/" = {
+          proxyPass = "https://fritz";
+          proxyWebsockets = true;
+          X-Frame-Options = "SAMEORIGIN";
+        };
+        extraConfig = ''
+          client_max_body_size 512M ;
+          proxy_ssl_verify off ;
+          allow ${globals.net.vlans.home.cidrv4} ;
+          allow ${globals.net.vlans.home.cidrv6} ;
+          deny all ;
+        '';
+      };
+    })
     (lib.mkIf public {
       upstreams.firezone-api = {
         servers."${ipOf "firezone"}:${
@@ -185,6 +187,7 @@ in
     })
     (blockOf "firezone" {
       publicAccess = true;
+      # Should not resolve privately anyway
       privateAcess = false;
       virtualHostExtraConfig.locations."/api/" = {
         # The trailing slash is important to strip the location prefix from the request
@@ -192,17 +195,18 @@ in
         proxyWebsockets = true;
       };
     })
-    (blockOf "vaultwarden" { maxBodySize = "1G"; })
+    (blockOf "vaultwarden" {
+      maxBodySize = "1G";
+      publicAccess = true;
+    })
     (blockOf "jellyfin" {
       maxBodySize = "10G";
       port = 8096;
-      virtualHostExtraConfig.extraConfig = ''
-        allow ${globals.net.vlans.home.cidrv4} ;
-        allow ${globals.net.vlans.home.cidrv6} ;
-        deny all ;
-      '';
     })
-    (blockOf "forgejo" { maxBodySize = "1G"; })
+    (blockOf "forgejo" {
+      maxBodySize = "1G";
+      publicAccess = true;
+    })
     (blockOf "immich" {
       maxBodySize = "5G";
       virtualHostExtraConfig.extraConfig = ''
@@ -214,6 +218,7 @@ in
       proxyProtect = true;
     })
     (blockOf "oauth2-proxy" {
+      publicAccess = true;
       port = 3001;
       allowedGroup = false;
       proxyProtect = true;
@@ -228,6 +233,7 @@ in
     (blockOf "freshrss" {
       port = 80;
       proxyProtect = true;
+      publicAccess = true;
     })
     (blockOf "invidious" {
       proxyProtect = true;
@@ -281,11 +287,13 @@ in
     })
     (blockOf "grafana" { })
     (blockOf "nextcloud" {
+      publicAccess = true;
       maxBodySize = "5G";
       port = 80;
     })
     (blockOf "kanidm" {
       protocol = "https";
+      publicAccess = true;
       virtualHostExtraConfig.extraConfig = ''
         proxy_ssl_verify off ;
       '';

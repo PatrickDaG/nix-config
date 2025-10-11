@@ -118,6 +118,11 @@
       config.services.vaultwarden.config.rocketPort
     ];
   };
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
+    firewallRuleForNode.torweg.allowedTCPPorts = [
+      config.services.vaultwarden.config.rocketPort
+    ];
+  };
 
   # Replace uses of old name
   systemd.services.backup-vaultwarden.environment.DATA_FOLDER = lib.mkForce "/var/lib/vaultwarden";

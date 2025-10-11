@@ -249,7 +249,7 @@ in
     hosts.${config.node.name}.server = true;
   };
   globals.wireguard.monitoring = {
-    host = "wg.${globals.domains.web}";
+    host = "home.${globals.domains.web}";
     port = 51821;
     cidrv4 = "10.43.0.0/20";
     cidrv6 = "fd00:1765::/112";

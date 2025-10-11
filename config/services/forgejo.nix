@@ -63,6 +63,11 @@ in
       config.services.forgejo.settings.server.HTTP_PORT
     ];
   };
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
+    firewallRuleForNode.torweg.allowedTCPPorts = [
+      config.services.forgejo.settings.server.HTTP_PORT
+    ];
+  };
   networking.firewall.allowedTCPPorts = [ config.services.forgejo.settings.server.SSH_PORT ];
 
   environment.persistence."/panzer".directories = [

@@ -81,15 +81,15 @@ in
           matchConfig.Name = "lan-${name}";
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
-          }
-          // (lib.optionalAttrs (name == "home") {
-            DHCP = "no";
-            address = [
-              (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv4)
-              (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv6)
-            ];
-          });
-        };
+          };
+        }
+        // (lib.optionalAttrs (name == "home") {
+          DHCP = "no";
+          address = [
+            (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv4)
+            (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv6)
+          ];
+        });
       }
     ))
   );
