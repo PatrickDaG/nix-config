@@ -9,7 +9,8 @@
 💻 | patricknix | HP spectre x360 | Patrick's laptop, mainly used for on the go university
 🖥️ | desktopnix | Intel i5-8600K <br> NVIDIA GeForce GTX 1080 <br> 32 GiB RAM | Patrick's desktop, used for most development and gaming
 🖥️ | elisabeth | AMD Ryzen 7 5800X <br> 32 GiB RAM | Server running most cloud services
-🖥️ | maddy | Hetzner VPS | Static IP server running mail
+🖥️ | mailnix | Hetzner VPS | Static IP server running mail
+🖥️ | torweg | Hetzner VPS | Static IP server running gatway services
 
 ## User Configuration
 This showcases my end user setup, which I dailydrive on all my hosts.
@@ -36,7 +37,7 @@ These are services I've set up
 🔨 Git | [Forgejo](./config/services/forgejo.nix) | Selfhosted GitHub alternative
 📸 Photos | [Immich](./config/services/immich.nix) | Selfhosted Google Photos equivalent
 🔒 SSO | [Kanidm](./config/services/kanidm.nix) | Secure single sign on Identity Provider
-📧 E-Mail | [Maddy](./config/services/maddy.nix) | All in one mail server
+📧 E-Mail | [Stalwart](./config/services/stalwart.nix) | All in one mail server
 🎧 Communication | [Teamspeak](./config/services/murmur.nix) | Selfhosted teamspeak server for secure and always available communication
 🌐 VPN | [Netbird](./config/services/netbird.nix) | Easy to use peer to peer VPN solution based on wireguard
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization

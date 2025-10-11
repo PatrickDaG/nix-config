@@ -20,7 +20,6 @@ in
       connections = [
         (mkConnection "fritzbox" "wan1")
         (mkConnection "mailnix" "lan01")
-        (mkConnection "maddy" "lan01")
       ];
     };
     fritzbox = mkRouter "FritzBox" {
