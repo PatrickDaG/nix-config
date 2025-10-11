@@ -9,7 +9,6 @@
 {
   imports = [
     ./wyoming.nix
-    #./zigbee2mqtt.nix
   ];
   environment.persistence."/persist".directories = [
     {
@@ -73,12 +72,6 @@
     group = "mosquitto";
     generator.script = "alnum";
   };
-  # age.secrets.mosquitto-pw-zigbee2mqtt = {
-  #   mode = "440";
-  #   owner = "zigbee2mqtt";
-  #   group = "mosquitto";
-  #   generator.script = "alnum";
-  # };
   services.mosquitto = {
     enable = true;
     persistence = true;
@@ -86,10 +79,6 @@
       {
         acl = [ "pattern readwrite #" ];
         users = {
-          # zigbee2mqtt = {
-          #   passwordFile = config.age.secrets.mosquitto-pw-zigbee2mqtt.path;
-          #   acl = [ "readwrite #" ];
-          # };
           home_assistant = {
             passwordFile = config.age.secrets.mosquitto-pw-home_assistant.path;
             acl = [ "readwrite #" ];
