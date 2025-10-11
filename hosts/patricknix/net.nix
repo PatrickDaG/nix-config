@@ -11,10 +11,6 @@
     #   directory = "/var/lib/netbird-main";
     #   user = "netbird-main";
     # }
-    {
-      directory = "/var/lib/tailscale";
-      mode = "750";
-    }
   ];
   age.secrets.eduroam = {
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
@@ -92,17 +88,4 @@
   #   };
   # };
   # users.users."patrick".extraGroups = [ "netbird-main" ];
-  # services.tailscale = {
-  #   enable = true;
-  #   extraDaemonFlags = [ "--no-logs-no-support" ];
-  #   disableTaildrop = true;
-  #   #authKeyFile = config.age.secrets.authKeyFile.path;
-  #   extraUpFlags = [
-  #     "--login-server=${"https://${globals.services.headscale.domain}"}"
-  #     "--shields-up"
-  #     "--accept-routes"
-  #     "--accept-dns"
-  #     "--operator=patrick"
-  #   ];
-  # };
 }

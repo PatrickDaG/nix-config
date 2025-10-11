@@ -37,10 +37,6 @@
     #   group = "netbird-main";
     #   mode = "770";
     # }
-    {
-      directory = "/var/lib/tailscale";
-      mode = "750";
-    }
   ];
   # services.netbird = {
   #   ui.enable = false;
@@ -59,26 +55,4 @@
   meta.telegraf.availableMonitoringNetworks = [
     "home"
   ];
-  # generated using
-  # 'headscale preauthkeys create -e 99y --reusable -u 1 --tags "tag:server"'
-  age.secrets.authKeyFile = {
-    rekeyFile = config.node.secretsDir + "/authkey.age";
-  };
-  services.tailscale = {
-    enable = true;
-    extraDaemonFlags = [ "--no-logs-no-support" ];
-    disableTaildrop = true;
-    authKeyFile = config.age.secrets.authKeyFile.path;
-    # These get applied everytime
-    extraSetFlags = [
-      "--accept-dns"
-      "--accept-routes"
-      "--shields-up"
-      "--operator=patrick"
-    ];
-    # These only on reauth
-    extraUpFlags = [
-      "--login-server=${"https://${globals.services.headscale.domain}"}"
-    ];
-  };
 }

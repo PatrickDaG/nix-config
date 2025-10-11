@@ -58,11 +58,6 @@
       mode = "440";
       group = "kanidm";
     };
-    oauth2-headscale = {
-      generator.script = "alnum";
-      mode = "440";
-      group = "kanidm";
-    };
     oauth2-grafana = {
       generator.script = "alnum";
       mode = "440";
@@ -237,21 +232,6 @@
         enableLocalhostRedirects = true;
         enableLegacyCrypto = true;
         scopeMaps."firezone.access" = [
-          "openid"
-          "email"
-          "profile"
-        ];
-      };
-
-      groups."headscale.access" = { };
-      systems.oauth2.headscale = {
-        displayName = "headscale";
-        originUrl = [
-          "https://${globals.services.headscale.domain}/oidc/callback"
-        ];
-        basicSecretFile = config.age.secrets.oauth2-headscale.path;
-        originLanding = "https://${globals.services.headscale.domain}/";
-        scopeMaps."headscale.access" = [
           "openid"
           "email"
           "profile"
