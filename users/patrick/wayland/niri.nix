@@ -215,11 +215,6 @@ in
             }
 
             {
-              matches = [ { app-id = "TeamSpeak 3"; } ];
-              open-on-workspace = "comms";
-              default-column-width.proportion = 0.1;
-            }
-            {
               matches = [ { app-id = "Element"; } ];
               open-on-workspace = "comms";
             }

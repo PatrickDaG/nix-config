@@ -84,7 +84,6 @@
     // mkContainer "adguardhome" { }
     // mkContainer "firezone-gateway" { vlans = [ "home" ]; }
     // mkContainer "nginx" { }
-    // mkContainer "teamspeak" { }
     // mkContainer "kanidm" { };
   # firezone needs tun access
   containers.firezone-gateway.enableTun = true;

@@ -75,13 +75,6 @@ mkMerge [
     protocol = "tcp";
     fport = 22;
   })
-  (forward {
-    service = "teamspeak";
-    ports = [
-      9987
-    ];
-    protocol = "udp";
-  })
   {
     networking.nftables = {
       chains = {

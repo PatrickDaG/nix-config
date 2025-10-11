@@ -55,7 +55,6 @@
       signal-desktop
       streamlink
       streamlink-twitch-gui-bin
-      #teamspeak3 # sadge
       telegram-desktop
       timer
       via
