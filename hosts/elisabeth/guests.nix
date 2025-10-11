@@ -126,10 +126,6 @@
         };
     in
     { }
-    # // mkContainer "ollama" {
-    #   enableRenaultFT = true;
-    # }
-
     // mkContainer "invidious" { }
     // mkContainer "ttrss" { }
     // mkContainer "firefly" { }

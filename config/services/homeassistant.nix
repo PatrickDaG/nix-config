@@ -102,7 +102,6 @@
       "matter"
       "esphome"
       "mqtt"
-      "ollama"
       "solaredge"
       "wled"
       "wake_word"
@@ -550,9 +549,6 @@
     "${globals.wireguard.services.hosts.${globals.services.adguardhome.host}.ipv4}" = [
       "adguardhome.internal"
     ];
-    # "${nodes.${globals.services.ollama.host}.config.wireguard.services.ipv4}" = [
-    #   "ollama.internal"
-    # ];
   };
   age.secrets."home-assistant-secrets.yaml" = {
     rekeyFile = config.node.secretsDir + "/secrets.yaml.age";
