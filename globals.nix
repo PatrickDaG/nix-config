@@ -70,7 +70,7 @@ in
       fritz = {
         domain = "fritz.${globals.domains.web}";
       };
-      ttrss = {
+      freshrss = {
         domain = "rss.${globals.domains.web}";
       };
       vaultwarden = {

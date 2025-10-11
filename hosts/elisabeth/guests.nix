@@ -126,22 +126,11 @@
         };
     in
     { }
-    // mkContainer "invidious" { }
-    // mkContainer "ttrss" { }
-    // mkContainer "firefly" { }
-    // mkContainer "yourspotify" { }
-    // mkContainer "blog" { }
-
-    // mkContainer "grafana" { enablePanzer = true; }
+    // mkContainer "personal" { }
     // mkContainer "vaultwarden" { }
-    // mkContainer "homeassistant" {
-      vlans = [
-        "services"
-        "devices"
-        "iot"
-      ];
-    }
     // mkContainer "nextcloud" { enablePanzer = true; }
+    // mkContainer "forgejo" { enablePanzer = true; }
+    // mkMicrovm "immich" { enablePanzer = true; }
     // mkContainer "paperless" {
       shared = [
         {
@@ -150,14 +139,20 @@
         }
       ];
     }
-    // mkContainer "forgejo" { enablePanzer = true; }
-    // mkMicrovm "immich" { enablePanzer = true; }
     // mkContainer "jellyfin" {
       shared = [
         {
           name = "jellyfin";
           pool = "renaultft";
         }
+      ];
+    }
+    // mkContainer "grafana" { enablePanzer = true; }
+    // mkContainer "homeassistant" {
+      vlans = [
+        "services"
+        "devices"
+        "iot"
       ];
     }
     // mkContainer "samba" {

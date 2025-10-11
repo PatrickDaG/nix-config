@@ -9,6 +9,9 @@
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
   };
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
+    firewallRuleForNode.torweg.allowedTCPPorts = [ 3000 ];
+  };
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/kanidm";
@@ -272,7 +275,7 @@
         claimMaps.groups = {
           joinType = "array";
           valuesByGroup."adguardhome.access" = [ "adguardhome_access" ];
-          valuesByGroup."rss.access" = [ "ttrss_access" ];
+          valuesByGroup."rss.access" = [ "freshrss_access" ];
           valuesByGroup."firefly.access" = [ "firefly_access" ];
           valuesByGroup."fireflypico.access" = [ "fireflypico_access" ];
           valuesByGroup."octoprint.access" = [ "octoprint_access" ];

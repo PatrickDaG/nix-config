@@ -4,6 +4,7 @@
   ...
 }:
 {
+  globals.services.firefly.host = config.node.name;
   i18n.supportedLocales = [ "all" ];
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];

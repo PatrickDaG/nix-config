@@ -10,6 +10,7 @@
     ../../config/support/zfs.nix
 
     ../../config/services/nginx.nix
+    ../../config/services/blog.nix
 
     ./net.nix
     ./fs.nix

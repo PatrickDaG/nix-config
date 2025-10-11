@@ -43,7 +43,7 @@ These are services I've set up
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
 🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learnig supported document organizing plattform
 📁 NAS | [Samba](./config/services/samba.nix) | Local network shared storage
-📰 Feedreader | [freshRSS](./config/services/ttrss.nix) | hosted RSS feed aggregator
+📰 Feedreader | [freshRSS](./config/services/freshrss.nix) | hosted RSS feed aggregator
 🔑 Passwords | [Vaultwarden](./config/services/vaultwarden.nix) | Self hosted bitwarden server
 🎵 Music | [Your Spotify](./config/services/yourspotify.nix) | Spotify listening habits analyzer
 

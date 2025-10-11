@@ -1,7 +1,9 @@
 { config, globals, ... }:
 {
+  globals.services.invidious.host = config.node.name;
   services.invidious = {
     enable = true;
+    port = 3001;
     inherit (globals.services.invidious) domain;
     #sig-helper.enable = true;
     settings = {
@@ -33,6 +35,6 @@
     }
   ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.invidious.port ];
   };
 }

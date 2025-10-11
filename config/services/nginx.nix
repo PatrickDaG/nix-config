@@ -225,15 +225,19 @@ in
       # django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '10.42.0.10:3000'. You may need to add '10.42.0.10' to ALLOWED_HOSTS.
       upstreams."paperless".monitoring.enable = false;
     })
-    (blockOf "ttrss" {
+    (blockOf "freshrss" {
       port = 80;
       proxyProtect = true;
     })
     (blockOf "invidious" {
       proxyProtect = true;
+      port = 3001;
     })
     (blockOf "yourspotify" { port = 80; })
-    (blockOf "blog" { port = 80; })
+    (blockOf "apispotify" {
+      port = 3000;
+      upstream = "yourspotify";
+    })
     (blockOf "homeassistant" { })
     (blockOf "esphome" {
       port = 3001;
@@ -276,10 +280,6 @@ in
       '';
     })
     (blockOf "grafana" { })
-    (blockOf "apispotify" {
-      port = 3000;
-      upstream = "yourspotify";
-    })
     (blockOf "nextcloud" {
       maxBodySize = "5G";
       port = 80;
