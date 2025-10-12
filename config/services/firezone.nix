@@ -2,7 +2,6 @@
   config,
   globals,
   lib,
-  pkgs,
   nodes,
   ...
 }:

@@ -1,5 +1,4 @@
-_:
-{
+_: {
   hm.programs.direnv = {
     enable = true;
     nix-direnv = {
