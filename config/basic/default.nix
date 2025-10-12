@@ -26,6 +26,7 @@
     ../../modules/deterministic-ids.nix
     ../../modules/distributed-config.nix
     ../../modules/ensure-pcr.nix
+    ../../modules/backup.nix
     ../../modules/iwd.nix
     ../../modules/meta.nix
     ../../modules/nginx-monitor.nix

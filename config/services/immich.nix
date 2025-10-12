@@ -170,50 +170,25 @@ in
     };
   };
 
-  age.secrets.resticpasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.immichHetznerSsh = {
-    generator.script = "ssh-ed25519";
-  };
   environment.persistence."/state".directories = [
     {
       directory = "/var/lib/containers";
       mode = "0755";
     }
   ];
-  services.restic.backups = {
-    main = {
-      user = "root";
-      timerConfig = {
-        OnCalendar = "06:00";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      initialize = true;
-      passwordFile = config.age.secrets.resticpasswd.path;
-      hetznerStorageBox = {
-        enable = true;
-        inherit (globals.hetzner) mainUser;
-        inherit (globals.hetzner.users.immich) subUid path;
-        sshAgeSecret = "immichHetznerSsh";
-      };
-      backupPrepareCommand = ''
-        ${pkgs.podman}/bin/podman exec -t immich_postgres pg_dumpall -c -U postgres > /run/immich_dump.sql
-      '';
-      paths = [
-        "${upload_folder}/library"
-        "${upload_folder}/upload"
-        "${upload_folder}/profile"
-        "/run/immich_dump.sql"
-      ];
-      #pruneOpts = [
-      #  "--keep-daily 10"
-      #  "--keep-weekly 7"
-      #  "--keep-monthly 12"
-      #  "--keep-yearly 75"
-      #];
-    };
+  backups.storageBoxes.main = {
+    subuser = "immich";
+    paths = [
+      "${upload_folder}/library"
+      "${upload_folder}/upload"
+      "${upload_folder}/profile"
+      "/run/immich_dump.sql"
+    ];
+  };
+  services.restic.backups.storage-box-main = {
+    backupPrepareCommand = ''
+      ${pkgs.podman}/bin/podman exec -t immich_postgres pg_dumpall -c -U postgres > /run/immich_dump.sql
+    '';
   };
 
   # Mirror the original oauth2 secret

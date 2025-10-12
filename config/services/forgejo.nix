@@ -15,36 +15,9 @@ let
   };
 in
 {
-  age.secrets.resticpasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.forgejoHetznerSsh = {
-    generator.script = "ssh-ed25519";
-  };
-  services.restic.backups = {
-    main = {
-      user = "root";
-      timerConfig = {
-        OnCalendar = "06:00";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      initialize = true;
-      passwordFile = config.age.secrets.resticpasswd.path;
-      hetznerStorageBox = {
-        enable = true;
-        inherit (globals.hetzner) mainUser;
-        inherit (globals.hetzner.users.forgejo) subUid path;
-        sshAgeSecret = "forgejoHetznerSsh";
-      };
-      paths = [ config.services.forgejo.stateDir ];
-      #pruneOpts = [
-      #  "--keep-daily 10"
-      #  "--keep-weekly 7"
-      #  "--keep-monthly 12"
-      #  "--keep-yearly 75"
-      #];
-    };
+  backups.storageBoxes.main = {
+    paths = [ config.services.forgejo.stateDir ];
+    subuser = "paperless";
   };
 
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh

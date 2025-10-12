@@ -15,36 +15,9 @@ in
     openFirewall = true;
   };
 
-  age.secrets.resticpasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.resticHetznerSsh = {
-    generator.script = "ssh-ed25519";
-  };
-  services.restic.backups = {
-    main = {
-      user = "root";
-      timerConfig = {
-        OnCalendar = "06:00";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      initialize = true;
-      passwordFile = config.age.secrets.resticpasswd.path;
-      hetznerStorageBox = {
-        enable = true;
-        inherit (globals.hetzner) mainUser;
-        inherit (globals.hetzner.users.smb) subUid path;
-        sshAgeSecret = "resticHetznerSsh";
-      };
-      paths = [ "/bunker" ];
-      ##pruneOpts = [
-      ##  "--keep-daily 10"
-      ##  "--keep-weekly 7"
-      ##  "--keep-monthly 12"
-      ##  "--keep-yearly 75"
-      ##];
-    };
+  backups.storageBoxes.main = {
+    paths = [ "/bunker" ];
+    subuser = "smb";
   };
 
   services.samba = {

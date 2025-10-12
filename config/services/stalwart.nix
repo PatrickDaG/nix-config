@@ -18,38 +18,9 @@ let
   dataDir = "/var/lib/stalwart-mail";
 in
 {
-  age.secrets.resticpasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.stalwartHetznerSshKey = {
-    generator.script = "ssh-ed25519";
-  };
-  services.restic.backups = {
-    main = {
-      user = "root";
-      timerConfig = {
-        OnCalendar = "06:00";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      initialize = true;
-      passwordFile = config.age.secrets.resticpasswd.path;
-      hetznerStorageBox = {
-        enable = true;
-        inherit (globals.hetzner) mainUser;
-        inherit (globals.hetzner.users.stalwart-mail) subUid path;
-        sshAgeSecret = "stalwartHetznerSshKey";
-      };
-      paths = [
-        mailBackupDir
-      ];
-      #pruneOpts = [
-      #  "--keep-daily 10"
-      #  "--keep-weekly 7"
-      #  "--keep-monthly 12"
-      #  "--keep-yearly 75"
-      #];
-    };
+  backups.storageBoxes.hetzner = {
+    subuser = "stalwart-mail";
+    paths = [ mailBackupDir ];
   };
   systemd.services.backup-mail = {
     description = "Mail backup";

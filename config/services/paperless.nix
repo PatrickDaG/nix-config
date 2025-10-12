@@ -16,36 +16,9 @@ in
       mode = "0770";
     };
   };
-  age.secrets.resticpasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.paperlessHetznerSsh = {
-    generator.script = "ssh-ed25519";
-  };
-  services.restic.backups = {
-    main = {
-      user = "root";
-      timerConfig = {
-        OnCalendar = "06:00";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      initialize = true;
-      passwordFile = config.age.secrets.resticpasswd.path;
-      hetznerStorageBox = {
-        enable = true;
-        inherit (globals.hetzner) mainUser;
-        inherit (globals.hetzner.users.paperless) subUid path;
-        sshAgeSecret = "paperlessHetznerSsh";
-      };
-      paths = [ paperlessBackupDir ];
-      #pruneOpts = [
-      #  "--keep-daily 10"
-      #  "--keep-weekly 7"
-      #  "--keep-monthly 12"
-      #  "--keep-yearly 75"
-      #];
-    };
+  backups.storageBoxes.main = {
+    paths = [ paperlessBackupDir ];
+    subuser = "paperless";
   };
   systemd.services.paperless-backup =
     let
