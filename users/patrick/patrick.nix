@@ -59,7 +59,7 @@
       timer
       via
       webcord
-      xautoclick
+      #xautoclick
       xournalpp
       ytdlp-pot-provider
       zathura

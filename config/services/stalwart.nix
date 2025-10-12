@@ -422,6 +422,9 @@ in
           default = true;
         };
 
+        calendar.default.display-name = "Personal Calendar";
+        contacts.default.display-name = "Personal Contacts";
+
         server = {
           hostname = domain;
           tls = {
