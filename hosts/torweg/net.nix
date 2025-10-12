@@ -75,4 +75,8 @@ in
       };
     };
   };
+  networking.nftables.chains.forward.dnat = {
+    after = [ "conntrack" ];
+    rules = [ "ct status dnat accept" ];
+  };
 }

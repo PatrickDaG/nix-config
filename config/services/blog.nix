@@ -81,7 +81,6 @@ in
       pkgs.git
     ];
     serviceConfig = {
-      Requires = "blog";
       Type = "oneshot";
       User = "blog";
       Group = "nginx";

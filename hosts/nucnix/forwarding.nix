@@ -30,22 +30,6 @@ let
             ];
           };
         };
-        firewall = {
-          zones = {
-            ${service}.ipv4Addresses = [
-              (lib.net.cidr.host globals.services.${service}.ip globals.net.vlans.services.cidrv4)
-            ];
-          };
-          rules = {
-            "forward-${service}" = {
-              from = [
-                "home"
-              ];
-              to = [ service ];
-              "allowed${toUpper protocol}Ports" = if fport != null then [ fport ] else ports;
-            };
-          };
-        };
       };
     };
 in
