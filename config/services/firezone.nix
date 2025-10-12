@@ -6,6 +6,7 @@
   ...
 }:
 let
+  # TODO: automatically assign these somehow
   homeDomains = [
     globals.services.jellyfin.domain
     globals.services.immich.domain

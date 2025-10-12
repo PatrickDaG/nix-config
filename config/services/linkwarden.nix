@@ -5,6 +5,7 @@
   ...
 }:
 {
+  globals.services.linkwarden.host = config.node.name;
   age.secrets.linkwarden-nextauth-secret = {
     rekeyFile = config.node.secretsDir + "/linkwarden-nextauth-secret.age";
     generator.script = "base64";
@@ -14,22 +15,15 @@
 
   # Mirror the original oauth2 secret
   age.secrets.linkwarden-oauth2-client-secret = {
-    inherit (nodes.elisabeth-kanidm.config.age.secrets.oauth2-linkwarden) rekeyFile;
+    inherit (nodes.nucnix-kanidm.config.age.secrets.oauth2-linkwarden) rekeyFile;
     mode = "440";
     group = "linkwarden";
   };
 
-  globals.wireguard.proxy-sentinel.hosts.${config.node.name}.firewallRuleForNode.sentinel.allowedTCPPorts =
-    [ 3000 ];
-  globals.wireguard.proxy-home.hosts.${config.node.name}.firewallRuleForNode.ward-web-proxy.allowedTCPPorts =
-    [ 3000 ];
-
-  globals.services.linkwarden.domain = globals.services.linkwarden.domain;
-  globals.monitoring.http.linkwarden = {
-    url = "https://${globals.services.linkwarden.domain}";
-    expectedBodyRegex = "<title>Linkwarden";
-    network = "internet";
-  };
+  globals.wireguard.services.hosts.${config.node.name}.firewallRuleForNode.nucnix-nginx.allowedTCPPorts =
+    [ 3003 ];
+  # globals.wireguard.services-extern.hosts.${config.node.name}.firewallRuleForNode.torweg.allowedTCPPorts =
+  #   [ 3003 ];
 
   environment.persistence."/persist".directories = [
     {
@@ -63,9 +57,9 @@
     };
   };
 
-  backups.storageBoxes.dusk = {
-    subuser = "linkwarden";
-    paths = [ "/var/lib/linkwarden" ];
-    withPostgres = true;
-  };
+  # backups.storageBoxes.main = {
+  #   subuser = "linkwarden";
+  #   paths = [ "/var/lib/linkwarden" ];
+  #   withPostgres = true;
+  # };
 }

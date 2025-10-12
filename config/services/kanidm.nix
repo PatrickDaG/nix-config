@@ -208,12 +208,10 @@
         };
       };
 
-      groups."linkwarden.access" = {
-        members = [ "linkwarden.admins" ];
-      };
+      groups."linkwarden.access" = { };
       systems.oauth2.linkwarden = {
         displayName = "linkwarden";
-        originUrl = "https://${globals.services.linkwarden.domain}/user/oauth2/kanidm/callback";
+        originUrl = "https://${globals.services.linkwarden.domain}/api/v1/auth/callback/authentik";
         originLanding = "https://${globals.services.linkwarden.domain}/";
         basicSecretFile = config.age.secrets.oauth2-linkwarden.path;
         enableLegacyCrypto = true; # XXX: ES256 not supported, yay legacy shit :(

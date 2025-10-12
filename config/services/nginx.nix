@@ -218,6 +218,7 @@ in
       proxyProtect = true;
     })
     (blockOf "linkwarden" {
+      port = 3003;
       virtualHostExtraConfig.locations."/" = {
         X-Frame-Options = "SAMEORIGIN";
       };

@@ -4,5 +4,6 @@
     ./invidious.nix
     ./firefly.nix
     ./yourspotify.nix
+    ./linkwarden.nix
   ];
 }

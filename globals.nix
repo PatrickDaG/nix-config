@@ -156,6 +156,9 @@ in
         host = "torweg";
         domain = "fz.${globals.domains.web}";
       };
+      linkwarden = {
+        domain = "lw.${globals.domains.web}";
+      };
       elisabeth = {
         domain = "home.${globals.domains.web}";
         ip = 19;
