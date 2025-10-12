@@ -66,6 +66,11 @@
       mode = "440";
       group = "kanidm";
     };
+    oauth2-linkwarden = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
   };
   services.kanidm = {
     package = pkgs.kanidm.withSecretProvisioning;
@@ -201,6 +206,24 @@
           joinType = "array";
           valuesByGroup."forgejo.admins" = [ "admin" ];
         };
+      };
+
+      groups."linkwarden.access" = {
+        members = [ "linkwarden.admins" ];
+      };
+      systems.oauth2.linkwarden = {
+        displayName = "linkwarden";
+        originUrl = "https://${globals.services.linkwarden.domain}/user/oauth2/kanidm/callback";
+        originLanding = "https://${globals.services.linkwarden.domain}/";
+        basicSecretFile = config.age.secrets.oauth2-linkwarden.path;
+        enableLegacyCrypto = true; # XXX: ES256 not supported, yay legacy shit :(
+        scopeMaps."linkwarden.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
+        allowInsecureClientDisablePkce = true;
+        preferShortUsername = true;
       };
 
       groups."firezone.access" = { };

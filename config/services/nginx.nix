@@ -217,6 +217,11 @@ in
     (blockOf "adguardhome" {
       proxyProtect = true;
     })
+    (blockOf "linkwarden" {
+      virtualHostExtraConfig.locations."/" = {
+        X-Frame-Options = "SAMEORIGIN";
+      };
+    })
     (blockOf "oauth2-proxy" {
       publicAccess = true;
       port = 3001;
