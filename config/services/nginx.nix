@@ -250,7 +250,9 @@ in
       port = 3000;
       upstream = "yourspotify";
     })
-    (blockOf "homeassistant" { })
+    (blockOf "homeassistant" {
+      publicAccess = true;
+    })
     (blockOf "esphome" {
       port = 3001;
       proxyProtect = true;

@@ -13,7 +13,7 @@ let
 
       ## Display separate Wallpaper per output
 
-      readarray -t MONITORS < <(swww query | cut -d ":" -f 1)
+      readarray -t MONITORS < <(swww query | cut -d ":" -f 2)
 
       for i in "''${MONITORS[@]}"; do
         swww img -o "$i" \

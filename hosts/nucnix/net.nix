@@ -25,6 +25,7 @@ in
   networking.nftables.firewall.zones = {
     fritz.interfaces = [ "vlan-fritz" ];
     wg-services.interfaces = [ "services" ];
+    wg-monitoring.interfaces = [ "monitoring" ];
     printer.ipv4Addresses = [
       (lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4)
     ];

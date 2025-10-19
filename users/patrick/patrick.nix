@@ -50,6 +50,8 @@
       osu-lazer-bin
       pandoc # for obsidian
       pdfpc
+      ripgrep-all
+      lazyjj
       pinentry-gnome3 # for yubikey pinentry
       qmk
       signal-desktop
