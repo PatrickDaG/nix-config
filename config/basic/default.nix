@@ -32,6 +32,7 @@
     ../../modules/nginx-monitor.nix
     ../../modules/secrets.nix
     ../../modules/smb-mounts.nix
+    ../../modules/snapshots.nix
     # keep-sorted end
 
     # keep-sorted start
