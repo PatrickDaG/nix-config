@@ -46,8 +46,8 @@
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
-      noto-fonts-emoji
-      noto-fonts-extra
+      noto-fonts-color-emoji
+      noto-fonts
     ];
   };
   stylix.fonts = {
@@ -69,7 +69,7 @@
     };
 
     emoji = {
-      package = pkgs.noto-fonts-emoji;
+      package = pkgs.noto-fonts-color-emoji;
       name = "Noto Color Emoji";
     };
   };

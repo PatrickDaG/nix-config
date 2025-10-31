@@ -1,5 +1,5 @@
 diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
-index 93a649314d6a48..5dd64b190b7048 100644
+index 93a649314d6a4..5dd64b190b704 100644
 --- a/nixos/modules/module-list.nix
 +++ b/nixos/modules/module-list.nix
 @@ -1571,6 +1571,7 @@
@@ -12,7 +12,7 @@ index 93a649314d6a48..5dd64b190b7048 100644
    ./services/web-apps/freshrss.nix
 diff --git a/nixos/modules/services/web-apps/firefly-pico.nix b/nixos/modules/services/web-apps/firefly-pico.nix
 new file mode 100644
-index 00000000000000..26bde10c0d3ab6
+index 0000000000000..26bde10c0d3ab
 --- /dev/null
 +++ b/nixos/modules/services/web-apps/firefly-pico.nix
 @@ -0,0 +1,421 @@
@@ -438,7 +438,7 @@ index 00000000000000..26bde10c0d3ab6
 +  };
 +}
 diff --git a/nixos/tests/all-tests.nix b/nixos/tests/all-tests.nix
-index 3c6f89dcb2aeeb..d77b6e42ec7391 100644
+index 3c6f89dcb2aee..d77b6e42ec739 100644
 --- a/nixos/tests/all-tests.nix
 +++ b/nixos/tests/all-tests.nix
 @@ -523,6 +523,7 @@ in
@@ -451,7 +451,7 @@ index 3c6f89dcb2aeeb..d77b6e42ec7391 100644
      _module.args.firefoxPackage = pkgs.firefox;
 diff --git a/nixos/tests/firefly-pico.nix b/nixos/tests/firefly-pico.nix
 new file mode 100644
-index 00000000000000..376938f3d818a5
+index 0000000000000..376938f3d818a
 --- /dev/null
 +++ b/nixos/tests/firefly-pico.nix
 @@ -0,0 +1,117 @@
@@ -574,7 +574,7 @@ index 00000000000000..376938f3d818a5
 +}
 diff --git a/pkgs/by-name/fi/firefly-pico/frontend.nix b/pkgs/by-name/fi/firefly-pico/frontend.nix
 new file mode 100644
-index 00000000000000..deeb59656ae932
+index 0000000000000..deeb59656ae93
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/frontend.nix
 @@ -0,0 +1,50 @@
@@ -630,7 +630,7 @@ index 00000000000000..deeb59656ae932
 +})
 diff --git a/pkgs/by-name/fi/firefly-pico/package.nix b/pkgs/by-name/fi/firefly-pico/package.nix
 new file mode 100644
-index 00000000000000..8b59c3d0de439a
+index 0000000000000..8b59c3d0de439
 --- /dev/null
 +++ b/pkgs/by-name/fi/firefly-pico/package.nix
 @@ -0,0 +1,73 @@

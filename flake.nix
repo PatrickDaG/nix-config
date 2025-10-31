@@ -8,10 +8,17 @@
     idmail = {
       url = "github:oddlama/idmail/";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nci.follows = "nci";
     };
     elewrap = {
       url = "github:oddlama/elewrap";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nci.follows = "nci";
+    };
+    nci = {
+      url = "github:yusdacra/nix-cargo-integration";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
 
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
@@ -22,6 +29,10 @@
     };
     nix-gaming = {
       url = "github:fufexan/nix-gaming";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -106,6 +117,7 @@
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
 
     stylix.url = "github:danth/stylix";

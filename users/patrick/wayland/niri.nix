@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 let
@@ -9,6 +10,9 @@ let
 in
 {
   programs.niri.enable = true;
+  programs.niri.package = inputs.niri.packages.x86_64-linux.niri-stable.override {
+    libdisplay-info = pkgs.libdisplay-info_0_2;
+  };
   hm =
     { config, ... }:
     {
@@ -143,9 +147,9 @@ in
 
             "Mod+y".action = toggle-column-tabbed-display;
 
-            "Print".action = screenshot;
+            #"Print".action = screenshot;
             #"Ctrl+Print".action = screenshot-screen {};
-            "Alt+Print".action = screenshot-window;
+            #"Alt+Print".action = screenshot-window;
 
             "Mod+Escape" = {
               action = toggle-keyboard-shortcuts-inhibit;

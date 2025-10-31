@@ -8,7 +8,7 @@
 lib.optionalAttrs (!minimal) {
   hm.home.packages = [
     pkgs.xclip
-    pkgs.xdragon
+    pkgs.dragon-drop
   ];
   imports = [
     ./rofi.nix
