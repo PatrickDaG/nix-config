@@ -1,0 +1,18 @@
+diff --git a/pkgs/tools/networking/openssh/default.nix b/pkgs/tools/networking/openssh/default.nix
+index 046a4db7a55c5..39c6ae31133fb 100644
+--- a/pkgs/tools/networking/openssh/default.nix
++++ b/pkgs/tools/networking/openssh/default.nix
+@@ -25,11 +25,11 @@ in
+ {
+   openssh = common rec {
+     pname = "openssh";
+-    version = "10.1p1";
++    version = "10.2p1";
+ 
+     src = fetchurl {
+       url = urlFor version;
+-      hash = "sha256-ufx6K4JXlGem8vQ+SoHI4d/aYU3bT5slWq/XAgu/B1g=";
++      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
+     };
+ 
+     extraPatches = [
