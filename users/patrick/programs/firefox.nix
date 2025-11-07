@@ -129,6 +129,21 @@ in
           "browser.urlbar.speculativeConnect.enabled" = false;
           "dom.battery.enabled" = false; # no battery for you
           "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
+
+          # no AI
+          "browser.ml.enable" = false;
+          "browser.ml.chat.enabled" = false;
+          "browser.ml.chat.hideFromLabs" = true;
+          "browser.ml.chat.hideLabsShortcuts" = true;
+          "browser.ml.chat.page" = false;
+          "browser.ml.chat.page.footerBadge" = false;
+          "browser.ml.chat.page.menuBadge" = false;
+          "browser.ml.chat.menu" = false;
+          "browser.ml.linkPreview.enabled" = false;
+          "browser.ml.pageAssist.enabled" = false;
+          "browser.tabs.groups.smart.enabled" = false;
+          "browser.tabs.groups.smart.userEnable" = false;
+          "extensions.ml.enabled" = false;
         };
         search = {
           force = true;
