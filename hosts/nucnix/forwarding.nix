@@ -66,8 +66,8 @@ mkMerge [
           after = [ "hook" ];
           rules = [
             "iifname vlan-fritz tcp dport 23 redirect to 22"
-            "iifname vlan-fritz ip6 tcp dport 24 dnat to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv6}:22"
-            "iifname vlan-fritz ip tcp dport 24 dnat to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv4}:22"
+            "iifname vlan-fritz tcp dport 24 dnat ip6 to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv6}:22"
+            "iifname vlan-fritz tcp dport 24 dnat ip to ${net.cidr.host globals.services.elisabeth.ip globals.net.vlans.home.cidrv4}:22"
           ];
         };
       };
