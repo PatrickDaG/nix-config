@@ -1,0 +1,53 @@
+diff --git a/pkgs/by-name/we/webcord-vencord/package.nix b/pkgs/by-name/we/webcord-vencord/package.nix
+index ceb69cc669889..7b2f2f8edb478 100644
+--- a/pkgs/by-name/we/webcord-vencord/package.nix
++++ b/pkgs/by-name/we/webcord-vencord/package.nix
+@@ -1,6 +1,6 @@
+ {
+   # allow overriding electron
+-  electron_36,
++  electron_37,
+   webcord,
+   replaceVars,
+   lib,
+@@ -8,7 +8,7 @@
+ }:
+ 
+ # nixpkgs-update: no auto update
+-(webcord.override { inherit electron_36; }).overrideAttrs (old: {
++(webcord.override { inherit electron_37; }).overrideAttrs (old: {
+   pname = "webcord-vencord";
+ 
+   patches = (old.patches or [ ]) ++ [
+diff --git a/pkgs/by-name/we/webcord/package.nix b/pkgs/by-name/we/webcord/package.nix
+index 50a9de8366e16..8e2568636c816 100644
+--- a/pkgs/by-name/we/webcord/package.nix
++++ b/pkgs/by-name/we/webcord/package.nix
+@@ -5,7 +5,7 @@
+   copyDesktopItems,
+   python3,
+   xdg-utils,
+-  electron_36,
++  electron_37,
+   makeDesktopItem,
+ }:
+ 
+@@ -55,7 +55,7 @@ buildNpmPackage rec {
+       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
+ 
+       # Add xdg-utils to path via suffix, per PR #181171
+-      makeWrapper '${lib.getExe electron_36}' $out/bin/webcord \
++      makeWrapper '${lib.getExe electron_37}' $out/bin/webcord \
+         --suffix PATH : "${binPath}" \
+         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+         --add-flags $out/lib/node_modules/webcord/
+diff --git a/pkgs/by-name/we/webcord/update.sh b/pkgs/by-name/we/webcord/update.sh
+index ea79effc869a6..cdab79c4f45af 100755
+--- a/pkgs/by-name/we/webcord/update.sh
++++ b/pkgs/by-name/we/webcord/update.sh
+@@ -12,4 +12,4 @@ latestVersion="$(expr "$latestTag" : 'v\(.*\)')"
+ 
+ nix-update --version "$latestVersion" webcord
+ electronVersion=$(curl_github "https://raw.githubusercontent.com/SpacingBat3/WebCord/v$latestVersion/package.json" | jq -r ".devDependencies.electron" | sed -r 's|^\^([0-9]+).*|\1|')
+-sed -r "/webcord = / s|(electron_)[0-9]+|\1$electronVersion|" -i pkgs/top-level/all-packages.nix
++sed -r "s|(electron_)[0-9]+|\1$electronVersion|" -i pkgs/by-name/we/webcord{,-vencord}/package.nix

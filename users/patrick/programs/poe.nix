@@ -6,6 +6,6 @@
 
   hm.home.packages = [
     #pkgs.awakened-poe-trade
-    pkgs.path-of-building
+    pkgs.rusty-path-of-building
   ];
 }

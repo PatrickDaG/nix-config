@@ -29,7 +29,7 @@ lib.optionalAttrs (!minimal) {
     jack.enable = true;
     pulse.enable = true;
     lowLatency = {
-      enable = true;
+      #enable = true;
       quantum = 96;
     };
     extraConfig.pipewire."99-allowed-rates".context.properties.default.clock.allowed-rates = [

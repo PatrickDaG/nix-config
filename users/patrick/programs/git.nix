@@ -170,22 +170,15 @@ in
       };
 
       programs.gitui.enable = true;
+      programs.difftastic = {
+        enable = true;
+        git.enable = true;
+      };
       programs.git = {
         enable = true;
-        difftastic.enable = true;
         lfs.enable = true;
-        aliases = {
-          cs = "commit -v -S";
-          s = "status";
-          a = "add";
-          p = "push";
-          rebase = "rebase --gpg-sign";
-          fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
-          f = "!${gf}";
-          crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
-        };
         ignores = [ ".direnv" ];
-        extraConfig = {
+        settings = {
           core.pager = "${pkgs.delta}/bin/delta";
           core.askpass = lib.getExe pkgs.pinentry-gnome3;
           user = {
@@ -223,6 +216,16 @@ in
           rebase.autoSquash = true;
           rebase.autoStash = true;
           rebase.updateRefs = true;
+          alias = {
+            cs = "commit -v -S";
+            s = "status";
+            a = "add";
+            p = "push";
+            rebase = "rebase --gpg-sign";
+            fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
+            f = "!${gf}";
+            crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
+          };
         };
         signing = {
           key = null;

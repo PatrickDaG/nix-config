@@ -24,7 +24,9 @@
     {
       _module.args.pkgs = import config.node.nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+        };
         overlays = (import ../pkgs inputs) ++ [
           inputs.nix-topology.overlays.default
           inputs.nixos-extra-modules.overlays.default
