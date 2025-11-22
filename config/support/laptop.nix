@@ -1,12 +1,12 @@
 {
   services = {
     logind.settings.Login = {
-      LidSwitch = "ignore";
-      LidSwitchDocked = "ignore";
-      LidSwitchExternalPower = "ignore";
-      HandlePowerKey = "suspend";
+      HandleLidSwitch = "suspend";
+      HandleLidSwitchDocked = "ignore";
+      HandleLidSwitchExternalPower = "ignore";
+      HandlePowerKey = "poweroff";
       HandleSuspendKey = "suspend";
-      HandleHibernateKey = "suspend";
+      HandleHibernateKey = "hibernate";
       PowerKeyIgnoreInhibited = "yes";
       SuspendKeyIgnoreInhibited = "yes";
       HibernateKeyIgnoreInhibited = "yes";
