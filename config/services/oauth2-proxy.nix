@@ -8,6 +8,9 @@
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3001 ];
   };
+  globals.wireguard.services-extern.hosts.${config.node.name} = {
+    firewallRuleForNode.torweg.allowedTCPPorts = [ 3001 ];
+  };
   globals.services.oauth2-proxy.host = config.node.name;
 
   age.secrets.oauth2-cookie-secret = {
