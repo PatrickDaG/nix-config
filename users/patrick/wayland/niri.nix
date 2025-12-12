@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
 let
@@ -10,9 +9,6 @@ let
 in
 {
   programs.niri.enable = true;
-  programs.niri.package = inputs.niri.packages.x86_64-linux.niri-stable.override {
-    libdisplay-info = pkgs.libdisplay-info_0_2;
-  };
   hm =
     { config, ... }:
     {
@@ -45,6 +41,7 @@ in
 
             workspace-auto-back-and-forth = true;
           };
+          gestures.hot-corners.enable = false;
           binds = with config.lib.niri.actions; {
 
             "Mod+T".action = spawn "kitty";
