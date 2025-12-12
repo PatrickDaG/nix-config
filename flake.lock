@@ -3146,6 +3146,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nixpkgs-xr": "nixpkgs-xr",
         "nixvim": "nixvim",
+        "noctalia": "noctalia",
         "pre-commit-hooks": "pre-commit-hooks_8",
         "rust-overlay": "rust-overlay_4",
         "spicetify-nix": "spicetify-nix",

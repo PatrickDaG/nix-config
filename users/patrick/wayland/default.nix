@@ -72,7 +72,8 @@
     ./fuzzel.nix
     ./sway.nix
     ./hyprland.nix
-    ./waybar
+    #./waybar
+    ./noctalia.nix
     ./swaync
     ./swww.nix
     ./niri.nix
