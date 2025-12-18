@@ -464,6 +464,27 @@
         "type": "github"
       }
     },
+    "dgop": {
+      "inputs": {
+        "nixpkgs": [
+          "dms",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762835999,
+        "narHash": "sha256-UykYGrGFOFTmDpKTLNxj1wvd1gbDG4TkqLNSbV0TYwk=",
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "rev": "799301991cd5dcea9b64245f9d500dcc76615653",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -513,6 +534,28 @@
         "owner": "divnix",
         "ref": "0.2.0",
         "repo": "dmerge",
+        "type": "github"
+      }
+    },
+    "dms": {
+      "inputs": {
+        "dgop": "dgop",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "quickshell": "quickshell"
+      },
+      "locked": {
+        "lastModified": 1766070338,
+        "narHash": "sha256-OAdrDYPss23Lng44IjkWx2XyLLju+iFJIfSpJoKCLRc=",
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
+        "rev": "8437e1aa7b34021aa9c97882fdbda2cca6d43878",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
         "type": "github"
       }
     },
@@ -2543,26 +2586,26 @@
         "type": "github"
       }
     },
-     "noctalia": {
-       "inputs": {
-         "nixpkgs": [
-           "nixpkgs"
-         ]
-       },
-       "locked": {
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
         "lastModified": 1765994904,
         "narHash": "sha256-B+CZqyyUIWbMaK8KTrEKISU3J9Ujk37fcyLzpVpwNsw=",
-         "owner": "noctalia-dev",
-         "repo": "noctalia-shell",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
         "rev": "c736272391678bd28e3d2410c91d45eb3b22d616",
-         "type": "github"
-       },
-       "original": {
-         "owner": "noctalia-dev",
-         "repo": "noctalia-shell",
-         "type": "github"
-       }
-     },
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "type": "github"
+      }
+    },
     "nosys": {
       "locked": {
         "lastModified": 1668010795,
@@ -3118,12 +3161,35 @@
         "type": "github"
       }
     },
+    "quickshell": {
+      "inputs": {
+        "nixpkgs": [
+          "dms",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764663772,
+        "narHash": "sha256-sHqLmm0wAt3PC4vczJeBozI1/f4rv9yp3IjkClHDXDs=",
+        "ref": "refs/heads/master",
+        "rev": "26531fc46ef17e9365b03770edd3fb9206fcb460",
+        "revCount": 713,
+        "type": "git",
+        "url": "https://git.outfoxxed.me/quickshell/quickshell"
+      },
+      "original": {
+        "rev": "26531fc46ef17e9365b03770edd3fb9206fcb460",
+        "type": "git",
+        "url": "https://git.outfoxxed.me/quickshell/quickshell"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
         "agenix-rekey": "agenix-rekey",
         "devshell": "devshell_2",
         "disko": "disko",
+        "dms": "dms",
         "elewrap": "elewrap",
         "flake-parts": "flake-parts_3",
         "home-manager": "home-manager",

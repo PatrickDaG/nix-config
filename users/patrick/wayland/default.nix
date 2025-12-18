@@ -45,8 +45,9 @@
   services.displayManager.enable = true;
   imports = [
     ./fuzzel.nix
-    ./noctalia.nix
+    #./noctalia.nix
     ./niri.nix
+    ./dms.nix
   ];
   hm.home.packages = with pkgs; [
     wdisplays
