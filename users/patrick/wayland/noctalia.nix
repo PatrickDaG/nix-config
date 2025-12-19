@@ -29,8 +29,8 @@
         settings = {
           bar = {
             density = "mini";
-            position = "bottom";
-            showCapsule = false;
+            position = "left";
+            showCapsule = true;
             floating = false;
             transparent = false;
             outerCorners = false;
@@ -55,18 +55,39 @@
                   "showIcon" = false;
                   "useFixedWidth" = false;
                 }
-              ];
-              "center" = [
                 {
-                  "characterCount" = 10;
+                  "characterCount" = 2;
                   "colorizeIcons" = false;
                   "enableScrollWheel" = true;
                   "followFocusedScreen" = false;
                   "hideUnoccupied" = false;
                   "id" = "Workspace";
-                  "labelMode" = "name";
-                  "showApplications" = false;
+                  "labelMode" = "none";
+                  "showApplications" = true;
                   "showLabelsOnlyWhenOccupied" = false;
+                }
+              ];
+              "center" = [
+                {
+                  "hideMode" = "visible";
+                  "hideWhenIdle" = false;
+                  "id" = "MediaMini";
+                  "maxWidth" = 145;
+                  "scrollingMode" = "hover";
+                  "showAlbumArt" = false;
+                  "showArtistFirst" = false;
+                  "showProgressRing" = true;
+                  "showVisualizer" = true;
+                  "useFixedWidth" = false;
+                  "visualizerType" = "linear";
+                }
+                {
+                  "customFont" = "";
+                  "formatHorizontal" = "HH:mm ddd, MMM dd";
+                  "formatVertical" = "HH mm ss - dd MMM";
+                  "id" = "Clock";
+                  "useCustomFont" = false;
+                  "usePrimaryColor" = true;
                 }
               ];
               "right" = [
@@ -101,12 +122,7 @@
                   "id" = "Microphone";
                 }
                 {
-                  "customFont" = "";
-                  "formatHorizontal" = "dd.MM. HH:mm:ss";
-                  "formatVertical" = "HH mm ss";
-                  "id" = "Clock";
-                  "useCustomFont" = false;
-                  "usePrimaryColor" = false;
+                  "id" = "plugin:privacy-indicator";
                 }
                 {
                   "hideWhenZero" = true;
@@ -116,15 +132,69 @@
               ];
             };
           };
+          "controlCenter" = {
+            "position" = "close_to_bar_button";
+            "shortcuts" = {
+              "left" = [
+                {
+                  "id" = "ScreenRecorder";
+                }
+                {
+                  "id" = "WallpaperSelector";
+                }
+              ];
+              "right" = [
+                {
+                  "id" = "Notifications";
+                }
+                {
+                  "id" = "PowerProfile";
+                }
+                {
+                  "id" = "KeepAwake";
+                }
+                {
+                  "id" = "NightLight";
+                }
+              ];
+            };
+            "cards" = [
+              {
+                "enabled" = true;
+                "id" = "profile-card";
+              }
+              {
+                "enabled" = true;
+                "id" = "shortcuts-card";
+              }
+              {
+                "enabled" = true;
+                "id" = "audio-card";
+              }
+              {
+                "enabled" = false;
+                "id" = "brightness-card";
+              }
+              {
+                "enabled" = true;
+                "id" = "weather-card";
+              }
+              {
+                "enabled" = true;
+                "id" = "media-sysmon-card";
+              }
+            ];
+          };
           general = {
-            radiusRatio = 0.2;
+            radiusRatio = 0;
+            "avatarImage" = "/dev/null";
             "allowPanelsOnScreenWithoutBar" = true;
             "animationDisabled" = true;
             "animationSpeed" = 2;
             "boxRadiusRatio" = 1;
             "compactLockScreen" = true;
             "dimmerOpacity" = 0.2;
-            "enableShadows" = true;
+            "enableShadows" = false;
             "lockOnSuspend" = true;
             "scaleRatio" = 1;
             "screenRadiusRatio" = 1;
@@ -139,6 +209,8 @@
             enabled = true;
             directory = "${config.xdg.dataHome}/wallpapers";
             overviewEnabled = false;
+            "enableMultiMonitorDirectories" = true;
+            "transitionType" = "random";
             "randomEnabled" = true;
             "randomIntervalSec" = 180;
           };
@@ -165,10 +237,11 @@
             };
           };
           location = {
-            name = "Munich, Germany";
+            name = "Bochum, Germany";
             firstDayOfWeek = 0;
           };
           dock.enabled = false;
+          network.wifiEnabled = false;
           "appLauncher" = {
             "customLaunchPrefix" = "";
             "customLaunchPrefixEnabled" = false;
