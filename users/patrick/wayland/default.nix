@@ -47,6 +47,7 @@
     ./fuzzel.nix
     ./noctalia.nix
     ./niri.nix
+    ./swaync.nix
   ];
   hm.home.packages = with pkgs; [
     wdisplays
