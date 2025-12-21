@@ -152,9 +152,12 @@ in
             backend = "gpg";
             backends.gpg.program = learnSmartCard;
           };
+          remotes = {
+            origin.auto-track-bookmarks = "glob:*";
+            upstream.auto-track-bookmarks = "glob:*";
+          };
           git = {
             sign-on-push = true;
-            push-new-bookmarks = true;
           };
           ui = {
             default-command = "l";
