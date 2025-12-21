@@ -238,6 +238,37 @@ in
               open-on-workspace = "notes";
               block-out-from = "screencast";
             }
+            {
+              matches = [ { app-id = "com.saivert.pwvucontrol"; } ];
+              open-floating = true;
+              default-column-width = {
+                proportion = 0.2;
+              };
+              default-window-height = {
+                proportion = 0.6;
+              };
+              default-floating-position = {
+                x = 42;
+                y = 42;
+                "relative-to" = "bottom-right";
+              };
+            }
+            {
+              matches = [ { app-id = "org.pipewire.Helvum"; } ];
+              open-floating = true;
+              default-column-width = {
+                proportion = 0.2;
+              };
+              default-window-height = {
+                proportion = 0.6;
+              };
+              default-floating-position = {
+                x = 42;
+                y = 42;
+                "relative-to" = "bottom-right";
+              };
+            }
+
           ];
 
           spawn-at-startup = [
@@ -329,23 +360,16 @@ in
             variable-refresh-rate = "on-demand";
           };
           outputs."HDMI-A-1" = {
-            #mode "1920x1080@120.030"
-            #scale 2.0
             position = {
               x = 0;
               y = 1080;
             };
           };
           outputs."DVI-D-1" = {
-            #mode "1920x1080@120.030"
-            #scale 2.0
             position = {
               x = 0;
               y = 0;
             };
-          };
-          outputs."Unknown-1" = {
-            enable = false;
           };
           workspaces = {
             "1default" = {

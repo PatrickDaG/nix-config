@@ -45,7 +45,8 @@
   services.displayManager.enable = true;
   imports = [
     ./fuzzel.nix
-    ./noctalia.nix
+    #./noctalia.nix
+    ./waybar
     ./niri.nix
     ./swaync.nix
   ];
