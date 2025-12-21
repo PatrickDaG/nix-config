@@ -49,6 +49,7 @@
     ./waybar
     ./niri.nix
     ./swaync.nix
+    ./wallpaper-engine.nix
   ];
   hm.home.packages = with pkgs; [
     wdisplays
