@@ -10,5 +10,7 @@
     ./invidious.nix
     # port 3003
     ./linkwarden.nix
+    # porte 3002
+    ./mealie.nix
   ];
 }

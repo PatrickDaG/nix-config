@@ -166,6 +166,9 @@ in
       bookstack = {
         domain = "wiki.${globals.domains.web}";
       };
+      mealie = {
+        domain = "mealie.${globals.domains.web}";
+      };
     };
   };
 }

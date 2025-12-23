@@ -61,6 +61,11 @@
       mode = "440";
       group = "kanidm";
     };
+    oauth2-mealie = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-bookstack = {
       generator.script = "alnum";
       mode = "440";
@@ -227,6 +232,25 @@
         ];
         preferShortUsername = true;
       };
+
+      groups."mealie.access" = {
+        members = [ "mealie.admins" ];
+      };
+      groups."mealie.admins" = { };
+      systems.oauth2.mealie = {
+        displayName = "mealie";
+        originUrl = "https://${globals.services.mealie.domain}/login";
+        originLanding = "https://${globals.services.mealie.domain}/";
+        basicSecretFile = config.age.secrets.oauth2-mealie.path;
+        scopeMaps."mealie.access" = [
+          "openid"
+          "email"
+          "profile"
+          "groups"
+        ];
+        preferShortUsername = true;
+      };
+
       groups."bookstack.access" = { };
       systems.oauth2.bookstack = {
         displayName = "bookstack";

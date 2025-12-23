@@ -244,6 +244,9 @@ in
     (blockOf "bookstack" {
       port = 80;
     })
+    (blockOf "mealie" { 
+      port = 3002;
+    })
     (blockOf "invidious" {
       proxyProtect = true;
       port = 3001;
