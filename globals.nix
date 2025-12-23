@@ -163,6 +163,9 @@ in
         domain = "home.${globals.domains.web}";
         ip = 19;
       };
+      bookstack = {
+        domain = "wiki.${globals.domains.web}";
+      };
     };
   };
 }

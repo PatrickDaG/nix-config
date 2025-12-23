@@ -61,6 +61,11 @@
       mode = "440";
       group = "kanidm";
     };
+    oauth2-bookstack = {
+      generator.script = "alnum";
+      mode = "440";
+      group = "kanidm";
+    };
     oauth2-grafana = {
       generator.script = "alnum";
       mode = "440";
@@ -220,7 +225,20 @@
           "email"
           "profile"
         ];
-        allowInsecureClientDisablePkce = true;
+        preferShortUsername = true;
+      };
+      groups."bookstack.access" = { };
+      systems.oauth2.bookstack = {
+        displayName = "bookstack";
+        originUrl = "https://${globals.services.bookstack.domain}/oidc/callback";
+        originLanding = "https://${globals.services.bookstack.domain}/";
+        basicSecretFile = config.age.secrets.oauth2-bookstack.path;
+        enableLegacyCrypto = true; # XXX: ES256 not supported, yay legacy shit :(
+        scopeMaps."bookstack.access" = [
+          "openid"
+          "email"
+          "profile"
+        ];
         preferShortUsername = true;
       };
 
@@ -234,8 +252,6 @@
         ];
         originLanding = "https://${globals.services.firezone.domain}/";
         preferShortUsername = true;
-        enableLocalhostRedirects = true;
-        enableLegacyCrypto = true;
         scopeMaps."firezone.access" = [
           "openid"
           "email"

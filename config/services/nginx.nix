@@ -241,6 +241,9 @@ in
       proxyProtect = true;
       publicAccess = true;
     })
+    (blockOf "bookstack" {
+      port = 80;
+    })
     (blockOf "invidious" {
       proxyProtect = true;
       port = 3001;
