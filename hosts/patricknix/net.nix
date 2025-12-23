@@ -73,4 +73,8 @@
     enable = true;
     package = pkgs.mullvad-vpn;
   };
+  services.firezone.gui-client = {
+    enable = true;
+    name = "patricknix";
+  };
 }

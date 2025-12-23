@@ -27,7 +27,7 @@ let
 in
 {
   globals.wireguard.services-extern.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.torweg-nginx.allowedTCPPorts = [
       config.services.firezone.server.api.port
       config.services.firezone.server.web.port
     ];
@@ -81,6 +81,12 @@ in
           name = "Admin";
           email = "firezone_admin@${globals.domains.mail_public}";
         };
+        groups.anyone = {
+          name = "anyone";
+          members = [
+            "admin"
+          ];
+        };
 
         auth.oidc =
           let
@@ -126,6 +132,21 @@ in
               address = globals.net.vlans.services.cidrv4;
               gatewayGroups = [ "home" ];
             };
+            "smb.internal" = {
+              type = "dns";
+              name = "smb.internal";
+              address = "smb.internal";
+              gatewayGroups = [ "home" ];
+              filters = [
+                { protocol = "icmp"; }
+                {
+                  protocol = "tcp";
+                  ports = [
+                    445
+                  ];
+                }
+              ];
+            };
             "home.vlan-services.v6" = {
               type = "cidr";
               name = "home.vlan-services.v6";
@@ -136,8 +157,11 @@ in
 
         policies =
           { }
+          // allow "anyone" "home.vlan-services.v4"
           // allow "everyone" "home.vlan-services.v4"
+          // allow "anyone" "home.vlan-services.v6"
           // allow "everyone" "home.vlan-services.v6"
+          // lib.mergeAttrsList (map (domain: allow "anyone" domain) homeDomains)
           // lib.mergeAttrsList (map (domain: allow "everyone" domain) homeDomains);
       };
     };
@@ -156,7 +180,7 @@ in
 
   services.firezone.relay = {
     enable = true;
-    name = "nucnix";
+    name = "torweg";
     apiUrl = "wss://${globals.services.firezone.domain}/api/";
     tokenFile = config.age.secrets.firezone-relay-token.path;
     publicIpv4 = lib.net.cidr.ip config.secrets.secrets.local.networking.interfaces.lan01.hostCidrv4;

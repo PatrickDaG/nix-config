@@ -42,9 +42,12 @@
   };
   services.firezone.gateway = {
     enable = true;
-    name = "ward"; # Oupsi
+    name = "nucnix"; # Oupsi
     apiUrl = "wss://${globals.services.firezone.domain}/api/";
     tokenFile = config.age.secrets.firezone-gateway-token.path;
+  };
+  systemd.services.firezone-gateway.environment = {
+    FIREZONE_NO_INC_BUF = "true";
   };
 
   systemd.network.networks."10-mv-home" = {

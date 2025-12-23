@@ -55,6 +55,7 @@
       lpadmin = uidGid 243;
       linkwarden = uidGid 244;
       bookstack = uidGid 245;
+      firezone-client = uidGid 246;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
