@@ -145,6 +145,7 @@ in
       rules = {
         mdns = {
           from = [
+            "fritz"
             "home"
             "services"
             "devices"
