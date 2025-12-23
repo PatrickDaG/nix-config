@@ -21,7 +21,7 @@ in
   };
 
   # Recommended by forgejo: https://forgejo.org/docs/latest/admin/recommendations/#git-over-ssh
-  services.openssh.settings.AcceptEnv = "GIT_PROTOCOL";
+  services.openssh.settings.AcceptEnv = [ "GIT_PROTOCOL" ];
 
   users.groups.git = { };
   users.users.git = {
