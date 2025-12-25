@@ -56,7 +56,10 @@ in
     mediaDir = "/paperless/media";
     settings = {
       PAPERLESS_URL = "https://${globals.services.paperless.domain}";
-      PAPERLESS_ALLOWED_HOSTS = globals.services.paperless.domain;
+      PAPERLESS_ALLOWED_HOSTS = [
+        globals.services.paperless.domain
+        globals.wireguard.services.hosts.${config.node.name}.ipv4
+      ];
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${globals.services.paperless.domain}";
       PAPERLESS_TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
 
