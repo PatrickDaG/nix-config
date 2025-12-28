@@ -3,7 +3,6 @@ let
   inherit (lib)
     concatStringsSep
     net
-    toUpper
     mkMerge
     optionalString
     ;

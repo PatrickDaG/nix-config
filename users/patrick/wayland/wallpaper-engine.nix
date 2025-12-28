@@ -29,7 +29,7 @@
                 --bg "$(basename "''${FILES[RANDOM%''${#FILES[@]}]}")" \
               '') config.programs.niri.settings.outputs)
             )
-          # This shit programs spams the journal with TUI things
+            # This shit programs spams the journal with TUI things
           } > /dev/null'';
       };
     in

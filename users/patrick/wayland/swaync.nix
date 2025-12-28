@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+_:
 {
   hm = {
     stylix.targets.swaync.enable = true;
