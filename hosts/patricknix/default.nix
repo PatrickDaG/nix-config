@@ -1,5 +1,35 @@
-{ inputs, lib, ... }:
 {
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
+let
+  inherit (pkgs.linuxPackages) kernel;
+in
+{
+  # boot.kernelPackages = pkgs.linuxPackagesFor (
+  #   kernel.override {
+  #     # Don't use nixos generic kernel options we do it ourselves
+  #     enableCommonConfig = false;
+  #     # This isn't relly used anyway
+  #     features = { };
+  #     # Don't build everything as a module
+  #     autoModules = false;
+  #     preferBuiltin = false;
+  #     structuredExtraConfig = with lib.kernel; {
+  #       # Needed by LUKS
+  #       CRYPTO_USER_API_AEAD = yes;
+  #     };
+  #     kernelPatches = [
+  #       # Things that evey kernel should or has to have
+  #       (import ./kernel/debug.nix {
+  #         inherit lib pkgs;
+  #         version = kernel.version;
+  #       })
+  #     ];
+  #   }
+  # );
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     # for some reasons the cpu-intel includes the gpu as well
