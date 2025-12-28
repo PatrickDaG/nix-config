@@ -244,7 +244,7 @@ in
     (blockOf "bookstack" {
       port = 80;
     })
-    (blockOf "mealie" { 
+    (blockOf "mealie" {
       port = 3002;
     })
     (blockOf "invidious" {

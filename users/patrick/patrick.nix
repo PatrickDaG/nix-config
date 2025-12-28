@@ -38,6 +38,7 @@
       hyperfine
       hyprshot
       jjui
+      lazyjj
       #ladybird
       makemkv
       mpv
@@ -50,10 +51,9 @@
       osu-lazer-bin
       pandoc # for obsidian
       pdfpc
-      ripgrep-all
-      lazyjj
       pinentry-gnome3 # for yubikey pinentry
       qmk
+      ripgrep-all
       signal-desktop
       streamlink
       streamlink-twitch-gui-bin
