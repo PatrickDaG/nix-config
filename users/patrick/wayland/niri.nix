@@ -176,17 +176,15 @@ in
             "Mod+u".action = focus-workspace "games";
             "Mod+Shift+u".action.move-window-to-workspace = "games";
 
-            "Mod+F1".action = focus-workspace "twitch";
-            "Mod+Shift+F1".action.move-window-to-workspace = "twitch";
+            "Mod+F1".action = focus-workspace "browser";
+            "Mod+Shift+F1".action.move-window-to-workspace = "browser";
 
-            "Mod+F2".action = focus-workspace "comms";
-            "Mod+Shift+F2".action.move-window-to-workspace = "comms";
+            "Mod+F2".action = focus-workspace "notes";
+            "Mod+Shift+F2".action.move-window-to-workspace = "notes";
 
-            "Mod+F3".action = focus-workspace "browser";
-            "Mod+Shift+F3".action.move-window-to-workspace = "browser";
+            "Mod+F3".action = focus-workspace "comms";
+            "Mod+Shift+F3".action.move-window-to-workspace = "comms";
 
-            "Mod+F4".action = focus-workspace "notes";
-            "Mod+Shift+F4".action.move-window-to-workspace = "notes";
           };
 
           window-rules = [
@@ -203,16 +201,6 @@ in
             {
               matches = [ { app-id = "steam"; } ];
               open-on-workspace = "games";
-            }
-
-            {
-              matches = [ { app-id = "streamlink-twitch-gui"; } ];
-              open-on-workspace = "twitch";
-            }
-            {
-              matches = [ { app-id = "mpv"; } ];
-              open-on-workspace = "twitch";
-              default-column-width.proportion = 0.9;
             }
 
             {
@@ -355,20 +343,14 @@ in
             #scale 2.0
             position = {
               x = 1920;
-              y = 200;
+              y = 0;
             };
             variable-refresh-rate = "on-demand";
           };
           outputs."HDMI-A-1" = {
             position = {
               x = 0;
-              y = 1080;
-            };
-          };
-          outputs."DVI-D-1" = {
-            position = {
-              x = 0;
-              y = 0;
+              y = 512;
             };
           };
           workspaces = {
@@ -393,14 +375,9 @@ in
               name = "notes";
               open-on-output = "HDMI-A-1";
             };
-
-            "1twitch" = {
-              name = "twitch";
-              open-on-output = "DVI-D-1";
-            };
-            "2comms" = {
+            "3comms" = {
               name = "comms";
-              open-on-output = "DVI-D-1";
+              open-on-output = "HDMI-A-1";
             };
           };
 
