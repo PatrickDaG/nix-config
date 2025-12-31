@@ -6,20 +6,64 @@
 }:
 let
   inherit (pkgs.linuxPackages) kernel;
+  # Stdenv with a few more LLVM tools available
+  llvmKernelStdenv = pkgs.stdenvAdapters.overrideInStdenv pkgs.llvmPackages.stdenv [
+    pkgs.llvm
+    pkgs.lld
+    pkgs.llvmPackages.clang-unwrapped
+  ];
 in
 {
   # boot.kernelPackages = pkgs.linuxPackagesFor (
   #   kernel.override {
   #     # Don't use nixos generic kernel options we do it ourselves
   #     enableCommonConfig = false;
+  #     extraMakeFlags = [
+  #       # gcc
+  #       # "KCFLAGS+=-O3"
+  #       # "KCFLAGS+=-mtune=todo"
+  #       # "KCFLAGS+=-march=todo"
+  #       # Clang/llvm flags
+  #       "KCFLAGS+=-O3"
+  #       "KCFLAGS+=-mtune=todo"
+  #       "KCFLAGS+=-march=todo"
+  #       "KCFLAGS+=-Wno-unused-command-line-argument"
+  #       "CC=${pkgs.llvmPackages.clang-unwrapped}/bin/clang"
+  #       "AR=${pkgs.llvm}/bin/llvm-ar"
+  #       "NM=${pkgs.llvm}/bin/llvm-nm"
+  #       "LD=${pkgs.lld}/bin/ld.lld"
+  #       "LLVM=1"
+  #     ];
+  #     stdenv = llvmKernelStdenv;
+  #     # Config generation failing usually corresponds to your config begin edited
+  #     # in the output due to the incompatible options and therefore also failing.
+  #     # ignoreConfigErrors = true;
+  #
+  #     # Start with an all-no config.  It is slightly easiler to pull together
+  #     # enough options to get this running than to whittle down the defaults.
+  #     # However, it is still a lot and you may miss some that are more important
+  #     # than what you gain by starting from a clean slate.
+  #     # defconfig = "ARCH=x86_64 allnoconfig";
   #     # This isn't relly used anyway
   #     features = { };
   #     # Don't build everything as a module
   #     autoModules = false;
+  #     # I think this is mostly a bad idea
   #     preferBuiltin = false;
   #     structuredExtraConfig = with lib.kernel; {
   #       # Needed by LUKS
   #       CRYPTO_USER_API_AEAD = yes;
+  #
+  #       # llvm lto
+  #       # We are not a k8s server
+  #       CPU_MITIGATIONS = lib.mkForce no;
+  #
+  #       # Clang options require a lot of extra config
+  #       CC_IS_CLANG = lib.mkForce yes;
+  #       LTO = lib.mkForce yes;
+  #       LTO_CLANG = lib.mkForce yes;
+  #       # full LTO is much more expsneive
+  #       LTO_CLANG_THIN = lib.mkForce yes;
   #     };
   #     kernelPatches = [
   #       # Things that evey kernel should or has to have
