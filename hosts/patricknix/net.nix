@@ -12,6 +12,9 @@
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
+  age.secrets.wg-priv-key = {
+    rekeyFile = ./secrets/wg-mpi-priv-key.age;
+  };
   age.secrets = {
     devoloog-psk.rekeyFile = ./secrets/iwd/devoloog-psk.age;
     devoloog-pass.rekeyFile = ./secrets/iwd/devoloog-pass.age;
@@ -37,6 +40,9 @@
           };
         };
       };
+    };
+    wg-quick.interfaces.wg-mpi = {
+      privateKeyFile = config.age.secrets.wg-priv-key.path;
     };
   };
 
