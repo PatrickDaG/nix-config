@@ -12,6 +12,9 @@
     rekeyFile = ./secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
+  age.secrets.wg-priv-key = {
+    rekeyFile = ./secrets/wg-mpi-priv-key.age;
+  };
   age.secrets = {
     devoloog-psk.rekeyFile = ./secrets/iwd/devoloog-psk.age;
     devoloog-pass.rekeyFile = ./secrets/iwd/devoloog-pass.age;
@@ -37,6 +40,32 @@
           };
         };
       };
+    };
+    wg-quick.interfaces.wg-mpi = {
+      address = [
+        "10.100.202.62/32"
+        "2a02:d480:a40:1:2000:0:202:62/128"
+      ];
+      dns = [
+        "10.100.1.25"
+        "10.100.1.26"
+        "10.100.1.27"
+        "mpi-sp.org"
+      ];
+      mtu = 1380;
+      autostart = false;
+      privateKeyFile = config.age.secrets.wg-priv-key.path;
+      peers = [
+        {
+          publicKey = "ZufCkzh6+NS2Fs2GnlAaG95U900oC+gUp77rZLcG4wU=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "141.5.46.36:51820";
+          persistentKeepalive = 20;
+        }
+      ];
     };
   };
 
