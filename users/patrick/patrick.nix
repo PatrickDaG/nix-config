@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
@@ -16,6 +17,7 @@
           la
         ]
       ))
+      inputs.flint.packages.${pkgs.stdenv.hostPlatform.system}.flint
       #keep-sorted start
       amazon
       bashInteractive

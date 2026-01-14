@@ -2,151 +2,280 @@
   description = "patricks tolle nix config";
 
   inputs = {
+    # The one, the only
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixp-meta.url = "git+https://forge.lel.lol/patrick/nixp-meta.git";
-    mdns.url = "git+https://forge.lel.lol/patrick/mdns-repeater.git";
-    idmail = {
-      url = "github:oddlama/idmail/";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nci.follows = "nci";
-    };
-    elewrap = {
-      url = "github:oddlama/elewrap";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nci.follows = "nci";
-    };
-    nci = {
-      url = "github:yusdacra/nix-cargo-integration";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
+
+    # deploy tool
+    nixp-meta = {
+      url = "git+https://forge.lel.lol/patrick/nixp-meta.git";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        flake-parts.follows = "flake-parts";
+        nci.follows = "nci";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
     };
 
-    nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
+    # Everything turns to dust eventually
+    impermanence.url = "github:nix-community/impermanence";
 
-    nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-gaming = {
-      url = "github:fufexan/nix-gaming";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # hardware configs
+    nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    nixos-extra-modules = {
-      url = "github:oddlama/nixos-extra-modules/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    microvm = {
-      url = "github:astro/microvm.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # More module systems
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
-    # to prevent multiple instances of systems
-    systems.url = "github:nix-systems/default";
-
+    # Disk formatting with nix
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Make boot secure
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs = {
+        # keep-sorted start
+        crane.follows = "crane";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit.follows = "pre-commit-hooks";
+        rust-overlay.follows = "rust-overlay";
+        # keep-sorted end
+      };
+    };
+
+    # generate installable images from my config
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Manage the home
     home-manager = {
       url = "github:nix-community/home-manager";
       # should use system nixpkgs instead of their own
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
+    # So I can be secret
     agenix = {
       url = "github:ryantm/agenix";
       inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
-
-    # Bin zu faul des zu kopieren
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
     };
 
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+    # VR application/modules
+    nixpkgs-xr = {
+      url = "github:nix-community/nixpkgs-xr";
+      inputs = {
+        # keep-sorted start
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
     };
 
+    # gaming modules
+    nix-gaming = {
+      url = "github:fufexan/nix-gaming";
+      inputs = {
+        # keep-sorted start
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+        # keep-sorted end
+      };
+    };
+
+    # Use nix to configure Niri
+    # All my homies hate KDL
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    # Configure nftables firewall with nix
     nixos-nftables-firewall = {
       url = "github:thelegy/nixos-nftables-firewall";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+    # Make good looking
+    stylix = {
+      url = "github:danth/stylix";
+      inputs = {
+        # keep-sorted start
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        # keep-sorted end
+      };
     };
 
-    nix-topology.url = "github:oddlama/nix-topology";
-
-    impermanence.url = "github:nix-community/impermanence";
-
-    nixos-hardware.url = "github:nixos/nixos-hardware";
-
+    # devshell for deving
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs = {
+        # keep-sorted start
+        nixpkgs.follows = "nixpkgs";
+        # keep-sorted end
+      };
+    };
+    # TODO: kinda useless currently because jujutsu
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
+    # Oddlama and my personal shared modules
+    nixos-extra-modules = {
+      url = "github:oddlama/nixos-extra-modules/main";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        # keep-sorted end
+      };
+    };
+
+    # My personal nix flake templates
+    templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
+
+    # Prebuilt database for comma, etc
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
+    # misc applications
+    mdns = {
+      url = "git+https://forge.lel.lol/patrick/mdns-repeater.git";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
     };
-
-    stylix.url = "github:danth/stylix";
-
+    idmail = {
+      url = "github:oddlama/idmail/";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        flake-parts.follows = "flake-parts";
+        nci.follows = "nci";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
+    };
+    elewrap = {
+      url = "github:oddlama/elewrap";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        nci.follows = "nci";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        flake-parts.follows = "flake-parts";
+        treefmt-nix.follows = "treefmt-nix";
+        # keep-sorted end
+      };
+    };
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-topology = {
+      url = "github:oddlama/nix-topology";
+      inputs = {
+        # keep-sorted start
+        devshell.follows = "devshell";
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        # keep-sorted end
+      };
+    };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs = {
+        # keep-sorted start
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        # keep-sorted end
+      };
+    };
     spicetify-nix = {
       url = "github:Gerg-l/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    # Don't override nixpks because of caching
     vicinae.url = "github:vicinaehq/vicinae";
     vicinae-extensions = {
       url = "github:vicinaehq/extensions";
+      inputs = {
+        # keep-sorted start
+        nixpkgs.follows = "nixpkgs";
+        vicinae.follows = "vicinae";
+        # keep-sorted end
+      };
+    };
+    flint = {
+      url = "github:NotAShelf/flint";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
+    # dependencies for deduplication
+    nci = {
+      url = "github:yusdacra/nix-cargo-integration";
+      inputs = {
+        # keep-sorted start
+        crane.follows = "crane";
+        nixpkgs.follows = "nixpkgs";
+        rust-overlay.follows = "rust-overlay";
+        treefmt.follows = "treefmt-nix";
+        # keep-sorted end
+      };
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs = {
+        # keep-sorted start
+        nixpkgs.follows = "nixpkgs";
+        # keep-sorted end
+      };
+    };
+    systems.url = "github:nix-systems/default";
+    flake-utils.url = "github:numtide/flake-utils";
+    crane.url = "github:ipetkov/crane";
+    # used by nixos-extra-modules automatically
+    microvm = {
+      url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

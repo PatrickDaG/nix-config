@@ -23,11 +23,9 @@
         systemd.user.startServices = "sd-switch";
       }
       #keep-sorted start
-      inputs.dms.homeModules.default
       inputs.nix-index-database.homeModules.nix-index
       inputs.nixos-extra-modules.modules.home-manager.default
       inputs.nixvim.homeModules.nixvim
-      inputs.noctalia.homeModules.default
       inputs.spicetify-nix.homeManagerModules.default
       #keep-sorted end
     ]

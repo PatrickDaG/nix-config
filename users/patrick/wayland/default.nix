@@ -43,16 +43,22 @@
   };
   services.displayManager.enable = true;
   imports = [
+    # keep-sorted start
     ./fuzzel.nix
-    #./noctalia.nix
-    ./waybar
     ./niri.nix
     ./swaync.nix
+    ./swww.nix
+    ./vicinae.nix
     ./wallpaper-engine.nix
+    #./noctalia.nix
+    ./waybar
+    # keep-sorted end
   ];
   hm.home.packages = with pkgs; [
+    # keep-sorted start
     wdisplays
-    wl-clipboard
     wev
+    wl-clipboard
+    # keep-sorted end
   ];
 }
