@@ -54,7 +54,6 @@
       pandoc # for obsidian
       pdfpc
       pinentry-gnome3 # for yubikey pinentry
-      qmk
       ripgrep-all
       signal-desktop
       streamlink
