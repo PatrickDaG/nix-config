@@ -1,5 +1,4 @@
-_:
-{
+_: {
   hm = {
     stylix.targets.swaync.enable = true;
 

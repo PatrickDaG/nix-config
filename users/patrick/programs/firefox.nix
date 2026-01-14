@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   ...
 }:
 let
@@ -230,20 +229,20 @@ in
         extensions = {
           packages = with pkgs.firefox-addons; [
             # keep-sorted start
-            ublock-origin
-            return-youtube-dislikes
-            sponsorblock
-            zotero-connector
             bitwarden
-            sidebery
-            linkwarden
-            single-file
             consent-o-matic
-            violentmonkey
-            user-agent-string-switcher
-            tabliss
-            refined-github
             kagi-search-for-firefox
+            linkwarden
+            refined-github
+            return-youtube-dislikes
+            sidebery
+            single-file
+            sponsorblock
+            tabliss
+            ublock-origin
+            user-agent-string-switcher
+            violentmonkey
+            zotero-connector
             # modern for wikipedia - not packaged
             # keep-sorted end
           ];

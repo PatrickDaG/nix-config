@@ -33,7 +33,11 @@
       };
     };
   };
-  networking.nftables.firewall.zones.untrusted.interfaces = [ "lan01" "wlan01" "wlan02"];
+  networking.nftables.firewall.zones.untrusted.interfaces = [
+    "lan01"
+    "wlan01"
+    "wlan02"
+  ];
   services.mullvad-vpn = {
     enable = true;
     package = pkgs.mullvad-vpn;

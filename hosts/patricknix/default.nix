@@ -1,18 +1,17 @@
 {
-  pkgs,
   inputs,
   lib,
   ...
 }:
-let
-  inherit (pkgs.linuxPackages) kernel;
-  # Stdenv with a few more LLVM tools available
-  llvmKernelStdenv = pkgs.stdenvAdapters.overrideInStdenv pkgs.llvmPackages.stdenv [
-    pkgs.llvm
-    pkgs.lld
-    pkgs.llvmPackages.clang-unwrapped
-  ];
-in
+# let
+#   inherit (pkgs.linuxPackages) kernel;
+#   # Stdenv with a few more LLVM tools available
+#   llvmKernelStdenv = pkgs.stdenvAdapters.overrideInStdenv pkgs.llvmPackages.stdenv [
+#     pkgs.llvm
+#     pkgs.lld
+#     pkgs.llvmPackages.clang-unwrapped
+#   ];
+# in
 {
   # boot.kernelPackages = pkgs.linuxPackagesFor (
   #   kernel.override {
