@@ -1,6 +1,9 @@
 { pkgs, lib, ... }:
 {
   hm.stylix.targets.kitty.enable = true;
+  hm.xdg.mimeApps.defaultApplications = {
+    "x-scheme-handler/terminal" = [ "kitty.desktop" ];
+  };
   hm.home.sessionVariables = {
     TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
     TERMINAL = "kitty";

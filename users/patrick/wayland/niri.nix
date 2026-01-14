@@ -47,7 +47,7 @@ in
             "Mod+T".action = spawn "kitty";
             "Mod+c".action = spawn "clone-term";
             "Mod+b".action = spawn "firefox";
-            "Menu".action = spawn "fuzzel";
+            "Menu".action = spawn "vicinae" "toggle";
             "Super+Alt+L".action = spawn "systemctl suspend";
             XF86AudioRaiseVolume = {
               action = spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";
