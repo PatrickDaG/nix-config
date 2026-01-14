@@ -36,7 +36,7 @@
     {
       systemd.user = {
         services.linux-wallpaperengine = {
-          Install.WantedBy = [ "graphical-session.target" ];
+          #Install.WantedBy = [ "graphical-session.target" ];
           Unit.After = [ "graphical-session.target" ];
           Unit.Description = "Wallpaper backgrounds";
           Service = {
