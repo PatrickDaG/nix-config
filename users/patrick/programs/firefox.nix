@@ -50,9 +50,33 @@ in
         })).override
           {
             nativeMessagingHosts = [
-              pkgs.tridactyl-native
             ];
           };
+      policies = {
+        AutofillAddressEnabled = false;
+        AutofillCreditCardEnabled = false;
+        DisableAppUpdate = true;
+        DisableFirefoxAccounts = true;
+        DisableFeedbackCommands = true;
+        DisableFirefoxStudies = true;
+        DisablePocket = true;
+        DisableTelemetry = true;
+        DontCheckDefaultBrowser = true;
+        NoDefaultBookmarks = true;
+        OfferToSaveLogins = false;
+        TranslateEnabled = false;
+        GenerativeAI.Enabled = false;
+        EnableTrackingProtection = {
+          Value = true;
+          Locked = true;
+          Cryptomining = true;
+          Fingerprinting = true;
+          EmailTracking = true;
+          SuspectedFingerprinting = true;
+          # Firefox builtin unbreak things
+          BaselineExceptions = true;
+        };
+      };
       profiles.patrick = {
         userChrome = ''
           #TabsToolbar {
@@ -231,7 +255,7 @@ in
             # keep-sorted start
             bitwarden
             consent-o-matic
-            kagi-search-for-firefox
+            kagi-search
             linkwarden
             refined-github
             return-youtube-dislikes
@@ -241,6 +265,7 @@ in
             tabliss
             ublock-origin
             user-agent-string-switcher
+            vimium-c
             violentmonkey
             zotero-connector
             # modern for wikipedia - not packaged
