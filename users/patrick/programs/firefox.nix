@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   inherit (lib) concatStringsSep escapeShellArg mapAttrsToList;
   env = {
@@ -169,7 +174,79 @@ in
                 }
               ];
             };
+            "Nix Packages" = {
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "channel";
+                      value = "unstable";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@np" ];
+            };
+
+            "Nix Options" = {
+              urls = [
+                {
+                  template = "https://search.xn--nschtos-n2a.de/";
+                  params = [
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@no" ];
+            };
+
+            "NixOS Wiki" = {
+              urls = [
+                {
+                  template = "https://wiki.nixos.org/w/index.php";
+                  params = [
+                    {
+                      name = "search";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@nw" ];
+            };
           };
+        };
+        extensions = {
+          packages = with pkgs.firefox-addons; [
+            # keep-sorted start
+            ublock-origin
+            return-youtube-dislikes
+            sponsorblock
+            zotero-connector
+            bitwarden
+            sidebery
+            linkwarden
+            single-file
+            consent-o-matic
+            violentmonkey
+            user-agent-string-switcher
+            tabliss
+            refined-github
+            kagi-search-for-firefox
+            # modern for wikipedia - not packaged
+            # keep-sorted end
+          ];
         };
       };
     };
