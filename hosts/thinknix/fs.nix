@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -10,14 +9,14 @@
     disk = {
       m2-ssd = rec {
         type = "disk";
-        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.m2-ssd}";
+        device = "/dev/disk/by-id/${config.secrets.secrets.local.disko.ssd}";
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "1GiB") // {
+            boot = (partEfi "1G") // {
               device = "${device}-part1";
             };
-            swap = (partSwap "16GiB") // {
+            swap = (partSwap "32G") // {
               device = "${device}-part2";
             };
             rpool = (partLuksZfs "rpool" "rpool" "100%") // {
@@ -34,7 +33,7 @@
   fileSystems."/state".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
   systemIdentity = {
-    enable = true;
-    pcr15 = "a8cfdc8ec869f9edf4635129ba6bb19a076a5d234655cf4684286dc57e325a38";
+    enable = false;
+    pcr15 = "";
   };
 }

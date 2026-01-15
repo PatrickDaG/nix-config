@@ -9,17 +9,11 @@
     "/etc/mullvad-vpn"
   ];
   age.secrets.eduroam = {
-    rekeyFile = ./secrets/iwd/eduroam.8021x.age;
+    rekeyFile = ../patricknix/secrets/iwd/eduroam.8021x.age;
     path = "/var/lib/iwd/eduroam.8021x";
   };
   age.secrets.wg-priv-key = {
-    rekeyFile = ./secrets/wg-mpi-priv-key.age;
-  };
-  age.secrets = {
-    devoloog-psk.rekeyFile = ./secrets/iwd/devoloog-psk.age;
-    devoloog-pass.rekeyFile = ./secrets/iwd/devoloog-pass.age;
-    devoloog-sae19.rekeyFile = ./secrets/iwd/devoloog-sae19.age;
-    devoloog-sae20.rekeyFile = ./secrets/iwd/devoloog-sae20.age;
+    rekeyFile = ../patricknix/secrets/wg-mpi-priv-key.age;
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [
     "lan01"
@@ -30,16 +24,6 @@
     inherit (config.secrets.secrets.local.networking) hostId;
     wireless.iwd = {
       enable = true;
-      networks = {
-        devolo-og.settings = {
-          Security = {
-            PreSharedKey = config.age.secrets.devoloog-psk.path;
-            Passphrase = config.age.secrets.devoloog-pass.path;
-            SAE-PT-Group19 = config.age.secrets.devoloog-sae19.path;
-            SAE-PT-Group20 = config.age.secrets.devoloog-sae20.path;
-          };
-        };
-      };
     };
     wg-quick.interfaces.wg-mpi = {
       address = [
