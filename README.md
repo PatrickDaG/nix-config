@@ -68,7 +68,7 @@ These are notable external flakes which this config depend upon
 
 
 
-## How-To                                                                            PP-Bizon | Facility Sketch
+## How-To
 
 ### Add additional hosts
 
