@@ -6,7 +6,9 @@
   ...
 }:
 {
-  hardware = lib.mkIf (!minimal) {
+  # Should be minima because it's quite large(~700 MB)
+  # Should not be minimal because then you have missing firmware on reboot
+  hardware = {
     enableRedistributableFirmware = true;
     enableAllFirmware = true;
   };
