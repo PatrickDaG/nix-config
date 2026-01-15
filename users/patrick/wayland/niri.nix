@@ -162,28 +162,14 @@ in
             # You can refer to workspaces by index. However, keep in mind that
             # niri is a dynamic workspace system, so these commands are kind of
             # "best effort". Trying to refer to a workspace index bigger than
-            # the current workspace count will instead refer to the bottommost
+            # the current workspace count will instead refer to the topmost
             # (empty) workspace.
             #
             # For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
             # will all refer to the 3rd workspace.
+            # keep this one just in case. All configs should have a "default" workspace
             "Mod+j".action = focus-workspace "default";
             "Mod+Shift+j".action.move-window-to-workspace = "default";
-
-            "Mod+d".action = focus-workspace "mail";
-            "Mod+Shift+d".action.move-window-to-workspace = "mail";
-
-            "Mod+u".action = focus-workspace "games";
-            "Mod+Shift+u".action.move-window-to-workspace = "games";
-
-            "Mod+F1".action = focus-workspace "browser";
-            "Mod+Shift+F1".action.move-window-to-workspace = "browser";
-
-            "Mod+F2".action = focus-workspace "notes";
-            "Mod+Shift+F2".action.move-window-to-workspace = "notes";
-
-            "Mod+F3".action = focus-workspace "comms";
-            "Mod+Shift+F3".action.move-window-to-workspace = "comms";
 
           };
 
@@ -214,6 +200,10 @@ in
             {
               matches = [ { app-id = "discord"; } ];
               open-on-workspace = "comms";
+            }
+            {
+              matches = [ { app-id = "Slack"; } ];
+              open-on-workspace = "slack";
             }
 
             {
@@ -380,26 +370,86 @@ in
               open-on-output = "HDMI-A-1";
             };
           };
+          binds = with config.lib.niri.actions; {
+            "Mod+d".action = focus-workspace "mail";
+            "Mod+Shift+d".action.move-window-to-workspace = "mail";
+
+            "Mod+u".action = focus-workspace "games";
+            "Mod+Shift+u".action.move-window-to-workspace = "games";
+
+            "Mod+F1".action = focus-workspace "browser";
+            "Mod+Shift+F1".action.move-window-to-workspace = "browser";
+
+            "Mod+F2".action = focus-workspace "notes";
+            "Mod+Shift+F2".action.move-window-to-workspace = "notes";
+
+            "Mod+F3".action = focus-workspace "comms";
+            "Mod+Shift+F3".action.move-window-to-workspace = "comms";
+          };
 
           spawn-at-startup = [
             { command = [ "thunderbird" ]; }
-            { command = [ "zotero" ]; }
           ];
         };
         patricknix = {
           outputs."eDP-1" = {
             scale = 2.0;
+            position = {
+              x = 2560 * 2;
+              y = 960;
+            };
+          };
+          outputs."DP-2" = {
+            position = {
+              x = 0;
+              y = 0;
+            };
+          };
+          outputs."DP-3" = {
+            position = {
+              x = 2560;
+              y = 0;
+            };
           };
           workspaces = {
-            "1default" = {
-              name = "default";
-              open-on-output = "eDP-1";
-            };
-            "2notes" = {
+            "1notes" = {
               name = "notes";
               open-on-output = "eDP-1";
             };
+            "1default" = {
+              name = "default";
+              open-on-output = "DP-3";
+            };
+            "2mail" = {
+              name = "mail";
+              open-on-output = "DP-3";
+            };
+            "1second" = {
+              name = "second";
+              open-on-output = "DP-2";
+            };
+            "2slack" = {
+              name = "slack";
+              open-on-output = "DP-2";
+            };
           };
+          binds = with config.lib.niri.actions; {
+            "Mod+d".action = focus-workspace "mail";
+            "Mod+Shift+d".action.move-window-to-workspace = "mail";
+
+            "Mod+F1".action = focus-workspace "second";
+            "Mod+Shift+F1".action.move-window-to-workspace = "second";
+
+            "Mod+F2".action = focus-workspace "slack";
+            "Mod+Shift+F2".action.move-window-to-workspace = "slack";
+
+            "Mod+F3".action = focus-workspace "notes";
+            "Mod+Shift+F3".action.move-window-to-workspace = "notes";
+          };
+          spawn-at-startup = [
+            { command = [ "thunderbird" ]; }
+            { command = [ "zotero" ]; }
+          ];
         };
 
       };
