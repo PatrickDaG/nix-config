@@ -268,6 +268,7 @@ in
             vimium-c
             violentmonkey
             zotero-connector
+            cookie-autodelete
             # modern for wikipedia - not packaged
             # keep-sorted end
           ];

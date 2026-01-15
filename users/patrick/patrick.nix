@@ -67,6 +67,8 @@
       ytdlp-pot-provider
       zathura
       zotero
+      zulip
+      slack
       #keep-sorted end
     ];
   };

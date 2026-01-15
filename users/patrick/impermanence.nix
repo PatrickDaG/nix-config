@@ -66,6 +66,8 @@
         ".factorio"
 
         ".config/obsidian"
+        ".config/Zulip"
+        ".config/Slack"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [
