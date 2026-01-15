@@ -4,6 +4,7 @@
   flake = {
     secretsConfig = {
       masterIdentities = [
+        # This has the downside that I cannot encrypt thing without a yubikey present
         "/run/yubikey/age-key"
         ../keys/PatC.pub
         ../keys/PatA.pub
