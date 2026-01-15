@@ -15,6 +15,7 @@
           pkgs.jq
         ];
         text = ''
+          # shellcheck disable=2034 # Ignore unused files in case no niri outputs are configured
           FILES=("${asset-dir}"/*)
           ${
             lib.concatStringsSep " " (
