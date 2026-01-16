@@ -1,21 +1,8 @@
 {
   pkgs,
   inputs,
-  lib,
   ...
 }:
-let
-  fuzzy-files-with-gf =
-    inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.fuzzy-files.overrideAttrs
-      {
-        patches = [
-          ./fuzzy-finder-goldfish.patch
-        ];
-        postPatch = ''
-          substituteInPlace src/find.tsx --replace "%%GOLDFISH%%" "${lib.getExe pkgs.goldfish}"
-        '';
-      };
-in
 {
   #hm.stylix.targets.vicinae.enable = true;
   hm = {
@@ -49,6 +36,9 @@ in
         };
         launcher_window = {
           opacity = 0.98;
+          layer_shell = {
+            layer = "overlay";
+          };
         };
         providers = {
           raycast-compat.enabled = false;
@@ -133,6 +123,7 @@ in
         #dbus # Currently broken nix build due to 'node-gyp'
         fuzzy-files
         firefox
+        mullvad
         niri
         nix
         player-pilot
