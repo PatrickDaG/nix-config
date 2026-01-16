@@ -70,6 +70,7 @@
         ".config/obsidian"
         ".config/Zulip"
         ".config/Slack"
+        ".local/share/Terraria"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [
