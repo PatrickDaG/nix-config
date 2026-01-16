@@ -11,6 +11,7 @@ _inputs: [
     nix-plugins = prev.callPackage ./nix-plugins.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     goldfish = prev.callPackage ./goldfish.nix { };
+    soulver-cpp = prev.callPackage ./soulver-cpp.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
