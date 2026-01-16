@@ -25,6 +25,7 @@
     ../../config/support/yubikey.nix
     ../../config/support/secureboot.nix
     ../../config/support/zfs.nix
+    ../../config/support/nix-builder.nix
     #keep-sorted end
 
     ./net.nix

@@ -76,7 +76,23 @@ lib.optionalAttrs (!minimal) {
         sshKey = "/run/builder-unlock/mailnix";
         supportedFeatures = [ ];
         publicHostKey = builtins.readFile "${pkgs.runCommand "MailnixHostKey" { }
-          ''${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out''
+          "${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out"
+        }";
+      }
+      {
+        hostName = "thinknix.local";
+        protocol = "ssh-ng";
+        sshUser = "build";
+        system = "x86_64-linux";
+        sshKey = "/run/builder-unlock/thinknix";
+        supportedFeatures = [
+          "kvm"
+          "benchmark"
+          "nixos-test"
+          "big-parallel"
+        ];
+        publicHostKey = builtins.readFile "${pkgs.runCommand "ThinknixHostKey" { }
+          "${pkgs.coreutils}/bin/base64 -w0 ${nodes.thinknix.config.node.secretsDir}/host.pub > $out"
         }";
       }
     ];

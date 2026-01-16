@@ -6,6 +6,7 @@
     ../../config/support/zfs.nix
     ../../config/services/idmail.nix
     ../../config/services/stalwart.nix
+    ../../config/support/nix-builder.nix
 
     ./net.nix
     ./fs.nix
@@ -25,13 +26,5 @@
     };
   };
   nixpkgs.hostPlatform = "aarch64-linux";
-  users.users.build = {
-    isSystemUser = true;
-    shell = pkgs.bash;
-    group = "nogroup";
-    extraGroups = [ "nix-build" ];
-    createHome = false;
-  };
-  users.groups.nix-build = { };
   topology.self.icon = "devices.cloud-server";
 }

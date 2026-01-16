@@ -103,16 +103,16 @@
     log_level = "notice";
   };
 
-  services.firefly-pico = {
-    enable = true;
-    enableNginx = true;
-    virtualHost = globals.services.fireflypico.domain;
-    settings = {
-      APP_URL = "https://${globals.services.fireflypico.domain}";
-      TZ = "Europe/Berlin";
-      FIREFLY_URL = "http://${globals.services.firefly.domain}";
-      APP_KEY_FILE = config.age.secrets.appKeyPico.path;
-    };
-  };
+  # services.firefly-pico = {
+  #   enable = true;
+  #   enableNginx = true;
+  #   virtualHost = globals.services.fireflypico.domain;
+  #   settings = {
+  #     APP_URL = "https://${globals.services.fireflypico.domain}";
+  #     TZ = "Europe/Berlin";
+  #     FIREFLY_URL = "http://${globals.services.firefly.domain}";
+  #     APP_KEY_FILE = config.age.secrets.appKeyPico.path;
+  #   };
+  # };
 
 }
