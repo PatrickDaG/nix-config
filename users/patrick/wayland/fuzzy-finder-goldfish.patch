@@ -1,0 +1,14 @@
+diff --git a/src/find.tsx b/src/find.tsx
+index c69c6e7..9b8ef0e 100644
+--- a/src/find.tsx
++++ b/src/find.tsx
+@@ -30,7 +30,7 @@ const MIME = (mime: string): keyof typeof Icon => {
+ 
+ let depsInstalled = true
+ function Finder() {
+-  const process = spawn('gf', {
++  const process = spawn('%%GOLDFISH%%', {
+     stdio: ['pipe', 'pipe', 'ignore']
+   })
+   process.on('error', (e: Error) => {
+

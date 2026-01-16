@@ -250,11 +250,9 @@ in
                 "relative-to" = "bottom-right";
               };
             }
-
           ];
 
           spawn-at-startup = [
-            { command = [ "obsidian" ]; }
             { command = [ "firefox" ]; }
           ];
 
@@ -393,6 +391,7 @@ in
 
           spawn-at-startup = [
             { command = [ "thunderbird" ]; }
+            { command = [ "obsidian" ]; }
           ];
         };
         patricknix = {
@@ -416,48 +415,15 @@ in
             };
           };
           workspaces = {
-            "1notes" = {
-              name = "notes";
-              open-on-output = "eDP-1";
-            };
             "1default" = {
               name = "default";
-              open-on-output = "DP-3";
-            };
-            "2mail" = {
-              name = "mail";
-              open-on-output = "DP-3";
-            };
-            "1second" = {
-              name = "second";
-              open-on-output = "DP-2";
-            };
-            "2slack" = {
-              name = "slack";
-              open-on-output = "DP-2";
+              open-on-output = "eDP-1";
             };
           };
-          binds = with config.lib.niri.actions; {
-            "Mod+d".action = focus-workspace "mail";
-            "Mod+Shift+d".action.move-window-to-workspace = "mail";
-
-            "Mod+F1".action = focus-workspace "second";
-            "Mod+Shift+F1".action.move-window-to-workspace = "second";
-
-            "Mod+F2".action = focus-workspace "slack";
-            "Mod+Shift+F2".action.move-window-to-workspace = "slack";
-
-            "Mod+F3".action = focus-workspace "notes";
-            "Mod+Shift+F3".action.move-window-to-workspace = "notes";
-          };
-          spawn-at-startup = [
-            { command = [ "thunderbird" ]; }
-            { command = [ "zotero" ]; }
-          ];
         };
         thinknix = {
           outputs."eDP-1" = {
-            scale = 1.5;
+            scale = 2.0;
             position = {
               x = 2560 * 2;
               y = 960;
@@ -519,6 +485,7 @@ in
             "Mod+Shift+F3".action.move-window-to-workspace = "notes";
           };
           spawn-at-startup = [
+            { command = [ "obsidian" ]; }
             { command = [ "thunderbird" ]; }
             { command = [ "zotero" ]; }
             { command = [ "slack" ]; }

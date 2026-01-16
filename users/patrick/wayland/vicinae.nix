@@ -1,4 +1,21 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
+let
+  fuzzy-files-with-gf =
+    inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.fuzzy-files.overrideAttrs
+      {
+        patches = [
+          ./fuzzy-finder-goldfish.patch
+        ];
+        postPatch = ''
+          substituteInPlace src/find.tsx --replace "%%GOLDFISH%%" "${lib.getExe pkgs.goldfish}"
+        '';
+      };
+in
 {
   #hm.stylix.targets.vicinae.enable = true;
   hm = {
@@ -115,6 +132,7 @@
         bluetooth
         #dbus # Currently broken nix build due to 'node-gyp'
         fuzzy-files
+        firefox
         niri
         nix
         player-pilot

@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "goldfish (`gf`) is a IPC file finder.";
     homepage = "https://github.com/sameoldlab/goldfish";
     license = lib.licenses.mpl20;
-    mainProgram = "goldfish";
+    mainProgram = "gf";
   };
 })
