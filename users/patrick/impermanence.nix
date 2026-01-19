@@ -41,6 +41,8 @@
 
         ".local/share/monado"
 
+        ".local/share/keyrings"
+
         # For nextcloud client install
         "Nextcloud"
         ".config/Nextcloud"
