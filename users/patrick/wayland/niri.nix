@@ -463,6 +463,7 @@ in
               y = 960;
             };
           };
+          # at work
           outputs."DP-7" = {
             position = {
               x = 0;
@@ -473,6 +474,13 @@ in
             position = {
               x = 2560;
               y = 0;
+            };
+          };
+          # at home
+          outputs."HDMI-A-1" = {
+            position = {
+              x = 2560;
+              y = 960;
             };
           };
           workspaces = {

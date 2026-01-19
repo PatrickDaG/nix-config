@@ -116,7 +116,7 @@ in
             "${modifier}+b" = "exec firefox";
             "${modifier}+m" = "exec thunderbird";
             "${modifier}+q" = "kill";
-            "${modifier}+c" = "exec ${lib.getExe pkgs.scripts.clone-term}";
+            "${modifier}+c" = "exec ${lib.getExe pkgs.pat-scripts.clone-term}";
             "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play-pause";
             "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl next";
             "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl previous";
