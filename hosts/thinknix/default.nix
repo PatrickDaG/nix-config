@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   lib,
   config,
   ...
@@ -48,6 +49,20 @@
       touchpad = lib.mkForce { accelSpeed = "0.5"; };
     };
   };
+
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
+  environment.persistence."/state".directories = [
+    "/var/lib/fprintd"
+  ];
+
+  #services.thinkfan.enable = true;
+
   nixpkgs.hostPlatform = "x86_64-linux";
   nix.settings.system-features = [
     "kvm"

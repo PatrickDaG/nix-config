@@ -2,7 +2,6 @@
 {
   config,
   minimal,
-  lib,
   ...
 }:
 {
