@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
@@ -42,6 +43,16 @@
     ];
   };
   services.displayManager.enable = true;
+
+  security.pam.services.swaylock = { };
+  hm.services.swayidle = {
+    enable = true;
+    events = {
+      "before-sleep" = "${pkgs.swaylock}/bin/swaylock -fF";
+      "lock" = "${pkgs.swaylock}/bin/swaylock -fF";
+    };
+  };
+
   imports = [
     # keep-sorted start
     ./fuzzel.nix

@@ -58,7 +58,7 @@
     };
   };
   environment.persistence."/state".directories = [
-    "/var/lib/fprintd"
+    "/var/lib/fprint"
   ];
 
   #services.thinkfan.enable = true;

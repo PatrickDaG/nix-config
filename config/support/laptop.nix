@@ -11,10 +11,6 @@
       SuspendKeyIgnoreInhibited = "yes";
       HibernateKeyIgnoreInhibited = "yes";
     };
-    physlock = {
-      enable = true;
-      muteKernelMessages = true;
-    };
     tlp = {
       enable = true;
       settings = {
