@@ -65,6 +65,30 @@
           "tray"
           "custom/notification"
         ];
+        thinknix = [
+          "cpu"
+          "memory"
+          "wireplumber"
+          "network"
+          "bluetooth"
+          "backlight"
+          "battery"
+          "clock"
+          "tray"
+          "custom/notification"
+        ];
+        default = [
+          "cpu"
+          "memory"
+          "wireplumber"
+          "network"
+          "bluetooth"
+          "backlight"
+          "battery"
+          "clock"
+          "tray"
+          "custom/notification"
+        ];
       };
 
       battery = {

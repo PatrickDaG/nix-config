@@ -81,5 +81,6 @@
     lib.mkMerge (
       (lib.optional (arg ? "all") arg.all)
       ++ (lib.optional (arg ? "${config.node.name}") arg."${config.node.name}")
+      ++ (lib.optional (!(arg ? "${config.node.name}") && arg ? "default") arg.default)
     );
 }

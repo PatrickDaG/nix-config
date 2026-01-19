@@ -205,6 +205,10 @@ in
               matches = [ { app-id = "Slack"; } ];
               open-on-workspace = "slack";
             }
+            {
+              matches = [ { app-id = "Zulip"; } ];
+              open-on-workspace = "slack";
+            }
 
             {
               matches = [ { app-id = "obsidian"; } ];
@@ -449,6 +453,68 @@ in
           spawn-at-startup = [
             { command = [ "thunderbird" ]; }
             { command = [ "zotero" ]; }
+          ];
+        };
+        thinknix = {
+          outputs."eDP-1" = {
+            scale = 1.5;
+            position = {
+              x = 2560 * 2;
+              y = 960;
+            };
+          };
+          outputs."DP-7" = {
+            position = {
+              x = 0;
+              y = 0;
+            };
+          };
+          outputs."DP-5" = {
+            position = {
+              x = 2560;
+              y = 0;
+            };
+          };
+          workspaces = {
+            "1notes" = {
+              name = "notes";
+              open-on-output = "eDP-1";
+            };
+            "1default" = {
+              name = "default";
+              open-on-output = "DP-5";
+            };
+            "2mail" = {
+              name = "mail";
+              open-on-output = "DP-5";
+            };
+            "1second" = {
+              name = "second";
+              open-on-output = "DP-7";
+            };
+            "2slack" = {
+              name = "slack";
+              open-on-output = "DP-7";
+            };
+          };
+          binds = with config.lib.niri.actions; {
+            "Mod+d".action = focus-workspace "mail";
+            "Mod+Shift+d".action.move-window-to-workspace = "mail";
+
+            "Mod+F1".action = focus-workspace "second";
+            "Mod+Shift+F1".action.move-window-to-workspace = "second";
+
+            "Mod+F2".action = focus-workspace "slack";
+            "Mod+Shift+F2".action.move-window-to-workspace = "slack";
+
+            "Mod+F3".action = focus-workspace "notes";
+            "Mod+Shift+F3".action.move-window-to-workspace = "notes";
+          };
+          spawn-at-startup = [
+            { command = [ "thunderbird" ]; }
+            { command = [ "zotero" ]; }
+            { command = [ "slack" ]; }
+            { command = [ "zulip" ]; }
           ];
         };
 
