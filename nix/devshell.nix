@@ -44,13 +44,13 @@
             package = pkgs.symlinkJoin {
               name = "locker";
               paths = [
-                pkgs.scripts.unlock
-                pkgs.scripts.lock
+                pkgs.pat-scripts.unlock
+                pkgs.pat-scripts.lock
               ];
             };
           }
           {
-            package = pkgs.scripts.update;
+            package = pkgs.pat-scripts.update;
             help = "update nix configurations";
           }
           {

@@ -7,7 +7,6 @@
 }:
 {
   imports = [
-    ../../modules-hm/impermanence.nix
     ../../modules-hm/hm-all.nix
   ];
   home-manager = {

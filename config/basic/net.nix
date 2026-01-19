@@ -42,11 +42,11 @@
   systemd.services.systemd-resolved.stopIfChanged = false;
   services.resolved = {
     enable = true;
-    # man I whish dnssec would be viable to use
-    dnssec = "false";
-    llmnr = "false";
-    extraConfig = ''
-      MulticastDNS=false
-    '';
+    settings.Resolve = {
+      MulticastDNS = false;
+      LLMNR = "false";
+      # man I whish dnssec would be viable to use
+      DNSSEC = "false";
+    };
   };
 }

@@ -520,7 +520,7 @@ in
 
       };
       home.packages = [
-        pkgs.scripts.clone-term
+        pkgs.pat-scripts.clone-term
       ];
     };
 }

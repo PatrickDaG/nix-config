@@ -211,14 +211,7 @@
     };
     nix-topology = {
       url = "github:oddlama/nix-topology";
-      inputs = {
-        # keep-sorted start
-        devshell.follows = "devshell";
-        flake-utils.follows = "flake-utils";
-        nixpkgs.follows = "nixpkgs";
-        pre-commit-hooks.follows = "pre-commit-hooks";
-        # keep-sorted end
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -248,7 +241,6 @@
       url = "github:NotAShelf/flint";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
 
     # dependencies for deduplication
     nci = {
