@@ -34,6 +34,14 @@
         	transition-duration: .1s;
         }
       '';
+      default = ''
+        * {
+        	/* `otf-font-awesome` is required to be installed for icons */
+        	font-family: "Symbols Nerd Font Mono", "JetBrains Mono";
+        	font-size: 10px;
+        	transition-duration: .1s;
+        }
+      '';
     };
     settings.main = {
       layer = "top";
