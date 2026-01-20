@@ -23,6 +23,7 @@
     ../../config/support/pipewire.nix
     ../../config/support/printing.nix
     ../../config/support/yubikey.nix
+    ../../config/support/secureboot.nix
     ../../config/support/zfs.nix
     #keep-sorted end
 
@@ -31,6 +32,10 @@
 
     ../../users/patrick
   ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.zfs.package = pkgs.zfs_2_4;
+
   hardware.trackpoint.enable = lib.mkDefault true;
   hardware.trackpoint.emulateWheel = lib.mkDefault config.hardware.trackpoint.enable;
 
