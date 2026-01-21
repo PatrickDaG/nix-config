@@ -10,7 +10,11 @@
       home.sessionVariables.COMMA_CACHING = "0";
 
       # has to be enabled to support zsh reverse search
-      programs.fzf.enable = true;
+      programs.fzf = {
+        enable = true;
+        # copy terminal background
+        colors.bg = lib.mkForce "#000000";
+      };
 
       programs.carapace = {
         enable = false;
