@@ -61,6 +61,7 @@
       p.flake = inputs.nixpkgs;
       pkgs.flake = inputs.nixpkgs;
       templates.flake = inputs.templates;
+      t.flake = inputs.templates;
     };
   };
   system = {

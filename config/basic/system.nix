@@ -8,6 +8,10 @@
 {
   system.stateVersion = "24.05";
 
+  # For some reason this is default enabled by this file
+  # https://github.com/nixos/nixpkgs/blob/master/nixos/modules/services/misc/graphical-desktop.nix
+  services.speechd.enable = false;
+
   age.rekey = {
     inherit (inputs.self.secretsConfig) masterIdentities extraEncryptionPubkeys;
 
