@@ -209,6 +209,10 @@ in
               matches = [ { app-id = "Zulip"; } ];
               open-on-workspace = "slack";
             }
+            {
+              matches = [ { app-id = "Element"; } ];
+              open-on-workspace = "slack";
+            }
 
             {
               matches = [ { app-id = "obsidian"; } ];
@@ -423,7 +427,7 @@ in
         };
         thinknix = {
           outputs."eDP-1" = {
-            scale = 2.0;
+            scale = 1.5;
             position = {
               x = 2560 * 2;
               y = 960;

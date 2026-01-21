@@ -95,12 +95,6 @@
               "hibernate" = {
                 "enabled" = false;
               };
-              "lock" = {
-                "enabled" = false;
-                "preferences" = {
-                  "customProgram" = "heheheha";
-                };
-              };
               "sleep" = {
                 "enabled" = false;
               };
