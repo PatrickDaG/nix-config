@@ -263,3 +263,18 @@ function zshaddhistory() {
 }
 # Set umask
 umask 077
+# functions
+mcd () {
+	mkdir -p "$1"
+	cd "$1"
+}
+wo () {
+	realpath "$(which "$1")"
+}
+
+nedit () {
+	cp --remove-destination "$(realpath "$1")" "$1"
+	chmod 640 "$1"
+	"$EDITOR" "$1"
+}
+
