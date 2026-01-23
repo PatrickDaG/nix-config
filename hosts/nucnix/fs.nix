@@ -30,4 +30,5 @@
 
   boot.kernel.sysctl."fs.inotify.max_user_instances" = 1024;
 
+  snapshots.zfs = true;
 }

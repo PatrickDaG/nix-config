@@ -23,6 +23,5 @@
       rpool = mkZpool { datasets = impermanenceZfsDatasets; };
     };
   };
-
-  boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
+  snapshots.zfs = true;
 }

@@ -39,5 +39,6 @@
 
     tmp.useTmpfs = true;
     loader.timeout = lib.mkDefault 2;
+    initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
   };
 }

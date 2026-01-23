@@ -5,6 +5,7 @@
   ...
 }:
 {
+  snapshots.zfs = true;
   disko.devices = {
     disk = {
       internal-ssd = rec {
