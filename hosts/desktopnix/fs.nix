@@ -56,8 +56,6 @@
     };
   };
 
-  fileSystems."/state".neededForBoot = true;
-  fileSystems."/persist".neededForBoot = true;
   fileSystems."/panzer/state".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-panzer".after = [ "cryptsetup.target" ];
   boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];

@@ -24,7 +24,5 @@
     };
   };
 
-  fileSystems."/state".neededForBoot = true;
-  fileSystems."/persist".neededForBoot = true;
   boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
 }

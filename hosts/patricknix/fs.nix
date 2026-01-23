@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -31,8 +30,6 @@
       rpool = mkZpool { datasets = impermanenceZfsDatasets; };
     };
   };
-  fileSystems."/state".neededForBoot = true;
-  fileSystems."/persist".neededForBoot = true;
   systemIdentity = {
     enable = true;
     pcr15 = "a8cfdc8ec869f9edf4635129ba6bb19a076a5d234655cf4684286dc57e325a38";

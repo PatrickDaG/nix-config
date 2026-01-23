@@ -30,8 +30,6 @@
       rpool = mkZpool { datasets = impermanenceZfsDatasets; };
     };
   };
-  fileSystems."/state".neededForBoot = true;
-  fileSystems."/persist".neededForBoot = true;
   systemIdentity = {
     enable = false;
     pcr15 = "";
