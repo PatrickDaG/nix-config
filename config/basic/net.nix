@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  globals,
   ...
 }:
 {
@@ -47,6 +48,22 @@
       LLMNR = "false";
       # man I whish dnssec would be viable to use
       DNSSEC = "false";
+      DNSOverTLS = "yes";
+      DNS =
+        let
+          id = globals.net.dns.default;
+          # Split the 6-character ID into two parts: first 2 chars and last 4 chars
+          part1 = builtins.substring 0 2 id;
+          part2 = builtins.substring 2 4 id;
+          ip = [
+            "2a07:a8c0::${part1}:${part2}"
+            "2a07:a8c1::${part1}:${part2}"
+            "45.90.28.138"
+            "45.90.30.138"
+          ];
+          dns = "${id}.dns.nextdns.io";
+        in
+        lib.flip lib.map ip (ip: "${ip}#${config.node.name}-${dns}");
     };
   };
 }

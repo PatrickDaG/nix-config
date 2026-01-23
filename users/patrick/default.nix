@@ -87,4 +87,5 @@ lib.optionalAttrs (!minimal) {
     ./programs/zsh
 
   ];
+
 }

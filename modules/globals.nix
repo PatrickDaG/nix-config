@@ -82,40 +82,47 @@ in
               };
             };
           };
-          net.vlans = mkOption {
-            default = { };
-            type = types.attrsOf (
-              types.submodule (vlanNetSubmod: {
-                options = {
-                  id = mkOption {
-                    type = types.ints.between 1 4094;
-                    description = "The VLAN id";
-                  };
+          net = {
+            dns = mkOption {
+              description = "NextDNS profile endpoint ids";
+              type = types.attrsOf types.str;
+              default = { };
+            };
+            vlans = mkOption {
+              default = { };
+              type = types.attrsOf (
+                types.submodule (vlanNetSubmod: {
+                  options = {
+                    id = mkOption {
+                      type = types.ints.between 1 4094;
+                      description = "The VLAN id";
+                    };
 
-                  cidrv4 = mkOption {
-                    type = types.nullOr types.net.cidrv4;
-                    default = null;
-                    description = "The CIDRv4 of this vlan";
-                  };
-                  cidrv6 = mkOption {
-                    type = types.nullOr types.net.cidrv6;
-                    default = null;
-                    description = "The CIDRv6 of this vlan";
-                  };
-                  internet = mkOption {
-                    type = types.bool;
-                    default = true;
-                    description = "Whether this vlan is connected to the internet";
-                  };
+                    cidrv4 = mkOption {
+                      type = types.nullOr types.net.cidrv4;
+                      default = null;
+                      description = "The CIDRv4 of this vlan";
+                    };
+                    cidrv6 = mkOption {
+                      type = types.nullOr types.net.cidrv6;
+                      default = null;
+                      description = "The CIDRv6 of this vlan";
+                    };
+                    internet = mkOption {
+                      type = types.bool;
+                      default = true;
+                      description = "Whether this vlan is connected to the internet";
+                    };
 
-                  name = mkOption {
-                    description = "The name of this VLAN";
-                    default = vlanNetSubmod.config._module.args.name;
-                    type = types.str;
+                    name = mkOption {
+                      description = "The name of this VLAN";
+                      default = vlanNetSubmod.config._module.args.name;
+                      type = types.str;
+                    };
                   };
-                };
-              })
-            );
+                })
+              );
+            };
           };
 
           services = mkOption {
