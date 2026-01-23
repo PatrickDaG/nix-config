@@ -57,21 +57,23 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wget
-    tree
-    rage
-    file
+    # keep-sorted start
+    bat
     dua
-    ripgrep
-    killall
     fd
+    file
+    killall
     kitty.terminfo
     nvd
-    unzip
-    bat
     # fix pcscd
     pcscliteWithPolkit.out
+    rage
+    ripgrep
+    tree
+    unzip
+    wget
     wireguard-tools
+    # keep-sorted end
   ];
 
   environment.ldso32 = null;

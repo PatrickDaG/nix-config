@@ -12,8 +12,8 @@
         #"($git_commit )"
         #"$git_state"
         #"$git_status"
-        ''(''${custom.jj} )''
-        ''(''${custom.jjstate} )''
+        "(\${custom.jj} )"
+        "(\${custom.jjstate} )"
         "$character"
       ];
 

@@ -270,6 +270,7 @@ in
             # keep-sorted start
             bitwarden
             consent-o-matic
+            cookie-autodelete
             kagi-search
             linkwarden
             refined-github
@@ -283,7 +284,6 @@ in
             vimium-c
             violentmonkey
             zotero-connector
-            cookie-autodelete
             # modern for wikipedia - not packaged
             # keep-sorted end
           ];

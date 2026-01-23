@@ -26,7 +26,7 @@
       chromium
       cmatrix
       cowsay
-      magic-wormhole
+      dig
       discord
       disneyplus
       element-desktop
@@ -42,6 +42,7 @@
       hyprshot
       jjui
       lazyjj
+      magic-wormhole
       #ladybird
       makemkv
       mpv
@@ -50,7 +51,6 @@
       nix-output-monitor
       nixpkgs-review
       obsidian
-      dig
       orca-slicer
       osu-lazer-bin
       pandoc # for obsidian
@@ -58,6 +58,7 @@
       pinentry-gnome3 # for yubikey pinentry
       ripgrep-all
       signal-desktop
+      slack
       streamlink
       streamlink-twitch-gui-bin
       telegram-desktop
@@ -70,7 +71,6 @@
       zathura
       zotero
       zulip
-      slack
       #keep-sorted end
     ];
   };

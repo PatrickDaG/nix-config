@@ -121,8 +121,8 @@
       url = "github:danth/stylix";
       inputs = {
         # keep-sorted start
-        nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
         # keep-sorted end
       };
     };
@@ -197,10 +197,10 @@
       inputs = {
         # keep-sorted start
         devshell.follows = "devshell";
+        flake-parts.follows = "flake-parts";
         nci.follows = "nci";
         nixpkgs.follows = "nixpkgs";
         pre-commit-hooks.follows = "pre-commit-hooks";
-        flake-parts.follows = "flake-parts";
         treefmt-nix.follows = "treefmt-nix";
         # keep-sorted end
       };
@@ -217,8 +217,8 @@
       url = "github:nix-community/nixvim";
       inputs = {
         # keep-sorted start
-        nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
         # keep-sorted end
       };
     };
