@@ -74,6 +74,7 @@
         ".config/Zulip"
         ".config/Slack"
         ".local/share/Terraria"
+        ".local/share/vicinae"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [
