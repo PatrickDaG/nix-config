@@ -176,7 +176,7 @@ in
     (lib.mkIf public {
       upstreams.firezone-api = {
         servers."${ipOf "firezone"}:${
-          toString nodes.${globals.services.firezone.host}.config.services.firezone.server.api.port
+          toString nodes.${globals.services.firezone.host}.config.services.firezone.server.portal.apiPort
         }" =
           { };
         extraConfig = ''

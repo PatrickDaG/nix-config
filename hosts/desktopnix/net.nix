@@ -46,4 +46,9 @@
     "/var/lib/iwd"
     "/etc/mullvad-vpn"
   ];
+  services.firezone.gui-client = {
+    enable = true;
+    name = config.node.name;
+    allowedUsers = [ "patrick" ];
+  };
 }

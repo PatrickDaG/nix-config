@@ -15,6 +15,7 @@ let
     globals.services.paperless.domain
     globals.services.esphome.domain
     globals.services.homeassistant.domain
+    globals.services.firefly.domain
     "fritzbox.${globals.domains.web}"
   ];
 
@@ -28,8 +29,8 @@ in
 {
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg-nginx.allowedTCPPorts = [
-      config.services.firezone.server.api.port
-      config.services.firezone.server.web.port
+      config.services.firezone.server.apiPort
+      config.services.firezone.server.webPort
     ];
   };
   age.secrets.firezone-smtp-password.generator.script = "alnum";
@@ -74,12 +75,12 @@ in
       enable = true;
       accounts.main = {
         name = "Home";
-        relayGroups.relays.name = "Relays";
         gatewayGroups.home.name = "Home";
         actors.admin = {
           type = "account_admin_user";
           name = "Admin";
           email = "firezone_admin@${globals.domains.mail_public}";
+          #allow_email_otp_sign_in = true;
         };
         groups.anyone = {
           name = "anyone";
@@ -166,15 +167,10 @@ in
       };
     };
 
-    domain.settings.ERLANG_DISTRIBUTION_PORT = 9003;
-    api = {
-      address = "0.0.0.0";
-      externalUrl = "https://${globals.services.firezone.domain}/api/";
-    };
-    web = {
+    portal = {
+      externalUrl = "https://${globals.services.firezone.domain}/";
       port = 3000;
       address = "0.0.0.0";
-      externalUrl = "https://${globals.services.firezone.domain}/";
     };
   };
 
