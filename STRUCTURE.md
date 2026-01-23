@@ -32,4 +32,4 @@ This file contains a small overview over the contents and structure of this repo
         - `wayland/` configuration for wayland windowmanagers and basic utilities
         - `xorg/` configuration for xorg windowmanagers and basic utilities
     - `root` minimal configuration for root
-' `patches` patche to be applied to nixpkgs before the system is built
+- `patches/` patches to be applied to nixpkgs before the system is built

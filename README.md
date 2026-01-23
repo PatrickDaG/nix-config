@@ -7,25 +7,27 @@
 | | Name | Device | Description
 ---|---|---|---
 💻 | patricknix | HP spectre x360 | Patrick's laptop, mainly used for on the go university
+💻 | thinknix | ThinkPad | Work laptop
 🖥️ | desktopnix | Intel i5-8600K <br> NVIDIA GeForce GTX 1080 <br> 32 GiB RAM | Patrick's desktop, used for most development and gaming
 🖥️ | elisabeth | AMD Ryzen 7 5800X <br> 32 GiB RAM | Server running most cloud services
+🖥️ | nucnix | Intel NUC | Gateway for internal home network
 🖥️ | mailnix | Hetzner VPS | Static IP server running mail
-🖥️ | torweg | Hetzner VPS | Static IP server running gatway services
+🖥️ | torweg | Hetzner VPS | Static IP server running gateway services
 
 ## User Configuration
 This showcases my end user setup, which I dailydrive on all my hosts.
 
 | | Programm | Description
 ---|---|---
-🐚 Shell | [ZSH](./users/common/shells/zsh/default.nix) & [Starship](./users/common/shells/starfish.nix) | ZSH with FZF autocomplete, starship prompt, sqlite history and histdb-skim for fancy reverse search
-🪟 WM | [Hyprland](./users/patrick/wayland/hyprland.nix) | Tiling window manager
-🖼️ Styling | [Stylix](./users/patrick/theme.nix) | globally consistent styling 
+🐚 Shell | [ZSH](./users/patrick/programs/zsh/default.nix) & [Starship](./users/patrick/programs/zsh/starfish.nix) | ZSH with FZF autocomplete, starship prompt, sqlite history and histdb-skim for fancy reverse search
+🪟 WM | [Niri](./users/patrick/wayland/niri.nix) | Scrolling tiling window manager
+🖼️ Styling | [Stylix](./users/patrick/theme.nix) | globally consistent styling
 📝 Editor | [NeoVim](./users/patrick/programs/nvim/default.nix) | Extensively configured neovim
 🎮 Gaming | [Bottles](./users/patrick/programs/bottles.nix) & [Steam](./users/patrick/programs/steam.nix) | Pew, Pew and such
-🌐 Browser | [Firefox](./users/patrick/firefox.nix) | Heavily configured Firefox to still my privacy and security needs
+🌐 Browser | [Firefox](./users/patrick/programs/firefox.nix) | Heavily configured Firefox to still my privacy and security needs
 💻 Terminal | [Kitty](./users/patrick/programs/kitty.nix) | fast terminal
 🎵 Music | [Spotify](./users/patrick/programs/spicetify.nix) | Fancy looking spotify using spicetify
-📫 Mail | [Thunderbird](./users/common/programs/thunderbird.nix) | Best email client there is
+📫 Mail | [Thunderbird](./users/patrick/programs/thunderbird.nix) | Best email client there is
 
 ## Service Configuration
 These are services I've set up
@@ -34,16 +36,22 @@ These are services I've set up
 ---|---|---
 💸 Budgeting | [FireflyIII](./config/services/firefly.nix) | Self Hosted budgeting tool
 🛡️ AdBlock | [AdGuard Home](./config/services/adguardhome.nix) | DNS Adblocker
+📝 Blog | [Blog](./config/services/blog.nix) | Personal blog
 🔨 Git | [Forgejo](./config/services/forgejo.nix) | Selfhosted GitHub alternative
+📊 Monitoring | [Grafana](./config/services/grafana.nix) | Monitoring dashboards
+🏠 Home | [Home Assistant](./config/services/homeassistant.nix) | Home automation
 📸 Photos | [Immich](./config/services/immich.nix) | Selfhosted Google Photos equivalent
+▶️ Video | [Invidious](./config/services/invidious.nix) | Privacy-friendly YouTube frontend
+🎬 Media | [Jellyfin](./config/services/jellyfin.nix) | Media server
 🔒 SSO | [Kanidm](./config/services/kanidm.nix) | Secure single sign on Identity Provider
+🔗 Bookmarks | [Linkwarden](./config/services/linkwarden.nix) | Bookmark manager
+🍽️ Recipes | [Mealie](./config/services/mealie.nix) | Recipe manager
 📧 E-Mail | [Stalwart](./config/services/stalwart.nix) | All in one mail server
-🎧 Communication | [Teamspeak](./config/services/murmur.nix) | Selfhosted teamspeak server for secure and always available communication
 🌐 VPN | [Firezone](./config/services/firezone.nix) | Easy to use peer to peer VPN solution based on wireguard
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
-🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learnig supported document organizing plattform
+🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learning supported document organizing platform
 📁 NAS | [Samba](./config/services/samba.nix) | Local network shared storage
-📰 Feedreader | [freshRSS](./config/services/freshrss.nix) | hosted RSS feed aggregator
+📰 Feedreader | [freshRSS](./config/services/freshrss.nix) | Hosted RSS feed aggregator
 🔑 Passwords | [Vaultwarden](./config/services/vaultwarden.nix) | Self hosted bitwarden server
 🎵 Music | [Your Spotify](./config/services/yourspotify.nix) | Spotify listening habits analyzer
 
