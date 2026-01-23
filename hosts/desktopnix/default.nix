@@ -16,6 +16,7 @@
     #keep-sorted start
     ../../config/support/bluetooth.nix
     ../../config/support/nintendo.nix
+    ../../config/support/nix-builder.nix
     ../../config/support/nvidia.nix
     ../../config/support/physical.nix
     ../../config/support/pipewire.nix

@@ -67,34 +67,58 @@ lib.optionalAttrs (!minimal) {
   ];
   nix = {
     distributedBuilds = true;
-    buildMachines = [
-      {
-        hostName = globals.hosts.mailnix.ip;
-        protocol = "ssh-ng";
-        sshUser = "build";
-        system = "aarch64-linux";
-        sshKey = "/run/builder-unlock/mailnix";
-        supportedFeatures = [ ];
-        publicHostKey = builtins.readFile "${pkgs.runCommand "MailnixHostKey" { }
-          "${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out"
-        }";
-      }
-      {
-        hostName = "thinknix.local";
-        protocol = "ssh-ng";
-        sshUser = "build";
-        system = "x86_64-linux";
-        sshKey = "/run/builder-unlock/thinknix";
-        supportedFeatures = [
-          "kvm"
-          "benchmark"
-          "nixos-test"
-          "big-parallel"
+    buildMachines =
+      let
+        allMachines = [
+          {
+            name = "mailnix";
+            hostName = globals.hosts.mailnix.ip;
+            protocol = "ssh-ng";
+            sshUser = "build";
+            system = "aarch64-linux";
+            sshKey = "/run/builder-unlock/mailnix";
+            supportedFeatures = [ ];
+            publicHostKey = builtins.readFile "${pkgs.runCommand "MailnixHostKey" { }
+              "${pkgs.coreutils}/bin/base64 -w0 ${nodes.mailnix.config.node.secretsDir}/host.pub > $out"
+            }";
+          }
+          {
+            name = "thinknix";
+            hostName = "thinknix.local";
+            protocol = "ssh-ng";
+            sshUser = "build";
+            system = "x86_64-linux";
+            sshKey = "/run/builder-unlock/thinknix";
+            supportedFeatures = [
+              "kvm"
+              "benchmark"
+              "nixos-test"
+              "big-parallel"
+            ];
+            publicHostKey = builtins.readFile "${pkgs.runCommand "ThinknixHostKey" { }
+              "${pkgs.coreutils}/bin/base64 -w0 ${nodes.thinknix.config.node.secretsDir}/host.pub > $out"
+            }";
+          }
+          {
+            name = "desktopnix";
+            hostName = "desktopnix.local";
+            protocol = "ssh-ng";
+            sshUser = "build";
+            system = "x86_64-linux";
+            sshKey = "/run/builder-unlock/desktopnix";
+            supportedFeatures = [
+              "kvm"
+              "benchmark"
+              "nixos-test"
+              "big-parallel"
+            ];
+            publicHostKey = builtins.readFile "${pkgs.runCommand "DesktopnixHostKey" { }
+              "${pkgs.coreutils}/bin/base64 -w0 ${nodes.desktopnix.config.node.secretsDir}/host.pub > $out"
+            }";
+          }
         ];
-        publicHostKey = builtins.readFile "${pkgs.runCommand "ThinknixHostKey" { }
-          "${pkgs.coreutils}/bin/base64 -w0 ${nodes.thinknix.config.node.secretsDir}/host.pub > $out"
-        }";
-      }
-    ];
+      in
+      builtins.map (m: builtins.removeAttrs m [ "name" ])
+        (builtins.filter (m: m.name != config.node.name) allMachines);
   };
 }
