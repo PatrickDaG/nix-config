@@ -128,6 +128,10 @@ These are notable external flakes which this config depend upon
     If you want to be able to boot microsoft signed images append `--microsoft`
 1. Time to reboot and pray
 
+### Add TPM unlock
+
+1. Run `systemd-cryptenroll --tpm2-with-pin=<yes/no> --tpm2-device=auto /dev/<...>`
+
 ### Deploy from new host
 
 If deploying from a host not containing the necessary nix configuration option append
