@@ -6,7 +6,7 @@
       HandleLidSwitchExternalPower = "ignore";
       HandlePowerKey = "poweroff";
       HandleSuspendKey = "suspend";
-      HandleHibernateKey = "hibernate";
+      HandleHibernateKey = "suspend";
       PowerKeyIgnoreInhibited = "yes";
       SuspendKeyIgnoreInhibited = "yes";
       HibernateKeyIgnoreInhibited = "yes";
