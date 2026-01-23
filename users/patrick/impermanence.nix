@@ -4,6 +4,8 @@
     "/state" = {
       files = [
         ".ssh/known_hosts"
+        ".claude.json"
+        ".claude.json.backup"
       ];
       directories = [
         "repos"
@@ -56,6 +58,7 @@
         ".local/share/TelegramDesktop"
 
         ".cache/mpv"
+        ".claude"
 
         ".config/Element"
         ".config/bs-manager"
