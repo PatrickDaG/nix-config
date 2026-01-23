@@ -1,5 +1,5 @@
 {
-  pkgs,
+  config,
   ...
 }:
 {
@@ -9,7 +9,7 @@
   # Failure to import is important to notice!
   boot.zfs.forceImportRoot = false;
 
-  environment.systemPackages = with pkgs; [ zfs ];
+  environment.systemPackages = [ config.boot.zfs.package ];
 
   # Might help with hangs mainly atuin
   #boot.kernelPatches = [
