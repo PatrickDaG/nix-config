@@ -163,9 +163,6 @@ in
         domain = "home.${globals.domains.web}";
         ip = 19;
       };
-      bookstack = {
-        domain = "wiki.${globals.domains.web}";
-      };
       mealie = {
         domain = "mealie.${globals.domains.web}";
       };

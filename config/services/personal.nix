@@ -3,7 +3,6 @@
     # port 80
     ./freshrss.nix
     ./firefly.nix
-    ./bookstack.nix
     # port 3000
     ./yourspotify.nix
     # port 3001

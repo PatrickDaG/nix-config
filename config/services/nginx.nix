@@ -241,9 +241,6 @@ in
       proxyProtect = true;
       publicAccess = true;
     })
-    (blockOf "bookstack" {
-      port = 80;
-    })
     (blockOf "mealie" {
       port = 3002;
     })
