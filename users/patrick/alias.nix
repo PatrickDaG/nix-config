@@ -25,5 +25,6 @@
 
     zf = "zathura --fork";
     flop = "poweroff";
+    claudius = "claude";
   };
 }
