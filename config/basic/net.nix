@@ -48,7 +48,8 @@
       LLMNR = "false";
       # man I whish dnssec would be viable to use
       DNSSEC = "false";
-      DNSOverTLS = "yes";
+      DNSOverTLS = "opportunistic";
+      Domains = "~.";
       DNS =
         let
           id = globals.net.dns.default;
