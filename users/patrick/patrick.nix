@@ -26,6 +26,7 @@
       chromium
       cmatrix
       cowsay
+      magic-wormhole
       discord
       disneyplus
       element-desktop
@@ -49,6 +50,7 @@
       nix-output-monitor
       nixpkgs-review
       obsidian
+      dig
       orca-slicer
       osu-lazer-bin
       pandoc # for obsidian
