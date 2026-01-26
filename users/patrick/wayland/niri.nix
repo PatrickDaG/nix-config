@@ -454,8 +454,8 @@ in
             };
           };
           workspaces = {
-            "1notes" = {
-              name = "notes";
+            "1third" = {
+              name = "third";
               open-on-output = "eDP-1";
             };
             "1default" = {
@@ -464,6 +464,10 @@ in
             };
             "2mail" = {
               name = "mail";
+              open-on-output = "DP-5";
+            };
+            "3notes" = {
+              name = "notes";
               open-on-output = "DP-5";
             };
             "1second" = {
@@ -479,14 +483,17 @@ in
             "Mod+d".action = focus-workspace "mail";
             "Mod+Shift+d".action.move-window-to-workspace = "mail";
 
+            "Mod+u".action = focus-workspace "notes";
+            "Mod+Shift+u".action.move-window-to-workspace = "notes";
+
             "Mod+F1".action = focus-workspace "second";
             "Mod+Shift+F1".action.move-window-to-workspace = "second";
 
             "Mod+F2".action = focus-workspace "slack";
             "Mod+Shift+F2".action.move-window-to-workspace = "slack";
 
-            "Mod+F3".action = focus-workspace "notes";
-            "Mod+Shift+F3".action.move-window-to-workspace = "notes";
+            "Mod+F3".action = focus-workspace "third";
+            "Mod+Shift+F3".action.move-window-to-workspace = "third";
           };
           spawn-at-startup = [
             { command = [ "obsidian" ]; }
