@@ -20,8 +20,9 @@ in
           input = {
             keyboard = {
               xkb = {
-                layout = "de";
-                variant = "nodeadkeys";
+                layout = "de,de";
+                variant = "nodeadkeys,bone";
+                options = "grp:win_space_toggle";
               };
               repeat-delay = 235;
               repeat-rate = 60;
