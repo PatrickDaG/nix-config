@@ -72,6 +72,7 @@
     tree
     unzip
     wget
+    socat
     wireguard-tools
     # keep-sorted end
   ];
