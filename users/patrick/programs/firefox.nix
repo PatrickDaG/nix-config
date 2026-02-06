@@ -172,6 +172,9 @@ in
           "browser.tabs.groups.smart.enabled" = false;
           "browser.tabs.groups.smart.userEnable" = false;
           "extensions.ml.enabled" = false;
+
+          # No speech dispatcher Why is this even a thing by default?
+          "media.webspeech.synth.enabled" = false;
         };
         search = {
           force = true;
