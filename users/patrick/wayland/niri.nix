@@ -389,8 +389,8 @@ in
             "Mod+F1".action = focus-workspace "browser";
             "Mod+Shift+F1".action.move-window-to-workspace = "browser";
 
-            "Mod+F3".action = focus-workspace "comms";
-            "Mod+Shift+F3".action.move-window-to-workspace = "comms";
+            "Mod+F2".action = focus-workspace "comms";
+            "Mod+Shift+F2".action.move-window-to-workspace = "comms";
           };
 
           spawn-at-startup = [
