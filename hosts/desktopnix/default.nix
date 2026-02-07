@@ -51,7 +51,17 @@
     "nixos-test"
   ];
   i18n.supportedLocales = [ "all" ];
-  zramSwap.enable = true;
+  # No one knows which is better
+  # https://linuxblog.io/zswap-better-than-zram/
+  # https://linuxreviews.org/Zram
+  # I just like zswap more
+  #zramSwap.enable = true;
+  boot.kernelParams = [
+    "zswap.enabled=1" # enables zswap
+    "zswap.compressor=zstd" # compression algorithm
+    "zswap.max_pool_percent=30" # maximum percentage of RAM that zswap is allowed to use
+    "zswap.shrinker_enabled=1" # whether to shrink the pool proactively on high memory pressure
+  ];
 
   # Do not cleanup nix store to prevent having to rebuild packages onca a month
   nix.gc.automatic = lib.mkForce false;
