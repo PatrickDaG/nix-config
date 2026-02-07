@@ -362,13 +362,13 @@ in
               name = "games";
               open-on-output = "DP-3";
             };
+            "4notes" = {
+              name = "notes";
+              open-on-output = "DP-3";
+            };
 
             "1browser" = {
               name = "browser";
-              open-on-output = "HDMI-A-1";
-            };
-            "2notes" = {
-              name = "notes";
               open-on-output = "HDMI-A-1";
             };
             "3comms" = {
@@ -383,11 +383,11 @@ in
             "Mod+u".action = focus-workspace "games";
             "Mod+Shift+u".action.move-window-to-workspace = "games";
 
+            "Mod+a".action = focus-workspace "notes";
+            "Mod+Shift+a".action.move-window-to-workspace = "notes";
+
             "Mod+F1".action = focus-workspace "browser";
             "Mod+Shift+F1".action.move-window-to-workspace = "browser";
-
-            "Mod+F2".action = focus-workspace "notes";
-            "Mod+Shift+F2".action.move-window-to-workspace = "notes";
 
             "Mod+F3".action = focus-workspace "comms";
             "Mod+Shift+F3".action.move-window-to-workspace = "comms";
