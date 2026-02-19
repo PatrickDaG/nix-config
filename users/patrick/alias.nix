@@ -1,6 +1,7 @@
 {
   hm-all.home.shellAliases = {
     # Aliases
+    # Yeah no shit the things in aliases.nix under config shellAliases are aliases
     l = "ls -lahF --group-directories-first --show-control-chars --quoting-style=escape --color=auto";
     ll = "ls -lahF --group-directories-first --show-control-chars --quoting-style=escape --color=auto";
     t = "tree -F --dirsfirst -L 2";
@@ -24,7 +25,10 @@
     rg = "rg -S";
 
     zf = "zathura --fork";
-    flop = "poweroff";
+    flop = "poweroff"; # ???
     claudius = "claude";
+
+    ltar = "tar --exclude=\"*/*/*\" -tvf";
+    untar = "tar -xvf";
   };
 }
