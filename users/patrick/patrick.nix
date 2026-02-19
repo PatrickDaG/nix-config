@@ -49,6 +49,7 @@
       netflix
       nextcloud-client
       nix-output-monitor
+      libreoffice
       nixpkgs-review
       obsidian
       orca-slicer
