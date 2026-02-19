@@ -42,6 +42,7 @@
       hyprshot
       jjui
       lazyjj
+      libreoffice
       magic-wormhole
       #ladybird
       makemkv
@@ -49,7 +50,6 @@
       netflix
       nextcloud-client
       nix-output-monitor
-      libreoffice
       nixpkgs-review
       obsidian
       orca-slicer

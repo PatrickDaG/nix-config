@@ -69,10 +69,10 @@
     pcscliteWithPolkit.out
     rage
     ripgrep
+    socat
     tree
     unzip
     wget
-    socat
     wireguard-tools
     # keep-sorted end
   ];
