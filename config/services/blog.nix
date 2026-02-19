@@ -4,7 +4,7 @@
 }:
 {
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 80 ];
   };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 80 ];

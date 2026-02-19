@@ -15,12 +15,12 @@
 
   # Mirror the original oauth2 secret
   age.secrets.linkwarden-oauth2-client-secret = {
-    inherit (nodes.nucnix-kanidm.config.age.secrets.oauth2-linkwarden) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-linkwarden) rekeyFile;
     mode = "440";
     group = "linkwarden";
   };
 
-  globals.wireguard.services.hosts.${config.node.name}.firewallRuleForNode.nucnix-nginx.allowedTCPPorts =
+  globals.wireguard.services.hosts.${config.node.name}.firewallRuleForNode.elisabeth-nginx.allowedTCPPorts =
     [ 3003 ];
   # globals.wireguard.services-extern.hosts.${config.node.name}.firewallRuleForNode.torweg.allowedTCPPorts =
   #   [ 3003 ];

@@ -13,7 +13,7 @@
 
   globals.services.loki.host = config.node.name;
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       config.services.loki.configuration.server.http_listen_port
     ];
   };

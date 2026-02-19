@@ -38,7 +38,7 @@ in
     };
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.paperless.port ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ config.services.paperless.port ];
   };
 
   age.secrets.paperless-admin-passwd = {
@@ -61,7 +61,7 @@ in
         globals.wireguard.services.hosts.${config.node.name}.ipv4
       ];
       PAPERLESS_CORS_ALLOWED_HOSTS = "https://${globals.services.paperless.domain}";
-      PAPERLESS_TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
+      PAPERLESS_TRUSTED_PROXIES = globals.wireguard.services.hosts.elisabeth-nginx.ipv4;
 
       PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
 

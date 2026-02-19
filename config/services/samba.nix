@@ -106,7 +106,7 @@ in
             # Also allow access from fritz vlan
             # Also allow printer access
             "hosts allow" =
-              "10.99.10. 10.99.2. ${lib.net.cidr.host 32 globals.net.vlans.devices.cidrv4} localhost";
+              "${lib.net.cidr.host 32 globals.net.vlans.house.cidrv4} localhost";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";
@@ -364,7 +364,7 @@ in
     ]
   );
   globals.monitoring.tcp.samba = {
-    host = lib.net.cidr.host globals.services.samba.ip globals.net.vlans.home.cidrv4;
+    host = lib.net.cidr.host globals.services.samba.ip globals.net.vlans.house.cidrv4;
     port = 445;
     network = "home";
   };

@@ -5,7 +5,7 @@
   imports = [ "${inputs.nixpkgs-octoprint}/nixos/modules/services/misc/octoprint.nix" ];
   wireguard.services = {
     client.via = "nucnix";
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.octoprint.port ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ config.services.octoprint.port ];
   };
   environment.persistence."/persist".directories = [
     {

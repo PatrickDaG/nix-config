@@ -5,9 +5,10 @@
   ...
 }:
 {
+  globals.services.kanidm.host = config.node.name;
   imports = [ ./oauth2-proxy.nix ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 3000 ];
   };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 3000 ];

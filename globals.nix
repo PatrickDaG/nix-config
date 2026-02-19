@@ -19,31 +19,9 @@ in
   ];
   globals = {
     net.vlans = {
-      home = rec {
-        id = 10;
-        cidrv4 = "10.99.${toString id}.0/24";
-        cidrv6 = "fd${toString id}::/64";
-      };
-      services = rec {
-        id = 20;
-        cidrv4 = "10.99.${toString id}.0/24";
-        cidrv6 = "fd${toString id}::/64";
-      };
-      devices = rec {
-        id = 30;
-        cidrv4 = "10.99.${toString id}.0/24";
-        cidrv6 = "fd${toString id}::/64";
-      };
-      iot = rec {
-        id = 40;
-        cidrv4 = "10.99.${toString id}.0/24";
-        cidrv6 = "fd${toString id}::/64";
-        internet = false;
-      };
-      guests = rec {
-        id = 50;
-        cidrv4 = "10.99.${toString id}.0/24";
-        cidrv6 = "fd${toString id}::/64";
+      house = {
+        cidrv4 = "10.99.30.0/24";
+        cidrv6 = "fd30::/64";
       };
     };
     services = {
@@ -161,7 +139,7 @@ in
       };
       elisabeth = {
         domain = "home.${globals.domains.web}";
-        ip = 19;
+        ip = 2;
       };
       mealie = {
         domain = "mealie.${globals.domains.web}";

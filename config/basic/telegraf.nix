@@ -106,9 +106,9 @@ in
         };
         outputs = {
           influxdb_v2 = {
-            urls = [
-              "http://${globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4}:8086"
-            ];
+            # urls = [
+            #   "http://${globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4}:8086"
+            # ];
             token = "@INFLUX_TOKEN@";
             organization = "machines";
             bucket = "telegraf";

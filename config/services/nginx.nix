@@ -167,9 +167,6 @@ in
         extraConfig = ''
           client_max_body_size 512M ;
           proxy_ssl_verify off ;
-          allow ${globals.net.vlans.home.cidrv4} ;
-          allow ${globals.net.vlans.home.cidrv6} ;
-          deny all ;
         '';
       };
     })
@@ -213,9 +210,6 @@ in
         proxy_buffering off;
         proxy_request_buffering off;
       '';
-    })
-    (blockOf "adguardhome" {
-      proxyProtect = true;
     })
     (blockOf "linkwarden" {
       port = 3003;
@@ -288,11 +282,6 @@ in
     })
     (blockOf "firefly-data-importer" {
       port = 80;
-      virtualHostExtraConfig.extraConfig = ''
-        allow ${globals.net.vlans.home.cidrv4} ;
-        allow ${globals.net.vlans.home.cidrv6} ;
-        deny all ;
-      '';
     })
     (blockOf "grafana" { })
     (blockOf "nextcloud" {

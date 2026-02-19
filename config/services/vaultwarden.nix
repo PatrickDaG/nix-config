@@ -87,7 +87,7 @@
   };
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       config.services.vaultwarden.config.rocketPort
     ];
   };

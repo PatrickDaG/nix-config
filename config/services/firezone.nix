@@ -42,7 +42,7 @@ in
 
   # Mirror the original oauth2 secret
   age.secrets.firezone-oauth2-client-secret = {
-    inherit (nodes.nucnix-kanidm.config.age.secrets.oauth2-firezone) rekeyFile;
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-firezone) rekeyFile;
   };
 
   environment.persistence."/persist".directories = [
@@ -127,10 +127,10 @@ in
             ];
           })
           // {
-            "home.vlan-services.v4" = {
+            "house.lan.v4" = {
               type = "cidr";
-              name = "home.vlan-services.v4";
-              address = globals.net.vlans.services.cidrv4;
+              name = "home.lan-house.v4";
+              address = globals.net.vlans.house.cidrv4;
               gatewayGroups = [ "home" ];
             };
             "smb.internal" = {
@@ -148,20 +148,20 @@ in
                 }
               ];
             };
-            "home.vlan-services.v6" = {
+            "house.lan-house.v6" = {
               type = "cidr";
-              name = "home.vlan-services.v6";
-              address = globals.net.vlans.services.cidrv6;
+              name = "home.lan-house.v6";
+              address = globals.net.vlans.house.cidrv6;
               gatewayGroups = [ "home" ];
             };
           };
 
         policies =
           { }
-          // allow "anyone" "home.vlan-services.v4"
-          // allow "everyone" "home.vlan-services.v4"
-          // allow "anyone" "home.vlan-services.v6"
-          // allow "everyone" "home.vlan-services.v6"
+          // allow "anyone" "home.lan-house.v4"
+          // allow "everyone" "home.lan-house.v4"
+          // allow "anyone" "home.lan-house.v6"
+          // allow "everyone" "home.lan-house.v6"
           // lib.mergeAttrsList (map (domain: allow "anyone" domain) homeDomains)
           // lib.mergeAttrsList (map (domain: allow "everyone" domain) homeDomains);
       };

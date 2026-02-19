@@ -4,111 +4,92 @@
   globals,
   ...
 }:
-let
-  inherit (lib)
-    flip
-    mapAttrsToList
-    mkMerge
-    genAttrs
-    attrNames
-    ;
-in
 {
+  imports = [
+    ./forwarding.nix
+    ./ddclient.nix
+  ];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };
-  networking.nftables.firewall.zones = genAttrs (attrNames globals.net.vlans) (name: {
-    interfaces = [ "lan-${name}" ];
-  });
+  networking.nftables.firewall.zones = {
+    wg-services.interfaces = [ "services" ];
+    house.interfaces = [ "lan-house" ];
+  };
 
-  networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [
-    "wg.${globals.domains.web}"
-  ];
-  systemd.network.netdevs = mkMerge (
-    flip mapAttrsToList globals.net.vlans (
-      name:
-      {
-        id,
-        ...
-      }:
-      {
-        "40-vlan-${name}" = {
-          netdevConfig = {
-            Name = "vlan-${name}";
-            Kind = "vlan";
-          };
-          vlanConfig.Id = id;
-        };
-        "50-macvlan-${name}" = {
-          netdevConfig = {
-            Name = "lan-${name}";
-            Kind = "macvlan";
-          };
-          extraConfig = ''
-            [MACVLAN]
-            Mode=bridge
-          '';
-        };
-      }
-    )
-  );
-  systemd.network.networks = mkMerge (
-    [
-      {
-        "40-vlans" = {
-          matchConfig.Name = "lan01";
-          networkConfig.LinkLocalAddressing = "no";
-        };
-      }
-    ]
-    ++ (flip mapAttrsToList globals.net.vlans (
-      name: _: {
-        "40-vlans".vlan = [ "vlan-${name}" ];
-        "10-vlan-${name}" = {
-          matchConfig.Name = "vlan-${name}";
-          # This interface should only be used from attached macvtaps.
-          # So don't acquire a link local address and only wait for
-          # this interface to gain a carrier.
-          networkConfig.LinkLocalAddressing = "no";
-          linkConfig.RequiredForOnline = "carrier";
-          extraConfig = ''
-            [Network]
-            MACVLAN=lan-${name}
-          '';
-        };
-        "20-lan-${name}" = {
-          DHCP = "yes";
-          matchConfig.Name = "lan-${name}";
-          networkConfig = {
-            IPv6PrivacyExtensions = "yes";
-          };
-        }
-        // (lib.optionalAttrs (name == "home") {
-          DHCP = "no";
-          address = [
-            (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv4)
-            (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.${name}.cidrv6)
-          ];
-        });
-      }
-    ))
-  );
+  systemd.network.netdevs = {
+    "50-macvlan-house" = {
+      netdevConfig = {
+        Name = "lan-house";
+        Kind = "macvlan";
+      };
+      extraConfig = ''
+        [MACVLAN]
+        Mode=bridge
+      '';
+    };
+  };
+  systemd.network.networks = {
+    "10-lan-house" = {
+      matchConfig.Name = "lan01";
+      # This interface should only be used from attached macvtaps.
+      # So don't acquire a link local address and only wait for
+      # this interface to gain a carrier.
+      networkConfig.LinkLocalAddressing = "no";
+      linkConfig.RequiredForOnline = "carrier";
+      extraConfig = ''
+        [Network]
+        MACVLAN=lan-house
+      '';
+    };
+    "20-lan-house" = {
+      matchConfig.Name = "lan-house";
+      networkConfig = {
+        IPv6PrivacyExtensions = "yes";
+        DHCP = "no";
+      };
+      address = [
+        (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.house.cidrv4)
+        (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.house.cidrv6)
+      ];
+    };
+  };
   networking.nftables.firewall = {
     snippets.nnf-ssh.enable = lib.mkForce false;
     rules = {
       ssh = {
         from = [
-          "home"
+          "house"
         ];
         to = [ "local" ];
         allowedTCPPorts = [ 22 ];
       };
       mdns = {
-        from = [ "home" ];
+        from = [ "house" ];
         to = [ "local" ];
         allowedUDPPorts = [ 5353 ];
       };
+      wireguard-services = {
+        from = [ "services" ];
+        to = [ "local" ];
+        allowedUDPPorts = [
+          globals.wireguard.services.port
+        ];
+      };
+      # Forward traffic between participants
+      forward-services-wireguard = {
+        from = [ "wg-services" ];
+        to = [ "wg-services" ];
+        verdict = "accept";
+      };
     };
+  };
+  globals.wireguard.services = {
+    host = lib.net.cidr.host globals.services.elisabeth.ip globals.net.vlans.house.cidrv4;
+    cidrv4 = "10.42.0.0/20";
+    cidrv6 = "fd00:1764::/112";
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
   };
 
   boot.initrd = {
@@ -120,33 +101,14 @@ in
       enable = true;
       networks = {
         # redo the network cause the livesystem has macvlans
-        "10-lan-home" = {
+        "10-lan-house" = {
           DHCP = "yes";
-          matchConfig.Name = "vlan-home";
+          matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           networkConfig = {
             IPv6PrivacyExtensions = "yes";
           };
         };
-        "40-vlans" = {
-          matchConfig.MACAddress = config.secrets.secrets.local.networking.interfaces.lan01.mac;
-          vlan = [
-            "vlan-home"
-          ];
-        };
-      };
-      netdevs = {
-        "10-vlan-home" = {
-          netdevConfig = {
-            Name = "vlan-home";
-            Kind = "vlan";
-          };
-          vlanConfig.Id = globals.net.vlans.home.id;
-        };
       };
     };
   };
-
-  meta.telegraf.availableMonitoringNetworks = [
-    "home"
-  ];
 }

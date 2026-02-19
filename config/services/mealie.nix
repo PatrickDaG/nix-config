@@ -26,7 +26,7 @@
   };
   globals.services.mealie.host = config.node.name;
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.mealie.port ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ config.services.mealie.port ];
   };
   services.mealie = {
     enable = true;
@@ -51,7 +51,7 @@
       OIDC_ADMIN_GROUP = "mealie.admins@${globals.services.kanidm.domain}";
     };
     extraOptions = [
-      "--forwarded-allow-ips=${globals.wireguard.services.hosts.nucnix-nginx.ipv4}"
+      "--forwarded-allow-ips=${globals.wireguard.services.hosts.elisabeth-nginx.ipv4}"
     ];
     credentialsFile = config.age.secrets.oauth2-client-secret.path;
   };

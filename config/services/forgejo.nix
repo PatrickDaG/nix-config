@@ -32,7 +32,7 @@ in
   };
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       config.services.forgejo.settings.server.HTTP_PORT
     ];
   };

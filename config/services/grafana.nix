@@ -10,7 +10,7 @@
     ./loki.nix
   ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       config.services.grafana.settings.server.http_port
     ];
   };

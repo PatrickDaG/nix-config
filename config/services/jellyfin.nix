@@ -18,7 +18,7 @@
     }
   ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx = {
+    firewallRuleForNode.elisabeth-nginx = {
       # from https://jellyfin.org/docs/general/networking/index.html
       allowedTCPPorts = [
         8096

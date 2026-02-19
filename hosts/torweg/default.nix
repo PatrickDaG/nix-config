@@ -11,6 +11,7 @@
 
     ../../config/services/nginx.nix
     ../../config/services/blog.nix
+    ../../config/services/kanidm.nix
 
     ./net.nix
     ./fs.nix

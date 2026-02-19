@@ -19,7 +19,6 @@
           # make sure this doesn't contain any sets called one of
           # state | persist | panzer | bunker | renaultft
           shared ? [ ],
-          vlans ? [ "services" ],
           ...
         }:
         {
@@ -64,29 +63,21 @@
               node.secretsDir = config.node.secretsDir + "/${guestName}";
               globals.services.${guestName}.host = "${config.node.name}-${guestName}";
 
-              networking.hosts.${lib.net.cidr.host 1 globals.net.vlans.services.cidrv4} = [
-                "wg.${globals.domains.web}"
-              ];
-              networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-services" ];
-              systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) (
-                lib.listToAttrs (
-                  lib.flip map vlans (
-                    name:
-                    lib.nameValuePair "10-mv-${name}" {
-                      matchConfig.Name = "mv-${name}";
-                      DHCP = lib.mkForce "no";
-                      address = [
-                        (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv4)
-                        (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.${name}.cidrv6)
-                      ];
-                      gateway = lib.optionals globals.net.vlans.${name}.internet [
-                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv4)
-                        (lib.net.cidr.host 1 globals.net.vlans.${name}.cidrv6)
-                      ];
-                    }
-                  )
-                )
-              );
+              networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-home" ];
+              systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) {
+                "10-mv-house" = {
+                  matchConfig.Name = "mv-house";
+                  DHCP = lib.mkForce "no";
+                  address = [
+                    (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.house.cidrv4)
+                    (lib.net.cidr.hostCidr globals.services.${guestName}.ip globals.net.vlans.house.cidrv6)
+                  ];
+                  gateway = lib.optionals globals.net.vlans.house.internet [
+                    (lib.net.cidr.host 1 globals.net.vlans.house.cidrv4)
+                    (lib.net.cidr.host 1 globals.net.vlans.house.cidrv6)
+                  ];
+                };
+              };
             }
           ];
         };
@@ -96,7 +87,7 @@
           backend = "microvm";
           microvm = {
             system = "x86_64-linux";
-            interfaces.lan-services = { };
+            interfaces.lan-house = { };
             baseMac = config.secrets.secrets.local.networking.interfaces.lan01.mac;
           };
           extraSpecialArgs = {
@@ -107,23 +98,17 @@
         };
       };
 
-      mkContainer =
-        guestName:
-        {
-          vlans ? [ "services" ],
-          ...
-        }@cfg:
-        {
-          ${guestName} = mkGuest guestName cfg // {
-            backend = "container";
-            container.macvlans = lib.flip map vlans (x: "lan-${x}:mv-${x}");
-            extraSpecialArgs = {
-              inherit (inputs.self) nodes globals;
-              inherit (inputs.self.pkgs.x86_64-linux) lib;
-              inherit inputs minimal;
-            };
+      mkContainer = guestName: cfg: {
+        ${guestName} = mkGuest guestName cfg // {
+          backend = "container";
+          container.macvlans = [ "lan-house:mv-house" ];
+          extraSpecialArgs = {
+            inherit (inputs.self) nodes globals;
+            inherit (inputs.self.pkgs.x86_64-linux) lib;
+            inherit inputs minimal;
           };
         };
+      };
     in
     { }
     // mkContainer "personal" { }
@@ -149,12 +134,9 @@
     }
     // mkContainer "grafana" { enablePanzer = true; }
     // mkContainer "homeassistant" {
-      vlans = [
-        "services"
-        "devices"
-        "iot"
-      ];
     }
+    // mkContainer "firezone-gateway" { }
+    // mkContainer "nginx" { }
     // mkContainer "samba" {
       enablePanzer = true;
       enableBunker = true;
@@ -168,11 +150,9 @@
           pool = "renaultft";
         }
       ];
-      vlans = [
-        "home"
-      ];
     };
 
+  containers.firezone-gateway.enableTun = true;
   # Zigbee Dongle
   # This is a very bad idea.
   # Hopefully no one else adds any usb devices

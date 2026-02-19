@@ -7,7 +7,7 @@
   globals.services.firefly.host = config.node.name;
   i18n.supportedLocales = [ "all" ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 80 ];
   };
   globals.services.fireflypico.host = config.node.name;
   globals.services.firefly-data-importer.host = config.node.name;
@@ -45,7 +45,7 @@
       AUDIT_LOG_LEVEL = "emergency";
       APP_URL = "https://${globals.services.firefly.domain}";
       TZ = "Europe/Berlin";
-      TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
+      TRUSTED_PROXIES = globals.wireguard.services.hosts.elisabeth-nginx.ipv4;
       SITE_OWNER = "firefly-admin@${globals.domains.mail_public}";
       APP_KEY_FILE = config.age.secrets.appKey.path;
       AUTHENTICATION_GUARD = "remote_user_guard";
@@ -69,7 +69,7 @@
       TZ = "Europe/Berlin";
       FIREFLY_III_URL = "http://${globals.services.firefly.domain}";
       VANITY_URL = config.services.firefly-iii.settings.APP_URL;
-      TRUSTED_PROXIES = globals.wireguard.services.hosts.nucnix-nginx.ipv4;
+      TRUSTED_PROXIES = globals.wireguard.services.hosts.elisabeth-nginx.ipv4;
       EXPECT_SECURE_URL = false;
       FIREFLY_III_ACCESS_TOKEN_FILE = config.age.secrets.firefly-token.path;
       NORDIGEN_ID_FILE = config.age.secrets.nordigen-id.path;

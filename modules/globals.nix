@@ -94,8 +94,9 @@ in
                 types.submodule (vlanNetSubmod: {
                   options = {
                     id = mkOption {
-                      type = types.ints.between 1 4094;
+                      type = types.nullOr types.ints.between 1 4094;
                       description = "The VLAN id";
+                      default = null;
                     };
 
                     cidrv4 = mkOption {
@@ -139,7 +140,7 @@ in
                     description = "The node-name on which this service runs";
                   };
                   ip = mkOption {
-                    type = types.nullOr (types.ints.between 5 49);
+                    type = types.nullOr (types.ints.between 2 49);
                     default = null;
                     description = "Optional IP in case this service runs needs a static ip. Shou";
                   };

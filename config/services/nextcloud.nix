@@ -77,7 +77,7 @@
     phpOptions."opcache.interned_strings_buffer" = "32";
     settings = {
       default_phone_region = "DE";
-      trusted_proxies = [ globals.wireguard.services.hosts.nucnix-nginx.ipv4 ];
+      trusted_proxies = [ globals.wireguard.services.hosts.elisabeth-nginx.ipv4 ];
       overwriteprotocol = "https";
       maintenance_window_start = 2;
       enabledPreviewProviders = [
@@ -122,7 +122,7 @@
     ];
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 80 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 80 ];
   };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 80 ];

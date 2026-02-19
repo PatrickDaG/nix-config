@@ -32,7 +32,7 @@
   services.matter-server.enable = true;
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       3000
       3001
     ];
@@ -137,7 +137,7 @@
         server_host = [ "0.0.0.0" ];
         server_port = 3000;
         use_x_forwarded_for = true;
-        trusted_proxies = [ globals.wireguard.services.hosts.nucnix-nginx.ipv4 ];
+        trusted_proxies = [ globals.wireguard.services.hosts.elisabeth-nginx.ipv4 ];
       };
       lovelace.mode = "yaml";
 
@@ -165,7 +165,7 @@
 
       influxdb = {
         api_version = 2;
-        host = globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4;
+        #host = globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4;
         port = 8086;
         max_retries = 10;
         ssl = false;
@@ -529,7 +529,6 @@
         psycopg2
         gtts
         fritzconnection
-        adguardhome
         aiosolaredge
         zlib-ng
         stringcase
@@ -544,11 +543,6 @@
         forecast-solar
         aioelectricitymaps
       ];
-  };
-  networking.hosts = {
-    "${globals.wireguard.services.hosts.${globals.services.adguardhome.host}.ipv4}" = [
-      "adguardhome.internal"
-    ];
   };
   age.secrets."home-assistant-secrets.yaml" = {
     rekeyFile = config.node.secretsDir + "/secrets.yaml.age";

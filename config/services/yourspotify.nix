@@ -7,7 +7,7 @@
 {
   globals.services.yourspotify.host = config.node.name;
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [
       3000
       80
     ];

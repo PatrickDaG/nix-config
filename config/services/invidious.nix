@@ -35,6 +35,6 @@
     }
   ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ config.services.invidious.port ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ config.services.invidious.port ];
   };
 }

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  globals.wireguard.monitoring.hosts.${config.node.name} = { };
+  #globals.wireguard.monitoring.hosts.${config.node.name} = { };
 
   networking = {
     useNetworkd = true;
