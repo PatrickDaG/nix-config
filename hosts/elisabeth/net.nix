@@ -12,8 +12,8 @@
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
   };
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking.nftables.firewall.zones = {
-    wg-services.interfaces = [ "services" ];
     house.interfaces = [ "lan-house" ];
   };
 
@@ -48,6 +48,10 @@
         IPv6PrivacyExtensions = "yes";
         DHCP = "no";
       };
+      gateway = [
+        (lib.net.cidr.host 1 globals.net.vlans.house.cidrv4)
+        (lib.net.cidr.host 1 globals.net.vlans.house.cidrv6)
+      ];
       address = [
         (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.house.cidrv4)
         (lib.net.cidr.hostCidr globals.services.elisabeth.ip globals.net.vlans.house.cidrv6)
@@ -70,7 +74,7 @@
         allowedUDPPorts = [ 5353 ];
       };
       wireguard-services = {
-        from = [ "services" ];
+        from = [ "house" ];
         to = [ "local" ];
         allowedUDPPorts = [
           globals.wireguard.services.port

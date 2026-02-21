@@ -8,10 +8,10 @@
   globals.services.kanidm.host = config.node.name;
   imports = [ ./oauth2-proxy.nix ];
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 4000 ];
   };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
-    firewallRuleForNode.torweg.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.torweg.allowedTCPPorts = [ 4000 ];
   };
   environment.persistence."/persist".directories = [
     {
@@ -86,7 +86,7 @@
       origin = "https://${globals.services.kanidm.domain}";
       tls_chain = config.age.secrets.kanidm-cert.path;
       tls_key = config.age.secrets.kanidm-key.path;
-      bindaddress = "0.0.0.0:3000";
+      bindaddress = "0.0.0.0:4000";
     };
     enableClient = true;
     clientSettings = {

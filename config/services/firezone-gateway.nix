@@ -50,7 +50,7 @@
     FIREZONE_NO_INC_BUF = "true";
   };
 
-  systemd.network.networks."10-mv-home" = {
+  systemd.network.networks."10-mv-house" = {
     DHCP = "yes";
     # XXX: Do we really want this?
     dhcpV4Config.UseDNS = lib.mkForce true;

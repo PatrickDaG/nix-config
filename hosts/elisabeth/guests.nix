@@ -63,7 +63,7 @@
               node.secretsDir = config.node.secretsDir + "/${guestName}";
               globals.services.${guestName}.host = "${config.node.name}-${guestName}";
 
-              networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-home" ];
+              networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-house" ];
               systemd.network.networks = lib.mkIf (globals.services.${guestName}.ip != null) {
                 "10-mv-house" = {
                   matchConfig.Name = "mv-house";

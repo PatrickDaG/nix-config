@@ -8,7 +8,6 @@
     pkgs.jellyfin-web
     pkgs.jellyfin-ffmpeg
   ];
-  networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-home" ];
   environment.persistence."/persist".directories = [
     {
       directory = "/var/lib/jellyfin";

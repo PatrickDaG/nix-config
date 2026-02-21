@@ -291,6 +291,7 @@ in
     })
     (blockOf "kanidm" {
       protocol = "https";
+      port = 4000;
       publicAccess = true;
       virtualHostExtraConfig.extraConfig = ''
         proxy_ssl_verify off ;

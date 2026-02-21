@@ -8,8 +8,6 @@ let
   shares = lib.removeAttrs config.services.samba.settings [ "global" ];
 in
 {
-  # allow direct access to shares
-  networking.nftables.firewall.zones.untrusted.interfaces = [ "mv-home" ];
   services.samba-wsdd = {
     enable = true; # make shares visible for windows 10 clients
     openFirewall = true;
@@ -106,7 +104,7 @@ in
             # Also allow access from fritz vlan
             # Also allow printer access
             "hosts allow" =
-              "${lib.net.cidr.host 32 globals.net.vlans.house.cidrv4} localhost";
+              "10.99.30. localhost";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";
