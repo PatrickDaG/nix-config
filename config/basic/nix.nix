@@ -54,6 +54,8 @@
       # collect garbage(oddlama for example)
       automatic = true;
       dates = "weekly";
+      # 2 Monate hoffentlich genug für roleback
+      options = "--delete-older-than 60d";
     };
 
     registry = {
