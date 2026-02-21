@@ -28,11 +28,11 @@ _inputs: [
         owner = "patrick";
         repo = "sd-switch";
         rev = "master";
-        hash = "sha256-pfwuM+ZCYiGnHiMtqvCIsBCZ1d2WoNEzL8wy6fMmyA0=";
+        hash = "sha256-WzbFGbFCS0TQXRM09U0nUATpduQ+ZZF6D1uFD2UlnhA=";
       };
       meta.mainProgram = "sd-switch";
-      version = "0.5.4-pre";
-      cargoHash = "sha256-4FD3aTEVi5s8TsAJrycxRwRro9Thk1PIsqD7Naja+/Q=";
+      version = "0.6.3-pre";
+      cargoHash = "sha256-jclRF05eUAW/ggCmfZfWE6c4q25d/WGX0dad4rsP8vk=";
     };
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (_pythonFinal: pythonPrev: {
