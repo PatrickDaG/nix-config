@@ -1,0 +1,121 @@
+diff --git a/pkgs/development/python-modules/aiohomematic-config/default.nix b/pkgs/development/python-modules/aiohomematic-config/default.nix
+new file mode 100644
+index 0000000000000..a5da572ad6cbc
+--- /dev/null
++++ b/pkgs/development/python-modules/aiohomematic-config/default.nix
+@@ -0,0 +1,45 @@
++{
++  aiohomematic,
++  buildPythonPackage,
++  fetchFromGitHub,
++  lib,
++  pydantic,
++  pytest-asyncio,
++  pytestCheckHook,
++  setuptools,
++}:
++
++buildPythonPackage (finalAttrs: {
++  pname = "aiohomematic-config";
++  version = "2026.2.10";
++  pyproject = true;
++
++  src = fetchFromGitHub {
++    owner = "sukramj";
++    repo = "aiohomematic-config";
++    tag = finalAttrs.version;
++    hash = "sha256-gb6cxo2gTQU95G76YE46/U1O0Tmj1CRq0+lMLkDQzfg=";
++  };
++
++  build-system = [ setuptools ];
++
++  dependencies = [
++    aiohomematic
++    pydantic
++  ];
++
++  pythonImportsCheck = [ "aiohomematic_config" ];
++
++  nativeCheckInputs = [
++    pytest-asyncio
++    pytestCheckHook
++  ];
++
++  meta = {
++    changelog = "https://github.com/sukramj/aiohomematic-config/blob/${finalAttrs.src.tag}/changelog.md";
++    description = "Presentation-layer library for Homematic device configuration UI";
++    homepage = "https://github.com/sukramj/aiohomematic-config";
++    license = lib.licenses.mit;
++    maintainers = [ lib.maintainers.dotlambda ];
++  };
++})
+diff --git a/pkgs/development/python-modules/aiohomematic/default.nix b/pkgs/development/python-modules/aiohomematic/default.nix
+index 0a6a6a4987427..7049f67a50cb0 100644
+--- a/pkgs/development/python-modules/aiohomematic/default.nix
++++ b/pkgs/development/python-modules/aiohomematic/default.nix
+@@ -17,14 +17,14 @@
+ 
+ buildPythonPackage rec {
+   pname = "aiohomematic";
+-  version = "2026.2.0";
++  version = "2026.2.25";
+   pyproject = true;
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "aiohomematic";
+     tag = version;
+-    hash = "sha256-HMKrXFhs3s0wV+39/xMIQT77gkLPg9m21iTKlypfZLA=";
++    hash = "sha256-nGrcmrIakIrVFvGclVT4aUdCjAdmH9jHGTUr+ZSFXm4=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+index 7909b8c7a1b2e..3809f21bc78c8 100644
+--- a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
++++ b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+@@ -4,6 +4,7 @@
+   buildHomeAssistantComponent,
+   fetchFromGitHub,
+   aiohomematic,
++  aiohomematic-config,
+   aiohomematic-test-support,
+   home-assistant,
+   pytest-homeassistant-custom-component,
+@@ -13,13 +14,13 @@
+ buildHomeAssistantComponent rec {
+   owner = "SukramJ";
+   domain = "homematicip_local";
+-  version = "2.2.4";
++  version = "2.3.0";
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "custom_homematic";
+     tag = version;
+-    hash = "sha256-LriphFQn7kpZdPox5//uAVddlNpALMk4pucyYOnfSSs=";
++    hash = "sha256-czRRDl+EhRTxtCzP+CV63wcKRX6r11+x6E4So4osrek=";
+   };
+ 
+   postPatch = ''
+@@ -31,6 +32,7 @@ buildHomeAssistantComponent rec {
+ 
+   dependencies = [
+     aiohomematic
++    aiohomematic-config
+   ];
+ 
+   nativeCheckInputs = [
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index 97cd9f6d13397..31feb1cce984f 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -310,6 +310,8 @@ self: super: with self; {
+ 
+   aiohomematic = callPackage ../development/python-modules/aiohomematic { };
+ 
++  aiohomematic-config = callPackage ../development/python-modules/aiohomematic-config { };
++
+   aiohomematic-test-support = callPackage ../development/python-modules/aiohomematic-test-support { };
+ 
+   aiohttp = callPackage ../development/python-modules/aiohttp { };

@@ -1,0 +1,20 @@
+diff --git a/pkgs/by-name/ma/makemkv/package.nix b/pkgs/by-name/ma/makemkv/package.nix
+index d41778ef3915b..6d4ffd64d016e 100644
+--- a/pkgs/by-name/ma/makemkv/package.nix
++++ b/pkgs/by-name/ma/makemkv/package.nix
+@@ -2,6 +2,7 @@
+   autoPatchelfHook,
+   common-updater-scripts,
+   curl,
++  expat,
+   fetchurl,
+   ffmpeg,
+   lib,
+@@ -51,6 +52,7 @@ stdenv.mkDerivation (
+       qt5.wrapQtAppsHook
+     ];
+     buildInputs = [
++      expat
+       ffmpeg
+       openssl
+       qt5.qtbase

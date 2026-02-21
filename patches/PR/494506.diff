@@ -1,0 +1,41 @@
+diff --git a/pkgs/development/python-modules/aiohomematic/default.nix b/pkgs/development/python-modules/aiohomematic/default.nix
+index 7049f67a50cb0..cab013487cebf 100644
+--- a/pkgs/development/python-modules/aiohomematic/default.nix
++++ b/pkgs/development/python-modules/aiohomematic/default.nix
+@@ -17,14 +17,14 @@
+ 
+ buildPythonPackage rec {
+   pname = "aiohomematic";
+-  version = "2026.2.25";
++  version = "2026.2.27";
+   pyproject = true;
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "aiohomematic";
+     tag = version;
+-    hash = "sha256-nGrcmrIakIrVFvGclVT4aUdCjAdmH9jHGTUr+ZSFXm4=";
++    hash = "sha256-BwEW1U9ARTZ5QQh3XZ1J1zh9/pDCtp4PG6FGAYdxGBg=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+index 3809f21bc78c8..7f65f6aef3a28 100644
+--- a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
++++ b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+@@ -14,13 +14,13 @@
+ buildHomeAssistantComponent rec {
+   owner = "SukramJ";
+   domain = "homematicip_local";
+-  version = "2.3.0";
++  version = "2.3.1";
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "custom_homematic";
+     tag = version;
+-    hash = "sha256-czRRDl+EhRTxtCzP+CV63wcKRX6r11+x6E4So4osrek=";
++    hash = "sha256-Y4yV4SyMtfXkb+5mcaT0qjjEu/+jv9zJ8LtSrFcuBFg=";
+   };
+ 
+   postPatch = ''

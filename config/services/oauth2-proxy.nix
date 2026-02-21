@@ -24,25 +24,20 @@
     cookie.domain = ".${globals.domains.web}";
     cookie.secure = true;
     cookie.expire = "900m";
-    cookie.secret = null;
-
-    clientSecret = null;
 
     reverseProxy = true;
     httpAddress = "0.0.0.0:3001";
     redirectURL = "https://oauth2.${globals.domains.web}/oauth2/callback";
     setXauthrequest = true;
+    upstream = "static://202";
     extraConfig = {
       code-challenge-method = "S256";
       whitelist-domain = ".${globals.domains.web}";
       set-authorization-header = true;
       pass-access-token = true;
       skip-jwt-bearer-tokens = true;
-      upstream = "static://202";
-
       oidc-issuer-url = "https://auth.${globals.domains.web}/oauth2/openid/oauth2-proxy";
       provider-display-name = "Kanidm";
-      #client-secret-file = config.age.secrets.oauth2-client-secret.path;
     };
 
     provider = "oidc";

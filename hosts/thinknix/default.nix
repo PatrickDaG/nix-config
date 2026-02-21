@@ -34,9 +34,6 @@
     ../../users/patrick
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.zfs.package = pkgs.zfs_2_4;
-
   hardware.trackpoint.enable = lib.mkDefault true;
   hardware.trackpoint.emulateWheel = lib.mkDefault config.hardware.trackpoint.enable;
 
@@ -75,4 +72,8 @@
     "nixos-test"
   ];
   topology.self.icon = "devices.laptop";
+  boot.binfmt.emulatedSystems = [
+    "aarch64-linux"
+    "riscv64-linux"
+  ];
 }

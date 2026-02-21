@@ -4,6 +4,7 @@
   nodes,
   config,
   globals,
+  lib,
   ...
 }:
 let
@@ -137,7 +138,7 @@ let
 
   serviceConfig = {
     serviceConfig = {
-      Restart = "always";
+      Restart = lib.mkForce "always";
     };
     after = [ "podman-network-immich-default.service" ];
     requires = [ "podman-network-immich-default.service" ];

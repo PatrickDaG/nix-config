@@ -46,7 +46,7 @@ lib.optionalAttrs (!minimal) {
         	export DISPLAY=":''${file:1}"
         	user=$(${pkgs.coreutils}/bin/stat -c '%U' "$D")
         	# sleep to give X time to access the keyboard
-        	(sleep 0.2; ${pkgs.util-linux}/bin/runuser -u "$user" -- ${pkgs.xorg.xset}/bin/xset r rate \
+        	(sleep 0.2; ${pkgs.util-linux}/bin/runuser -u "$user" -- ${pkgs.xset}/bin/xset r rate \
         	${toString config.services.xserver.autoRepeatDelay} ${toString config.services.xserver.autoRepeatInterval})&
         	done
         fi

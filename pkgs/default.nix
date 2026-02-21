@@ -36,6 +36,14 @@ _inputs: [
     };
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (_pythonFinal: pythonPrev: {
+        pyhumps = pythonPrev.pyhumps.overrideAttrs (old: {
+          patches = (old.patches or [ ]) ++ [
+            (prev.fetchpatch {
+              url = "https://patch-diff.githubusercontent.com/raw/nficano/humps/pull/305.patch";
+              hash = "sha256-KH+VNDR6524RrR3SgedzRoWfv+YahsjDYPITGJdJUDQ=";
+            })
+          ];
+        });
         home-assistant-chip-wheels = pythonPrev.home-assistant-chip-wheels.overrideAttrs {
           prePatch = ''
             rm 0002-Use-data-as-platform-storage-location.patch

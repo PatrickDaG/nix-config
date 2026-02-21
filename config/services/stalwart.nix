@@ -17,6 +17,7 @@ let
   mailBackupDir = "/var/cache/mail-backup";
   dataDir = "/var/lib/stalwart-mail";
 in
+  # if stateVersion update this will break due to update stalwart-mail -> stalwart
 {
   backups.storageBoxes.hetzner = {
     subuser = "stalwart-mail";
@@ -133,9 +134,9 @@ in
           locations."/".proxyPass = "http://stalwart";
         });
   };
-  systemd.services.stalwart-mail =
+  systemd.services.stalwart =
     let
-      cfg = config.services.stalwart-mail;
+      cfg = config.services.stalwart;
       configFormat = pkgs.formats.toml { };
       configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
     in
@@ -170,11 +171,11 @@ in
           ""
           "${lib.getExe cfg.package} --config=/run/stalwart-mail/config.toml"
         ];
-        RestartSec = "60"; # Retry every minute
+        RestartSec = lib.mkForce "60"; # Retry every minute
       };
     };
 
-  services.stalwart-mail = {
+  services.stalwart = {
     enable = true;
     settings =
       let
@@ -219,10 +220,10 @@ in
           "webadmin.path"
           "webadmin.resource"
         ];
-        spam-filter.resource = lib.mkDefault "file://${config.services.stalwart-mail.package.spam-filter}/spam-filter.toml";
+        spam-filter.resource = lib.mkDefault "file://${config.services.stalwart.package.spam-filter}/spam-filter.toml";
         webadmin = {
           path = "/var/cache/stalwart-mail";
-          resource = lib.mkDefault "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
+          resource = lib.mkDefault "file://${config.services.stalwart.package.webadmin}/webadmin.zip";
         };
 
         authentication.fallback-admin = {

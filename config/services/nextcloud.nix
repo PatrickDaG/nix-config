@@ -57,7 +57,7 @@
   services.nextcloud = {
     hostName = globals.services.nextcloud.domain;
     enable = true;
-    package = pkgs.nextcloud31;
+    package = pkgs.nextcloud33;
     configureRedis = true;
     config.adminpassFile = config.age.secrets.ncpasswd.path; # Kinda ok just remember to instanly change after first setup
     config.adminuser = "admin";

@@ -56,6 +56,7 @@
       linkwarden = uidGid 244;
       bookstack = uidGid 245;
       firezone-client = uidGid 246;
+      pcscd = uidGid 247;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
