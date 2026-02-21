@@ -6,7 +6,7 @@ let
     let
       parts = lib.splitString "/" x;
       zpool = lib.elemAt parts 0;
-      dataset = lib.concatStringsSep "/" (lib.tail parts);
+      dataset = lib.replaceString "<" "" (lib.concatStringsSep "/" (lib.tail parts));
     in
     # pool has to exists
     (config.disko.devices.zpool ? ${zpool})
@@ -33,7 +33,7 @@ in
       Will use the default dataset naming as defined in lib.disko.zfs.impermanenceZfsDatasets
     '';
   };
-  config = lib.mkIf (cfg && (filteredDatasets datasets) != [ ]) {
+  config = lib.mkIf (cfg && ((filteredDatasets datasets) != [ ])) {
     services.zrepl = {
       enable = true;
       settings = {
