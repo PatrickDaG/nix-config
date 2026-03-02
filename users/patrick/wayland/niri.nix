@@ -241,7 +241,7 @@ in
               };
             }
             {
-              matches = [ { app-id = "org.pipewire.Helvum"; } ];
+              matches = [ { app-id = "io.github.dp0sk.Crosspipe"; } ];
               open-floating = true;
               default-column-width = {
                 proportion = 0.2;
@@ -329,17 +329,17 @@ in
         };
         desktopnix = {
           input.tablet = {
-            map-to-output = "DP-3";
+            map-to-output = "DP-1";
           };
-          outputs."DP-3" = {
+          outputs."DP-1" = {
             mode = {
-              width = 2560;
-              height = 1440;
-              refresh = 143.998;
+              width = 3840;
+              height = 2160;
+              refresh = 119.880;
             };
             #scale 2.0
             position = {
-              x = 1920;
+              x = 2560;
               y = 0;
             };
             variable-refresh-rate = "on-demand";
@@ -347,25 +347,25 @@ in
           outputs."HDMI-A-1" = {
             position = {
               x = 0;
-              y = 512;
+              y = 288;
             };
           };
           workspaces = {
             "1default" = {
               name = "default";
-              open-on-output = "DP-3";
+              open-on-output = "DP-1";
             };
             "2mail" = {
               name = "mail";
-              open-on-output = "DP-3";
+              open-on-output = "DP-1";
             };
             "3games" = {
               name = "games";
-              open-on-output = "DP-3";
+              open-on-output = "DP-1";
             };
             "4notes" = {
               name = "notes";
-              open-on-output = "DP-3";
+              open-on-output = "DP-1";
             };
 
             "1browser" = {
@@ -435,6 +435,7 @@ in
             };
           };
           # at work
+          # TODO: Maybe add specializations to switch between home/work setup?
           outputs."DP-7" = {
             position = {
               x = 0;
@@ -448,12 +449,12 @@ in
             };
           };
           # at home
-          outputs."HDMI-A-1" = {
-            position = {
-              x = 2560;
-              y = 960;
-            };
-          };
+          # outputs."HDMI-A-1" = {
+          #   position = {
+          #     x = 2560;
+          #     y = 960;
+          #   };
+          # };
           workspaces = {
             "1third" = {
               name = "third";
