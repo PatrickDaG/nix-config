@@ -170,7 +170,7 @@
         format = "{icon} {volume}%";
         on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
         on-click-middle = lib.getExe pkgs.pwvucontrol;
-        on-click-right = lib.getExe pkgs.helvum;
+        on-click-right = lib.getExe pkgs.crosspipe;
         format-muted = "󰖁";
         format-icons = [
           "󰕿"

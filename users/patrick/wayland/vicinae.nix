@@ -113,7 +113,7 @@
       };
       extensions = with inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}; [
         # keep-sorted start
-        bluetooth
+        #bluetooth
         firefox
         #dbus # Currently broken nix build due to 'node-gyp'
         fuzzy-files

@@ -36,7 +36,7 @@
       galaxy-buds-client
       gh
       gh-dash
-      helvum
+      crosspipe
       hexyl
       hyperfine
       hyprshot

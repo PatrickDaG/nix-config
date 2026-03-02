@@ -1,0 +1,28 @@
+diff --git a/pkgs/by-name/we/weston/package.nix b/pkgs/by-name/we/weston/package.nix
+index c6d103f0fbe14..0a552ce1b95cd 100644
+--- a/pkgs/by-name/we/weston/package.nix
++++ b/pkgs/by-name/we/weston/package.nix
+@@ -2,6 +2,7 @@
+   lib,
+   stdenv,
+   fetchFromGitLab,
++  fetchpatch, # Added for applying patch
+   meson,
+   ninja,
+   nix-update-script,
+@@ -65,6 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
+     hash = "sha256-7FbQkXazsf6FkkNbE+Q6ilKACFa/CoOL2Q1oXHuaVX8=";
+   };
+ 
++  # Backport for https://gitlab.freedesktop.org/wayland/weston/-/issues/1100
++  patches = [
++    (fetchpatch {
++      name = "weston-upstream-assertion-fix.patch";
++      url = "https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1993.patch";
++      hash = "sha256-705GIM7drTzv0N5Hk5dO18LWBnhhi1VoX8sfITHRYc4=";
++    })
++  ];
++
+   depsBuildBuild = [ pkg-config ];
+   nativeBuildInputs = [
+     meson
