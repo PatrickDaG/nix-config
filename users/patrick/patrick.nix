@@ -63,6 +63,7 @@
       streamlink
       streamlink-twitch-gui-bin
       telegram-desktop
+      zoom-us
       timer
       via
       webcord
