@@ -7,9 +7,6 @@
 {
   globals.services.kanidm.host = config.node.name;
   imports = [ ./oauth2-proxy.nix ];
-  globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 4000 ];
-  };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 4000 ];
   };
