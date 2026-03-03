@@ -26,6 +26,7 @@
       chromium
       cmatrix
       cowsay
+      dust
       dig
       discord
       disneyplus
