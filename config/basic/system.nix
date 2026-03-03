@@ -65,6 +65,7 @@
     killall
     kitty.terminfo
     nvd
+    dix
     # fix pcscd
     pcscliteWithPolkit.out
     rage
