@@ -1,4 +1,9 @@
-{ globals, lib, ... }:
+{
+  globals,
+  lib,
+  pkgs,
+  ...
+}:
 {
   hm = {
     accounts.email.accounts = lib.flip lib.mapAttrs' globals.accounts.email (
@@ -12,6 +17,9 @@
     );
     programs.thunderbird = {
       enable = true;
+      nativeMessagingHosts = [
+        pkgs.external-editor-revived
+      ];
 
       profiles.personal = {
         isDefault = true;
