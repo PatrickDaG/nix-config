@@ -26,5 +26,8 @@
     ../patrick/programs/htop.nix
 
   ];
-  environment.systemPackages = [ pkgs.neovim ];
+  environment.systemPackages = [
+    pkgs.neovim
+    pkgs.trace-cmd
+  ];
 }
