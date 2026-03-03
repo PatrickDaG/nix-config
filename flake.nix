@@ -56,8 +56,8 @@
 
     # Manage the home
     home-manager = {
-      url = "github:nix-community/home-manager";
-      # should use system nixpkgs instead of their own
+      #url = "github:nix-community/home-manager";
+      url = "github:patrickdag/home-manager/push-tpwnppnzxxkz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
