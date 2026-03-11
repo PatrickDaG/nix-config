@@ -61,6 +61,10 @@
             package = pkgs.nvd;
             help = "List package differences between systems";
           }
+          {
+            package = pkgs.dix;
+            help = "List package differences between systems but *rust*";
+          }
           # {
           #   package = pkgs.vulnix;
           #   help = "List vulnerabilities found in your system";
