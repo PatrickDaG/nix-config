@@ -18,6 +18,9 @@
         pop_to_root_on_close = true;
         favicon_service = "twenty";
         #escape_key_behaviour = "close_window";
+        telemetry = { # Why opt-out :(
+          system_info = false;
+        };
         font = {
           normal = {
             size = 12;
