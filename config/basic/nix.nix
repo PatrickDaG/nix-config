@@ -20,18 +20,18 @@
       substituters = [
         "https://nix-community.cachix.org"
         "https://cache.nixos.org"
-        "https://ai.cachix.org"
         "https://nix-gaming.cachix.org"
-        "https://vicinae.cachix.org"
+        "https://cache.nixos-cuda.org"
+      ];
+      trusted-substituters = [
         "https://pwndbg.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc="
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-        "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
         "pwndbg.cachix.org-1:HhtIpP7j73SnuzLgobqqa8LVTng5Qi36sQtNt79cD3k="
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
         (builtins.readFile ../../secrets/nix-key.pub)
       ];
       cores = 0;
