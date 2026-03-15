@@ -10,8 +10,8 @@ let
   robots = pkgs.fetchFromGitHub {
     owner = "ai-robots-txt";
     repo = "ai.robots.txt";
-    rev = "main";
-    hash = "sha256-O/W/gX7EazxzR+ghdxg4i6S0SHEUZoX1afB//HKUNgY=";
+    rev = "86d582b11cb651e2e5f0eb8a1fcabbcb7360181d";
+    hash = "sha256-Q30JQoqzMgxfmh6KfZsPVkF83X9VOx9Hv2/7yQ04kYs=";
   };
 in
 {
