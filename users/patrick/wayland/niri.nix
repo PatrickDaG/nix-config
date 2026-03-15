@@ -329,66 +329,88 @@ in
         };
         desktopnix = {
           input.tablet = {
-            map-to-output = "DP-1";
+            map-to-output = "DP-6";
           };
-          outputs."DP-1" = {
+          outputs."DP-6" = {
             mode = {
               width = 3840;
               height = 2160;
-              refresh = 119.880;
+              refresh = 240.000;
             };
             #scale 2.0
             position = {
-              x = 2560;
+              x = 1920;
+              y = 342;
+            };
+            variable-refresh-rate = "on-demand";
+          };
+          outputs."DP-4" = {
+            mode = {
+              width = 2560;
+              height = 1440;
+              refresh = 119.998;
+            };
+            transform.rotation = 270;
+            #scale 2.0
+            position = {
+              x = 4992; # ?
               y = 0;
             };
             variable-refresh-rate = "on-demand";
           };
-          outputs."HDMI-A-1" = {
+          outputs."HDMI-A-2" = {
             position = {
               x = 0;
-              y = 288;
+              y = 989;
             };
           };
           workspaces = {
             "1default" = {
               name = "default";
-              open-on-output = "DP-1";
+              open-on-output = "DP-6";
             };
-            "2mail" = {
-              name = "mail";
-              open-on-output = "DP-1";
-            };
-            "3games" = {
+            "2games" = {
               name = "games";
-              open-on-output = "DP-1";
-            };
-            "4notes" = {
-              name = "notes";
-              open-on-output = "DP-1";
+              open-on-output = "DP-6";
             };
 
             "1browser" = {
               name = "browser";
-              open-on-output = "HDMI-A-1";
+              open-on-output = "DP-4";
             };
-            "3comms" = {
+            "2mail" = {
+              name = "mail";
+              open-on-output = "DP-4";
+            };
+            "3notes" = {
+              name = "notes";
+              open-on-output = "DP-4";
+            };
+
+            "1twitch" = {
+              name = "twitch";
+              open-on-output = "HDMI-A-2";
+            };
+            "2comms" = {
               name = "comms";
-              open-on-output = "HDMI-A-1";
+              open-on-output = "HDMI-A-2";
             };
           };
           binds = with config.lib.niri.actions; {
-            "Mod+d".action = focus-workspace "mail";
-            "Mod+Shift+d".action.move-window-to-workspace = "mail";
+            "Mod+d".action = focus-workspace "games";
+            "Mod+Shift+d".action.move-window-to-workspace = "games";
 
-            "Mod+u".action = focus-workspace "games";
-            "Mod+Shift+u".action.move-window-to-workspace = "games";
+            "Mod+u".action = focus-workspace "browser";
+            "Mod+Shift+u".action.move-window-to-workspace = "browser";
 
-            "Mod+a".action = focus-workspace "notes";
-            "Mod+Shift+a".action.move-window-to-workspace = "notes";
+            "Mod+a".action = focus-workspace "mail";
+            "Mod+Shift+a".action.move-window-to-workspace = "mail";
 
-            "Mod+F1".action = focus-workspace "browser";
-            "Mod+Shift+F1".action.move-window-to-workspace = "browser";
+            "Mod+x".action = focus-workspace "notes";
+            "Mod+Shift+x".action.move-window-to-workspace = "notes";
+
+            "Mod+F1".action = focus-workspace "twitch";
+            "Mod+Shift+F1".action.move-window-to-workspace = "twitch";
 
             "Mod+F2".action = focus-workspace "comms";
             "Mod+Shift+F2".action.move-window-to-workspace = "comms";
@@ -405,18 +427,6 @@ in
             position = {
               x = 2560 * 2;
               y = 960;
-            };
-          };
-          outputs."DP-2" = {
-            position = {
-              x = 0;
-              y = 0;
-            };
-          };
-          outputs."DP-3" = {
-            position = {
-              x = 2560;
-              y = 0;
             };
           };
           workspaces = {

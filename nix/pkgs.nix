@@ -17,6 +17,14 @@
         option = lib.mkOption { type = lib.types.unspecified; };
       }
     )
+    (
+      { lib, flake-parts-lib, ... }:
+      flake-parts-lib.mkTransposedPerSystemModule {
+        name = "pkgsCuda";
+        file = ./pkgs.nix;
+        option = lib.mkOption { type = lib.types.unspecified; };
+      }
+    )
   ];
 
   perSystem =
@@ -31,7 +39,6 @@
           inputs.nix-topology.overlays.default
           inputs.nixos-extra-modules.overlays.default
           inputs.devshell.overlays.default
-          inputs.agenix-rekey.overlays.default
           inputs.nixvim.overlays.default
           inputs.niri.overlays.niri
           inputs.firefox-addons.overlays.default
@@ -40,6 +47,13 @@
             #   nix = prev.lixPackageSets.latest.lix;
             # };
           })
+        ];
+      };
+      pkgsCuda = import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+        overlays = (import ../pkgs inputs) ++ [
         ];
       };
 

@@ -22,6 +22,7 @@
       amazon
       bashInteractive
       bs-manager
+      btop-cuda
       chatterino2
       chromium
       cmatrix
