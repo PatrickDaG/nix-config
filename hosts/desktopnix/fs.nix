@@ -12,7 +12,7 @@
         content = with lib.disko.gpt; {
           type = "gpt";
           partitions = {
-            boot = (partEfi "2GiB") // {
+            boot = (partEfi "2G") // {
               device = "${device}-part1";
             };
             swap = (partSwap "16G") // {
