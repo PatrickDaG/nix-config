@@ -19,7 +19,7 @@ lib.optionalAttrs (!minimal) {
     nvidia = {
       powerManagement.enable = true;
       modesetting.enable = true;
-      open = false;
+      open = true;
     };
   };
 }
