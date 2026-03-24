@@ -5,9 +5,9 @@
 }:
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
-    inputs.nixos-hardware.nixosModules.common-cpu-intel-cpu-only
-    inputs.nixos-hardware.nixosModules.common-pc
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-zenpower
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
 
@@ -54,6 +54,7 @@
   # No one knows which is better
   # https://linuxblog.io/zswap-better-than-zram/
   # https://linuxreviews.org/Zram
+  # https://chrisdown.name/2026/03/24/zswap-vs-zram-when-to-use-what.html
   # I just like zswap more
   #zramSwap.enable = true;
   boot.kernelParams = [

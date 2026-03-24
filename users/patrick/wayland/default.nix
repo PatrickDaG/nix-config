@@ -57,7 +57,7 @@
     ./fuzzel.nix
     ./niri.nix
     ./swaync.nix
-    ./swww.nix
+    ./awww.nix
     ./vicinae.nix
     ./wallpaper-engine.nix
     #./noctalia.nix

@@ -19,6 +19,7 @@ let
   envStr = concatStringsSep " " (mapAttrsToList (n: v: "${n}=${escapeShellArg v}") env);
 in
 {
+  environment.systemPackages = [ pkgs.libva-utils ];
   hm.home.persistence."/state".directories = [
     ".cache/mozilla"
     ".mozilla"
@@ -97,6 +98,8 @@ in
           (builtins.readFile "${betterfox}/Peskyfox.js")
         ];
         settings = {
+          # Video docoding things
+          "media.hardware-video-decoding.force-enabled" = true;
           # user chrome soll funzen
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           # nvidia hardware video decode

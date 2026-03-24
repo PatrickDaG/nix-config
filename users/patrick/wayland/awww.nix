@@ -1,9 +1,9 @@
 { lib, pkgs, ... }:
 let
-  swww-update-wallpaper = pkgs.writeShellApplication {
-    name = "swww-update-wallpaper";
+  awww-update-wallpaper = pkgs.writeShellApplication {
+    name = "awww-update-wallpaper";
     runtimeInputs = [
-      pkgs.swww
+      pkgs.awww
       pkgs.gawk
     ];
     text = ''
@@ -13,10 +13,10 @@ let
 
       ## Display separate Wallpaper per output
 
-      readarray -t MONITORS < <(swww query | awk -F': ' '{print $2}')
+      readarray -t MONITORS < <(awww query | awk -F': ' '{print $2}')
 
       for i in "''${MONITORS[@]}"; do
-        swww img -o "$i" \
+        awww img -o "$i" \
           "''${FILES[RANDOM%''${#FILES[@]}]}" \
           --transition-type "''${TYPES[RANDOM%''${#TYPES[@]}]}" \
           --transition-angle "''${ANGLES[RANDOM%''${#ANGLES[@]}]}" \
@@ -29,28 +29,28 @@ in
 {
   hm.systemd.user = {
     services = {
-      swww = {
+      awww = {
         Install.WantedBy = [ "graphical-session.target" ];
         Unit.After = [ "graphical-session.target" ];
         Unit = {
           Description = "Wayland wallpaper daemon";
         };
         Service = {
-          ExecStart = "${pkgs.swww}/bin/swww-daemon";
+          ExecStart = "${pkgs.awww}/bin/awww-daemon";
           Restart = "on-failure";
         };
       };
-      swww-update-wallpaper = {
+      awww-update-wallpaper = {
         Unit.Description = "Update the wallpaper";
         Service = {
           Type = "oneshot";
           Restart = "on-failure";
           RestartSec = "2m";
-          ExecStart = lib.getExe swww-update-wallpaper;
+          ExecStart = lib.getExe awww-update-wallpaper;
         };
       };
     };
-    timers.swww-update-wallpaper = {
+    timers.awww-update-wallpaper = {
       Install.WantedBy = [ "graphical-session.target" ];
       Unit.After = [ "graphical-session.target" ];
       Unit.Description = "Periodically switch to a new wallpaper";

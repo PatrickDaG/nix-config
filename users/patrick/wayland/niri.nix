@@ -216,6 +216,7 @@ in
             }
 
             {
+              # Currentl broken cause obsidian app-id is 'electron'
               matches = [ { app-id = "obsidian"; } ];
               open-on-workspace = "notes";
               block-out-from = "screencast";
@@ -331,7 +332,7 @@ in
           input.tablet = {
             map-to-output = "DP-6";
           };
-          outputs."DP-6" = {
+          outputs."DP-4" = {
             mode = {
               width = 3840;
               height = 2160;
@@ -344,7 +345,7 @@ in
             };
             variable-refresh-rate = "on-demand";
           };
-          outputs."DP-4" = {
+          outputs."DP-6" = {
             mode = {
               width = 2560;
               height = 1440;
@@ -367,24 +368,24 @@ in
           workspaces = {
             "1default" = {
               name = "default";
-              open-on-output = "DP-6";
+              open-on-output = "DP-1";
             };
             "2games" = {
               name = "games";
-              open-on-output = "DP-6";
+              open-on-output = "DP-1";
             };
 
             "1browser" = {
               name = "browser";
-              open-on-output = "DP-4";
+              open-on-output = "DP-6";
             };
             "2mail" = {
               name = "mail";
-              open-on-output = "DP-4";
+              open-on-output = "DP-6";
             };
             "3notes" = {
               name = "notes";
-              open-on-output = "DP-4";
+              open-on-output = "DP-6";
             };
 
             "1twitch" = {

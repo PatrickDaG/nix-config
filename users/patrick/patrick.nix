@@ -79,7 +79,10 @@
       #keep-sorted end
     ];
   };
-  hm.programs.claude-code.enable = true;
+  hm.programs.claude-code = {
+    enable = true;
+    package = pkgs.llm-agents.claude-code;
+  };
   hm.programs.bat.enable = true;
   # needed for gnome pinentry
   services.dbus.packages = [ pkgs.gcr ];
