@@ -59,6 +59,7 @@
 
         ".cache/mpv"
         ".claude"
+        ".cache/llama.cpp"
 
         ".config/Element"
         ".config/bs-manager"
