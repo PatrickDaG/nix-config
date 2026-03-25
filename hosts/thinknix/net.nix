@@ -90,4 +90,21 @@
     enable = true;
     inherit (config.node) name;
   };
+  age.secrets = {
+    ovpn-conf.rekeyFile = config.node.secretsDir + /ovpn/config.age;
+    ovpn-ca.rekeyFile = config.node.secretsDir + /ovpn/ca.age;
+    ovpn-cert.rekeyFile = config.node.secretsDir + /ovpn/cert.age;
+    ovpn-key.rekeyFile = config.node.secretsDir + /ovpn/key.age;
+    ovpn-ta.rekeyFile = config.node.secretsDir + /ovpn/ta.age;
+  };
+  services.openvpn.servers.syssec = {
+    autoStart = false;
+    config = ''
+      config ${config.age.secrets.ovpn-conf.path}
+      ca ${config.age.secrets.ovpn-ca.path}
+      cert ${config.age.secrets.ovpn-cert.path}
+      key ${config.age.secrets.ovpn-key.path}
+      tls-auth ${config.age.secrets.ovpn-ta.path} 1
+    '';
+  };
 }
