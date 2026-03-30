@@ -80,6 +80,8 @@
 
   environment.ldso32 = null;
 
+  services.davfs2.enable = true;
+
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # Define an option for different hosts
   # expects an attrset containing optionally an key 'all' for shared config between

@@ -27,6 +27,7 @@ lib.optionalAttrs (!minimal) {
       "disk"
       # TPM settings
       "tss"
+      "davfs2"
     ];
     group = "patrick";
     inherit (globals.users.patrick) hashedPassword;
