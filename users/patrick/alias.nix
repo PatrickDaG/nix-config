@@ -30,5 +30,6 @@
 
     ltar = "tar --exclude=\"*/*/*\" -tvf";
     untar = "tar -xvf";
+    ish = "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
   };
 }
