@@ -113,7 +113,6 @@
     # Configure nftables firewall with nix
     nixos-nftables-firewall = {
       url = "github:thelegy/nixos-nftables-firewall";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Make good looking
@@ -268,6 +267,11 @@
     # used by nixos-extra-modules automatically
     microvm = {
       url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

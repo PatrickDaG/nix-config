@@ -65,6 +65,7 @@
       streamlink
       streamlink-twitch-gui-bin
       telegram-desktop
+      llm-agents.pi
       zoom-us
       timer
       via
