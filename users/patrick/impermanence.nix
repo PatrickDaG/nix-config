@@ -59,6 +59,7 @@
 
         ".cache/mpv"
         ".claude"
+        ".pi"
         ".cache/llama.cpp"
 
         ".config/Element"

@@ -274,6 +274,10 @@
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    jail-nix = {
+      url = "sourcehut:~alexdavid/jail.nix";
+    };
   };
 
   outputs =

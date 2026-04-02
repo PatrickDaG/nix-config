@@ -8,6 +8,7 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
+  imports = [ ./programs/pi.nix ];
   age.secrets.nix-key = {
     rekeyFile = ../../secrets/nix-key.age;
     generator.script =
