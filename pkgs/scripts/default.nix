@@ -21,5 +21,6 @@ _final: prev: {
         nim update-prs
       '';
     };
+    git-dirty = prev.callPackage ./git-dirty.nix { };
   };
 }
