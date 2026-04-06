@@ -33,9 +33,7 @@ let
       ) "compatibility: ${builtins.toJSON skill.compatibility}"
       ++ lib.optional (skill.allowedTools != null) "allowed-tools: ${builtins.toJSON skill.allowedTools}"
       ++ lib.optional skill.disableModelInvocation "disable-model-invocation: true"
-      ++ lib.concatLists (
-        lib.mapAttrsToList (k: v: [ "${k}: ${toYamlValue v}" ]) skill.extraFrontmatter
-      );
+      ++ lib.concatLists (lib.mapAttrsToList (k: v: [ "${k}: ${toYamlValue v}" ]) skill.extraFrontmatter);
     in
     lib.concatStringsSep "\n" [
       "---"
@@ -221,7 +219,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = jsonFormat.type;
+      inherit (jsonFormat) type;
       default = { };
       example = lib.literalExpression ''
         {

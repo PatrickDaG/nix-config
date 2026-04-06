@@ -278,7 +278,6 @@ in
             consent-o-matic
             cookie-autodelete
             kagi-search
-            youtube-recommended-videos
             linkwarden
             refined-github
             return-youtube-dislikes
@@ -290,6 +289,7 @@ in
             user-agent-string-switcher
             vimium-c
             violentmonkey
+            youtube-recommended-videos
             zotero-connector
             # modern for wikipedia - not packaged
             # keep-sorted end

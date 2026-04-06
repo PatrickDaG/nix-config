@@ -54,10 +54,10 @@
 
   imports = [
     # keep-sorted start
+    ./awww.nix
     ./fuzzel.nix
     ./niri.nix
     ./swaync.nix
-    ./awww.nix
     ./vicinae.nix
     ./wallpaper-engine.nix
     #./noctalia.nix

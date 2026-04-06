@@ -27,10 +27,11 @@
       chromium
       cmatrix
       cowsay
-      dust
+      crosspipe
       dig
       discord
       disneyplus
+      dust
       element-desktop
       espeak
       feh
@@ -38,7 +39,6 @@
       galaxy-buds-client
       gh
       gh-dash
-      crosspipe
       hexyl
       hyperfine
       hyprshot
@@ -65,7 +65,6 @@
       streamlink
       streamlink-twitch-gui-bin
       telegram-desktop
-      zoom-us
       timer
       via
       webcord
@@ -73,6 +72,7 @@
       xournalpp
       ytdlp-pot-provider
       zathura
+      zoom-us
       zotero
       zulip
       #keep-sorted end

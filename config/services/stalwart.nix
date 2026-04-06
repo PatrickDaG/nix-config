@@ -17,7 +17,7 @@ let
   mailBackupDir = "/var/cache/mail-backup";
   dataDir = "/var/lib/stalwart-mail";
 in
-  # if stateVersion update this will break due to update stalwart-mail -> stalwart
+# if stateVersion update this will break due to update stalwart-mail -> stalwart
 {
   backups.storageBoxes.hetzner = {
     subuser = "stalwart-mail";

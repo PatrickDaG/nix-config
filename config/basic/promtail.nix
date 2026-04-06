@@ -1,6 +1,5 @@
 {
   config,
-  nodes,
   globals,
   ...
 }:

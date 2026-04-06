@@ -47,9 +47,9 @@ let
           nix
           nixpkgs-review
           ps
+          python3
           ripgrep
           unzip
-          python3
           which
           # keep-sorted end
         ]

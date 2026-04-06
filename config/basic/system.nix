@@ -59,13 +59,13 @@
   environment.systemPackages = with pkgs; [
     # keep-sorted start
     bat
+    dix
     dua
     fd
     file
     killall
     kitty.terminfo
     nvd
-    dix
     # fix pcscd
     pcscliteWithPolkit.out
     rage

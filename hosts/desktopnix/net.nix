@@ -32,7 +32,7 @@
   ];
   services.firezone.gui-client = {
     enable = true;
-    name = config.node.name;
+    inherit (config.node) name;
     allowedUsers = [ "patrick" ];
   };
 }

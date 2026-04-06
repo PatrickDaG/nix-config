@@ -103,8 +103,7 @@ in
             # Allow access to local network
             # Also allow access from fritz vlan
             # Also allow printer access
-            "hosts allow" =
-              "10.99.30. localhost";
+            "hosts allow" = "10.99.30. localhost";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";
