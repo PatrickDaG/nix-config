@@ -139,7 +139,7 @@
         use_x_forwarded_for = true;
         trusted_proxies = [ globals.wireguard.services.hosts.elisabeth-nginx.ipv4 ];
       };
-      lovelace.mode = "yaml";
+      lovelace.resoucre_mode = "yaml";
 
       homeassistant = {
         name = "!secret ha_name";
