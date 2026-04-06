@@ -32,5 +32,15 @@ let
   );
 in
 {
-  hm.home.packages = [ jailed-pi ];
+  hm.programs.pi = {
+    enable = true;
+
+    package = jailed-pi;
+
+    settings = {
+      defaultProvider = "anthropic";
+      defaultModel = "claude-opus-4-6";
+      defaultThinkingLevel = "medium";
+    };
+  };
 }
