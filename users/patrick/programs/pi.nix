@@ -20,37 +20,43 @@ let
       (readonly "/etc/static/nix")
       (try-fwd-env "NIX_PATH")
       (set-env "NIX_REMOTE" "daemon")
+
+      (readonly (noescape "~/.config/jj"))
+
       # GitHub CLI auth for PR interactions (separate account from host)
       # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
       (readwrite (noescape "~/.config/gh-pi"))
       (set-env "NIX_REMOTE" (noescape "~/.config/gh-pi"))
+
       (add-pkg-deps (
         with pkgs;
         [
           # keep-sorted start
           bashInteractive
           curl
+          diffutils
+          findutils
+          gawkInteractive
           gh
           git
-          jq
-          ripgrep
           gnugrep
-          findutils
-          diffutils
-          which
-          gzip
-          unzip
           gnutar
+          gzip
+          jq
           jujutsu
-          gawkInteractive
           nix
           nixpkgs-review
           ps
+          ripgrep
+          unzip
+          python3
+          which
           # keep-sorted end
         ]
       ))
     ]
   );
+
 in
 {
   hm.home.persistence."/state".directories = [ ".config/gh-pi" ];
@@ -69,7 +75,7 @@ in
     agentsPrompt = ''
       - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
       - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
-      - ALWAYS DO THIS: at the start of each session, create a new `jj` changeset (`jj new`) and work within it.
+      - ALWAYS DO THIS: at the start of each session, create a new `jj` workspace in the current directory (`jj workspace add`) and work within it.
     '';
 
     prompts.nixpkgs-review = {
