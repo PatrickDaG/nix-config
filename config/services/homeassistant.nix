@@ -163,16 +163,16 @@
       };
       "automation ui" = "!include automations.yaml";
 
-      influxdb = {
-        api_version = 2;
-        #host = globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4;
-        port = 8086;
-        max_retries = 10;
-        ssl = false;
-        token = "!secret influxdb_token";
-        organization = "home";
-        bucket = "home_assistant";
-      };
+      # influxdb = {
+      #   api_version = 2;
+      #   #host = globals.wireguard.monitoring.hosts.${globals.services.influxdb.host}.ipv4;
+      #   port = 8086;
+      #   max_retries = 10;
+      #   ssl = false;
+      #   token = "!secret influxdb_token";
+      #   organization = "home";
+      #   bucket = "home_assistant";
+      # };
 
       # Modbus Varta element backup
       modbus = {
