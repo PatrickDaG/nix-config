@@ -78,8 +78,15 @@
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
       };
-      dhcpV4Config.RouteMetric = 40;
-      dhcpV6Config.RouteMetric = 40;
+      dhcpV4Config = {
+        UseDNS = false;
+        RouteMetric = 40;
+      };
+      ipv6AcceptRAConfig.UseDNS = false;
+      dhcpV6Config = {
+        UseDNS = false;
+        RouteMetric = 40;
+      };
     };
   };
   services.mullvad-vpn = {
