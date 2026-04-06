@@ -42,5 +42,11 @@ in
       defaultModel = "claude-opus-4-6";
       defaultThinkingLevel = "medium";
     };
+
+    agentsPrompt = ''
+      - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
+      - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
+      - At the start of each session, create a new `jj` changeset (`jj new`) and work within it.
+    '';
   };
 }
