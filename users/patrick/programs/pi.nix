@@ -12,6 +12,7 @@ let
       (add-pkg-deps (
         with pkgs;
         [
+          # keep-sorted start
           bashInteractive
           curl
           git
@@ -24,8 +25,10 @@ let
           gzip
           unzip
           gnutar
+          jujutsu
           gawkInteractive
           ps
+          # keep-sorted end
         ]
       ))
     ]
@@ -46,7 +49,7 @@ in
     agentsPrompt = ''
       - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
       - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
-      - At the start of each session, create a new `jj` changeset (`jj new`) and work within it.
+      - ALWAYS DO THIS: at the start of each session, create a new `jj` changeset (`jj new`) and work within it.
     '';
   };
 }
