@@ -9,6 +9,17 @@ let
       no-new-session
       mount-cwd
       (readwrite (noescape "~/.pi"))
+
+      # Nix support: expose the full nix store (read-only),
+      # the daemon socket, and caches so nix builds work inside the sandbox.
+      (readonly "/nix/store")
+      (readwrite "/nix/var/nix/daemon-socket")
+      # noesacpe needed to expand ~
+      (readwrite (noescape "~/.cache/nix"))
+      (readonly "/etc/nix")
+      (readonly "/etc/static/nix")
+      (try-fwd-env "NIX_PATH")
+      (set-env "NIX_REMOTE" "daemon")
       (add-pkg-deps (
         with pkgs;
         [
@@ -27,6 +38,8 @@ let
           gnutar
           jujutsu
           gawkInteractive
+          nix
+          nixpkgs-review
           ps
           # keep-sorted end
         ]
