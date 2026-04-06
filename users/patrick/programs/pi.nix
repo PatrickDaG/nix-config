@@ -20,12 +20,17 @@ let
       (readonly "/etc/static/nix")
       (try-fwd-env "NIX_PATH")
       (set-env "NIX_REMOTE" "daemon")
+      # GitHub CLI auth for PR interactions (separate account from host)
+      # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
+      (readwrite (noescape "~/.config/gh-pi"))
+      (set-env "NIX_REMOTE" (noescape "~/.config/gh-pi"))
       (add-pkg-deps (
         with pkgs;
         [
           # keep-sorted start
           bashInteractive
           curl
+          gh
           git
           jq
           ripgrep
@@ -48,6 +53,8 @@ let
   );
 in
 {
+  hm.home.persistence."/state".directories = [ ".config/gh-pi" ];
+
   hm.programs.pi = {
     enable = true;
 
