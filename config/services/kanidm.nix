@@ -77,17 +77,17 @@
   };
   services.kanidm = {
     package = pkgs.kanidm_1_8.withSecretProvisioning;
-    enableServer = true;
-    serverSettings = {
+    server.enable = true;
+    server.settings = {
       inherit (globals.services.kanidm) domain;
       origin = "https://${globals.services.kanidm.domain}";
       tls_chain = config.age.secrets.kanidm-cert.path;
       tls_key = config.age.secrets.kanidm-key.path;
       bindaddress = "0.0.0.0:4000";
     };
-    enableClient = true;
-    clientSettings = {
-      uri = config.services.kanidm.serverSettings.origin;
+    client.enable = true;
+    client.settings = {
+      uri = config.services.kanidm.server.settings.origin;
       verify_ca = true;
       verify_hostnames = true;
     };
