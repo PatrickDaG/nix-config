@@ -43,6 +43,9 @@
 
         ".local/share/monado"
 
+        ".config/timewarrior"
+        ".local/share/timewarrior"
+
         ".local/share/keyrings"
 
         # For nextcloud client install

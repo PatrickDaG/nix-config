@@ -50,6 +50,7 @@
           signal-desktop
           streamlink
           streamlink-twitch-gui-bin
+          timewarrior
           zathura
           zotero
           zoom-us
