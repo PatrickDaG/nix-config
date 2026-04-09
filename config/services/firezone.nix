@@ -27,6 +27,16 @@ let
   };
 in
 {
+  age.secrets.admin-passwd = {
+    generator.script = "alnum";
+    intermediary = true;
+  };
+
+  age.secrets.admin-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.admin-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+  };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg-nginx.allowedTCPPorts = [
       config.services.firezone.server.apiPort
@@ -70,6 +80,7 @@ in
       implicitTls = true;
       passwordFile = config.age.secrets.firezone-smtp-password.path;
     };
+    settings.HEALTH_PORT = 4001;
 
     provision = {
       enable = true;
@@ -80,7 +91,7 @@ in
           type = "account_admin_user";
           name = "Admin";
           email = "firezone_admin@${globals.domains.mail_public}";
-          #allow_email_otp_sign_in = true;
+          passwordHash._secret = config.age.secrets.admin-passwd-hash.path;
         };
         groups.anyone = {
           name = "anyone";
@@ -89,20 +100,16 @@ in
           ];
         };
 
-        auth.oidc =
+        auth.oidc.kanidm =
           let
             client_id = "firezone";
           in
           {
-            name = "Kanidm";
-            adapter = "openid_connect";
-            adapter_config = {
-              scope = "openid email profile";
-              response_type = "code";
-              inherit client_id;
-              discovery_document_uri = "https://${globals.services.kanidm.domain}/oauth2/openid/${client_id}/.well-known/openid-configuration";
-              clientSecretFile = config.age.secrets.firezone-oauth2-client-secret.path;
-            };
+            name = "kanidm";
+            inherit client_id;
+            issuer = "https://auth.${globals.domains.web}/oauth2/openid/${client_id}";
+            discovery_document_uri = "https://${globals.services.kanidm.domain}/oauth2/openid/${client_id}/.well-known/openid-configuration";
+            client_secret._secret = config.age.secrets.firezone-oauth2-client-secret.path;
           };
 
         resources =
@@ -129,7 +136,7 @@ in
           // {
             "house.lan.v4" = {
               type = "cidr";
-              name = "home.lan-house.v4";
+              name = "house.lan.v4";
               address = globals.net.vlans.house.cidrv4;
               gatewayGroups = [ "home" ];
             };
@@ -148,9 +155,9 @@ in
                 }
               ];
             };
-            "house.lan-house.v6" = {
+            "house.lan.v6" = {
               type = "cidr";
-              name = "home.lan-house.v6";
+              name = "house.lan.v6";
               address = globals.net.vlans.house.cidrv6;
               gatewayGroups = [ "home" ];
             };
@@ -158,10 +165,10 @@ in
 
         policies =
           { }
-          // allow "anyone" "home.lan-house.v4"
-          // allow "everyone" "home.lan-house.v4"
-          // allow "anyone" "home.lan-house.v6"
-          // allow "everyone" "home.lan-house.v6"
+          // allow "anyone" "house.lan.v4"
+          // allow "everyone" "house.lan.v4"
+          // allow "anyone" "house.lan.v6"
+          // allow "everyone" "house.lan.v6"
           // lib.mergeAttrsList (map (domain: allow "anyone" domain) homeDomains)
           // lib.mergeAttrsList (map (domain: allow "everyone" domain) homeDomains);
       };

@@ -30,9 +30,9 @@
     "/var/lib/iwd"
     #"/etc/mullvad-vpn"
   ];
-  # services.firezone.gui-client = {
-  #   enable = true;
-  #   inherit (config.node) name;
-  #   allowedUsers = [ "patrick" ];
-  # };
+  services.firezone.gui-client = {
+    enable = true;
+    inherit (config.node) name;
+    allowedUsers = [ "patrick" ];
+  };
 }

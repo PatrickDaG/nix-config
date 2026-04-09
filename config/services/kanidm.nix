@@ -248,8 +248,7 @@
         public = true;
         displayName = "firezone";
         originUrl = [
-          "https://${globals.services.firezone.domain}/40c9ad96-f06d-45c1-8e35-e2a0b5088a01/sign_in/providers/ba9a23e0-df6c-4ebd-99dd-de938f8ab07d/handle_callback"
-          "https://${globals.services.firezone.domain}/40c9ad96-f06d-45c1-8e35-e2a0b5088a01/settings/identity_providers/openid_connect/ba9a23e0-df6c-4ebd-99dd-de938f8ab07d/handle_callback"
+          "https://${globals.services.firezone.domain}/auth/oidc/callback"
         ];
         originLanding = "https://${globals.services.firezone.domain}/";
         preferShortUsername = true;
