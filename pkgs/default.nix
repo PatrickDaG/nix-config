@@ -36,11 +36,16 @@ _inputs: [
     };
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (_pythonFinal: pythonPrev: {
-        home-assistant-chip-wheels = pythonPrev.home-assistant-chip-wheels.overrideAttrs {
-          prePatch = ''
-            rm 0002-Use-data-as-platform-storage-location.patch
-          '';
-        };
+        reactivex = pythonPrev.reactivex.overridePythonAttrs (old: rec {
+          version = "5.0.0a2";
+          disabled = false;
+          src = old.src.override {
+            rev = null;
+            tag = "v${version}";
+            hash = "sha256-91pPWYXPuGR0++AzpglMFWMPKtY5jFa7YGwU8GPVJ1U=";
+          };
+          build-system = [ pythonPrev.hatchling ];
+        });
       })
     ];
 
