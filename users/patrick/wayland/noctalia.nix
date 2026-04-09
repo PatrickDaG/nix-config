@@ -3,6 +3,9 @@ _: {
   hm =
     { config, ... }:
     {
+      home.persistence."/state".directories = [
+        ".cache/noctalia"
+      ];
       stylix.targets.noctalia-shell.enable = true;
       programs.niri.settings = {
         layer-rules = [
