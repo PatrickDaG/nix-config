@@ -439,24 +439,21 @@ in
         };
         thinknix = {
           outputs."eDP-1" = {
-            scale = 1.5;
-            position = {
-              x = 2560 * 2;
-              y = 960;
-            };
+            enable = false;
           };
           # at work
           # TODO: Maybe add specializations to switch between home/work setup?
           outputs."DP-7" = {
             position = {
-              x = 0;
+              x = 2560;
               y = 0;
             };
+            transform.rotation = 270;
           };
           outputs."DP-5" = {
             position = {
-              x = 2560;
-              y = 0;
+              x = 0;
+              y = 564;
             };
           };
           # at home
@@ -467,19 +464,11 @@ in
           #   };
           # };
           workspaces = {
-            "1third" = {
-              name = "third";
-              open-on-output = "eDP-1";
-            };
             "1default" = {
               name = "default";
               open-on-output = "DP-5";
             };
-            "2mail" = {
-              name = "mail";
-              open-on-output = "DP-5";
-            };
-            "3notes" = {
+            "2notes" = {
               name = "notes";
               open-on-output = "DP-5";
             };
@@ -487,26 +476,28 @@ in
               name = "second";
               open-on-output = "DP-7";
             };
-            "2slack" = {
+            "2mail" = {
+              name = "mail";
+              open-on-output = "DP-7";
+            };
+            "3slack" = {
               name = "slack";
               open-on-output = "DP-7";
             };
           };
           binds = with config.lib.niri.actions; {
-            "Mod+d".action = focus-workspace "mail";
-            "Mod+Shift+d".action.move-window-to-workspace = "mail";
 
-            "Mod+u".action = focus-workspace "notes";
-            "Mod+Shift+u".action.move-window-to-workspace = "notes";
+            "Mod+d".action = focus-workspace "notes";
+            "Mod+Shift+d".action.move-window-to-workspace = "notes";
 
             "Mod+F1".action = focus-workspace "second";
             "Mod+Shift+F1".action.move-window-to-workspace = "second";
 
-            "Mod+F2".action = focus-workspace "slack";
-            "Mod+Shift+F2".action.move-window-to-workspace = "slack";
+            "Mod+F2".action = focus-workspace "mail";
+            "Mod+Shift+F2".action.move-window-to-workspace = "mail";
 
-            "Mod+F3".action = focus-workspace "third";
-            "Mod+Shift+F3".action.move-window-to-workspace = "third";
+            "Mod+F3".action = focus-workspace "slack";
+            "Mod+Shift+F3".action.move-window-to-workspace = "slack";
           };
           spawn-at-startup = [
             { command = [ "obsidian" ]; }
