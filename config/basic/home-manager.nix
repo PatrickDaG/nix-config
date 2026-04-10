@@ -28,6 +28,7 @@
       inputs.nixvim.homeModules.nixvim
       inputs.spicetify-nix.homeManagerModules.default
       inputs.vicinae.homeManagerModules.default
+      inputs.noctalia.homeModules.default
       #keep-sorted end
     ]
     #If not minimal the stylix nixos module takes care of this

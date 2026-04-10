@@ -22,6 +22,7 @@
         "https://cache.nixos.org"
         "https://nix-gaming.cachix.org"
         "https://cache.nixos-cuda.org"
+        "https://noctalia.cachix.org"
       ];
       trusted-substituters = [
         "https://pwndbg.cachix.org"
@@ -32,6 +33,7 @@
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
         "pwndbg.cachix.org-1:HhtIpP7j73SnuzLgobqqa8LVTng5Qi36sQtNt79cD3k="
         "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
         (builtins.readFile ../../secrets/nix-key.pub)
       ];
       cores = 0;

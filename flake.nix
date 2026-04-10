@@ -168,16 +168,6 @@
     };
 
     # misc applications
-    mdns = {
-      url = "git+https://forge.lel.lol/patrick/mdns-repeater.git";
-      inputs = {
-        # keep-sorted start
-        devshell.follows = "devshell";
-        pre-commit-hooks.follows = "pre-commit-hooks";
-        treefmt-nix.follows = "treefmt-nix";
-        # keep-sorted end
-      };
-    };
     idmail = {
       url = "github:oddlama/idmail/";
       inputs = {
@@ -277,6 +267,10 @@
 
     jail-nix = {
       url = "sourcehut:~alexdavid/jail.nix";
+    };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

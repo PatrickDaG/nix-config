@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   ...
 }:
@@ -136,7 +137,7 @@
     };
     programs.niri.settings = {
       # Allow vicinae to activate other windows
-      debug.honor-xdg-activation-with-invalid-serial = [ ];
+      debug.honor-xdg-activation-with-invalid-serial = lib.mkForce [ ];
     };
   };
   # needed by power-profile extension

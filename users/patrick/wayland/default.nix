@@ -45,14 +45,14 @@
 
   imports = [
     # keep-sorted start
-    ./awww.nix
+    #./awww.nix
     #./fuzzel.nix
     ./niri.nix
-    ./swaync.nix
+    #./swaync.nix
     ./vicinae.nix
-    ./wallpaper-engine.nix
-    #./noctalia.nix
-    ./waybar
+    #./wallpaper-engine.nix
+    #./waybar
+    ./noctalia.nix
     # keep-sorted end
   ];
   hm.home.packages = with pkgs; [
