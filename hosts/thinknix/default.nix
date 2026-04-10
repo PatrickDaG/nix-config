@@ -37,8 +37,6 @@
   hardware.trackpoint.enable = lib.mkDefault true;
   hardware.trackpoint.emulateWheel = lib.mkDefault config.hardware.trackpoint.enable;
 
-  # Fingerprint reader: login and unlock with fingerprint (if you add one with `fprintd-enroll`)
-  # services.fprintd.enable = true;
   stylix.fonts.sizes = {
     terminal = 9;
     applications = 9;
@@ -53,16 +51,16 @@
     };
   };
 
-  services.fprintd = {
-    enable = true;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-goodix;
-    };
-  };
-  environment.persistence."/state".directories = [
-    "/var/lib/fprint"
-  ];
+  # services.fprintd = {
+  #   enable = true;
+  #   tod = {
+  #     enable = true;
+  #     driver = pkgs.libfprint-2-tod1-goodix;
+  #   };
+  # };
+  # environment.persistence."/state".directories = [
+  #   "/var/lib/fprint"
+  # ];
 
   #services.thinkfan.enable = true;
 
