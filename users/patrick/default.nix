@@ -70,6 +70,7 @@ lib.optionalAttrs (!minimal) {
     ./programs/direnv.nix
     ./programs/firefox.nix
     ./programs/gdb.nix
+    ./programs/claude.nix
     ./programs/git.nix
     ./programs/gpg
     ./programs/htop.nix
