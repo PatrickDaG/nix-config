@@ -3,8 +3,8 @@
   services.printing = {
     enable = true;
     drivers = [
-      pkgs.hplipWithPlugin
-      pkgs.hplip
+      # pkgs.hplipWithPlugin
+      # pkgs.hplip
     ];
   };
   environment.persistence."/state".directories = [

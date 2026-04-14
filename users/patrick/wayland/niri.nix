@@ -368,11 +368,11 @@ in
           workspaces = {
             "1default" = {
               name = "default";
-              open-on-output = "DP-1";
+              open-on-output = "DP-4";
             };
             "2games" = {
               name = "games";
-              open-on-output = "DP-1";
+              open-on-output = "DP-4";
             };
 
             "1browser" = {

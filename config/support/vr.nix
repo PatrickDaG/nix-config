@@ -9,7 +9,6 @@
     XRT_COMPOSITOR_COMPUTE = "1";
     XRT_COMPOSITOR_FORCE_WAYLAND_DIRECT = "1";
   };
-  programs.envision.enable = true;
   hm =
     { config, ... }:
     {

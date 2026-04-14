@@ -22,13 +22,13 @@
   networking.nftables.firewall.zones.untrusted.interfaces = [
     "lan01"
   ];
-  services.mullvad-vpn = {
-    enable = true;
-    package = pkgs.mullvad-vpn;
-  };
+  # services.mullvad-vpn = {
+  #   enable = true;
+  #   package = pkgs.mullvad-vpn;
+  # };
   environment.persistence."/state".directories = [
     "/var/lib/iwd"
-    "/etc/mullvad-vpn"
+    #"/etc/mullvad-vpn"
   ];
   services.firezone.gui-client = {
     enable = true;

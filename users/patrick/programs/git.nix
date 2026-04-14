@@ -78,10 +78,6 @@ in
   hm =
     { config, ... }:
     {
-      home.packages = [
-        # try for jujutsu
-        pkgs.meld
-      ];
       programs.jujutsu = {
         enable = true;
         settings = {

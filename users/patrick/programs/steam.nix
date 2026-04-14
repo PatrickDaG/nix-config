@@ -5,11 +5,11 @@
   ...
 }:
 {
-  programs.gamescope = {
-    enable = true;
-    # Not possible inside steam
-    #capSysNice = true;
-  };
+  # programs.gamescope = {
+  #   enable = true;
+  #   # Not possible inside steam
+  #   #capSysNice = true;
+  # };
   services.ratbagd.enable = true;
   hm.home.packages = [ pkgs.piper ];
   programs.steam = {

@@ -17,7 +17,6 @@ lib.optionalAttrs (!minimal) {
   #};
   environment.systemPackages = with pkgs; [
     pulseaudio
-    pulsemixer
   ];
 
   services.pulseaudio.enable = lib.mkForce false;

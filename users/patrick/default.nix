@@ -65,7 +65,6 @@ lib.optionalAttrs (!minimal) {
     ./theme.nix
 
     ./wayland
-    ./Xorg
 
     ./programs/bottles.nix
     ./programs/direnv.nix
@@ -73,19 +72,21 @@ lib.optionalAttrs (!minimal) {
     ./programs/gdb.nix
     ./programs/git.nix
     ./programs/gpg
-    ./programs/gpu-screen-recorder.nix
     ./programs/htop.nix
     ./programs/kitty.nix
-    ./programs/minecraft.nix
-    ./programs/minion.nix
     ./programs/nvim
-    ./programs/obs.nix
     ./programs/pager.nix
     ./programs/poe.nix
     ./programs/spicetify.nix
     ./programs/steam.nix
     ./programs/thunderbird.nix
     ./programs/zsh
+    # Currently unused and need a lot of space
+    #./programs/minecraft.nix
+    #./programs/obs.nix
+    #./programs/minion.nix
+    #./programs/gpu-screen-recorder.nix
+    #./programs/yt-dlp.nix
 
   ];
 

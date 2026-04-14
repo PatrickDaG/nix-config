@@ -43,19 +43,10 @@
   };
   services.displayManager.enable = true;
 
-  security.pam.services.swaylock = { };
-  hm.services.swayidle = {
-    enable = true;
-    events = {
-      "before-sleep" = "${pkgs.swaylock}/bin/swaylock -fF";
-      "lock" = "${pkgs.swaylock}/bin/swaylock -fF";
-    };
-  };
-
   imports = [
     # keep-sorted start
     ./awww.nix
-    ./fuzzel.nix
+    #./fuzzel.nix
     ./niri.nix
     ./swaync.nix
     ./vicinae.nix

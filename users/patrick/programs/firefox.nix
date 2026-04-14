@@ -50,8 +50,7 @@ in
           '';
         })).override
           {
-            nativeMessagingHosts = [
-            ];
+            nativeMessagingHosts = [ ];
           };
       policies = {
         AutofillAddressEnabled = false;

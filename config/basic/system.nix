@@ -65,7 +65,6 @@
     file
     killall
     kitty.terminfo
-    nvd
     # fix pcscd
     pcscliteWithPolkit.out
     rage

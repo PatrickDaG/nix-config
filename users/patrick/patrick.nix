@@ -1,82 +1,73 @@
 {
   pkgs,
+  config,
   inputs,
   ...
 }:
 {
   hm.home = {
-    packages = with pkgs; [
-      (aspellWithDicts (
-        dicts: with dicts; [
-          de
-          en
-          en-computers
-          en-science
-          es
-          fr
-          la
-        ]
-      ))
-      inputs.flint.packages.${pkgs.stdenv.hostPlatform.system}.flint
-      #keep-sorted start
-      amazon
-      bashInteractive
-      bs-manager
-      btop-cuda
-      chatterino2
-      chromium
-      cmatrix
-      cowsay
-      crosspipe
-      dig
-      discord
-      disneyplus
-      dust
-      element-desktop
-      espeak
-      feh
-      figlet
-      galaxy-buds-client
-      gh
-      gh-dash
-      hexyl
-      hyperfine
-      hyprshot
-      jjui
-      lazyjj
-      libreoffice
-      magic-wormhole
-      #ladybird
-      makemkv
-      mpv
-      netflix
-      nextcloud-client
-      nix-output-monitor
-      nixpkgs-review
-      obsidian
-      orca-slicer
-      osu-lazer-bin
-      pandoc # for obsidian
-      pdfpc
-      pinentry-gnome3 # for yubikey pinentry
-      ripgrep-all
-      signal-desktop
-      slack
-      streamlink
-      streamlink-twitch-gui-bin
-      telegram-desktop
-      timer
-      via
-      webcord
-      #xautoclick
-      xournalpp
-      ytdlp-pot-provider
-      zathura
-      zoom-us
-      zotero
-      zulip
-      #keep-sorted end
-    ];
+    packages =
+      with pkgs;
+      config.lib.misc.mkPerHost {
+        all = [
+          (aspellWithDicts (
+            dicts: with dicts; [
+              de
+              en
+              en-computers
+              en-science
+              es
+              fr
+              la
+            ]
+          ))
+          inputs.flint.packages.${pkgs.stdenv.hostPlatform.system}.flint
+          #keep-sorted start
+          amazon
+          bashInteractive
+          btop-cuda
+          chromium
+          #crosspipe
+          dig
+          discord
+          disneyplus
+          dust
+          element-desktop
+          feh
+          gh
+          gh-dash
+          hyperfine
+          magic-wormhole
+          mpv
+          netflix
+          nextcloud-client
+          nix-output-monitor
+          nixpkgs-review
+          obsidian
+          pandoc # for obsidian
+          pinentry-gnome3 # for yubikey pinentry
+          ripgrep-all
+          signal-desktop
+          streamlink
+          streamlink-twitch-gui-bin
+          zathura
+          zotero
+          zoom-us
+          #keep-sorted end
+        ];
+        thinknix = [
+          slack
+          zulip
+          galaxy-buds-client
+          #pdfpc
+        ];
+        desktopnix = [
+          bs-manager
+        ];
+        patricknix = [
+          xournalpp
+        ];
+      };
   };
   hm.programs.claude-code = {
     enable = true;
@@ -100,46 +91,6 @@
     '';
   };
   services.udev.packages = [ pkgs.qmk-udev-rules ];
-  hm.xdg.configFile.yt-dlp-get-pot =
-    let
-      source = pkgs.fetchFromGitHub {
-        owner = "coletdjnz";
-        repo = "yt-dlp-get-pot";
-        tag = "v0.2.0";
-        hash = "sha256-c5iKnZ7rYckbqvEI20nymOV6/QJAWyu/FX0QM6ps2D4=";
-      };
-    in
-    {
-      inherit source;
-      target = "yt-dlp/plugins/yt-dlp-get-pot";
-    };
-  hm.xdg.configFile.bgutil-ytdlp-pot-provider =
-    let
-      source = pkgs.fetchFromGitHub {
-        owner = "Brainicism";
-        repo = "bgutil-ytdlp-pot-provider";
-        tag = "0.7.2";
-        hash = "sha256-IiPle9hZEHFG6bjMbe+psVJH0iBZXOMg3pjgoERH3Eg=";
-      };
-    in
-    {
-      source = "${source}/plugin";
-      target = "yt-dlp/plugins/bgutil-ytdlp-pot-provider";
-    };
-  hm.programs.yt-dlp = {
-    enable = true;
-    extraConfig = ''
-      --restrict-filenames
-      -P "temp:~/tmp"
-      -P "~/videos"
-      -o "%(epoch>%Y-%m-%dT%H:%M:%SZ)s%(uploader)s_%(title)s.%(ext)s"
-    '';
-    settings = {
-      sponsorblock-remove = "sponsor";
-      sponsorblock-mark = "all";
-      cookies-from-browser = "firefox";
-    };
-  };
   environment.systemPackages = [
     (pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves"; })
   ];

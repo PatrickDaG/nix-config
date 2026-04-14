@@ -6,7 +6,6 @@
 {
   environment.persistence."/state".directories = [
     "/var/lib/iwd"
-    "/etc/mullvad-vpn"
   ];
   age.secrets.eduroam = {
     rekeyFile = ../patricknix/secrets/iwd/eduroam.8021x.age;
@@ -88,10 +87,6 @@
         RouteMetric = 40;
       };
     };
-  };
-  services.mullvad-vpn = {
-    enable = true;
-    package = pkgs.mullvad-vpn;
   };
   services.firezone.gui-client = {
     enable = true;

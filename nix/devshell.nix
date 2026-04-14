@@ -41,15 +41,6 @@
             help = "Format all files";
           }
           {
-            package = pkgs.symlinkJoin {
-              name = "locker";
-              paths = [
-                pkgs.pat-scripts.unlock
-                pkgs.pat-scripts.lock
-              ];
-            };
-          }
-          {
             package = pkgs.pat-scripts.update;
             help = "update nix configurations";
           }
