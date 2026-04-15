@@ -15,13 +15,16 @@ in
     (readonly "/nix/store")
     (readwrite "/nix/var/nix/daemon-socket")
     # noescape needed to expand ~
-    (readwrite (noescape "~/.cache/nix"))
+    (try-readwrite (noescape "~/.cache/nix"))
     (readonly "/etc/nix")
     (readonly "/etc/static/nix")
     (try-fwd-env "NIX_PATH")
     (set-env "NIX_REMOTE" "daemon")
 
+    # Allow jujutsu usage
     (readonly (noescape "~/.config/jj"))
+    (readwrite (noescape "\"$PWD/../.jj\""))
+    (readwrite (noescape "\"$PWD/../.git\""))
 
     # GitHub CLI auth for PR interactions (separate account from host)
     # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
@@ -31,7 +34,7 @@ in
     # Spawn agent in a new jj workspace
     # Just don't spawn 2 agent in the same second. Thx
     (add-runtime ''
-      date=$(date +"%Y-%m-%d %H:%M:%S")
+      date=$(date +"%Y-%m-%dT%H:%M:%S")
       export AGENT_SESSION_NAME="agent-$date"
       jj workspace add "$AGENT_SESSION_NAME" --quiet
       cd "$AGENT_SESSION_NAME"
