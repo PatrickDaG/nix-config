@@ -135,7 +135,6 @@
     // mkContainer "grafana" { enablePanzer = true; }
     // mkContainer "homeassistant" {
     }
-    // mkContainer "firezone-gateway" { }
     // mkContainer "nginx" { }
     // mkContainer "samba" {
       enablePanzer = true;
@@ -152,7 +151,6 @@
       ];
     };
 
-  containers.firezone-gateway.enableTun = true;
   # Zigbee Dongle
   # This is a very bad idea.
   # Hopefully no one else adds any usb devices

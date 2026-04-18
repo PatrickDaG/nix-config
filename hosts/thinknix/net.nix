@@ -88,10 +88,6 @@
       };
     };
   };
-  services.firezone.gui-client = {
-    enable = true;
-    inherit (config.node) name;
-  };
   age.secrets = {
     ovpn-conf.rekeyFile = config.node.secretsDir + /ovpn/config.age;
     ovpn-ca.rekeyFile = config.node.secretsDir + /ovpn/ca.age;

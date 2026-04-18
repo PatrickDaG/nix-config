@@ -39,11 +39,6 @@
       mode = "440";
       group = "kanidm";
     };
-    oauth2-firezone = {
-      generator.script = "alnum";
-      mode = "440";
-      group = "kanidm";
-    };
     oauth2-paperless = {
       generator.script = "alnum";
       mode = "440";
@@ -241,23 +236,6 @@
           "groups"
         ];
         preferShortUsername = true;
-      };
-
-      groups."firezone.access" = { };
-      systems.oauth2.firezone = {
-        public = true;
-        displayName = "firezone";
-        originUrl = [
-          "https://${globals.services.firezone.domain}/40c9ad96-f06d-45c1-8e35-e2a0b5088a01/sign_in/providers/ba9a23e0-df6c-4ebd-99dd-de938f8ab07d/handle_callback"
-          "https://${globals.services.firezone.domain}/40c9ad96-f06d-45c1-8e35-e2a0b5088a01/settings/identity_providers/openid_connect/ba9a23e0-df6c-4ebd-99dd-de938f8ab07d/handle_callback"
-        ];
-        originLanding = "https://${globals.services.firezone.domain}/";
-        preferShortUsername = true;
-        scopeMaps."firezone.access" = [
-          "openid"
-          "email"
-          "profile"
-        ];
       };
 
       # oauth2 proxy groups

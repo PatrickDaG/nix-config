@@ -170,28 +170,6 @@ in
         '';
       };
     })
-    (lib.mkIf public {
-      upstreams.firezone-api = {
-        servers."${ipOf "firezone"}:${
-          toString nodes.${globals.services.firezone.host}.config.services.firezone.server.portal.apiPort
-        }" =
-          { };
-        extraConfig = ''
-          zone firezone 64k;
-          keepalive 2;
-        '';
-      };
-    })
-    (blockOf "firezone" {
-      publicAccess = true;
-      # Should not resolve privately anyway
-      privateAcess = false;
-      virtualHostExtraConfig.locations."/api/" = {
-        # The trailing slash is important to strip the location prefix from the request
-        proxyPass = "http://firezone-api/";
-        proxyWebsockets = true;
-      };
-    })
     (blockOf "vaultwarden" {
       maxBodySize = "1G";
       publicAccess = true;

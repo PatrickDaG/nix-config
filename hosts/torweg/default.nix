@@ -1,9 +1,4 @@
 {
-  lib,
-  minimal,
-  ...
-}:
-{
   imports = [
     ../../config/basic
     ../../config/support/initrd-ssh.nix
@@ -15,8 +10,7 @@
 
     ./net.nix
     ./fs.nix
-  ]
-  ++ lib.lists.optionals (!minimal) [ ../../config/services/firezone.nix ];
+  ];
   boot = {
     initrd.availableKernelModules = [
       "virtio_pci"

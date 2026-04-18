@@ -47,7 +47,6 @@ These are services I've set up
 🔗 Bookmarks | [Linkwarden](./config/services/linkwarden.nix) | Bookmark manager
 🍽️ Recipes | [Mealie](./config/services/mealie.nix) | Recipe manager
 📧 E-Mail | [Stalwart](./config/services/stalwart.nix) | All in one mail server
-🌐 VPN | [Firezone](./config/services/firezone.nix) | Easy to use peer to peer VPN solution based on wireguard
 🌧️ Cloud | [NextCloud](./config/services/nextcloud.nix) | All in one cloud solution providing online File storage as well as notes, contacts and calendar synchronization
 🗄️ Documents | [Paperless](./config/services/paperless.nix) | Machine learning supported document organizing platform
 📁 NAS | [Samba](./config/services/samba.nix) | Local network shared storage
