@@ -8,8 +8,6 @@ in
     network
     time-zone
     no-new-session
-    (readonly (noescape "\"$PWD/../\""))
-
     mount-cwd
 
     # Nix support: expose the full nix store (read-only),
@@ -36,13 +34,15 @@ in
     # Spawn agent in a new jj workspace
     # Just don't spawn 2 agent in the same second. Thx
     (add-runtime ''
-      date=$(date +"%Y-%m-%dT%H:%M:%S")
+      date=$(date +"%Y%m%dT%H%M%S")
       export AGENT_SESSION_NAME="agent-$date"
-      jj workspace add "$AGENT_SESSION_NAME" --quiet
+      jj workspace add "$AGENT_SESSION_NAME" --quiet -m "agent session $date"
       cd "$AGENT_SESSION_NAME"
-      jj describe -m "agent session $date" --quiet
+      git init
+      git add .
     '')
     (add-cleanup ''
+      jj status
       if [ -n "$AGENT_SESSION_NAME" ]; then
         # Capture change id while still in the workspace directory
         change_id=$(jj log --no-graph -r @ -T 'change_id')
@@ -53,7 +53,7 @@ in
         if [ "$is_empty" = "true" ]; then
           jj abandon "$change_id" --quiet
         fi
-        rm -r "$AGENT_SESSION_NAME"
+        rm -rf "$AGENT_SESSION_NAME"
       fi
     '')
 
