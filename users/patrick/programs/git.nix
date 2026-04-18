@@ -101,6 +101,7 @@ in
             #   format_signed_off_by_trailer(self)
             #   ++ if(!trailers.contains_key("Change-Id"), format_gerrit_change_id_trailer(self))
             # '';
+            git_push_bookmark = "'patrick/push-' ++ change_id.short()'";
           };
           aliases = {
             tug = [
@@ -121,9 +122,9 @@ in
             rebase-all = [
               "rebase"
               "--source"
-              "all:roots(bookmarks(master)..bookmarks())"
+              "roots(trunk()..mine())"
               "--destination"
-              "master"
+              "trunk()"
             ];
             csp = [
               "util"
@@ -150,7 +151,7 @@ in
           };
           remotes = {
             origin.auto-track-bookmarks = "glob:*";
-            upstream.auto-track-bookmarks = "glob:*";
+            upstream.auto-track-bookmarks = "glob:ma*";
           };
           git = {
             sign-on-push = true;

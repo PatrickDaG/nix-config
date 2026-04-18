@@ -40,7 +40,7 @@
           magic-wormhole
           mpv
           netflix
-          nextcloud-client
+          #nextcloud-client # 2GB?
           nix-output-monitor
           nixpkgs-review
           obsidian
@@ -49,11 +49,11 @@
           ripgrep-all
           signal-desktop
           streamlink
-          streamlink-twitch-gui-bin
+          #streamlink-twitch-gui-bin # Why this 500MB????
           timewarrior
           zathura
           zotero
-          zoom-us
+          #zoom-us # 2.5GB?
           #keep-sorted end
         ];
         thinknix = [
@@ -110,16 +110,16 @@
       # By default we would install all themes
       (adi1090x-plymouth-themes.override {
         selected_themes = [
-          "circuit"
-          "colorful_sliced"
-          "deus_ex"
-          "dna"
-          "dragon"
-          "ibm"
-          "lone"
           "rings"
-          "rings_2"
-          "square"
+          # "circuit"
+          # "colorful_sliced"
+          # "deus_ex"
+          # "dna"
+          # "dragon"
+          # "ibm"
+          # "lone"
+          # "rings_2"
+          # "square"
         ];
       })
     ];

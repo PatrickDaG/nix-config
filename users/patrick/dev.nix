@@ -43,9 +43,8 @@ lib.optionalAttrs (!minimal) {
     pat-scripts.git-dirty
   ];
 
-  environment = {
-    enableDebugInfo = true;
-  };
+  # Save space
+  #environment.enableDebugInfo = true;
   documentation = {
     enable = true;
     dev.enable = true;

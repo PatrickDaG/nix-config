@@ -66,7 +66,6 @@ lib.optionalAttrs (!minimal) {
 
     ./wayland
 
-    ./programs/bottles.nix
     ./programs/direnv.nix
     ./programs/firefox.nix
     ./programs/gdb.nix
@@ -83,6 +82,7 @@ lib.optionalAttrs (!minimal) {
     ./programs/thunderbird.nix
     ./programs/zsh
     # Currently unused and need a lot of space
+    #./programs/bottles.nix
     #./programs/minecraft.nix
     #./programs/obs.nix
     #./programs/minion.nix

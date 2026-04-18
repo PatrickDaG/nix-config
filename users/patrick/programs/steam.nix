@@ -14,9 +14,10 @@
   hm.home.packages = [ pkgs.piper ];
   programs.steam = {
     enable = true;
-    extraCompatPackages = [
-      pkgs.proton-ge-bin
-    ];
+    # This takes 1.5 GB because it seems to pull in a full nixpkgs clone?
+    # extraCompatPackages = [
+    #   pkgs.proton-ge-bin
+    # ];
     extraPackages = [
       # vampir überlebende braucht diese pkgs
       pkgs.libgdiplus

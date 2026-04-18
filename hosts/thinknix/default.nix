@@ -72,6 +72,5 @@
   topology.self.icon = "devices.laptop";
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"
-    "riscv64-linux"
   ];
 }

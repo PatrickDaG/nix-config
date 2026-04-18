@@ -40,15 +40,15 @@
       };
       servers = {
         bashls.enable = true;
-        clangd.enable = true;
+        #clangd.enable = true; # Why 1 GB of space?
+        #java_language_server.enable = true; # 300MB
+        #gopls.enable = true; # 300MB
         cmake.enable = true;
         cssls.enable = true;
-        gopls.enable = true;
         html.enable = true;
         zls.enable = true;
         pyright.enable = true;
         texlab.enable = true;
-        java_language_server.enable = true;
         nil_ls = {
           enable = true;
           settings = {
