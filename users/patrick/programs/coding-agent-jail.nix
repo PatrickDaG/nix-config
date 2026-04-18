@@ -8,6 +8,8 @@ in
     network
     time-zone
     no-new-session
+    (readonly (noescape "\"$PWD/../\""))
+
     mount-cwd
 
     # Nix support: expose the full nix store (read-only),
@@ -23,7 +25,6 @@ in
 
     # Allow jujutsu usage
     (readonly (noescape "~/.config/jj"))
-    (readonly (noescape "\"$PWD/../\""))
     (readwrite (noescape "\"$PWD/../.jj\""))
     (readwrite (noescape "\"$PWD/../.git\""))
 

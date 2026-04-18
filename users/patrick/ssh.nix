@@ -26,10 +26,6 @@
         ];
       in
       {
-        "elisabeth" = {
-          hostname = "lel.lol";
-          user = "root";
-        };
         "mailnix" = {
           hostname = globals.hosts.mailnix.ip;
           user = "root";

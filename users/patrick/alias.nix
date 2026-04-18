@@ -26,7 +26,7 @@
 
     zf = "zathura --fork";
     flop = "poweroff"; # ???
-    claudius = "claude";
+    claudius = "jailed-claude";
 
     ltar = "tar --exclude=\"*/*/*\" -tvf";
     untar = "tar -xvf";
