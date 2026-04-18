@@ -374,6 +374,10 @@ in
               name = "games";
               open-on-output = "DP-4";
             };
+            "3notes" = {
+              name = "notes";
+              open-on-output = "DP-4";
+            };
 
             "1browser" = {
               name = "browser";
@@ -381,10 +385,6 @@ in
             };
             "2mail" = {
               name = "mail";
-              open-on-output = "DP-6";
-            };
-            "3notes" = {
-              name = "notes";
               open-on-output = "DP-6";
             };
 
@@ -401,14 +401,14 @@ in
             "Mod+d".action = focus-workspace "games";
             "Mod+Shift+d".action.move-window-to-workspace = "games";
 
-            "Mod+u".action = focus-workspace "browser";
-            "Mod+Shift+u".action.move-window-to-workspace = "browser";
+            "Mod+u".action = focus-workspace "notes";
+            "Mod+Shift+u".action.move-window-to-workspace = "notes";
+
+            "Mod+x".action = focus-workspace "browser";
+            "Mod+Shift+x".action.move-window-to-workspace = "browser";
 
             "Mod+a".action = focus-workspace "mail";
             "Mod+Shift+a".action.move-window-to-workspace = "mail";
-
-            "Mod+x".action = focus-workspace "notes";
-            "Mod+Shift+x".action.move-window-to-workspace = "notes";
 
             "Mod+F1".action = focus-workspace "twitch";
             "Mod+Shift+F1".action.move-window-to-workspace = "twitch";
