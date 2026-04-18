@@ -28,7 +28,6 @@ lib.optionalAttrs (!minimal) {
       # TPM settings
       "tss"
       "davfs2"
-      "firezone-client"
     ];
     group = "patrick";
     inherit (globals.users.patrick) hashedPassword;
