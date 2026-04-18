@@ -99,8 +99,17 @@ let
     };
 in
 {
-  globals.wireguard.services.hosts.${config.node.name} = { };
-  globals.wireguard.services-extern.hosts.${config.node.name} = { };
+  globals.wireguard =
+    if public then
+      {
+        services-extern.hosts.${config.node.name} = { };
+      }
+    else
+      {
+        users.hosts.${config.node.name} = { };
+        services.hosts.${config.node.name} = { };
+      };
+  networking.nftables.firewall.zones.untrusted.interfaces = lib.optional (!public) "users";
   age.secrets.loki-basic-auth-hashes = {
     inherit (nodes.${globals.services.loki.host}.config.age.secrets.loki-basic-auth-hashes) rekeyFile;
     mode = "440";

@@ -13,6 +13,9 @@ in
     openFirewall = true;
   };
 
+  globals.wireguard.users.hosts.${config.node.name} = { };
+  networking.nftables.firewall.zones.untrusted.interfaces = [ "users" ];
+
   backups.storageBoxes.main = {
     paths = [ "/bunker" ];
     subuser = "smb";
@@ -103,7 +106,7 @@ in
             # Allow access to local network
             # Also allow access from fritz vlan
             # Also allow printer access
-            "hosts allow" = "10.99.30. localhost";
+            "hosts allow" = "10.99.30. localhost 10.45.";
 
             "guest account" = "nobody";
             "map to guest" = "bad user";

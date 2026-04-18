@@ -42,6 +42,15 @@ in
   meta.telegraf.availableMonitoringNetworks = [
     "internet"
   ];
+  globals.wireguard.users = {
+    host = icfg.hostCidrv4;
+    port = 51823;
+    cidrv4 = "10.45.0.0/20";
+    cidrv6 = "fd00:1767::/112";
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
+  };
+  globals.wireguard.users.hosts.patrick-handy = {};
   globals.wireguard.services-extern = {
     host = icfg.hostCidrv4;
     port = 51822;
@@ -61,16 +70,22 @@ in
         to = [ "local" ];
         allowedTCPPorts = [ 22 ];
       };
-      wireguard-services-extern = {
+      wireguard = {
         from = [ "untrusted" ];
         to = [ "local" ];
         allowedUDPPorts = [
           globals.wireguard.services-extern.port
+          globals.wireguard.users.port
         ];
       };
       forward-services-wireguard = {
         from = [ "wg-services-extern" ];
         to = [ "wg-services-extern" ];
+        verdict = "accept";
+      };
+      forward-users-wireguard = {
+        from = [ "wg-users" ];
+        to = [ "wg-users" ];
         verdict = "accept";
       };
     };

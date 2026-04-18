@@ -68,8 +68,15 @@
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
       };
-      dhcpV4Config.RouteMetric = 10;
-      dhcpV6Config.RouteMetric = 10;
+      dhcpV4Config = {
+        UseDNS = false;
+        RouteMetric = 10;
+      };
+      ipv6AcceptRAConfig.UseDNS = false;
+      dhcpV6Config = {
+        UseDNS = false;
+        RouteMetric = 10;
+      };
     };
     "01-wlan1" = {
       DHCP = "yes";

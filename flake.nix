@@ -283,47 +283,59 @@
       flake-parts,
       ...
     }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        ./nix/agenix-rekey.nix
-        ./nix/devshell.nix
-        ./nix/globals.nix
-        ./nix/pkgs.nix
-        ./nix/patch.nix
-        nix-topology.flakeModule
-        nixos-extra-modules.modules.flake.default
-      ];
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      {
+        imports = [
+          ./nix/agenix-rekey.nix
+          ./nix/devshell.nix
+          ./nix/globals.nix
+          ./nix/pkgs.nix
+          ./nix/patch.nix
+          nix-topology.flakeModule
+          nixos-extra-modules.modules.flake.default
+        ];
 
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
 
-      perSystem =
-        { pkgs, system, ... }:
-        {
-          topology.modules = [ ./nix/topology.nix ];
-          apps.setupHetznerStorageBoxes =
-            import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
-              {
-                inherit pkgs;
-                nixosConfigurations = self.nodes;
-                decryptIdentity = ../keys/PatC.pub;
-              };
-          packages.live-iso = nixos-generators.nixosGenerate {
-            inherit pkgs;
-            modules = [
-              ./nix/installer-configuration.nix
-              ./config/basic/ssh.nix
-            ];
-            format =
-              {
-                x86_64-linux = "install-iso";
-                aarch64-linux = "sd-aarch64-installer";
-              }
-              .${system};
+        perSystem =
+          {
+            pkgs,
+            system,
+            ...
+          }:
+          {
+            topology.modules = [ ./nix/topology.nix ];
+            apps.setupHetznerStorageBoxes =
+              import (nixos-extra-modules + "/apps/setup-hetzner-storage-boxes.nix")
+                {
+                  inherit pkgs;
+                  nixosConfigurations = self.nodes;
+                  decryptIdentity = ../keys/PatC.pub;
+                };
+            apps.wg-config = import (nixos-extra-modules + "/apps/wg-quick-config.nix") {
+              inherit pkgs inputs;
+              inherit (inputs.self) globals;
+              nixosConfigurations = self.nodes;
+              decryptIdentity = "${inputs.self.outPath}/keys/PatA.pub";
+            };
+            packages.live-iso = nixos-generators.nixosGenerate {
+              inherit pkgs;
+              modules = [
+                ./nix/installer-configuration.nix
+                ./config/basic/ssh.nix
+              ];
+              format =
+                {
+                  x86_64-linux = "install-iso";
+                  aarch64-linux = "sd-aarch64-installer";
+                }
+                .${system};
+            };
+
           };
-
-        };
-    };
+      }
+    );
 }

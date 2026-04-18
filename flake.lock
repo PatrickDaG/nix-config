@@ -1399,11 +1399,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774870126,
-        "narHash": "sha256-Pn5VGBzqvqyKO/aLsK9wKxWi/SMmpOzgzQbhHe+qEQA=",
+        "lastModified": 1776595118,
+        "narHash": "sha256-6bIEi8q5hXCHU9nApTbQXvpljMWldg3QipCD+jkOGK8=",
         "owner": "oddlama",
         "repo": "nixos-extra-modules",
-        "rev": "26d55fc5680641e8f126bda0271438a3f2452698",
+        "rev": "84207afebb794be7b53cfc9768730f37c64f4a13",
         "type": "github"
       },
       "original": {

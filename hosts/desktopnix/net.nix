@@ -17,6 +17,15 @@
       networkConfig = {
         IPv6PrivacyExtensions = "yes";
       };
+      dhcpV4Config = {
+        UseDNS = false;
+        RouteMetric = 10;
+      };
+      ipv6AcceptRAConfig.UseDNS = false;
+      dhcpV6Config = {
+        UseDNS = false;
+        RouteMetric = 10;
+      };
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [
@@ -30,9 +39,5 @@
     "/var/lib/iwd"
     #"/etc/mullvad-vpn"
   ];
-  # services.firezone.gui-client = {
-  #   enable = true;
-  #   inherit (config.node) name;
-  #   allowedUsers = [ "patrick" ];
-  # };
+  globals.wireguard.users.hosts.${config.node.name} = { };
 }
