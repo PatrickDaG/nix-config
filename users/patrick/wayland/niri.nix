@@ -439,20 +439,24 @@ in
         };
         thinknix = {
           outputs."eDP-1" = {
-            enable = false;
+            position = {
+              x = 0;
+              y = 564 + 1440 - 256;
+            };
+            scale = 1.25;
           };
           # at work
           # TODO: Maybe add specializations to switch between home/work setup?
           outputs."DP-7" = {
             position = {
-              x = 2560;
+              x = 2560 + (builtins.floor (2560 / 1.25));
               y = 0;
             };
             transform.rotation = 270;
           };
           outputs."DP-5" = {
             position = {
-              x = 0;
+              x = 0 + (builtins.floor (2560 / 1.25));
               y = 564;
             };
           };
