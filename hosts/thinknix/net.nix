@@ -112,4 +112,5 @@
       tls-auth ${config.age.secrets.ovpn-ta.path} 1
     '';
   };
+  globals.wireguard.users.hosts.${config.node.name} = { };
 }
