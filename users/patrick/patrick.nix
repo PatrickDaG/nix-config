@@ -53,7 +53,8 @@
           timewarrior
           zathura
           zotero
-          #zoom-us # 2.5GB?
+          zoom-us # 2.5GB?
+          libreoffice
           #keep-sorted end
         ];
         thinknix = [
