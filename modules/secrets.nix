@@ -18,11 +18,11 @@ let
   # how modules can be functions or sets.
   constSet = x: if builtins.isAttrs x then (_: x) else x;
 
+  extraBuiltins = import ../nix/extra-builtins.nix;
   rageImportEncrypted =
-    assert assertMsg (
-      builtins ? extraBuiltins.rageImportEncrypted
-    ) "The rageImportEncrypted extra plugin is not loaded";
-    builtins.extraBuiltins.rageImportEncrypted;
+    assert assertMsg (builtins ? exec)
+      "builtins.exec is not available. Set `allow-unsafe-native-code-during-evaluation = true`";
+    extraBuiltins.rageImportEncrypted;
   # This "imports" an encrypted .nix.age file
   importEncrypted =
     path:
@@ -40,8 +40,8 @@ in
       default = true;
       type = types.bool;
       description = mdDoc ''
-        Add nix plugins and the extra builtins file to the nix config
-        Enabling this host to decrypt secret when deploying
+        Add allow-unsafe-native-code-during-evaluation to the nix config
+        Enabling this host to decrypt secrets when deploying
       '';
     };
 

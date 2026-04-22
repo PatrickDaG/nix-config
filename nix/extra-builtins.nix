@@ -1,20 +1,5 @@
-# This file is intended to be used together with pkgs.nix-plugins,
-# to provide rage decryption as an additional safe builtin.
-#
-# Make sure that nix-plugins is installed by adding the following
-# statement to your configuration.nix:
-#
-# ```nix
-# {
-#   nix.extraOptions = ''
-#     plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-#     # Please adjust path accordingly, or leave this out and alternativaly
-#     # pass `--option extra-builtins-file ./extra-builtins.nix` to each invocation
-#     extra-builtins-file = ./extra-builtins.nix
-#   '';
-# }
-# ```
-{ exec, ... }:
+# Provides rage decryption and other unsafe builtins using builtins.exec.
+# Requires `allow-unsafe-native-code-during-evaluation = true` in nix config.
 let
   assertMsg = pred: msg: pred || builtins.throw msg;
   hasSuffix =
@@ -35,7 +20,7 @@ in
       "The file to decrypt must be given as a path to prevent impurity.";
     assert assertMsg (hasSuffix ".nix.age" nixFile)
       "The content of the decrypted file must be a nix expression and should therefore end in .nix.age";
-    exec (
+    builtins.exec (
       [
         ./rage-decrypt-and-cache.sh
         nixFile
@@ -43,7 +28,7 @@ in
       ++ identities
     );
   # currentSystem
-  unsafeCurrentSystem = exec [
+  unsafeCurrentSystem = builtins.exec [
     "nix"
     "eval"
     "--impure"

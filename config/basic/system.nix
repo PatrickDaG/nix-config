@@ -17,7 +17,7 @@
 
     storageMode = "derivation";
 
-    forceRekeyOnSystem = builtins.extraBuiltins.unsafeCurrentSystem;
+    forceRekeyOnSystem = (import ../../nix/extra-builtins.nix).unsafeCurrentSystem;
     hostPubkey =
       let
         pubkeyPath = config.node.secretsDir + "/host.pub";
@@ -77,7 +77,7 @@
     # keep-sorted end
   ];
   environment.variables = {
-    DO_NOT_TRACK = true;
+    DO_NOT_TRACK = 1;
   };
 
   environment.ldso32 = null;

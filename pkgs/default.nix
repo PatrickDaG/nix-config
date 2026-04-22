@@ -8,7 +8,7 @@ _inputs: [
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
     amazon = prev.callPackage ./amazon.nix { };
-    nix-plugins = prev.callPackage ./nix-plugins.nix { };
+
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     goldfish = prev.callPackage ./goldfish.nix { };
     soulver-cpp = prev.callPackage ./soulver-cpp.nix { };

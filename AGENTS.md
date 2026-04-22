@@ -39,9 +39,9 @@ Build a live ISO for installation:
 nix build --print-out-paths --no-link .#images.<target-system>.live-iso
 ```
 
-When deploying from a host without nix-plugins configured:
+When deploying from a host without the nix config:
 ```bash
---nix-option plugin-files "$NIX_PLUGINS"/lib/nix/plugins --nix-option extra-builtins-file ./nix/extra-builtins.nix
+--nix-option allow-unsafe-native-code-during-evaluation true
 ```
 
 ## Architecture

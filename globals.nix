@@ -6,12 +6,11 @@
 }:
 let
   inherit (config) globals;
-  # Try to access the extra builtin we loaded via nix-plugins.
-  # Throw an error if that doesn't exist.
+  extraBuiltins = import ./nix/extra-builtins.nix;
   rageImportEncrypted =
-    assert lib.assertMsg (builtins ? extraBuiltins.rageImportEncrypted)
-      "The extra builtin 'rageImportEncrypted' is not available, so repo.secrets cannot be decrypted. Did you forget to add nix-plugins and point it to `./nix/extra-builtins.nix` ?";
-    builtins.extraBuiltins.rageImportEncrypted;
+    assert lib.assertMsg (builtins ? exec)
+      "builtins.exec is not available, so repo.secrets cannot be decrypted. Did you forget to set `allow-unsafe-native-code-during-evaluation = true` ?";
+    extraBuiltins.rageImportEncrypted;
 in
 {
   imports = [

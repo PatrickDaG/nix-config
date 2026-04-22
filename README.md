@@ -135,5 +135,5 @@ These are notable external flakes which this config depend upon
 
 If deploying from a host not containing the necessary nix configuration option append
 ```bash
---nix-option plugin-files "$NIX_PLUGINS"/lib/nix/plugins --nix-option extra-builtins-file ./nix/extra-builtins`
+--nix-option allow-unsafe-native-code-during-evaluation true
 ```
