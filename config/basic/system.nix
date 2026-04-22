@@ -76,6 +76,9 @@
     wireguard-tools
     # keep-sorted end
   ];
+  environment.variables = {
+    DO_NOT_TRACK = true;
+  };
 
   environment.ldso32 = null;
 
