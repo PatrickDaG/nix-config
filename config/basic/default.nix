@@ -11,7 +11,6 @@
     ./net.nix
     ./nftables.nix
     ./nix.nix
-    ./promtail.nix
     ./secrets.nix
     ./ssh.nix
     ./system.nix
