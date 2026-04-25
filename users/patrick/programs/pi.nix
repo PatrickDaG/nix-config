@@ -32,7 +32,7 @@ in
       - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
       - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
       - Your parent directory(the main jujutsu repository) is not part of the sandbox, DO NOT try reading/editing it. Contain everything in the current workspace.
-      - Use jujutsu instead of git for everything. Sync the repository after every change by running 'jj status'.
+      - Use jujutsu instead of git for everything. Sync the repository after every change by running 'jj status', also set a good short description using "jj describe -m".
     '';
 
     prompts.nixpkgs-review = {
