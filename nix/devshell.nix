@@ -64,6 +64,9 @@
         env = [
           {
             name = "NIX_CONFIG";
+            # This seems dangerous, as it allows any nix code that I eval to gain immediate code execution
+            # However I think any nix code that I evaluate as part of my flake most likely can already gain
+            # root-code execution by injecting stuff into activationScripts
             value = ''
               allow-unsafe-native-code-during-evaluation = true
             '';
