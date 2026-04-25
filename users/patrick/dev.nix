@@ -18,8 +18,8 @@ lib.optionalAttrs (!minimal) {
         ...
       }:
       ''
-        priv=$(${lib.getExe pkgs.nix} key generate-secret --key-name patrickdag.lel.lol-1)
-        ${lib.getExe pkgs.nix} key convert-secret-to-public <<< "$priv" > ${
+        priv=$(${lib.getExe pkgs.lixPackageSets.latest.lix} key generate-secret --key-name patrickdag.lel.lol-1)
+        ${lib.getExe pkgs.lixPackageSets.latest.lix} key convert-secret-to-public <<< "$priv" > ${
           lib.escapeShellArg (lib.removeSuffix ".age" file + ".pub")
         }
         echo "$priv"

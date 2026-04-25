@@ -73,7 +73,7 @@ in
         gzip
         jq
         jujutsu
-        nix
+        lixPackageSets.latest.lix
         nixpkgs-review
         ripgrep
         ps

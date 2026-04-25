@@ -30,8 +30,7 @@
           shellcheck
           pre-commit
           rage
-          #lixPackageSets.latest.lix
-          nix
+          lixPackageSets.latest.lix
           nix-diff
           nix-update
         ];
