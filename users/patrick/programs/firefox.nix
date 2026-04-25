@@ -23,6 +23,7 @@ in
   hm.home.persistence."/state".directories = [
     ".cache/mozilla"
     ".mozilla"
+    ".config/mozilla"
   ];
   hm.xdg.mimeApps.enable = true;
   hm.xdg.mimeApps.defaultApplications = {

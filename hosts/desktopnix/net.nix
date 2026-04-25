@@ -22,10 +22,8 @@
         RouteMetric = 10;
       };
       ipv6AcceptRAConfig.UseDNS = false;
-      dhcpV6Config = {
-        UseDNS = false;
-        RouteMetric = 10;
-      };
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [

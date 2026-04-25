@@ -178,6 +178,7 @@ in
         enable = true;
         lfs.enable = true;
         ignores = [ ".direnv" ];
+        signing.format = "openpgp";
         settings = {
           core.pager = "${pkgs.delta}/bin/delta";
           core.askpass = lib.getExe pkgs.pinentry-gnome3;

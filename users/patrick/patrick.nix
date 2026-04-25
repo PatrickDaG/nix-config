@@ -71,6 +71,9 @@
         ];
       };
   };
+
+  #services.davfs2.enable = true;
+
   hm.programs.bat.enable = true;
   # needed for gnome pinentry
   services.dbus.packages = [ pkgs.gcr ];

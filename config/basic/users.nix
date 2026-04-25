@@ -57,6 +57,7 @@
       bookstack = uidGid 245;
       firezone-client = uidGid 246;
       pcscd = uidGid 247;
+      esphome = uidGid 248;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
