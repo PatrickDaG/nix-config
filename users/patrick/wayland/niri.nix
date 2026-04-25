@@ -404,11 +404,11 @@ in
             "Mod+u".action = focus-workspace "notes";
             "Mod+Shift+u".action.move-window-to-workspace = "notes";
 
-            "Mod+x".action = focus-workspace "browser";
-            "Mod+Shift+x".action.move-window-to-workspace = "browser";
+            "Mod+a".action = focus-workspace "browser";
+            "Mod+Shift+a".action.move-window-to-workspace = "browser";
 
-            "Mod+a".action = focus-workspace "mail";
-            "Mod+Shift+a".action.move-window-to-workspace = "mail";
+            "Mod+x".action = focus-workspace "mail";
+            "Mod+Shift+x".action.move-window-to-workspace = "mail";
 
             "Mod+F1".action = focus-workspace "twitch";
             "Mod+Shift+F1".action.move-window-to-workspace = "twitch";
