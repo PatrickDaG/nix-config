@@ -83,36 +83,12 @@
       user = "firefly-iii";
     }
     {
-      directory = "/var/lib/firefly-pico";
-      user = "firefly-pico";
-    }
-    {
       directory = config.services.firefly-iii-data-importer.dataDir;
       user = "firefly-iii-data-importer";
     }
   ];
 
-  age.secrets.appKeyPico = {
-    generator.script = _: ''
-      echo "base64:$(head -c 32 /dev/urandom | base64)"
-    '';
-    owner = "firefly-pico";
-  };
-
   services.phpfpm.settings = {
     log_level = "notice";
   };
-
-  # services.firefly-pico = {
-  #   enable = true;
-  #   enableNginx = true;
-  #   virtualHost = globals.services.fireflypico.domain;
-  #   settings = {
-  #     APP_URL = "https://${globals.services.fireflypico.domain}";
-  #     TZ = "Europe/Berlin";
-  #     FIREFLY_URL = "http://${globals.services.firefly.domain}";
-  #     APP_KEY_FILE = config.age.secrets.appKeyPico.path;
-  #   };
-  # };
-
 }

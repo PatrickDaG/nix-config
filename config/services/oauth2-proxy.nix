@@ -5,11 +5,9 @@
   ...
 }:
 {
-  globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 3001 ];
-  };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 3001 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 3001 ];
   };
   globals.services.oauth2-proxy.host = config.node.name;
 

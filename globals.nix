@@ -101,7 +101,7 @@ in
       };
       nginx = {
         domain = globals.domains.web;
-        ip = 5;
+        ip = 6;
       };
       samba = {
         domain = "smb.${globals.domains.web}";

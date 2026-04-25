@@ -9,7 +9,7 @@ let
   public = config.node.name == "torweg";
   ipOf =
     name:
-    if public then
+    if public || globals.services.${name}.host == "torweg" then
       globals.wireguard.services-extern.hosts.${globals.services.${name}.host}.ipv4
     else
       globals.wireguard.services.hosts.${globals.services.${name}.host}.ipv4;
@@ -108,6 +108,8 @@ in
       {
         users.hosts.${config.node.name} = { };
         services.hosts.${config.node.name} = { };
+        # Need external vpn to get to oauth2 proxy
+        services-extern.hosts.${config.node.name} = { };
       };
   networking.nftables.firewall.zones.untrusted.interfaces = lib.optional (!public) "users";
   age.secrets.loki-basic-auth-hashes = {
@@ -225,10 +227,6 @@ in
     (blockOf "mealie" {
       port = 3002;
     })
-    (blockOf "invidious" {
-      proxyProtect = true;
-      port = 3001;
-    })
     (blockOf "yourspotify" { port = 80; })
     (blockOf "apispotify" {
       port = 3000;
@@ -249,19 +247,6 @@ in
         extraConfig = ''
           add_header Access-Control-Allow-Origin "https://pico.lel.lol" ;
           add_header Access-Control-Allow-Methods 'GET, POST, HEAD, OPTIONS';
-          proxy_set_header X-User  "";
-          proxy_set_header X-Email "";
-        '';
-      };
-    })
-    (blockOf "fireflypico" {
-      port = 80;
-      proxyProtect = true;
-      virtualHostExtraConfig.locations."/api" = {
-        proxyPass = "http://fireflypico";
-        proxyWebsockets = true;
-        X-Frame-Options = "SAMEORIGIN";
-        extraConfig = ''
           proxy_set_header X-User  "";
           proxy_set_header X-Email "";
         '';
