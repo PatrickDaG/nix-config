@@ -8,7 +8,6 @@ let
       with jail.combinators;
       [
         (readwrite (noescape "~/.pi"))
-        # TODO: mount the session dir to prevent having a new session each time
       ]
     )
   );

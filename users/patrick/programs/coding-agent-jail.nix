@@ -8,7 +8,6 @@ in
     network
     time-zone
     no-new-session
-    mount-cwd
 
     # Nix support: expose the full nix store (read-only),
     # the daemon socket, and caches so nix builds work inside the sandbox.
@@ -23,8 +22,8 @@ in
 
     # Allow jujutsu usage
     (readonly (noescape "~/.config/jj"))
-    (readwrite (noescape "\"$PWD/../.jj\""))
-    (readwrite (noescape "\"$PWD/../.git\""))
+    (readwrite (noescape "\"$PWD/.jj\""))
+    (readwrite (noescape "\"$PWD/.git\""))
 
     # GitHub CLI auth for PR interactions (separate account from host)
     # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
@@ -36,18 +35,21 @@ in
     (add-runtime ''
       date=$(date +"%Y%m%dT%H%M%S")
       export AGENT_SESSION_NAME="agent-$date"
-      jj workspace add "$AGENT_SESSION_NAME" --quiet -m "agent session $date"
-      cd "$AGENT_SESSION_NAME"
+      jj workspace add "./$AGENT_SESSION_NAME" --quiet -m "agent session $date"
+    '')
+    (rw-bind (noescape "\"$PWD/$AGENT_SESSION_NAME\"") (noescape "\"$PWD/agent\""))
+
+    (wrap-entry (entry: ''
+      cd ./agent
       git init
       git add .
-    '')
-    (add-cleanup ''
+      ${entry}
       jj status
+    ''))
+    (add-cleanup ''
       if [ -n "$AGENT_SESSION_NAME" ]; then
-        # Capture change id while still in the workspace directory
-        change_id=$(jj log --no-graph -r @ -T 'change_id')
-        is_empty=$(jj log --no-graph -r @ -T 'if(empty, "true", "false")')
-        cd ..
+        change_id=$(jj log --no-graph -r "@$AGENT_SESSION_NAME" -T 'change_id')
+        is_empty=$(jj log --no-graph -r "@$AGENT_SESSION_NAME" -T 'if(empty, "true", "false")')
         jj workspace forget "$AGENT_SESSION_NAME" --quiet
         # Abandon the changeset if it is empty
         if [ "$is_empty" = "true" ]; then
@@ -78,7 +80,6 @@ in
         ripgrep
         ps
         python3
-        ripgrep
         unzip
         which
         # keep-sorted end
