@@ -101,7 +101,7 @@ in
             #   format_signed_off_by_trailer(self)
             #   ++ if(!trailers.contains_key("Change-Id"), format_gerrit_change_id_trailer(self))
             # '';
-            git_push_bookmark = "'patrick/push-' ++ change_id.short()'";
+            git_push_bookmark = "'patrick/push-' ++ change_id.short()";
           };
           aliases = {
             tug = [
@@ -115,32 +115,17 @@ in
             l = [
               "log"
               "--limit"
-              "15"
+              "30"
               "--revisions"
               "::"
             ];
+            # I think this is kinda not working
             rebase-all = [
               "rebase"
               "--source"
               "roots(trunk()..mine())"
               "--destination"
               "trunk()"
-            ];
-            csp = [
-              "util"
-              "exec"
-              "--"
-              (lib.getExe (
-                pkgs.writeShellApplication {
-                  name = "jj-csp";
-                  runtimeInputs = [ config.programs.jujutsu.package ];
-                  text = ''
-                    jj commit
-                    jj tug
-                    jj git push
-                  '';
-                }
-              ))
             ];
           };
           signing = {
@@ -150,8 +135,8 @@ in
             backends.gpg.program = learnSmartCard;
           };
           remotes = {
-            origin.auto-track-bookmarks = "glob:*";
-            upstream.auto-track-bookmarks = "glob:ma*";
+            origin.auto-track-bookmarks = "patrick*";
+            upstream.auto-track-bookmarks = "ma*";
           };
           git = {
             sign-on-push = true;

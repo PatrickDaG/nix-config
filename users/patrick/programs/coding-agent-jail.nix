@@ -69,7 +69,6 @@ in
         findutils
         gawkInteractive
         gh
-        git
         gnugrep
         gnutar
         gzip
