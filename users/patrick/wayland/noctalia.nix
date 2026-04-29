@@ -1,7 +1,7 @@
 _: {
 
   hm =
-    { config, ... }:
+    { config, lib, ... }:
     {
       home.persistence."/state".directories = [
         ".cache/noctalia"
@@ -28,14 +28,91 @@ _: {
         systemd.enable = true;
 
         settings = {
+          audio = {
+            preferredPlayer = "spotify";
+            visualizerType = "wave";
+          };
+          desktopWidgets.enabled = false;
+          hooks.enabled = false;
+          idle.enabled = false;
+          nightLight = {
+            autoSchedule = true;
+            dayTemp = "6500";
+            enabled = false;
+            forced = false;
+            manualSunrise = "06:30";
+            manualSunset = "18:30";
+            nightTemp = "4000";
+          };
+          sessionMenu = {
+            enableCountdown = false;
+            powerOptions = [
+              {
+                action = "lock";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "1";
+              }
+              {
+                action = "suspend";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "2";
+              }
+              {
+                action = "hibernate";
+                command = "";
+                countdownEnabled = true;
+                enabled = false;
+                keybind = "";
+              }
+              {
+                action = "reboot";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "3";
+              }
+              {
+                action = "logout";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "4";
+              }
+              {
+                action = "shutdown";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "5";
+              }
+              {
+                action = "rebootToUefi";
+                command = "";
+                countdownEnabled = true;
+                enabled = true;
+                keybind = "6";
+              }
+              {
+                action = "userspaceReboot";
+                command = "";
+                countdownEnabled = true;
+                enabled = false;
+                keybind = "";
+              }
+            ];
+          };
+          systemMonitor.enableDgpuMonitoring = true;
           bar = {
             density = "mini";
             position = "left";
-            showCapsule = true;
-            floating = false;
-            transparent = false;
+            showCapsule = false;
             outerCorners = false;
             "showOutline" = false;
+            enableExclusionZoneInset = false;
             widgets = {
               "left" = [
                 {
@@ -103,6 +180,9 @@ _: {
                   ];
                 }
                 {
+                  id = "plugin:pomodoro";
+                }
+                {
                   "diskPath" = "/state";
                   "id" = "SystemMonitor";
                   "showCpuTemp" = false;
@@ -129,6 +209,10 @@ _: {
                   "hideWhenZero" = true;
                   "id" = "NotificationHistory";
                   "showUnreadBadge" = true;
+                }
+                {
+                  id = "Battery";
+                  hideIfNotDetected = false;
                 }
               ];
             };
@@ -205,14 +289,15 @@ _: {
             "showHibernateOnLockScreen" = false;
             "showScreenCorners" = false;
             "showSessionButtonsOnLockScreen" = false;
+            telemetryEnabled = false;
           };
           wallpaper = {
             enabled = true;
             directory = "${config.xdg.dataHome}/wallpapers";
             overviewEnabled = false;
-            "enableMultiMonitorDirectories" = true;
-            "transitionType" = "random";
-            "randomEnabled" = true;
+            "enableMultiMonitorDirectories" = false;
+            "transitionType" = [ "random" ];
+            wallpaperChangeMode = "random";
             "randomIntervalSec" = 180;
           };
           notifications = {
@@ -242,6 +327,7 @@ _: {
             firstDayOfWeek = 0;
           };
           dock.enabled = false;
+          # Only networkmanager supported
           network.wifiEnabled = false;
           "appLauncher" = {
             "customLaunchPrefix" = "";
@@ -258,6 +344,39 @@ _: {
             "viewMode" = "list";
           };
         };
+        pluginSettings = {
+          pomodoro = {
+            "workDuration" = 50;
+            "shortBreakDuration" = 6;
+            "longBreakDuration" = 30;
+            "sessionsBeforeLongBreak" = 3;
+            "autoStartBreaks" = false;
+            "autoStartWork" = false;
+            "compactMode" = true;
+            "playSound" = true;
+          };
+        };
+        plugins = {
+          sources = [
+            {
+              enabled = true;
+              name = "Official Noctalia Plugins";
+              url = "https://github.com/noctalia-dev/noctalia-plugins";
+            }
+          ];
+          states = {
+            pomodoro = {
+              enabled = true;
+              sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+            };
+            "privacy-indicator" = {
+              enabled = true;
+              sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+            };
+          };
+          version = 2;
+        };
       };
+      home.file.".cache/noctalia/wallpapers.json".text = lib.mkForce (builtins.toJSON { });
     };
 }
