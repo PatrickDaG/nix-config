@@ -76,7 +76,8 @@
         IPv6PrivacyExtensions = "yes";
       };
       dhcpV4Config.RouteMetric = 10;
-      dhcpV6Config.RouteMetric = 10;
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
     "02-lan1" = {
       DHCP = "yes";
@@ -85,7 +86,8 @@
         IPv6PrivacyExtensions = "yes";
       };
       dhcpV4Config.RouteMetric = 10;
-      dhcpV6Config.RouteMetric = 10;
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
     "01-wlan1" = {
       DHCP = "yes";
@@ -94,7 +96,8 @@
         IPv6PrivacyExtensions = "yes";
       };
       dhcpV4Config.RouteMetric = 40;
-      dhcpV6Config.RouteMetric = 40;
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
   };
 }

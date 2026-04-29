@@ -60,7 +60,8 @@
         IPv6PrivacyExtensions = "yes";
       };
       dhcpV4Config.RouteMetric = 10;
-      dhcpV6Config.RouteMetric = 10;
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
     "02-lan1" = {
       DHCP = "yes";
@@ -73,10 +74,8 @@
         RouteMetric = 10;
       };
       ipv6AcceptRAConfig.UseDNS = false;
-      dhcpV6Config = {
-        UseDNS = false;
-        RouteMetric = 10;
-      };
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
     "01-wlan1" = {
       DHCP = "yes";
@@ -89,10 +88,8 @@
         RouteMetric = 40;
       };
       ipv6AcceptRAConfig.UseDNS = false;
-      dhcpV6Config = {
-        UseDNS = false;
-        RouteMetric = 40;
-      };
+      dhcpV6Config.UseDNS = false;
+      dhcpPrefixDelegationConfig.RouteMetric = 10;
     };
   };
   age.secrets = {
