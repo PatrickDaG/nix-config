@@ -347,7 +347,7 @@ _: {
         pluginSettings = {
           pomodoro = {
             "workDuration" = 50;
-            "shortBreakDuration" = 6;
+            "shortBreakDuration" = 10;
             "longBreakDuration" = 30;
             "sessionsBeforeLongBreak" = 3;
             "autoStartBreaks" = false;
