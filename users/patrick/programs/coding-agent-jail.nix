@@ -1,4 +1,8 @@
-{ pkgs, inputs }:
+{
+  pkgs,
+  lib,
+  inputs,
+}:
 let
   jail = inputs.jail-nix.lib.init pkgs;
 in
@@ -41,15 +45,15 @@ in
 
     (wrap-entry (entry: ''
       cd ./agent
-      git init
-      git add .
+      ${lib.getExe pkgs.git} init
+      ${lib.getExe pkgs.git} add .
       ${entry}
       jj status
     ''))
     (add-cleanup ''
       if [ -n "$AGENT_SESSION_NAME" ]; then
-        change_id=$(jj log --no-graph -r "@$AGENT_SESSION_NAME" -T 'change_id')
-        is_empty=$(jj log --no-graph -r "@$AGENT_SESSION_NAME" -T 'if(empty, "true", "false")')
+        change_id=$(jj log --no-graph -r "$AGENT_SESSION_NAME@" -T 'change_id')
+        is_empty=$(jj log --no-graph -r "$AGENT_SESSION_NAME@" -T 'if(empty, "true", "false")')
         jj workspace forget "$AGENT_SESSION_NAME" --quiet
         # Abandon the changeset if it is empty
         if [ "$is_empty" = "true" ]; then

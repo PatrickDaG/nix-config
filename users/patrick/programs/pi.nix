@@ -1,15 +1,17 @@
-{ pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
-  base = import ./coding-agent-jail.nix { inherit pkgs inputs; };
+  base = import ./coding-agent-jail.nix { inherit lib pkgs inputs; };
   inherit (base) jail;
   jailed-pi = jail "jailed-pi" pkgs.llm-agents.pi (
     base.baseCombinators
-    ++ (
-      with jail.combinators;
-      [
-        (readwrite (noescape "~/.pi"))
-      ]
-    )
+    ++ (with jail.combinators; [
+      (readwrite (noescape "~/.pi"))
+    ])
   );
 
 in

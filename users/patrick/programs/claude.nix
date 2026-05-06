@@ -1,6 +1,6 @@
-{ pkgs, inputs, ... }:
+{lib, pkgs, inputs, ... }:
 let
-  base = import ./coding-agent-jail.nix { inherit pkgs inputs; };
+  base = import ./coding-agent-jail.nix { inherit lib pkgs inputs; };
   inherit (base) jail;
   jailed-claude = jail "jailed-claude" pkgs.llm-agents.claude-code (
     base.baseCombinators
