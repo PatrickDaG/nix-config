@@ -278,7 +278,6 @@ in
             consent-o-matic
             cookie-autodelete
             kagi-search
-            linkwarden
             refined-github
             return-youtube-dislikes
             sidebery
