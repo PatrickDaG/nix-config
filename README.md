@@ -120,7 +120,7 @@ These are notable external flakes which this config depend upon
 1. Deploy your system with lanzaboote enabled
 1. ensure the boot files are signed using `sbctl verify`
 1. Now reboot the computer into BIOS and enable secureboot,
-    this may include removing any existing old keys
+    this may include removing any existing keys
 1. bootctl should now read `Secure Boot: disabled (setup)`
 1. you can now enroll your secureboot keys using
 1. `sbctl enroll-keys`
@@ -130,6 +130,18 @@ These are notable external flakes which this config depend upon
 ### Add TPM unlock
 
 1. Run `systemd-cryptenroll --tpm2-with-pin=<yes/no> --tpm2-device=auto /dev/<...>`
+
+### Reenroll TPM keys
+
+1. list keyslots`systemd-cryptenroll /dev/disk`
+1. delete keyslot `# systemd-cryptenroll /dev/disk --wipe-slot=tpm2`
+
+> [!warning] Keep your password slot
+> If you delete your password slot you can no longer change the superblock, e.g. enroll new keys, add a new password. don't do it
+
+> [!note] Wipe slot argument
+> you can set the slot to `tpm2` to ensure you keep your password
+- redeploy tpm key `systemd-cryptenroll --tpm2-with-pin={yes/no} --tpm2-device=auto <device>``
 
 ### Deploy from new host
 
