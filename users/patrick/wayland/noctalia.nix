@@ -293,9 +293,11 @@ _: {
           };
           wallpaper = {
             enabled = true;
+            automationEnabled = true;
             directory = "${config.xdg.dataHome}/wallpapers";
             overviewEnabled = false;
-            "enableMultiMonitorDirectories" = false;
+            # Otherwise same image on all monitors
+            "enableMultiMonitorDirectories" = true;
             "transitionType" = [ "random" ];
             wallpaperChangeMode = "random";
             "randomIntervalSec" = 180;
