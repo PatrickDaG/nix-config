@@ -32,6 +32,11 @@
       group = "linkwarden";
       mode = "0750";
     }
+    {
+      directory = "/var/lib/postgresql";
+      user = "postgres";
+      group = "postgres";
+    }
   ];
 
   services.linkwarden = {
