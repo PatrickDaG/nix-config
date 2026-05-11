@@ -9,7 +9,6 @@
   globals.wireguard.services.hosts.${config.node.name} = {
     firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 80 ];
   };
-  globals.services.fireflypico.host = config.node.name;
   globals.services.firefly-data-importer.host = config.node.name;
   networking.hosts = {
     "127.0.0.1" = [ globals.services.firefly.domain ];
@@ -21,6 +20,7 @@
     '';
     owner = "firefly-iii";
   };
+  # Only valid for one year. Remember to renew
   age.secrets.firefly-token = {
     owner = "firefly-iii-data-importer";
     mode = "440";
@@ -42,7 +42,6 @@
     enableNginx = true;
     virtualHost = globals.services.firefly.domain;
     settings = {
-      AUDIT_LOG_LEVEL = "emergency";
       APP_URL = "https://${globals.services.firefly.domain}";
       TZ = "Europe/Berlin";
       TRUSTED_PROXIES = globals.wireguard.services.hosts.elisabeth-nginx.ipv4;

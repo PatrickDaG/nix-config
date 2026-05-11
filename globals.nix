@@ -74,9 +74,6 @@ in
       firefly-data-importer = {
         domain = "ff-import.${globals.domains.web}";
       };
-      fireflypico = {
-        domain = "pico.${globals.domains.web}";
-      };
       homebox = {
         domain = "homebox.${globals.domains.web}";
       };

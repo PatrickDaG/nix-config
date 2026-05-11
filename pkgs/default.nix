@@ -35,17 +35,7 @@ _inputs: [
       cargoHash = "sha256-jclRF05eUAW/ggCmfZfWE6c4q25d/WGX0dad4rsP8vk=";
     };
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-      (_pythonFinal: pythonPrev: {
-        reactivex = pythonPrev.reactivex.overridePythonAttrs (old: rec {
-          version = "5.0.0a2";
-          disabled = false;
-          src = old.src.override {
-            rev = null;
-            tag = "v${version}";
-            hash = "sha256-91pPWYXPuGR0++AzpglMFWMPKtY5jFa7YGwU8GPVJ1U=";
-          };
-          build-system = [ pythonPrev.hatchling ];
-        });
+      (_pythonFinal: _pythonPrev: {
       })
     ];
 
