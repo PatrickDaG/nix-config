@@ -1,9 +1,6 @@
 { config, pkgs, ... }:
 {
   globals.services.freshrss.host = config.node.name;
-  globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 80 ];
-  };
   globals.wireguard.services-extern.hosts.${config.node.name} = {
     firewallRuleForNode.torweg.allowedTCPPorts = [ 80 ];
   };

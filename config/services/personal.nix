@@ -5,9 +5,11 @@
     ./firefly.nix
     # port 3000
     ./yourspotify.nix
-    # port 3003
-    ./linkwarden.nix
     # porte 3002
     ./mealie.nix
+    # port 3003
+    ./linkwarden.nix
+    # Port 3004
+    ./atuin.nix
   ];
 }

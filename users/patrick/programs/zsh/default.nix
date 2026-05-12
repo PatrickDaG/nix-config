@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  globals,
+  ...
+}:
 {
   imports = [ ./starfish.nix ];
   # save history in xdg data home
@@ -57,19 +62,34 @@
             name = "fast-syntax-highlighting";
             src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
           }
-          {
-            name = "zsh-histdb";
-            src = pkgs.zsh-histdb;
-          }
-          {
-            name = "zsh-histdb-skim";
-            src = pkgs.zsh-histdb-skim;
-          }
         ];
+      };
+      programs.atuin = {
+        daemon.enable = true;
+        enable = true;
+        enableZshIntegration = true;
+        flags = [
+          "--disable-up-arrow"
+        ];
+        settings = {
+          auto_sync = true;
+          update_check = false;
+          sync_address = "https://${globals.services.atuin.domain}";
+          sync_frequency = "15m";
+          invert = true;
+          ai.enabled = false;
+          search_mode_shell_up_key_binding = "prefix";
+          history_filter = [
+            "^ "
+            "^rm"
+            "^[a-z,A-Z] "
+          ];
+        };
       };
       home.persistence."/state".directories = [
         ".local/share/zsh"
         ".local/share/zoxide"
+        ".local/share/atuin"
       ];
     };
 }

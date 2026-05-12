@@ -233,6 +233,7 @@ in
       upstream = "yourspotify";
     })
     (blockOf "homeassistant" { })
+    (blockOf "atuin" { port = 3004;})
     (blockOf "esphome" {
       port = 3001;
       proxyProtect = true;

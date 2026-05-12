@@ -140,6 +140,9 @@ in
       mealie = {
         domain = "mealie.${globals.domains.web}";
       };
+      atuin = {
+        domain = "atuin.${globals.domains.web}";
+      };
     };
   };
 }
