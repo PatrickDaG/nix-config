@@ -26,6 +26,7 @@ in
 
     # Allow jujutsu usage
     (readonly (noescape "~/.config/jj"))
+    (readonly (noescape "~/.config/git"))
     (readwrite (noescape "\"$PWD/.jj\""))
     (readwrite (noescape "\"$PWD/.git\""))
 

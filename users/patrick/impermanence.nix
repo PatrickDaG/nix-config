@@ -62,6 +62,7 @@
 
         ".cache/mpv"
         ".claude"
+        ".codex"
         ".pi"
         ".cache/llama.cpp"
 
