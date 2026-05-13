@@ -1,4 +1,18 @@
-_: {
+{ pkgs, ... }:
+let
+  noctaliaLock = pkgs.writeShellScript "noctalia-lock" ''
+    set -u
+
+    uid="$(id -u)"
+    export XDG_RUNTIME_DIR="/run/user/$uid"
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+
+    /etc/profiles/per-user/patrick/bin/noctalia-shell ipc call lockScreen lock || true
+    sleep 0.7
+  '';
+in
+{
+  services.systemd-lock-handler.enable = true;
 
   hm =
     { config, lib, ... }:
@@ -23,6 +37,24 @@ _: {
         };
         debug.honor-xdg-activation-with-invalid-serial = [ ];
       };
+      systemd.user.services.noctalia-lock = {
+        Unit = {
+          Description = "Lock Noctalia on logind lock/sleep targets";
+          Before = [
+            "lock.target"
+            "sleep.target"
+          ];
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = noctaliaLock;
+        };
+        Install.WantedBy = [
+          "lock.target"
+          "sleep.target"
+        ];
+      };
+
       programs.noctalia-shell = {
         enable = true;
         systemd.enable = true;
