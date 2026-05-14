@@ -11,6 +11,7 @@
     RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
     WINEPREFIX = "${XDG_DATA_HOME}/wine";
     TS3_CONFIG_DIR = "${XDG_CONFIG_HOME}/ts3client";
+    PASSWORD_STORE_DIR = "${XDG_DATA_HOME}/password-store";
   };
   nix.extraOptions = ''
     use-xdg-base-directories = true

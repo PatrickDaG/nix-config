@@ -81,6 +81,8 @@
         ".config/Slack"
         ".local/share/Terraria"
         ".local/share/vicinae"
+
+        ".local/share/password-store"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [

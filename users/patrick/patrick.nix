@@ -52,6 +52,7 @@
           #streamlink-twitch-gui-bin # Why this 500MB????
           timewarrior
           zathura
+          pass
           zotero
           zoom-us # 2.5GB?
           libreoffice
