@@ -74,14 +74,13 @@ in
         findutils
         gawkInteractive
         gh
-        gnugrep
-        gnutar
         gzip
         jq
         jujutsu
         lixPackageSets.latest.lix
         nixpkgs-review
         ripgrep
+        tea
         ps
         python3
         unzip
