@@ -55,7 +55,7 @@
     # keep-sorted start
     wdisplays
     wev
-    wl-clipboard
+    wl-clipboard-rs
     # keep-sorted end
   ];
 }

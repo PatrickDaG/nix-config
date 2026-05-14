@@ -411,6 +411,7 @@ in
           version = 2;
         };
       };
-      home.file.".cache/noctalia/wallpapers.json".text = lib.mkForce (builtins.toJSON { });
+      # FIXME: stylix writes this path I want my own backgrounds always
+      #home.file.".cache/noctalia/wallpapers.json"= lib.mkForce (builtins.toJSON { };
     };
 }

@@ -137,7 +137,6 @@
           #keep-sorted start
           bat.enable = true;
           btop.enable = true;
-          dunst.enable = true;
           font-packages.enable = true;
           fontconfig.enable = true;
           fzf.enable = true;
