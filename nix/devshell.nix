@@ -9,7 +9,10 @@
   perSystem =
     { config, pkgs, ... }:
     {
-      pre-commit.settings.hooks.treefmt.enable = true;
+      pre-commit.settings.hooks = {
+        treefmt.enable = true;
+        ripsecrets.enable = true;
+      };
       treefmt = {
         projectRootFile = "flake.nix";
         programs = {
