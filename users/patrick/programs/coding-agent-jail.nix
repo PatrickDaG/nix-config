@@ -75,6 +75,7 @@ in
         gawkInteractive
         gh
         gzip
+        git
         jq
         jujutsu
         lixPackageSets.latest.lix
