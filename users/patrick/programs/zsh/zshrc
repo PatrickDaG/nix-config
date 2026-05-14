@@ -169,8 +169,6 @@ function setup_keybinds() {
     bindkeys keys_PageDown        nop
     bindkeys keys_ShiftPageDown   nop
 
-	bindkeys keys_CtrlR histdb-skim-widget
-
 	# fzf file and directory related expansions and functions
     bindkey '\ef' fzf-select-file-or-dir
     bindkey '\eF' fzf-select-file-or-dir-hidden

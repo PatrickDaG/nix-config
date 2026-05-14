@@ -10,7 +10,6 @@
   hm-all =
     { config, ... }:
     {
-      home.sessionVariables.HISTDB_FILE = "${config.xdg.dataHome}/zsh/history.db";
       # Completely disable caching
       home.sessionVariables.COMMA_CACHING = "0";
 
@@ -52,6 +51,8 @@
             fi
           '')
           (builtins.readFile ./zshrc)
+          # TODO: rename hex -> pty-proxy once on atuin 18.16
+          "eval \"$(atuin hex init zsh)\""
         ];
         plugins = [
           {
@@ -76,8 +77,35 @@
           update_check = false;
           sync_address = "https://${globals.services.atuin.domain}";
           sync_frequency = "15m";
-          invert = true;
+          workspaces = true;
+          ui.columns = [
+            "duration"
+            "time"
+            {
+              type = "host";
+              width = 10;
+            }
+            {
+              type = "command";
+              # This does not expand all available space only enough so the text fills
+              # Meaning the directory is not on the right hand side
+              expand = true;
+            }
+            {
+              type = "directory";
+              width = 30;
+            }
+          ];
+          search = {
+            filters = [
+              "directory"
+              "global"
+              "session"
+              "workspace"
+            ];
+          };
           ai.enabled = false;
+          show_numeric_shortcuts = true;
           search_mode_shell_up_key_binding = "prefix";
           history_filter = [
             "^ "
