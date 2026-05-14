@@ -54,7 +54,7 @@
         };
       };
     };
-    cmp-emoji.enable = true;
+    #cmp-emoji.enable = true;
     lsp.capabilities = # lua
       ''
         capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
