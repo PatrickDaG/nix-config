@@ -45,6 +45,9 @@ lib.optionalAttrs (!minimal) {
     man-pages
     man-pages-posix
     pat-scripts.git-dirty
+    gfold
+    bingrep
+    hexyl
   ];
 
   # Save space
