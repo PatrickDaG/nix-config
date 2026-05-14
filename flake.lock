@@ -1026,6 +1026,42 @@
         "type": "sourcehut"
       }
     },
+    "kagi": {
+      "inputs": {
+        "devshell": [
+          "devshell"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nci": [
+          "nci"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pre-commit-hooks": [
+          "pre-commit-hooks"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778777281,
+        "narHash": "sha256-ohXUEdULo/GmA+kFEC8pF/eYFuhlb3uMHNjxuNanrhQ=",
+        "ref": "main",
+        "rev": "c6b91ead2f7509c5b371e8a266cd8bfe4dea7a85",
+        "revCount": 2,
+        "type": "git",
+        "url": "https://forge.lel.lol/patrick/kagi"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://forge.lel.lol/patrick/kagi"
+      }
+    },
     "lanzaboote": {
       "inputs": {
         "crane": [
@@ -2043,6 +2079,7 @@
         "idmail": "idmail",
         "impermanence": "impermanence",
         "jail-nix": "jail-nix",
+        "kagi": "kagi",
         "lanzaboote": "lanzaboote",
         "llm-agents": "llm-agents",
         "microvm": "microvm",

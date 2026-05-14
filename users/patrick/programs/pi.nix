@@ -7,10 +7,14 @@
 let
   base = import ./coding-agent-jail.nix { inherit lib pkgs inputs; };
   inherit (base) jail;
+  kagi = inputs.kagi.packages.${pkgs.stdenv.hostPlatform.system}.kagi-release;
   jailed-pi = jail "jailed-pi" pkgs.llm-agents.pi (
     base.baseCombinators
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.pi"))
+      (try-fwd-env "KAGI_SESSION_LINK")
+      (try-fwd-env "KAGI_SESSION_TOKEN")
+      (add-pkg-deps [ kagi ])
     ])
   );
 
@@ -24,6 +28,33 @@ in
     package = jailed-pi;
 
     settings = { };
+
+    skills.kagi-web-search = {
+      description = "Search the web with Kagi. Use when current external information, web pages, or general internet research are needed.";
+      content = ''
+        # Kagi Web Search
+
+        Use the `kagi` CLI through `bash` for web searches.
+
+        ## Commands
+
+        - Search with quick answer and links:
+          ```bash
+          kagi --quick-answer --links --num-results 5 --json "search query"
+          ```
+        - Search only links:
+          ```bash
+          kagi --links --num-results 10 --json "search query"
+          ```
+
+        ## Guidance
+
+        - Prefer `--json` so results are structured.
+        - Quote the query as one argument.
+        - Summarize results and cite returned URLs.
+        - If auth fails, tell the user to set `KAGI_SESSION_TOKEN` or `KAGI_SESSION_LINK` before starting pi.
+      '';
+    };
 
     agentsPrompt = ''
       # Output format
