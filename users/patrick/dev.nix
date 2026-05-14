@@ -111,6 +111,7 @@ lib.optionalAttrs (!minimal) {
             sshUser = "build";
             system = "x86_64-linux";
             sshKey = "/run/builder-unlock/desktopnix";
+            speedFactor = 2;
             supportedFeatures = [
               "kvm"
               "benchmark"
@@ -123,7 +124,7 @@ lib.optionalAttrs (!minimal) {
           }
         ];
       in
-      builtins.map (m: builtins.removeAttrs m [ "name" ]) (
+      map (m: removeAttrs m [ "name" ]) (
         builtins.filter (m: m.name != config.node.name) allMachines
       );
   };
