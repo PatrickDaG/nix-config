@@ -1,0 +1,205 @@
+diff --git a/pkgs/development/python-modules/aiohomematic-config/default.nix b/pkgs/development/python-modules/aiohomematic-config/default.nix
+index 8ffabedec6409..c4d430f7b2c34 100644
+--- a/pkgs/development/python-modules/aiohomematic-config/default.nix
++++ b/pkgs/development/python-modules/aiohomematic-config/default.nix
+@@ -3,28 +3,31 @@
+   buildPythonPackage,
+   fetchFromGitHub,
+   lib,
++  openccu-data,
+   pydantic,
+   pytest-asyncio,
++  pytest-xdist,
+   pytestCheckHook,
+   setuptools,
+ }:
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "aiohomematic-config";
+-  version = "2026.4.1";
++  version = "2026.4.7";
+   pyproject = true;
+ 
+   src = fetchFromGitHub {
+     owner = "sukramj";
+     repo = "aiohomematic-config";
+     tag = finalAttrs.version;
+-    hash = "sha256-I75OPUA/gdLdMAJU0iYYQUk54f5cQQ5UWsRQHayqpyo=";
++    hash = "sha256-JqNRtjA4lDztxTHD+cKRjSIX4E3ZqiW0g4RGIe7D6VE=";
+   };
+ 
+   build-system = [ setuptools ];
+ 
+   dependencies = [
+     aiohomematic
++    openccu-data
+     pydantic
+   ];
+ 
+@@ -32,6 +35,7 @@ buildPythonPackage (finalAttrs: {
+ 
+   nativeCheckInputs = [
+     pytest-asyncio
++    pytest-xdist
+     pytestCheckHook
+   ];
+ 
+diff --git a/pkgs/development/python-modules/aiohomematic/default.nix b/pkgs/development/python-modules/aiohomematic/default.nix
+index 43e343eea57d8..e0be39569647d 100644
+--- a/pkgs/development/python-modules/aiohomematic/default.nix
++++ b/pkgs/development/python-modules/aiohomematic/default.nix
+@@ -4,6 +4,7 @@
+   buildPythonPackage,
+   fetchFromGitHub,
+   freezegun,
++  openccu-data,
+   orjson,
+   pydantic,
+   pydevccu,
+@@ -18,7 +19,7 @@
+ 
+ buildPythonPackage rec {
+   pname = "aiohomematic";
+-  version = "2026.4.6";
++  version = "2026.5.0";
+   pyproject = true;
+ 
+   disabled = pythonOlder "3.14";
+@@ -27,13 +28,14 @@ buildPythonPackage rec {
+     owner = "SukramJ";
+     repo = "aiohomematic";
+     tag = version;
+-    hash = "sha256-R7hQprIAK7Xs+XpmMecAGGrAYzfBk+fQo17tkByC0Kc=";
++    hash = "sha256-WVqVyVHR9TDCY8MTPv4JhBEAb3BNSeeBlaexcpixUFE=";
+   };
+ 
+   build-system = [ setuptools ];
+ 
+   dependencies = [
+     aiohttp
++    openccu-data
+     orjson
+     pydantic
+     python-slugify
+diff --git a/pkgs/development/python-modules/openccu-data/default.nix b/pkgs/development/python-modules/openccu-data/default.nix
+new file mode 100644
+index 0000000000000..d8c8cb4b50c2c
+--- /dev/null
++++ b/pkgs/development/python-modules/openccu-data/default.nix
+@@ -0,0 +1,36 @@
++{
++  buildPythonPackage,
++  fetchFromGitHub,
++  lib,
++  pytestCheckHook,
++  setuptools,
++}:
++
++buildPythonPackage (finalAttrs: {
++  pname = "openccu-data";
++  version = "2026.4.1";
++  pyproject = true;
++
++  src = fetchFromGitHub {
++    owner = "SukramJ";
++    repo = "openccu-data";
++    tag = finalAttrs.version;
++    hash = "sha256-wf4IZgrN3t9Xr5uqU5TKM/vhCI2Hyfzo0hnFut9FkHk=";
++  };
++
++  build-system = [ setuptools ];
++
++  pythonImportsCheck = [ "openccu_data" ];
++
++  nativeCheckInputs = [
++    pytestCheckHook
++  ];
++
++  meta = {
++    changelog = "https://github.com/SukramJ/openccu-data/blob/${finalAttrs.src.tag}/changelog.md";
++    description = "Extract and distribute Homematic CCU/OpenCCU configuration metadata";
++    homepage = "https://github.com/SukramJ/openccu-data";
++    license = lib.licenses.mit;
++    maintainers = [ lib.maintainers.dotlambda ];
++  };
++})
+diff --git a/pkgs/development/python-modules/pydevccu/default.nix b/pkgs/development/python-modules/pydevccu/default.nix
+index e1f597b279558..6a5ce143d9897 100644
+--- a/pkgs/development/python-modules/pydevccu/default.nix
++++ b/pkgs/development/python-modules/pydevccu/default.nix
+@@ -12,7 +12,7 @@
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "pydevccu";
+-  version = "0.2.3";
++  version = "0.2.4";
+   pyproject = true;
+ 
+   disabled = pythonOlder "3.13";
+@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
+     owner = "SukramJ";
+     repo = "pydevccu";
+     tag = finalAttrs.version;
+-    hash = "sha256-dOk0Sb7RR21Mzke+wkhEca8HMVt7pcU5eXs/hzojFBQ=";
++    hash = "sha256-/Z1+k9CNTQsqTXSIqmUQn7r5WBTgZmqsg5Z+cq9nR3Q=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+index 2a1bf4d58c7db..4dcb9949d2c9c 100644
+--- a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
++++ b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+@@ -7,20 +7,23 @@
+   aiohomematic-config,
+   aiohomematic-test-support,
+   home-assistant,
++  openccu-data,
+   pytest-homeassistant-custom-component,
++  pytest-xdist,
+   pytestCheckHook,
+ }:
+ 
+ buildHomeAssistantComponent rec {
+   owner = "SukramJ";
+   domain = "homematicip_local";
+-  version = "2.6.0";
++  version = "2.7.0";
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "custom_homematic";
+     tag = version;
+-    hash = "sha256-u3REMGuaQ+wQgDgiTvplBRMbzZJDUfcbyJm9tYOuYIw=";
++    hash = "sha256-yrqDZnX9R/moNdTc7aj5mFOUTfDuSonSxw/BgATWGPs=";
+   };
++  doCheck = false;
+ 
+   postPatch = ''
+@@ -33,12 +35,14 @@ buildHomeAssistantComponent rec {
+   dependencies = [
+     aiohomematic
+     aiohomematic-config
++    openccu-data
+   ];
+ 
+   nativeCheckInputs = [
+     aiohomematic-test-support
+     async-upnp-client
+     pytest-homeassistant-custom-component
++    pytest-xdist
+     pytestCheckHook
+   ];
+ 
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index b2b874c0337a5..ec08aa8791e6d 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -11606,6 +11606,8 @@ self: super: with self; {
+ 
+   opencc = callPackage ../development/python-modules/opencc { };
+ 
++  openccu-data = callPackage ../development/python-modules/openccu-data { };
++
+   opencensus = callPackage ../development/python-modules/opencensus { };
+ 
+   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
