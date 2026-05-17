@@ -126,8 +126,6 @@ lib.optionalAttrs (!minimal) {
           }
         ];
       in
-      map (m: removeAttrs m [ "name" ]) (
-        builtins.filter (m: m.name != config.node.name) allMachines
-      );
+      map (m: removeAttrs m [ "name" ]) (builtins.filter (m: m.name != config.node.name) allMachines);
   };
 }

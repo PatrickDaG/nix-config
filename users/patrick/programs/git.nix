@@ -76,7 +76,7 @@ let
 in
 {
   hm =
-    { config, ... }:
+    _:
     {
       programs.jujutsu = {
         enable = true;

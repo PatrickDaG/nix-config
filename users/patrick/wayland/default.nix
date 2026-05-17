@@ -44,11 +44,11 @@
     #./awww.nix
     #./fuzzel.nix
     ./niri.nix
-    #./swaync.nix
-    ./vicinae.nix
     #./wallpaper-engine.nix
     #./waybar
     ./noctalia.nix
+    #./swaync.nix
+    ./vicinae.nix
     # keep-sorted end
   ];
   hm.home.packages = with pkgs; [

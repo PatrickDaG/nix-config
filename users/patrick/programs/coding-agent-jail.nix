@@ -74,16 +74,16 @@ in
         findutils
         gawkInteractive
         gh
-        gzip
         git
+        gzip
         jq
         jujutsu
         lixPackageSets.latest.lix
         nixpkgs-review
-        ripgrep
-        tea
         ps
         python3
+        ripgrep
+        tea
         unzip
         which
         # keep-sorted end

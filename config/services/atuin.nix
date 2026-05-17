@@ -9,7 +9,7 @@ in
   };
   services.atuin = {
     enable = true;
-    port = port;
+    inherit port;
     database.createLocally = true;
     openRegistration = false;
     host = "0.0.0.0";

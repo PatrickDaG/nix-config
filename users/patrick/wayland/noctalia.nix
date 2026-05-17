@@ -15,7 +15,7 @@ in
   services.systemd-lock-handler.enable = true;
 
   hm =
-    { config, lib, ... }:
+    { config, ... }:
     {
       home.persistence."/state".directories = [
         ".cache/noctalia"

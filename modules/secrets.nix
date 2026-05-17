@@ -20,8 +20,9 @@ let
 
   extraBuiltins = import ../nix/extra-builtins.nix;
   rageImportEncrypted =
-    assert assertMsg (builtins ? exec)
-      "builtins.exec is not available. Set `allow-unsafe-native-code-during-evaluation = true`";
+    assert assertMsg (
+      builtins ? exec
+    ) "builtins.exec is not available. Set `allow-unsafe-native-code-during-evaluation = true`";
     extraBuiltins.rageImportEncrypted;
   # This "imports" an encrypted .nix.age file
   importEncrypted =

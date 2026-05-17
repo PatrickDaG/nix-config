@@ -37,6 +37,7 @@
           gh
           gh-dash
           hyperfine
+          libreoffice
           magic-wormhole
           mpv
           netflix
@@ -45,6 +46,7 @@
           nixpkgs-review
           obsidian
           pandoc # for obsidian
+          pass
           pinentry-gnome3 # for yubikey pinentry
           ripgrep-all
           signal-desktop
@@ -52,10 +54,8 @@
           #streamlink-twitch-gui-bin # Why this 500MB????
           timewarrior
           zathura
-          pass
-          zotero
           zoom-us # 2.5GB?
-          libreoffice
+          zotero
           #keep-sorted end
         ];
         thinknix = [
