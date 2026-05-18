@@ -32,17 +32,18 @@ lib.optionalAttrs (!minimal) {
     enable = true;
     pkiBundle = "/var/lib/sbctl/";
     # MeasuredBoot limitation
-    configurationLimit = 8;
-    measuredBoot = {
-      enable = true;
-      pcrs = [
-        0
-        4
-        7
-        # Not supported
-        #15
-      ];
-    };
+    # FIXME: Figure out why this does not work
+    # configurationLimit = 8;
+    # measuredBoot = {
+    #   enable = true;
+    #   pcrs = [
+    #     0
+    #     4
+    #     7
+    #     # Not supported
+    #     #15
+    #   ];
+    # };
   };
   environment.persistence."/state".files = [
     config.boot.lanzaboote.measuredBoot.pcrlockPolicy
