@@ -75,148 +75,153 @@ let
   );
 in
 {
-  hm =
-    _:
-    {
-      programs.jujutsu = {
-        enable = true;
-        settings = {
-          revset-aliases = {
-            "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
-            "closest_bookmark(to)" = "heads(::to & bookmarks())";
-          };
-          templates = {
-            draft_commit_description = ''
-              concat(
-                coalesce(description, default_commit_description, "\n"),
-                surround(
-                  "\nJJ: This commit contains the following changes:\n", "",
-                  indent("JJ:     ", diff.stat(72)),
-                ),
-                "\nJJ: ignore-rest\n",
-                diff.git(),
-              )
-            '';
-            # commit_trailers = ''
-            #   format_signed_off_by_trailer(self)
-            #   ++ if(!trailers.contains_key("Change-Id"), format_gerrit_change_id_trailer(self))
-            # '';
-            git_push_bookmark = "'patrick/push-' ++ change_id.short()";
-          };
-          aliases = {
-            tug = [
-              "bookmark"
-              "move"
-              "--from"
-              "closest_bookmark(@-)"
-              "--to"
-              "@-"
-            ];
-            l = [
-              "log"
-              "--limit"
-              "30"
-              "--revisions"
-              "::"
-            ];
-            # I think this is kinda not working
-            rebase-all = [
-              "rebase"
-              "--source"
-              "roots(trunk()..mine())"
-              "--destination"
-              "trunk()"
-            ];
-          };
-          signing = {
-            # Only sign on push
-            behavior = "drop";
-            backend = "gpg";
-            backends.gpg.program = learnSmartCard;
-          };
-          remotes = {
-            origin.auto-track-bookmarks = "patrick*";
-            upstream.auto-track-bookmarks = "ma*";
-          };
-          git = {
-            sign-on-push = true;
-          };
-          ui = {
-            default-command = "l";
-            # Why no paginate if longer than a page??
-            paginate = "never";
-            diff-editor = ":builtin";
-          };
-          user = {
-            email = "patrick@${globals.domains.mail_public}";
-            name = "Patrick";
-          };
+  hm = _: {
+    home.packages = with pkgs; [
+      gfold
+    ];
+    xdg.configFile."gfold/config.toml".text = ''
+      paths = ['/home/patrick/repos']
+      display_mode = 'Classic'
+    '';
+    programs.jujutsu = {
+      enable = true;
+      settings = {
+        revset-aliases = {
+          "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+          "closest_bookmark(to)" = "heads(::to & bookmarks())";
         };
-      };
-
-      programs.gitui.enable = true;
-      programs.difftastic = {
-        enable = true;
-        git.enable = true;
-      };
-      programs.git = {
-        enable = true;
-        lfs.enable = true;
-        ignores = [ ".direnv" ];
-        signing.format = "openpgp";
-        settings = {
-          core.pager = "${pkgs.delta}/bin/delta";
-          core.askpass = lib.getExe pkgs.pinentry-gnome3;
-          user = {
-            name = "Patrick";
-            email = globals.accounts.email."1".address;
-            #signingkey = globals.accounts.email."1".address;
-          };
-          sendemail.identity = globals.accounts.email."1".address;
-          gpg.openpgp.program = learnSmartCard;
-          delta = {
-            hyperlinks = true;
-            keep-plus-minus-markers = true;
-            line-numbers = true;
-            navigate = true;
-            side-by-side = true;
-            syntax-theme = "TwoDark";
-            tabs = 4;
-          };
-          column.ui = "auto";
-          branch.sort = "-committerdate";
-          tag.sort = "version:refname";
-          mergetool.prompt = true;
-          merge.conflictstyle = "diff3";
-          init.defaultBranch = "main";
-          push.followTags = true;
-          pull.ff = "only";
-          pull.rebase = true;
-          push.autoSetupRemote = true;
-          fetch.prune = true;
-          fetch.pruneTags = true;
-          fetch.all = true;
-          commit.verbose = true;
-          rerere.enabled = true;
-          rerere.autoupdate = true;
-          rebase.autoSquash = true;
-          rebase.autoStash = true;
-          rebase.updateRefs = true;
-          alias = {
-            cs = "commit -v -S";
-            s = "status";
-            a = "add";
-            p = "push";
-            rebase = "rebase --gpg-sign";
-            fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
-            f = "!${gf}";
-            crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
-          };
+        templates = {
+          draft_commit_description = ''
+            concat(
+              coalesce(description, default_commit_description, "\n"),
+              surround(
+                "\nJJ: This commit contains the following changes:\n", "",
+                indent("JJ:     ", diff.stat(72)),
+              ),
+              "\nJJ: ignore-rest\n",
+              diff.git(),
+            )
+          '';
+          # commit_trailers = ''
+          #   format_signed_off_by_trailer(self)
+          #   ++ if(!trailers.contains_key("Change-Id"), format_gerrit_change_id_trailer(self))
+          # '';
+          git_push_bookmark = "'patrick/push-' ++ change_id.short()";
+        };
+        aliases = {
+          tug = [
+            "bookmark"
+            "move"
+            "--from"
+            "closest_bookmark(@-)"
+            "--to"
+            "@-"
+          ];
+          l = [
+            "log"
+            "--limit"
+            "30"
+            "--revisions"
+            "::"
+          ];
+          # I think this is kinda not working
+          rebase-all = [
+            "rebase"
+            "--source"
+            "roots(trunk()..mine())"
+            "--destination"
+            "trunk()"
+          ];
         };
         signing = {
-          key = null;
-          signByDefault = true;
+          # Only sign on push
+          behavior = "drop";
+          backend = "gpg";
+          backends.gpg.program = learnSmartCard;
+        };
+        remotes = {
+          origin.auto-track-bookmarks = "patrick*";
+          upstream.auto-track-bookmarks = "ma*";
+        };
+        git = {
+          sign-on-push = true;
+        };
+        ui = {
+          default-command = "l";
+          # Why no paginate if longer than a page??
+          paginate = "never";
+          diff-editor = ":builtin";
+        };
+        user = {
+          email = "patrick@${globals.domains.mail_public}";
+          name = "Patrick";
         };
       };
     };
+
+    programs.gitui.enable = true;
+    programs.difftastic = {
+      enable = true;
+      git.enable = true;
+    };
+    programs.git = {
+      enable = true;
+      lfs.enable = true;
+      ignores = [ ".direnv" ];
+      signing.format = "openpgp";
+      settings = {
+        core.pager = "${pkgs.delta}/bin/delta";
+        core.askpass = lib.getExe pkgs.pinentry-gnome3;
+        user = {
+          name = "Patrick";
+          email = globals.accounts.email."1".address;
+          #signingkey = globals.accounts.email."1".address;
+        };
+        sendemail.identity = globals.accounts.email."1".address;
+        gpg.openpgp.program = learnSmartCard;
+        delta = {
+          hyperlinks = true;
+          keep-plus-minus-markers = true;
+          line-numbers = true;
+          navigate = true;
+          side-by-side = true;
+          syntax-theme = "TwoDark";
+          tabs = 4;
+        };
+        column.ui = "auto";
+        branch.sort = "-committerdate";
+        tag.sort = "version:refname";
+        mergetool.prompt = true;
+        merge.conflictstyle = "diff3";
+        init.defaultBranch = "main";
+        push.followTags = true;
+        pull.ff = "only";
+        pull.rebase = true;
+        push.autoSetupRemote = true;
+        fetch.prune = true;
+        fetch.pruneTags = true;
+        fetch.all = true;
+        commit.verbose = true;
+        rerere.enabled = true;
+        rerere.autoupdate = true;
+        rebase.autoSquash = true;
+        rebase.autoStash = true;
+        rebase.updateRefs = true;
+        alias = {
+          cs = "commit -v -S";
+          s = "status";
+          a = "add";
+          p = "push";
+          rebase = "rebase --gpg-sign";
+          fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
+          f = "!${gf}";
+          crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
+        };
+      };
+      signing = {
+        key = null;
+        signByDefault = true;
+      };
+    };
+  };
 }

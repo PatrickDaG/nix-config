@@ -44,7 +44,6 @@ lib.optionalAttrs (!minimal) {
     usbutils
     man-pages
     man-pages-posix
-    gfold
     bingrep
     hexyl
   ];
