@@ -106,7 +106,7 @@ in
       - Sync the repository after every change by running 'jj status'
       - Set a description using "jj describe -m"
       - Use conventional commit messages(e.g. prefix of feat/fix/chore)
-      - Always add an "Assisted-by:" commit message trailer containing tool name and the primary model name and version used for the contribution
+      - Always add an "Assisted-by:" commit message trailer containing tool name and the exact model name and version used for the contribution
       - Use gh for GitHub
       - use tea for gitea/forgejo
 
