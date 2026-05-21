@@ -149,7 +149,7 @@ diff --git a/pkgs/servers/home-assistant/custom-components/homematicip_local/pac
 index 2a1bf4d58c7db..4dcb9949d2c9c 100644
 --- a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
 +++ b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
-@@ -7,20 +7,23 @@
+@@ -7,20 +7,22 @@
    aiohomematic-config,
    aiohomematic-test-support,
    home-assistant,
@@ -172,7 +172,6 @@ index 2a1bf4d58c7db..4dcb9949d2c9c 100644
 -    hash = "sha256-u3REMGuaQ+wQgDgiTvplBRMbzZJDUfcbyJm9tYOuYIw=";
 +    hash = "sha256-yrqDZnX9R/moNdTc7aj5mFOUTfDuSonSxw/BgATWGPs=";
    };
-+  doCheck = false;
  
    postPatch = ''
 @@ -33,12 +35,14 @@ buildHomeAssistantComponent rec {

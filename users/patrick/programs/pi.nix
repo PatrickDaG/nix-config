@@ -89,10 +89,16 @@ in
 
       - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
       - Your parent directory(the main jujutsu repository) is not part of the sandbox, DO NOT try reading/editing it. Contain everything in the current workspace.
+      - Commands may fail due to missing permission or secrets. DO NOT try again. Instead tell the user what went wrong, what is missing and wait for further instructions.
 
       # Available Tools
 
-      fd, rg, jq, gh, tea, diff, jj, nix
+      - These basic tools are always available: fd, rg, jq, gh, tea, diff, jj, nix
+      - For further tools use 'nix run'
+
+      # Style guide
+
+      - Markdown files should have a maximum line width of 170 characters
 
       # VCS
 
