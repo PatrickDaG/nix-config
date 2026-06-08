@@ -76,6 +76,7 @@ in
         gh
         git
         gzip
+        gnused
         jq
         jujutsu
         lixPackageSets.latest.lix
