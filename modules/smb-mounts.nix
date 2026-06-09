@@ -11,14 +11,9 @@ let
     types
     flip
     attrNames
-    mkMerge
     concatMap
     optional
     ;
-  baseOptions = [
-    "x-systemd.idle-timeout=60"
-    "x-systemd.mount-timeout=5s"
-  ];
 in
 {
   # Give users the ability to add their own smb shares
@@ -73,38 +68,55 @@ in
     [
       {
         environment.systemPackages = lib.optional existingCfg pkgs.cifs-utils;
-        fileSystems = mkMerge (
-          flip concatMap (attrNames config.home-manager.users) (
-            user:
-            let
-              parentPath = "/home/${user}/smb";
-              cfg = config.home-manager.users.${user}.home.smb;
-              inherit (config.users.users.${user}) uid;
-              inherit (config.users.groups.${user}) gid;
-            in
-            flip map cfg (cfg: {
-              "${parentPath}/${cfg.localPath}" =
-                let
-                  options =
-                    baseOptions
-                    ++ [
-                      "uid=${toString uid}"
-                      "gid=${toString gid}"
-                      "file_mode=0600"
-                      "dir_mode=0700"
-                      "credentials=${cfg.credentials}"
-                      "x-systemd.automount"
-                      "_netdev"
-                    ]
-                    ++ (optional (!cfg.automatic) "noauto");
-                in
-                {
-                  inherit options;
-                  device = "//${cfg.address}/${cfg.remotePath}";
-                  fsType = "cifs";
-                };
-            })
-          )
+        systemd.mounts = flip concatMap (attrNames config.home-manager.users) (
+          user:
+          let
+            parentPath = "/home/${user}/smb";
+            cfg = config.home-manager.users.${user}.home.smb;
+            inherit (config.users.users.${user}) uid;
+            inherit (config.users.groups.${user}) gid;
+          in
+          flip map cfg (cfg: {
+            what = "//${cfg.address}/${cfg.remotePath}";
+            where = "${parentPath}/${cfg.localPath}";
+            type = "cifs";
+            options = lib.concatStringsSep "," [
+              "uid=${toString uid}"
+              "gid=${toString gid}"
+              "file_mode=0600"
+              "dir_mode=0700"
+              "credentials=${cfg.credentials}"
+              "_netdev"
+            ];
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+            mountConfig.TimeoutSec = "5s";
+          })
+        );
+
+        systemd.automounts = flip concatMap (attrNames config.home-manager.users) (
+          user:
+          let
+            parentPath = "/home/${user}/smb";
+            cfg = config.home-manager.users.${user}.home.smb;
+          in
+          flip map cfg (cfg: {
+            where = "${parentPath}/${cfg.localPath}";
+            wantedBy = optional cfg.automatic "remote-fs.target";
+            automountConfig.TimeoutIdleSec = 60;
+          })
+        );
+
+        systemd.tmpfiles.rules = flip concatMap (attrNames config.home-manager.users) (
+          user:
+          let
+            parentPath = "/home/${user}/smb";
+            cfg = config.home-manager.users.${user}.home.smb;
+            inherit (config.users.users.${user}) uid;
+            inherit (config.users.groups.${user}) gid;
+          in
+          [ "d ${parentPath} 0700 ${toString uid} ${toString gid} -" ]
+          ++ flip map cfg (cfg: "d ${parentPath}/${cfg.localPath} 0700 ${toString uid} ${toString gid} -")
         );
       }
     ];
