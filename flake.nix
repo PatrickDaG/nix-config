@@ -207,7 +207,6 @@
       inputs = {
         # keep-sorted start
         flake-parts.follows = "flake-parts";
-        nixpkgs.follows = "nixpkgs";
         # keep-sorted end
       };
     };
@@ -283,7 +282,7 @@
       url = "sourcehut:~alexdavid/jail.nix";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia/legacy-v4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

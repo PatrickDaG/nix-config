@@ -283,7 +283,7 @@ in
             sidebery
             single-file
             sponsorblock
-            tabliss
+            tablissng
             ublock-origin
             user-agent-string-switcher
             vimium-c
