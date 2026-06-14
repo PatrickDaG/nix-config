@@ -35,5 +35,5 @@
       directory = config.services.mongodb.dbpath;
     }
   ];
-  services.mongodb.package = pkgs.mongodb-bin;
+  services.mongodb.package = pkgs.mongodb-ce;
 }
