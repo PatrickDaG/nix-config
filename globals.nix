@@ -143,6 +143,9 @@ in
       atuin = {
         domain = "atuin.${globals.domains.web}";
       };
+      habitica = {
+        domain = "habits.${globals.domains.web}";
+      };
     };
   };
 }

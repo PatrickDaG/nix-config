@@ -10,6 +10,7 @@ _inputs: [
     amazon = prev.callPackage ./amazon.nix { };
 
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
+    habitica = prev.callPackage ./habitica { };
     goldfish = prev.callPackage ./goldfish.nix { };
     soulver-cpp = prev.callPackage ./soulver-cpp.nix { };
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
@@ -34,10 +35,6 @@ _inputs: [
       version = "0.6.3-pre";
       cargoHash = "sha256-jclRF05eUAW/ggCmfZfWE6c4q25d/WGX0dad4rsP8vk=";
     };
-    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-      (_pythonFinal: _pythonPrev: {
-      })
-    ];
 
     path-of-building = prev.path-of-building.overrideAttrs (old: {
       postFixup = (old.postFixup or "") + ''
@@ -58,5 +55,9 @@ _inputs: [
         entrypoint = "content-card-another-mvg-livemap.js";
       };
     };
+    # pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    #   (_pythonFinal: _pythonPrev: {
+    #   })
+    # ];
   })
 ]

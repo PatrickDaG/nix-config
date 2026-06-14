@@ -32,6 +32,7 @@
     ../../modules/secrets.nix
     ../../modules/smb-mounts.nix
     ../../modules/snapshots.nix
+    ../../modules/habitica.nix
     # keep-sorted end
 
     # keep-sorted start

@@ -3,6 +3,8 @@
     # port 80
     ./freshrss.nix
     ./firefly.nix
+    # Apparently mongodb can only have one user at a time
+    #./habitica.nix
     # port 3000
     ./yourspotify.nix
     # porte 3002
