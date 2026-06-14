@@ -202,14 +202,7 @@
       url = "github:oddlama/nix-topology";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs = {
-        # keep-sorted start
-        flake-parts.follows = "flake-parts";
-        # keep-sorted end
-      };
-    };
+    nixvim.url = "github:nix-community/nixvim";
     spicetify-nix = {
       url = "github:Gerg-l/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";

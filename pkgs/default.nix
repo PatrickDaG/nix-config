@@ -1,6 +1,7 @@
 _inputs: [
   (import ./scripts)
   (_final: prev: {
+    # keep-sorted start
     zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
     signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
@@ -8,11 +9,12 @@ _inputs: [
     mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
     disneyplus = prev.callPackage ./disney.nix { };
     amazon = prev.callPackage ./amazon.nix { };
-
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
     habitica = prev.callPackage ./habitica { };
     goldfish = prev.callPackage ./goldfish.nix { };
     soulver-cpp = prev.callPackage ./soulver-cpp.nix { };
+    # keep-sorted end
+
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
       _neovimFinal: neovimPrev: {
         nativeBuildInputs = (neovimPrev.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
@@ -42,9 +44,10 @@ _inputs: [
           --set QT_QPA_PLATFORM xcb
       '';
     });
+
     home-assistant-custom-components = prev.home-assistant-custom-components // {
-      another_mvg = prev.home-assistant.python.pkgs.callPackage ./another_mvg.nix { };
-      solaredge-modbus = prev.home-assistant.python.pkgs.callPackage ./solaredge-modbus.nix { };
+      another_mvg = prev.home-assistant.python3Packages.callPackage ./another_mvg.nix { };
+      solaredge-modbus = prev.home-assistant.python3Packages.callPackage ./solaredge-modbus.nix { };
     };
     home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {
       another_mvg_1 = prev.callPackage ./another_mvg_l.nix { };
