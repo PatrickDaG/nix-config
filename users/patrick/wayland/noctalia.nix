@@ -19,6 +19,9 @@ in
     {
       home.persistence."/state".directories = [
         ".cache/noctalia"
+        # So they are not downloaded on every reboot
+        ".config/noctalia/plugins"
+        ".config/noctalia/colorschemes"
       ];
       stylix.targets.noctalia-shell.enable = true;
       programs.niri.settings = {
