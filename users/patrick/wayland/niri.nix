@@ -181,7 +181,6 @@ in
               matches = [ { app-id = "firefox"; } ];
               open-on-workspace = "default";
             }
-
             {
               matches = [ { app-id = "thunderbird"; } ];
               open-on-workspace = "mail";
@@ -206,17 +205,16 @@ in
             }
             {
               matches = [ { app-id = "Slack"; } ];
-              open-on-workspace = "slack";
+              open-on-workspace = "comms";
             }
             {
               matches = [ { app-id = "Zulip"; } ];
-              open-on-workspace = "slack";
+              open-on-workspace = "comms";
             }
             {
               matches = [ { app-id = "Element"; } ];
-              open-on-workspace = "slack";
+              open-on-workspace = "comms";
             }
-
             {
               # Currentl broken cause obsidian app-id is 'electron'
               matches = [ { app-id = "obsidian"; } ];
@@ -478,32 +476,38 @@ in
               name = "notes";
               open-on-output = "DP-5";
             };
+            "2scratch" = {
+              name = "scratch";
+              open-on-output = "DP-5";
+            };
             "1second" = {
               name = "second";
               open-on-output = "DP-7";
             };
-            "2mail" = {
-              name = "mail";
+            "2comms" = {
+              name = "comms";
               open-on-output = "DP-7";
             };
-            "3slack" = {
-              name = "slack";
-              open-on-output = "DP-7";
+            "1todo" = {
+              name = "todo";
+              open-on-output = "eDP-1";
             };
           };
           binds = with config.lib.niri.actions; {
 
             "Mod+d".action = focus-workspace "notes";
             "Mod+Shift+d".action.move-window-to-workspace = "notes";
+            "Mod+u".action = focus-workspace "scratch";
+            "Mod+Shift+u".action.move-window-to-workspace = "scratch";
 
-            "Mod+F1".action = focus-workspace "second";
-            "Mod+Shift+F1".action.move-window-to-workspace = "second";
+            "Mod+F1".action = focus-workspace "todo";
+            "Mod+Shift+F1".action.move-window-to-workspace = "todo";
 
-            "Mod+F2".action = focus-workspace "mail";
-            "Mod+Shift+F2".action.move-window-to-workspace = "mail";
+            "Mod+a".action = focus-workspace "second";
+            "Mod+Shift+a".action.move-window-to-workspace = "second";
 
-            "Mod+F3".action = focus-workspace "slack";
-            "Mod+Shift+F3".action.move-window-to-workspace = "slack";
+            "Mod+x".action = focus-workspace "comms";
+            "Mod+Shift+x".action.move-window-to-workspace = "comms";
           };
           spawn-at-startup = [
             { command = [ "obsidian" ]; }
