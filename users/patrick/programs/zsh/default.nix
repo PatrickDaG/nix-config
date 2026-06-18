@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ ./starfish.nix ];
+  imports = [ ./starship.nix ];
   # save history in xdg data home
   hm-all =
     { config, ... }:
@@ -18,12 +18,6 @@
         enable = true;
         # copy terminal background
         colors.bg = lib.mkForce "#000000";
-      };
-
-      programs.carapace = {
-        enable = false;
-        # this would source all completers sadly some are worse than the builtin completers
-        enableZshIntegration = false;
       };
 
       programs.zoxide.enable = true;

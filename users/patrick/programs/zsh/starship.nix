@@ -8,20 +8,15 @@
         "$username"
         "$hostname"
         " $directory "
-        #"($git_branch )"
-        #"($git_commit )"
-        #"$git_state"
-        #"$git_status"
         "(\${custom.jj} )"
-        "$character"
-      ];
-
-      right_format = lib.concatStrings [
+        "$fill"
         "($nix_shell )"
         "($cmd_duration )"
         "($status )"
         "($jobs)"
         "$time"
+        "$line_break"
+        "$character"
       ];
 
       username = {
@@ -40,6 +35,9 @@
         format = "[$path]($style)[$read_only]($read_only_style)";
         fish_style_pwd_dir_length = 1;
         truncate_to_repo = false;
+      };
+      fill = {
+        symbol = " ";
       };
 
       custom.jj = {
