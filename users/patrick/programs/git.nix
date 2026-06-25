@@ -76,6 +76,9 @@ let
 in
 {
   hm = _: {
+    home.persistence."/state".directories = [
+      ".config/jj/repos"
+    ];
     home.packages = with pkgs; [
       gfold
     ];
