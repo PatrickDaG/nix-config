@@ -370,17 +370,17 @@ in
               name = "default";
               open-on-output = "DP-4";
             };
-            "2games" = {
-              name = "games";
-              open-on-output = "DP-4";
-            };
-            "3notes" = {
+            "2notes" = {
               name = "notes";
               open-on-output = "DP-4";
             };
+            "3games" = {
+              name = "games";
+              open-on-output = "DP-4";
+            };
 
-            "1browser" = {
-              name = "browser";
+            "1second" = {
+              name = "second";
               open-on-output = "DP-6";
             };
             "2mail" = {
@@ -398,14 +398,14 @@ in
             };
           };
           binds = with config.lib.niri.actions; {
-            "Mod+d".action = focus-workspace "games";
-            "Mod+Shift+d".action.move-window-to-workspace = "games";
+            "Mod+d".action = focus-workspace "notes";
+            "Mod+Shift+d".action.move-window-to-workspace = "notes";
 
-            "Mod+u".action = focus-workspace "notes";
-            "Mod+Shift+u".action.move-window-to-workspace = "notes";
+            "Mod+u".action = focus-workspace "games";
+            "Mod+Shift+u".action.move-window-to-workspace = "games";
 
-            "Mod+a".action = focus-workspace "browser";
-            "Mod+Shift+a".action.move-window-to-workspace = "browser";
+            "Mod+a".action = focus-workspace "second";
+            "Mod+Shift+a".action.move-window-to-workspace = "second";
 
             "Mod+x".action = focus-workspace "mail";
             "Mod+Shift+x".action.move-window-to-workspace = "mail";
@@ -421,21 +421,6 @@ in
             { command = [ "thunderbird" ]; }
             { command = [ "obsidian" ]; }
           ];
-        };
-        patricknix = {
-          outputs."eDP-1" = {
-            scale = 2.0;
-            position = {
-              x = 2560 * 2;
-              y = 960;
-            };
-          };
-          workspaces = {
-            "1default" = {
-              name = "default";
-              open-on-output = "eDP-1";
-            };
-          };
         };
         thinknix = {
           outputs."eDP-1" = {
@@ -476,16 +461,16 @@ in
               name = "notes";
               open-on-output = "DP-5";
             };
-            "2scratch" = {
+            "3comms" = {
               name = "scratch";
               open-on-output = "DP-5";
             };
-            "1second" = {
+            "4second" = {
               name = "second";
               open-on-output = "DP-7";
             };
-            "2comms" = {
-              name = "comms";
+            "5mail" = {
+              name = "mail";
               open-on-output = "DP-7";
             };
             "1todo" = {
@@ -497,17 +482,17 @@ in
 
             "Mod+d".action = focus-workspace "notes";
             "Mod+Shift+d".action.move-window-to-workspace = "notes";
-            "Mod+u".action = focus-workspace "scratch";
-            "Mod+Shift+u".action.move-window-to-workspace = "scratch";
-
-            "Mod+F1".action = focus-workspace "todo";
-            "Mod+Shift+F1".action.move-window-to-workspace = "todo";
+            "Mod+u".action = focus-workspace "comms";
+            "Mod+Shift+u".action.move-window-to-workspace = "comms";
 
             "Mod+a".action = focus-workspace "second";
             "Mod+Shift+a".action.move-window-to-workspace = "second";
 
-            "Mod+x".action = focus-workspace "comms";
-            "Mod+Shift+x".action.move-window-to-workspace = "comms";
+            "Mod+x".action = focus-workspace "mail";
+            "Mod+Shift+x".action.move-window-to-workspace = "mail";
+
+            "Mod+F1".action = focus-workspace "todo";
+            "Mod+Shift+F1".action.move-window-to-workspace = "todo";
           };
           spawn-at-startup = [
             { command = [ "obsidian" ]; }
@@ -517,7 +502,21 @@ in
             { command = [ "zulip" ]; }
           ];
         };
-
+        patricknix = {
+          outputs."eDP-1" = {
+            scale = 2.0;
+            position = {
+              x = 2560 * 2;
+              y = 960;
+            };
+          };
+          workspaces = {
+            "1default" = {
+              name = "default";
+              open-on-output = "eDP-1";
+            };
+          };
+        };
       };
       home.packages = [
         pkgs.pat-scripts.clone-term
