@@ -7,7 +7,7 @@
 {
   #hm.stylix.targets.vicinae.enable = true;
   hm = {
-    services.vicinae = {
+    programs.vicinae = {
       enable = true;
       systemd = {
         enable = true;

@@ -27,6 +27,7 @@
     ipv4 = true;
     ipv6 = true;
     nssmdns4 = true;
+    # FIXME: why this disabled?
     #nssmdns6 = true;
     publish = {
       enable = true;
