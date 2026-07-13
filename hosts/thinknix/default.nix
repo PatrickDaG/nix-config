@@ -63,6 +63,9 @@
 
   #services.thinkfan.enable = true;
 
+  virtualisation.docker.enable = true;
+  users.users.patrick.extraGroups = [ "docker" ];
+
   nixpkgs.hostPlatform = "x86_64-linux";
   nix.settings.system-features = [
     "kvm"
