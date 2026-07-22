@@ -137,5 +137,10 @@
 
   hm.programs.calibre = {
     enable = true;
+    plugins = with pkgs; [
+      deacsm
+      dedrm
+      koreader-sync
+    ];
   };
 }

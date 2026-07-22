@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -Dm444 "dist/KOReader_Sync_v${finalAttrs.version}.zip" "$out"
+    install -Dm444 "dist/KOReader_Sync_v${finalAttrs.version}.zip" "$out/KOReader_Sync_v${finalAttrs.version}.zip"
   '';
 
   meta = {

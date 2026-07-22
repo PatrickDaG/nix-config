@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -Dm444 plugin/DeDRM_plugin.zip "$out"
+    install -Dm444 plugin/DeDRM_plugin.zip "$out/DeDRM_plugin.zip"
   '';
 
   meta = {

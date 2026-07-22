@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -Dm444 calibre-plugin.zip "$out"
+    install -Dm444 calibre-plugin.zip "$out/calibre-plugin.zip"
   '';
 
   meta = {
