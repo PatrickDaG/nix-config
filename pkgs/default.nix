@@ -2,17 +2,20 @@ _inputs: [
   (import ./scripts)
   (_final: prev: {
     # keep-sorted start
-    zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
-    zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
-    signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
-    ytdlp-pot-provider = prev.callPackage ./ytdlp-pot-provider.nix { };
-    mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
-    disneyplus = prev.callPackage ./disney.nix { };
     amazon = prev.callPackage ./amazon.nix { };
     awakened-poe-trade = prev.callPackage ./awakened-poe-trade.nix { };
-    habitica = prev.callPackage ./habitica { };
+    deacsm = prev.callPackage ./deacsm.nix { };
+    dedrm = prev.callPackage ./dedrm.nix { };
+    disneyplus = prev.callPackage ./disney.nix { };
     goldfish = prev.callPackage ./goldfish.nix { };
+    habitica = prev.callPackage ./habitica { };
+    koreader-sync = prev.callPackage ./koreader-sync.nix { };
+    mongodb-bin = prev.callPackage ./mongodb-bin.nix { };
+    signal-to-blog = prev.callPackage ./signal-to-blog.nix { };
     soulver-cpp = prev.callPackage ./soulver-cpp.nix { };
+    ytdlp-pot-provider = prev.callPackage ./ytdlp-pot-provider.nix { };
+    zsh-histdb = prev.callPackage ./zsh-histdb.nix { };
+    zsh-histdb-skim = prev.callPackage ./zsh-histdb-skim.nix { };
     # keep-sorted end
 
     neovim-clean = prev.neovim-unwrapped.overrideAttrs (
