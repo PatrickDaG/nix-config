@@ -10,6 +10,7 @@
     baseUrl = "https://rss.lel.lol";
     virtualHost = "rss.lel.lol";
     authType = "none";
+    api.enable = true;
     extensions = [ pkgs.freshrss-extensions.youtube ];
   };
   environment.persistence."/persist".directories = [
