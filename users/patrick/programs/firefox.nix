@@ -290,6 +290,7 @@ in
             violentmonkey
             youtube-recommended-videos
             zotero-connector
+            clearurls
             # modern for wikipedia - not packaged
             # keep-sorted end
           ];

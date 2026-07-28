@@ -82,6 +82,7 @@ in
         lixPackageSets.latest.lix
         nixpkgs-review
         ps
+        gnugrep
         python3
         ripgrep
         tea
