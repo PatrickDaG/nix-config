@@ -42,7 +42,7 @@
           inputs.nixvim.overlays.default
           inputs.niri.overlays.niri
           inputs.firefox-addons.overlays.default
-          inputs.llm-agents.overlays.default
+          inputs.llm-agents.overlays.shared-nixpkgs
         ];
       };
       pkgsCuda = import inputs.nixpkgs {

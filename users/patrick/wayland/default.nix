@@ -29,7 +29,7 @@
       "org.freedesktop.impl.portal.Screenshot" = [ "xdg-desktop-portal-gnome" ];
     };
     configPackages = [
-      pkgs.niri
+      pkgs.niri-stable
     ];
     extraPortals = [
       pkgs.gnome-keyring
