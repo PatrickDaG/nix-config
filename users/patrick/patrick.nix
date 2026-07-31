@@ -134,4 +134,13 @@
     "quiet"
   ];
   boot.loader.timeout = 2;
+
+  hm.programs.calibre = {
+    enable = true;
+    plugins = with pkgs; [
+      deacsm
+      dedrm
+      koreader-sync
+    ];
+  };
 }

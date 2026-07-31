@@ -223,6 +223,10 @@ in
       port = 80;
       proxyProtect = true;
       publicAccess = true;
+      # FreshRSS authenticates Google Reader API clients with an API password.
+      virtualHostExtraConfig.locations."/api/greader.php" = {
+        proxyPass = "http://freshrss";
+      };
     })
     (blockOf "mealie" {
       port = 3002;

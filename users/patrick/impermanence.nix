@@ -83,6 +83,10 @@
         ".local/share/vicinae"
 
         ".local/share/password-store"
+
+        ".local/share/calibre-lib"
+        ".config/calibre"
+        ".cache/calibre"
       ];
     };
     "/panzer/state".directories = lib.lists.optionals (config.disko.devices.zpool ? "panzer") [
