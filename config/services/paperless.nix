@@ -83,7 +83,6 @@ in
       PAPERLESS_ENABLE_COMPRESSION = false;
       PAPERLESS_CONSUMER_ENABLE_BARCODES = true;
       PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE = true;
-      PAPERLESS_CONSUMER_BARCODE_SCANNER = "ZXING";
       PAPERLESS_CONSUMER_RECURSIVE = true;
       PAPERLESS_FILENAME_FORMAT = "{owner_username}/{created_year}-{created_month}-{created_day}_{asn}_{title}";
       PAPERLESS_NUMBER_OF_SUGESSTED_DATES = 11;
@@ -115,8 +114,11 @@ in
     group = "paperless";
   };
 
-  systemd.services.paperless-web.script = lib.mkBefore ''
-    paperlessClientSecret=$(< ${config.age.secrets.paperless-oauth2-client-secret.path})
-    export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$( <<< $PAPERLESS_SOCIALACCOUNT_PROVIDERS ${pkgs.jq}/bin/jq -c --arg paperlessClientSecret "$paperlessClientSecret" '.openid_connect.APPS.[0].secret = $paperlessClientSecret')"
-  '';
+  systemd.services.paperless-web.serviceConfig.ExecStart = lib.mkForce (
+    pkgs.writeShellScript "paperless-web" ''
+      paperlessClientSecret=$(< ${config.age.secrets.paperless-oauth2-client-secret.path})
+      export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$( <<< $PAPERLESS_SOCIALACCOUNT_PROVIDERS ${pkgs.jq}/bin/jq -c --arg paperlessClientSecret "$paperlessClientSecret" '.openid_connect.APPS.[0].secret = $paperlessClientSecret')"
+      "${lib.getExe config.services.paperless.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
+    ''
+  );
 }

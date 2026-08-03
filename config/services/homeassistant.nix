@@ -539,7 +539,6 @@
         devolo-plc-api
         dwdwfsapi
         wled
-        pymvglive
         forecast-solar
         aioelectricitymaps
       ];
