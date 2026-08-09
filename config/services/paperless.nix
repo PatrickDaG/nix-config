@@ -118,7 +118,7 @@ in
     pkgs.writeShellScript "paperless-web" ''
       paperlessClientSecret=$(< ${config.age.secrets.paperless-oauth2-client-secret.path})
       export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$( <<< $PAPERLESS_SOCIALACCOUNT_PROVIDERS ${pkgs.jq}/bin/jq -c --arg paperlessClientSecret "$paperlessClientSecret" '.openid_connect.APPS.[0].secret = $paperlessClientSecret')"
-      "${lib.getExe config.services.paperless.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
+      ${lib.getExe config.services.paperless.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application
     ''
   );
 }
