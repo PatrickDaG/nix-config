@@ -51,6 +51,7 @@ in
     hosts.${config.node.name}.server = true;
   };
   globals.wireguard.users.hosts.patrick-handy = { };
+  globals.wireguard.users.hosts.david-handy = { };
   globals.wireguard.services-extern = {
     host = icfg.hostCidrv4;
     port = 51822;
