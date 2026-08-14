@@ -133,12 +133,6 @@
       another_mvg_3
     ];
     config = {
-      http = {
-        server_host = [ "0.0.0.0" ];
-        server_port = 3000;
-        use_x_forwarded_for = true;
-        trusted_proxies = [ globals.wireguard.services.hosts.elisabeth-nginx.ipv4 ];
-      };
       lovelace.resource_mode = "yaml";
 
       homeassistant = {
@@ -390,7 +384,6 @@
             {% endif %}
             {{ varta_in }}
           '';
-
         }
         {
           name = "Varta Output Power";
@@ -433,6 +426,22 @@
             {% set varta_out = 0 %}
             {% endif %}
             {{ varta_out }}
+          '';
+        }
+        {
+          name = "Varta Status";
+          state = ''
+            {% set mapper =  {
+                '0' : 'Busy',
+                '1' : 'Run',
+                '2' : 'Charge',
+                '3' : 'Discharge',
+                '4' : 'Standby',
+                '5' : 'Error',
+                '6' : 'Service',
+                '7' : 'Islanding' } %}
+            {% set state =  states.sensor.mb_varta_state.state %}
+            {{ mapper[state] if state in mapper else 'Unknown' }}
           '';
         }
       ];
@@ -487,27 +496,6 @@
           round = 2;
           max_sub_interval = {
             minutes = 5;
-          };
-        }
-        {
-          platform = "template";
-          sensors = {
-            mb_varta_status = {
-              friendly_name = "Varta Status";
-              value_template = ''
-                {% set mapper =  {
-                    '0' : 'Busy',
-                    '1' : 'Run',
-                    '2' : 'Charge',
-                    '3' : 'Discharge',
-                    '4' : 'Standby',
-                    '5' : 'Error',
-                    '6' : 'Service',
-                    '7' : 'Islanding' } %}
-                {% set state =  states.sensor.mb_varta_state.state %}
-                {{ mapper[state] if state in mapper else 'Unknown' }}
-              '';
-            };
           };
         }
         {
