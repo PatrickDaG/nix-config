@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "noDRM";
     repo = "DeDRM_tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hq/DBYeJ2urJtxG+MiO2L8TGZ9/kLue1DXbG4/KJFhc=";
+    hash = "sha256-BqRcN7ItZdB4d1MOLzsDXCruViyTOt395x/kJLHxOIs=";
   };
 
   nativeBuildInputs = [
