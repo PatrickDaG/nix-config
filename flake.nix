@@ -258,20 +258,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    kagi = {
-      url = "git+https://forge.lel.lol/patrick/kagi?ref=main";
-      inputs = {
-        # keep-sorted start
-        devshell.follows = "devshell";
-        flake-parts.follows = "flake-parts";
-        nci.follows = "nci";
-        nixpkgs.follows = "nixpkgs";
-        pre-commit-hooks.follows = "pre-commit-hooks";
-        treefmt-nix.follows = "treefmt-nix";
-        # keep-sorted end
-      };
-    };
-
     jail-nix = {
       url = "sourcehut:~alexdavid/jail.nix";
     };
