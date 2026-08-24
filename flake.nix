@@ -162,6 +162,14 @@
     # My personal nix flake templates
     templates.url = "git+https://forge.lel.lol/patrick/nix-templates.git";
 
+    # Better agents
+    omp = {
+      url = "github:can1357/oh-my-pi";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     # Prebuilt database for comma, etc
     nix-index-database = {
       url = "github:nix-community/nix-index-database";

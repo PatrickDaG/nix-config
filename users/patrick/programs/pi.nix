@@ -13,322 +13,334 @@ let
       (readwrite (noescape "~/.pi"))
     ])
   );
-  jailed-omp = jail "jailed-omp" pkgs.llm-agents.omp (
-    base.baseCombinators
-    ++ (with jail.combinators; [
-      (readwrite (noescape "~/.pi"))
-    ])
-  );
-
 in
 {
-  hm.home.persistence."/state".directories = [ ".config/gh-pi" ];
-  hm.home.packages = [ jailed-omp ];
-
-  hm.programs.pi = {
-    enable = true;
-
-    package = jailed-pi;
-
-    settings = { };
-
-    extensions.current-model.text = ''
-      import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-      import { Type } from "typebox";
-
-      function currentModelDetails(ctx: ExtensionContext) {
-        const model = ctx.model;
-        const thinkingLevel = ctx.getThinkingLevel?.();
-
-        if (!model) {
-          return {
-            available: false,
-            shortDescription: "none/none",
-            longDescription: "No model is currently selected for this pi session.",
-          };
-        }
-
-        const shortDescription = `''${model.name}/''${model.provider}`;
-        const longDescription = [
-          `Provider: ''${model.provider}`,
-          `Model id: ''${model.id}`,
-          `Display name: ''${model.name}`,
-          `API: ''${model.api}`,
-          `Base URL: ''${model.baseUrl}`,
-          `Reasoning supported: ''${model.reasoning}`,
-          `Input modes: ''${model.input.join(", ")}`,
-          `Context window: ''${model.contextWindow}`,
-          `Max output tokens: ''${model.maxTokens}`,
-          `Thinking level: ''${thinkingLevel ?? "unknown"}`,
-        ].join("\n");
-
-        return {
-          available: true,
-          provider: model.provider,
-          id: model.id,
-          name: model.name,
-          api: model.api,
-          baseUrl: model.baseUrl,
-          reasoning: model.reasoning,
-          input: model.input,
-          contextWindow: model.contextWindow,
-          maxTokens: model.maxTokens,
-          thinkingLevel,
-          shortDescription,
-          longDescription,
+  hm =
+    { config, ... }:
+    let
+      inherit (base) jail;
+      jailed-omp = jail "jailed-omp" inputs.omp.packages.x86_64-linux.omp (
+        base.baseCombinators
+        ++ (with jail.combinators; [
+          (readwrite (noescape "~/.omp"))
+        ])
+      );
+    in
+    {
+      home.persistence."/state".directories = [ ".config/gh-pi" ];
+      programs.omp = {
+        enable = true;
+        package = jailed-omp;
+        settings = {
         };
-      }
+      };
 
-      export default function (pi: ExtensionAPI) {
-        pi.registerTool({
-          name: "current_model",
-          label: "Current Model",
-          description: "Return exact model currently selected for this pi session.",
-          promptSnippet: "Return exact current pi session model identity.",
-          promptGuidelines: [
-            "Use current_model when the user asks what model you are, which model is active, or any question about exact current pi session model identity.",
-          ],
-          parameters: Type.Object({}),
-          async execute(_toolCallId, _params, _signal, _onUpdate, ctx) {
-            const details = currentModelDetails(ctx);
+      programs.pi = {
+        enable = true;
+
+        package = jailed-pi;
+
+        settings = { };
+
+        extensions.current-model.text = ''
+          import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+          import { Type } from "typebox";
+
+          function currentModelDetails(ctx: ExtensionContext) {
+            const model = ctx.model;
+            const thinkingLevel = ctx.getThinkingLevel?.();
+
+            if (!model) {
+              return {
+                available: false,
+                shortDescription: "none/none",
+                longDescription: "No model is currently selected for this pi session.",
+              };
+            }
+
+            const shortDescription = `''${model.name}/''${model.provider}`;
+            const longDescription = [
+              `Provider: ''${model.provider}`,
+              `Model id: ''${model.id}`,
+              `Display name: ''${model.name}`,
+              `API: ''${model.api}`,
+              `Base URL: ''${model.baseUrl}`,
+              `Reasoning supported: ''${model.reasoning}`,
+              `Input modes: ''${model.input.join(", ")}`,
+              `Context window: ''${model.contextWindow}`,
+              `Max output tokens: ''${model.maxTokens}`,
+              `Thinking level: ''${thinkingLevel ?? "unknown"}`,
+            ].join("\n");
+
             return {
-              content: [
-                {
-                  type: "text",
-                  text: `''${details.shortDescription}\n\n''${details.longDescription}`,
-                },
-              ],
-              details,
+              available: true,
+              provider: model.provider,
+              id: model.id,
+              name: model.name,
+              api: model.api,
+              baseUrl: model.baseUrl,
+              reasoning: model.reasoning,
+              input: model.input,
+              contextWindow: model.contextWindow,
+              maxTokens: model.maxTokens,
+              thinkingLevel,
+              shortDescription,
+              longDescription,
             };
-          },
-        });
-      }
-    '';
+          }
 
-    agentsPrompt = ''
-      # Output format
-      Respond brief in chat replies. Commit messages, code, and comments use normal English.
+          export default function (pi: ExtensionAPI) {
+            pi.registerTool({
+              name: "current_model",
+              label: "Current Model",
+              description: "Return exact model currently selected for this pi session.",
+              promptSnippet: "Return exact current pi session model identity.",
+              promptGuidelines: [
+                "Use current_model when the user asks what model you are, which model is active, or any question about exact current pi session model identity.",
+              ],
+              parameters: Type.Object({}),
+              async execute(_toolCallId, _params, _signal, _onUpdate, ctx) {
+                const details = currentModelDetails(ctx);
+                return {
+                  content: [
+                    {
+                      type: "text",
+                      text: `''${details.shortDescription}\n\n''${details.longDescription}`,
+                    },
+                  ],
+                  details,
+                };
+              },
+            });
+          }
+        '';
 
-      - Drop articles (a, an, the), filler (just, really, basically, actually).
-      - Drop pleasantries (sure, certainly, happy to).
-      - No hedging. Fragments fine. Short synonyms.
-      - Technical terms stay exact. Code blocks unchanged.
-      - Pattern: [thing] [action] [reason]. [next step].
+        # TODO: add notice saying to never write human output for me(paper/blog post)
+        agentsPrompt = ''
+          # Output format
+          Respond brief in chat replies. Commit messages, code, and comments use normal English.
 
-      # Ask, Don't Assume
+          - Drop articles (a, an, the), filler (just, really, basically, actually).
+          - Drop pleasantries (sure, certainly, happy to).
+          - No hedging. Fragments fine. Short synonyms.
+          - Technical terms stay exact. Code blocks unchanged.
+          - Pattern: [thing] [action] [reason]. [next step].
 
-      When a request is ambiguous, has multiple valid approaches, or the scope is unclear — stop and ask before doing anything. Specific triggers:
+          # Ask, Don't Assume
 
-          - Requirements could be interpreted multiple ways → ask which one
-          - Multiple valid implementation approaches exist → list them, ask preference
-          - Scope is unclear (how much to change, which files) → ask to narrow down
-          - Not sure about existing project conventions → read existing code first, ask if still unclear
-          - Task is large or vague → propose a plan and wait for approval
+          When a request is ambiguous, has multiple valid approaches, or the scope is unclear — stop and ask before doing anything. Specific triggers:
 
-      Never go on a multi-file exploration spree trying to "figure it out". A 10-second question saves a 10-minute goose chase.
+              - Requirements could be interpreted multiple ways → ask which one
+              - Multiple valid implementation approaches exist → list them, ask preference
+              - Scope is unclear (how much to change, which files) → ask to narrow down
+              - Not sure about existing project conventions → read existing code first, ask if still unclear
+              - Task is large or vague → propose a plan and wait for approval
 
-      # Always Re-read Before Editing
+          Never go on a multi-file exploration spree trying to "figure it out". A 10-second question saves a 10-minute goose chase.
 
-      - Always re-read a file before editing it — the user may have changed it
-      - Never assume file contents from memory. Files change between turns
-      - If an edit fails, re-read the file before retrying
+          # Always Re-read Before Editing
 
-
-      # Sandboxing
-
-      - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
-      - Your parent directory(the main jujutsu repository) is not part of the sandbox, DO NOT try reading/editing it. Contain everything in the current workspace.
-      - Commands may fail due to missing permission or secrets. DO NOT try again. Instead tell the user what went wrong, what is missing and wait for further instructions.
-
-      # Available Tools
-
-      - These basic tools are always available: fd, rg, jq, gh, tea, diff, jj, nix
-      - For further tools use 'nix run'
-
-      # Style guide
-
-      - Markdown files should have a maximum line width of 170 characters
-
-      # VCS
-
-      - Use jujutsu instead of git
-      - Sync the repository after every change by running 'jj status'
-      - Set a description using "jj describe -m"
-      - Use conventional commit messages(e.g. prefix of feat/fix/chore)
-      - Always add an "Assisted-by:" commit message trailer containing tool name and the exact model name and version used for the contribution
-      - Use gh for GitHub
-      - use tea for gitea/forgejo
-
-      # Search
-
-      - Recommended: Use GitHub code search to find examples for libraries and APIs: gh search code "foo lang:nix".
-      - Prefer cloning source code over web searches for more accurate results.
+          - Always re-read a file before editing it — the user may have changed it
+          - Never assume file contents from memory. Files change between turns
+          - If an edit fails, re-read the file before retrying
 
 
-      # General Guidelines
+          # Sandboxing
 
-      Follow XDG Base Directory spec for config/cache/data paths when writing code.
+          - You are running in a sandbox. Edits outside `$PWD` and `$HOME/.pi` will not persist. If such edits are needed, ask the user to relax the sandbox.
+          - Your parent directory(the main jujutsu repository) is not part of the sandbox, DO NOT try reading/editing it. Contain everything in the current workspace.
+          - Commands may fail due to missing permission or secrets. DO NOT try again. Instead tell the user what went wrong, what is missing and wait for further instructions.
 
-      # Nix
+          # Available Tools
 
-      - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
-      - Use nix log /nix/store/xxxx | grep <key-word> to inspect failed nix builds
-      - Add new untracked files in Nix flakes with git add.
-      - To get a rebuild of a nix package change the nix expression instead of --rebuild
-      - Prefer nix-provided Python deps over pip/venv when packaging or scripting.
-      - Inside nix-shell/nix develop: locate headers/libs/tools via env vars (e.g. env | rg /nix/store, $NIX_CFLAGS_COMPILE, $PKG_CONFIG_PATH, $buildInputs) rather than guessing system paths.
-      - Use nix-locate to find packages by path, e.g. nix-locate bin/ip
-      - Use nix run to execute applications that are not installed.
-      - Use nix eval instead of nix flake show to look up attributes in a flake.
-      - nix flake check runs too slow. Instead, build individual tests.
+          - These basic tools are always available: fd, rg, jq, gh, tea, diff, jj, nix
+          - For further tools use 'nix run'
 
-    '';
+          # Style guide
 
-    prompts.nixpkgs-review = {
-      description = "Review a nixpkgs pull request for quality, correctness, and adherence to best practices";
-      content = ''
-        You are a nixpkgs pull request reviewer. Your job is to thoroughly review PR #$1 against the nixpkgs repository.
+          - Markdown files should have a maximum line width of 170 characters
 
-        **You must NOT modify any files.** Your output is a review with actionable findings only.
+          # VCS
 
-        ## Environment
+          - Use jujutsu instead of git
+          - Sync the repository after every change by running 'jj status'
+          - Set a description using "jj describe -m"
+          - Use conventional commit messages(e.g. prefix of feat/fix/chore)
+          - Always add an "Assisted-by:" commit message trailer containing tool name and the exact model name and version used for the contribution
+          - Use gh for GitHub
+          - use tea for gitea/forgejo
 
-        You are in a jj checkout of the nixpkgs repository. Use `jj` for all VCS operations (not git).
+          # Search
 
-        ## Step 1: Fetch and understand the PR
+          - Recommended: Use GitHub code search to find examples for libraries and APIs: gh search code "foo lang:nix".
+          - Prefer cloning source code over web searches for more accurate results.
 
-        First, gather PR metadata from GitHub:
-        ```
-        gh pr view $1 --json title,body,files,commits,labels,reviews,comments
-        ```
 
-        Read the PR description, linked issues, and all discussion comments carefully to understand intent.
+          # General Guidelines
 
-        ## Step 2: Check out the PR changes locally
+          Follow XDG Base Directory spec for config/cache/data paths when writing code.
 
-        Fetch and inspect the diff without modifying the working tree:
-        ```
-        gh pr diff $1
-        ```
+          # Nix
 
-        Review every changed file in the diff. For deeper inspection of specific files, read them from the PR branch:
-        ```
-        gh pr diff $1 --name-only
-        ```
-        Then read each changed file to understand surrounding context.
+          - Use nix-based tooling whenever possible (flakes, devshells, `nix` command).
+          - Use nix log /nix/store/xxxx | grep <key-word> to inspect failed nix builds
+          - Add new untracked files in Nix flakes with git add.
+          - To get a rebuild of a nix package change the nix expression instead of --rebuild
+          - Prefer nix-provided Python deps over pip/venv when packaging or scripting.
+          - Inside nix-shell/nix develop: locate headers/libs/tools via env vars (e.g. env | rg /nix/store, $NIX_CFLAGS_COMPILE, $PKG_CONFIG_PATH, $buildInputs) rather than guessing system paths.
+          - Use nix-locate to find packages by path, e.g. nix-locate bin/ip
+          - Use nix run to execute applications that are not installed.
+          - Use nix eval instead of nix flake show to look up attributes in a flake.
+          - nix flake check runs too slow. Instead, build individual tests.
 
-        ## Step 3: Build with nixpkgs-review
+        '';
 
-        Use `nixpkgs-review` to verify the PR builds correctly:
-        ```
-        nixpkgs-review pr $1
-        ```
+        prompts.nixpkgs-review = {
+          description = "Review a nixpkgs pull request for quality, correctness, and adherence to best practices";
+          content = ''
+            You are a nixpkgs pull request reviewer. Your job is to thoroughly review PR #$1 against the nixpkgs repository.
 
-        This will:
-        - Fetch the PR and determine affected packages
-        - Build all affected packages
-        - Report build successes and failures
+            **You must NOT modify any files.** Your output is a review with actionable findings only.
 
-        Carefully examine any build failures and include them in your review.
+            ## Environment
 
-        ## Step 4: Review against nixpkgs standards
+            You are in a jj checkout of the nixpkgs repository. Use `jj` for all VCS operations (not git).
 
-        Evaluate the PR against the following official documentation and policies. Read the relevant sections from the local nixpkgs tree:
+            ## Step 1: Fetch and understand the PR
 
-        ### Packaging conventions
-        - `doc/languages-frameworks/` — language-specific packaging guides (python, rust, go, haskell, node, etc.)
-        - `doc/stdenv/` — stdenv phases, meta attributes, cross-compilation
-        - `doc/build-helpers/` — fetchers, trivial builders, `makeWrapper`, etc.
-        - `pkgs/README.md` — top-level packaging conventions
+            First, gather PR metadata from GitHub:
+            ```
+            gh pr view $1 --json title,body,files,commits,labels,reviews,comments
+            ```
 
-        ### Contributing standards
-        - `CONTRIBUTING.md` — commit message format, PR conventions, review process
-        - `.github/CODEOWNERS` — check if appropriate maintainers are requested
-        - `.github/PULL_REQUEST_TEMPLATE.md` — verify PR description completeness
+            Read the PR description, linked issues, and all discussion comments carefully to understand intent.
 
-        ### Specific checks to perform
+            ## Step 2: Check out the PR changes locally
 
-        **Package metadata (`meta` attribute):**
-        - `description` is present and concise (no "A" or "An" prefix, no period at end)
-        - `homepage` is set and valid
-        - `license` uses values from `lib.licenses`
-        - `maintainers` list includes the PR author or appropriate maintainers from `maintainers/maintainer-list.nix`
-        - `platforms` is set appropriately
-        - `mainProgram` is set if the package provides a binary
+            Fetch and inspect the diff without modifying the working tree:
+            ```
+            gh pr diff $1
+            ```
 
-        **Source integrity:**
-        - Fetcher is appropriate (`fetchFromGitHub`, `fetchurl`, `fetchpatch`, etc.)
-        - `hash` uses SRI format (not legacy `sha256` string when avoidable)
-        - Version matches upstream tag/release
-        - Patches are minimal and well-justified
+            Review every changed file in the diff. For deeper inspection of specific files, read them from the PR branch:
+            ```
+            gh pr diff $1 --name-only
+            ```
+            Then read each changed file to understand surrounding context.
 
-        **Build correctness:**
-        - Correct builder/framework used for the language ecosystem
-        - Dependencies are complete (native vs build vs runtime)
-        - No unnecessary `fixupPhase` or `postInstall` hacks
-        - Tests are enabled where possible (`doCheck = true`, `pytestCheckHook`, etc.)
-        - `passthru.tests` or `passthru.updateScript` where applicable
+            ## Step 3: Build with nixpkgs-review
 
-        **NixOS module quality (if applicable):**
-        - Read `doc/README.md` for module documentation conventions
-        - Options use proper types from `lib.types`
-        - Options have `description`, `default`, and `example` where appropriate
-        - `mkEnableOption` / `mkPackageOption` used correctly
-        - Service hardening (systemd sandboxing, `DynamicUser`, `StateDirectory`, etc.)
-        - Freeform settings pattern used where appropriate (`settingsFormat`)
+            Use `nixpkgs-review` to verify the PR builds correctly:
+            ```
+            nixpkgs-review pr $1
+            ```
 
-        **Code style:**
-        - Follows nixpkgs formatting (nixfmt-rfc-style)
-        - `lib` functions used properly (no `with lib;` in new code, prefer qualified access)
-        - `callPackage` pattern used for package definitions
-        - File is in the correct location under `pkgs/by-name/` (two-letter prefix convention) for new packages
-        - `by-name` packages must NOT set `pname`/`name` redundantly if directory name suffices
+            This will:
+            - Fetch the PR and determine affected packages
+            - Build all affected packages
+            - Report build successes and failures
 
-        **Commit hygiene:**
-        - Commit message follows `category: description` format (e.g., `python3Packages.foo: init at 1.0.0`)
-        - One logical change per commit
-        - Version updates include a changelog link or summary of changes
+            Carefully examine any build failures and include them in your review.
 
-        **Security considerations:**
-        - No vendored binaries or prebuilt artifacts without justification
-        - No `allowBroken`, `insecure`, or `unfree` additions without rationale
-        - Patches reviewed for safety
+            ## Step 4: Review against nixpkgs standards
 
-        ## Step 5: Produce the review
+            Evaluate the PR against the following official documentation and policies. Read the relevant sections from the local nixpkgs tree:
 
-        Output a structured review in this format:
+            ### Packaging conventions
+            - `doc/languages-frameworks/` — language-specific packaging guides (python, rust, go, haskell, node, etc.)
+            - `doc/stdenv/` — stdenv phases, meta attributes, cross-compilation
+            - `doc/build-helpers/` — fetchers, trivial builders, `makeWrapper`, etc.
+            - `pkgs/README.md` — top-level packaging conventions
 
-        ```markdown
-        # Review: PR #$1 — <title>
+            ### Contributing standards
+            - `CONTRIBUTING.md` — commit message format, PR conventions, review process
+            - `.github/CODEOWNERS` — check if appropriate maintainers are requested
+            - `.github/PULL_REQUEST_TEMPLATE.md` — verify PR description completeness
 
-        ## Summary
-        <Brief description of what the PR does and your overall assessment>
+            ### Specific checks to perform
 
-        ## Build Results
-        <Output from nixpkgs-review: which packages built, which failed>
+            **Package metadata (`meta` attribute):**
+            - `description` is present and concise (no "A" or "An" prefix, no period at end)
+            - `homepage` is set and valid
+            - `license` uses values from `lib.licenses`
+            - `maintainers` list includes the PR author or appropriate maintainers from `maintainers/maintainer-list.nix`
+            - `platforms` is set appropriately
+            - `mainProgram` is set if the package provides a binary
 
-        ## Findings
+            **Source integrity:**
+            - Fetcher is appropriate (`fetchFromGitHub`, `fetchurl`, `fetchpatch`, etc.)
+            - `hash` uses SRI format (not legacy `sha256` string when avoidable)
+            - Version matches upstream tag/release
+            - Patches are minimal and well-justified
 
-        ### Blockers (must fix before merge)
-        - [ ] <issue with file path and line reference>
+            **Build correctness:**
+            - Correct builder/framework used for the language ecosystem
+            - Dependencies are complete (native vs build vs runtime)
+            - No unnecessary `fixupPhase` or `postInstall` hacks
+            - Tests are enabled where possible (`doCheck = true`, `pytestCheckHook`, etc.)
+            - `passthru.tests` or `passthru.updateScript` where applicable
 
-        ### Suggestions (should fix, non-blocking)
-        - [ ] <improvement with rationale>
+            **NixOS module quality (if applicable):**
+            - Read `doc/README.md` for module documentation conventions
+            - Options use proper types from `lib.types`
+            - Options have `description`, `default`, and `example` where appropriate
+            - `mkEnableOption` / `mkPackageOption` used correctly
+            - Service hardening (systemd sandboxing, `DynamicUser`, `StateDirectory`, etc.)
+            - Freeform settings pattern used where appropriate (`settingsFormat`)
 
-        ### Nits (style, optional)
-        - [ ] <minor style issue>
+            **Code style:**
+            - Follows nixpkgs formatting (nixfmt-rfc-style)
+            - `lib` functions used properly (no `with lib;` in new code, prefer qualified access)
+            - `callPackage` pattern used for package definitions
+            - File is in the correct location under `pkgs/by-name/` (two-letter prefix convention) for new packages
+            - `by-name` packages must NOT set `pname`/`name` redundantly if directory name suffices
 
-        ### Positive observations
-        - <things done well>
+            **Commit hygiene:**
+            - Commit message follows `category: description` format (e.g., `python3Packages.foo: init at 1.0.0`)
+            - One logical change per commit
+            - Version updates include a changelog link or summary of changes
 
-        ## Verdict
-        <APPROVE / REQUEST_CHANGES / NEEDS_DISCUSSION — with rationale>
-        ```
+            **Security considerations:**
+            - No vendored binaries or prebuilt artifacts without justification
+            - No `allowBroken`, `insecure`, or `unfree` additions without rationale
+            - Patches reviewed for safety
 
-        Be specific: always reference file paths, line numbers, and quote relevant code snippets.
-        Cite the specific nixpkgs documentation section when flagging an issue.
-        If everything looks good, say so — don't invent problems.
-      '';
+            ## Step 5: Produce the review
+
+            Output a structured review in this format:
+
+            ```markdown
+            # Review: PR #$1 — <title>
+
+            ## Summary
+            <Brief description of what the PR does and your overall assessment>
+
+            ## Build Results
+            <Output from nixpkgs-review: which packages built, which failed>
+
+            ## Findings
+
+            ### Blockers (must fix before merge)
+            - [ ] <issue with file path and line reference>
+
+            ### Suggestions (should fix, non-blocking)
+            - [ ] <improvement with rationale>
+
+            ### Nits (style, optional)
+            - [ ] <minor style issue>
+
+            ### Positive observations
+            - <things done well>
+
+            ## Verdict
+            <APPROVE / REQUEST_CHANGES / NEEDS_DISCUSSION — with rationale>
+            ```
+
+            Be specific: always reference file paths, line numbers, and quote relevant code snippets.
+            Cite the specific nixpkgs documentation section when flagging an issue.
+            If everything looks good, say so — don't invent problems.
+          '';
+        };
+      };
     };
-  };
 }

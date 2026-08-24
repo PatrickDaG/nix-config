@@ -29,6 +29,7 @@
       inputs.noctalia.homeModules.default
       inputs.spicetify-nix.homeManagerModules.default
       inputs.vicinae.homeManagerModules.default
+      inputs.omp.homeManagerModules.default
       #keep-sorted end
     ]
     #If not minimal the stylix nixos module takes care of this

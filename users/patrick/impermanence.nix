@@ -64,6 +64,7 @@
         ".claude"
         ".codex"
         ".pi"
+        ".omp"
         ".cache/llama.cpp"
 
         ".config/Element"
