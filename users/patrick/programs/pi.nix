@@ -13,7 +13,7 @@ let
       (readwrite (noescape "~/.pi"))
     ])
   );
-  jailed-omp = jail "jailed-pi" pkgs.llm-agents.omp (
+  jailed-omp = jail "jailed-omp" pkgs.llm-agents.omp (
     base.baseCombinators
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.pi"))
@@ -23,7 +23,7 @@ let
 in
 {
   hm.home.persistence."/state".directories = [ ".config/gh-pi" ];
-  hm.homePackages = [ jailed-omp ];
+  hm.home.packages = [ jailed-omp ];
 
   hm.programs.pi = {
     enable = true;
