@@ -78,7 +78,7 @@
 
   hm.programs.bat.enable = true;
   # needed for gnome pinentry
-  services.dbus.packages = [ pkgs.gcr ];
+  services.dbus.packages = [ pkgs.gcr_3 ];
   hm = {
     xdg.configFile."streamlink/config".text = ''
       player=mpv
