@@ -279,7 +279,6 @@ in
             cookie-autodelete
             kagi-search
             refined-github
-            return-youtube-dislikes
             sidebery
             single-file
             sponsorblock
