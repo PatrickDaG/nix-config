@@ -22,14 +22,13 @@
         systemd.user.startServices = "sd-switch";
       }
       #keep-sorted start
-      ../../modules-hm/pi.nix
       inputs.nix-index-database.homeModules.nix-index
       inputs.nixos-extra-modules.modules.home-manager.default
       inputs.nixvim.homeModules.nixvim
       inputs.noctalia.homeModules.default
+      inputs.omp.homeManagerModules.default
       inputs.spicetify-nix.homeManagerModules.default
       inputs.vicinae.homeManagerModules.default
-      inputs.omp.homeManagerModules.default
       #keep-sorted end
     ]
     #If not minimal the stylix nixos module takes care of this
