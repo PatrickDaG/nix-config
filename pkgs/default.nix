@@ -50,6 +50,7 @@ _inputs: [
 
     home-assistant-custom-components = prev.home-assistant-custom-components // {
       another_mvg = prev.home-assistant.python3Packages.callPackage ./another_mvg.nix { };
+      bambu-lab = prev.home-assistant.python3Packages.callPackage ./bambu-lab.nix { };
       solaredge-modbus = prev.home-assistant.python3Packages.callPackage ./solaredge-modbus.nix { };
     };
     home-assistant-custom-lovelace-modules = prev.home-assistant-custom-lovelace-modules // {

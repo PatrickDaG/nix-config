@@ -13,6 +13,7 @@
 
     ./net.nix
     ./fs.nix
+    ./guests.nix
   ];
   services.xserver = {
     xkb = {

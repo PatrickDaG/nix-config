@@ -113,6 +113,12 @@ in
       homeassistant = {
         domain = "hs.${globals.domains.web}";
       };
+      homeassistant-nucnix = {
+        domain = "ha.${globals.domains.web}";
+      };
+      esphome-nucnix = {
+        domain = "esp-nucnix.${globals.domains.web}";
+      };
       esphome = {
         domain = "esp.${globals.domains.web}";
       };

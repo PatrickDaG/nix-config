@@ -77,40 +77,4 @@
       };
     };
   };
-  # age.secrets.cloudflare_token_acme = {
-  #   rekeyFile = ./secrets/cloudflare_api_token.age;
-  #   mode = "440";
-  #   group = "acme";
-  # };
-  # security.acme = {
-  #   acceptTerms = true;
-  #   defaults = {
-  #     email = globals.accounts.email."1".address;
-  #     dnsProvider = "cloudflare";
-  #     dnsPropagationCheck = true;
-  #     reloadServices = [
-  #       "nginx"
-  #       "stalwart-mail"
-  #     ];
-  #     credentialFiles = {
-  #       "CF_DNS_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
-  #       "CF_ZONE_API_TOKEN_FILE" = config.age.secrets.cloudflare_token_acme.path;
-  #     };
-  #   };
-  # };
-  # users.groups.acme.members = [ "nginx" ];
-  # security.acme.certs = {
-  #   "${globals.domains.mail_public}" = {
-  #     domain = globals.domains.mail_public;
-  #     extraDomainNames = [ "*.${globals.domains.mail_public}" ];
-  #   };
-  # };
-  # environment.persistence."/state".directories = [
-  #   {
-  #     directory = "/var/lib/acme";
-  #     user = "acme";
-  #     group = "acme";
-  #     mode = "0755";
-  #   }
-  # ];
 }
