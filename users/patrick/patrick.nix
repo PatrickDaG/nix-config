@@ -14,8 +14,6 @@
             dicts: with dicts; [
               de
               en
-              en-computers
-              en-science
               es
               fr
               la
