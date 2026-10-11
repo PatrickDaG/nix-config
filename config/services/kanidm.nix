@@ -71,7 +71,7 @@
     };
   };
   services.kanidm = {
-    package = pkgs.kanidm_1_9.withSecretProvisioning;
+    package = pkgs.kanidm_1_11.withSecretProvisioning;
     server.enable = true;
     server.settings = {
       inherit (globals.services.kanidm) domain;

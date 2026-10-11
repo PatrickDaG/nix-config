@@ -57,15 +57,13 @@ index 0000000000000..2ad72a9b15684
 + /*------------- 7.25.3 Condition variable functions -------------*/
 diff --git a/pkgs/by-name/zo/zotero/firefox-esr-140.nix b/pkgs/by-name/zo/zotero/firefox-esr-140.nix
 new file mode 100644
-index 0000000000000..ff444df2984a9
+index 0000000000000..b730aff6ae30e
 --- /dev/null
 +++ b/pkgs/by-name/zo/zotero/firefox-esr-140.nix
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,56 @@
 +{
 +  lib,
-+  callPackage,
 +  fetchurl,
-+  nixosTests,
 +  buildMozillaMach,
 +}:
 +
@@ -117,7 +115,6 @@ index 0000000000000..ff444df2984a9
 +        spec = "firefox@${lib.removeSuffix "esr" version}";
 +      };
 +    };
-+    insecure = true;
 +  };
 +}
 diff --git a/pkgs/by-name/zo/zotero/package.nix b/pkgs/by-name/zo/zotero/package.nix

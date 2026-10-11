@@ -177,6 +177,7 @@ in
 
   services.stalwart = {
     enable = true;
+    stateVersion = "24.05";
     settings =
       let
         ifthen = field: data: {

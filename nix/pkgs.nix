@@ -34,6 +34,8 @@
         inherit system;
         config = {
           allowUnfree = true;
+          permittedInsecurePackages = [
+          ];
         };
         overlays = (import ../pkgs inputs) ++ [
           inputs.nix-topology.overlays.default
