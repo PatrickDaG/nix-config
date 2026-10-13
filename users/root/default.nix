@@ -15,19 +15,10 @@
     ];
     inherit (globals.users.root) hashedPassword;
   };
-  imports = lib.optionals (!minimal) [
-
+  home-manager.users.root.imports = lib.optionals (!minimal) [
     ../patrick/alias.nix
-    ../patrick/theme.nix
-
-    ../patrick/programs/nvim
-    ../patrick/programs/pager.nix
-    ../patrick/programs/zsh
     ../patrick/programs/htop.nix
-
+    ../patrick/programs/zsh
   ];
-  environment.systemPackages = [
-    pkgs.neovim
-    pkgs.trace-cmd
-  ];
+  environment.systemPackages = [ pkgs.trace-cmd ];
 }

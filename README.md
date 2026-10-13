@@ -109,6 +109,14 @@ These are notable external flakes which this config depend upon
 5. Rekey again `agenix rekey`
 6. Deploy again
 
+### Deploy standalone on non-nixos config
+1. Install nix
+2. Add patrick user
+3. Add patrick to trusted users
+4. `nix copy --to <remote> .#homeConfigurations.patrick.activationPackages`
+5. Run `<out>/activate` on remote host
+6. run `kitten ssh <remote>` once to coype terminfo files
+
 ### Add secureboot to new systems
 
 1. generate keys with `sbctl create-keys`

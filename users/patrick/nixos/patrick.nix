@@ -24,6 +24,7 @@
           amazon
           bashInteractive
           btop-cuda
+          captive-browser
           chromium
           #crosspipe
           dig
@@ -42,7 +43,6 @@
           #nextcloud-client # 2GB?
           nix-output-monitor
           nixpkgs-review
-          captive-browser
           obsidian
           pandoc # for obsidian
           pass

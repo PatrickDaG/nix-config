@@ -40,7 +40,7 @@
   age.secrets = {
     smb-creds = {
       owner = "patrick";
-      rekeyFile = ../../secrets/smb.cred.age;
+      rekeyFile = ../../../secrets/smb.cred.age;
     };
   };
 }

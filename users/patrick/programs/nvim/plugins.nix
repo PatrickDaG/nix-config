@@ -5,7 +5,7 @@
     ./plugins/alpha.nix
     ./plugins/neo-tree.nix
   ];
-  hm.programs.nixvim.plugins = {
+  programs.nixvim.plugins = {
     web-devicons.enable = true;
     which-key.enable = true;
     lualine = {

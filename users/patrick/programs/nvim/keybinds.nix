@@ -5,7 +5,7 @@ let
   };
 in
 {
-  hm.programs.nixvim.keymaps = [
+  programs.nixvim.keymaps = [
     {
       key = "<M-down>";
       action = "<C-w><down>";

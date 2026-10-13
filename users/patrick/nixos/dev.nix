@@ -8,14 +8,14 @@
   ...
 }:
 lib.optionalAttrs (!minimal) {
-  imports = [
-    ./programs/pi.nix
-    ./programs/claude.nix
-    # FIXME: OOM on Compile
-    #./programs/codex.nix
-  ];
+  hm.programs.zsh.initContent = lib.mkBefore ''
+    gpg-connect-agent /bye
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    umask 077
+  '';
+
   age.secrets.nix-key = {
-    rekeyFile = ../../secrets/nix-key.age;
+    rekeyFile = ../../../secrets/nix-key.age;
     generator.script =
       {
         pkgs,
@@ -59,11 +59,6 @@ lib.optionalAttrs (!minimal) {
     info.enable = false;
     nixos.enable = false;
   };
-  hm.programs.zsh.initContent = lib.mkBefore ''
-    gpg-connect-agent /bye
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    umask 077
-  '';
   # For embedded development
   users.groups.plugdev = { };
   services.udev.packages = [

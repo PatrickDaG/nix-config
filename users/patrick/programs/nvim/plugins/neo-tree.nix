@@ -1,5 +1,5 @@
 {
-  hm.programs.nixvim.plugins.neo-tree = {
+  programs.nixvim.plugins.neo-tree = {
     enable = true;
     # TODO window_opts.winblend = 0;
     settings = {

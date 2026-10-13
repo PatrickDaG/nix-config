@@ -1,5 +1,5 @@
 {
-  hm.programs.nixvim.plugins.alpha = {
+  programs.nixvim.plugins.alpha = {
     enable = true;
     settings.layout =
       let

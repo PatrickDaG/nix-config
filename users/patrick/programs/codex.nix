@@ -19,7 +19,7 @@ let
   );
 in
 {
-  hm.programs.codex = {
+  programs.codex = {
     enable = true;
     package = jailed-codex;
   };

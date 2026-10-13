@@ -1,16 +1,6 @@
+{ pkgs, ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-{
-  age.secrets."my-gpg-yubikey-keygrip.tar" = {
-    rekeyFile = ../../secrets/gpg-keygrip.tar.age;
-    group = "patrick";
-    mode = "640";
-  };
-  hm-all.programs.gpg.publicKeys = [
+  programs.gpg.publicKeys = [
     {
       source = ./pubkey.gpg;
       trust = 5;
@@ -20,23 +10,13 @@
       trust = 5;
     }
   ];
-  # Make sure the keygrips exist, otherwise we'd need to run `gpg --card-status`
-  # before being able to use the yubikey.
-  hm.home.activation.installKeygrips =
-    config.home-manager.users.root.lib.dag.entryAfter [ "writeBoundary" ]
-      ''
-        run mkdir -p "$HOME/.gnupg/private-keys-v1.d"
-        run ${lib.getExe pkgs.gnutar} xvf ${
-          lib.escapeShellArg config.age.secrets."my-gpg-yubikey-keygrip.tar".path
-        } -C "$HOME/.gnupg/private-keys-v1.d/"
-      '';
-  hm-all.services.gpg-agent = {
+  services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    pinentry.package = pkgs.pinentry-gnome3;
+    pinentry.package = pkgs.pinentry-curses;
   };
 
-  hm-all.programs.gpg = {
+  programs.gpg = {
     enable = true;
     scdaemonSettings.disable-ccid = true;
     settings = {

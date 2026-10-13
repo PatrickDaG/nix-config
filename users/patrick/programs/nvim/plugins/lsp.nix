@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  hm.programs.nixvim.plugins = {
+  programs.nixvim.plugins = {
     none-ls = {
       enable = true;
       sources = {

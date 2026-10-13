@@ -1,5 +1,5 @@
 {
-  hm.programs.nixvim.plugins = {
+  programs.nixvim.plugins = {
     blink-compat.enable = true;
     blink-cmp = {
       enable = true;

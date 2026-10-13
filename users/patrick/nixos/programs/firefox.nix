@@ -275,6 +275,7 @@ in
           packages = with pkgs.firefox-addons; [
             # keep-sorted start
             bitwarden
+            clearurls
             consent-o-matic
             cookie-autodelete
             kagi-search
@@ -289,7 +290,6 @@ in
             violentmonkey
             youtube-recommended-videos
             zotero-connector
-            clearurls
             # modern for wikipedia - not packaged
             # keep-sorted end
           ];

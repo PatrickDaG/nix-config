@@ -66,5 +66,5 @@ let
   );
 in
 {
-  hm.home.sessionVariables.MANPAGER = "${exe} '+Man!'";
+  home.sessionVariables.MANPAGER = "${exe} '+Man!'";
 }

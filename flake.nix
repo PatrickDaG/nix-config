@@ -288,6 +288,7 @@
         ./nix/agenix-rekey.nix
         ./nix/devshell.nix
         ./nix/globals.nix
+        ./nix/home-manager.nix
         ./nix/pkgs.nix
         ./nix/patch.nix
         nix-topology.flakeModule

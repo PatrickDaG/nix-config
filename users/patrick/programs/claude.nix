@@ -21,7 +21,7 @@ let
   );
 in
 {
-  hm.programs.claude-code = {
+  programs.claude-code = {
     enable = true;
     package = jailed-claude;
   };

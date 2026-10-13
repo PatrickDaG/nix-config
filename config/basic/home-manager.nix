@@ -1,20 +1,26 @@
 {
+  globals,
   inputs,
-  nodes,
-  minimal,
   lib,
+  minimal,
+  nodes,
   ...
 }:
 {
   imports = [
-    ../../modules-hm/hm-all.nix
+    ../../modules-hm/users.nix
   ];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     verbose = true;
     extraSpecialArgs = {
-      inherit nodes minimal;
+      inherit
+        globals
+        inputs
+        nodes
+        minimal
+        ;
     };
     sharedModules = [
       {
