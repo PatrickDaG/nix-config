@@ -113,6 +113,7 @@ These are notable external flakes which this config depend upon
 1. Install nix
 2. Add patrick user
 3. Add patrick to trusted users
+4. Add `nix-experimental-features = nix-command flakes` to the `nix.conf`
 4. `nix copy --to <remote> .#homeConfigurations.patrick.activationPackages`
 5. Run `<out>/activate` on remote host
 6. run `kitten ssh <remote>` once to coype terminfo files
