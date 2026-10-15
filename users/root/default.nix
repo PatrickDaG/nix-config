@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   globals,
   lib,
@@ -15,10 +16,13 @@
     ];
     inherit (globals.users.root) hashedPassword;
   };
-  home-manager.users.root.imports = lib.optionals (!minimal) [
-    ../patrick/alias.nix
-    ../patrick/programs/htop.nix
-    ../patrick/programs/zsh
-  ];
+  home-manager.users.root.imports = lib.optionals (!minimal) (
+    [ ../patrick/alias.nix ]
+    ++ lib.optional config.stylix.enable ../patrick/theme.nix
+    ++ [
+      ../patrick/programs/htop.nix
+      ../patrick/programs/zsh
+    ]
+  );
   environment.systemPackages = [ pkgs.trace-cmd ];
 }

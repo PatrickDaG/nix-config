@@ -1,13 +1,18 @@
 { config, lib, ... }:
 {
-  options.hm = lib.mkOption {
-    description = "NixOS-dependent Home Manager options for Patrick";
-    type = lib.types.mkOptionType {
-      name = "NixOS-dependent Home Manager options for Patrick";
-      merge = _loc: defs: map (x: x.value) defs;
+  options = {
+    hm = lib.mkOption {
+      description = "NixOS-dependent Home Manager options for Patrick";
+      type = lib.types.mkOptionType {
+        name = "NixOS-dependent Home Manager options for Patrick";
+        merge = _loc: defs: map (x: x.value) defs;
+      };
+      default = { };
     };
-    default = { };
+    hmForPatrick = lib.mkEnableOption "Home Manager configuration for Patrick";
   };
 
-  config.home-manager.users.patrick.imports = config.hm;
+  config = lib.mkIf config.hmForPatrick {
+    home-manager.users.patrick.imports = config.hm;
+  };
 }

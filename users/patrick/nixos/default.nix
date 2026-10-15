@@ -68,6 +68,7 @@ lib.optionalAttrs (!minimal) {
     ../programs/zsh
   ];
 
+  hmForPatrick = true;
   hm = {
     home.sessionVariables.SSH_ASKPASS = lib.getExe pkgs.pinentry-gnome3;
     programs.git.settings.core.askpass = lib.getExe pkgs.pinentry-gnome3;

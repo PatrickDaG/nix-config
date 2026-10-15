@@ -1,4 +1,5 @@
 {
+  config,
   globals,
   inputs,
   lib,
@@ -37,10 +38,11 @@
       inputs.vicinae.homeManagerModules.default
       #keep-sorted end
     ]
-    #If not minimal the stylix nixos module takes care of this
-    ++ lib.optionals minimal [
+    # Use the direct module when Stylix's NixOS integration is inactive.
+    ++ lib.optionals (!config.stylix.enable) [
       inputs.stylix.homeModules.stylix
       {
+        # NixOS owns the package set because Home Manager uses global packages.
         stylix.overlays.enable = false;
       }
     ];
