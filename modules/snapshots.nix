@@ -5,8 +5,8 @@ let
     x:
     let
       parts = lib.splitString "/" x;
-      zpool = lib.elemAt parts 0;
-      dataset = lib.replaceString "<" "" (lib.concatStringsSep "/" (lib.tail parts));
+      zpool = lib.removeSuffix "<" (lib.elemAt parts 0);
+      dataset = lib.removeSuffix "<" (lib.concatStringsSep "/" (lib.tail parts));
     in
     # pool has to exists
     (config.disko.devices.zpool ? ${zpool})
@@ -95,7 +95,7 @@ in
             filesystems = lib.genAttrs (filteredDatasets dataDatasets) (_: true);
             snapshotting = {
               type = "periodic";
-              prefix = "zrepl-long-";
+              prefix = "zrepl-long";
               interval = "10m";
               timestamp_format = "iso-8601";
             };
