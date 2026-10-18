@@ -1,0 +1,148 @@
+diff --git a/pkgs/by-name/go/godevccu/package.nix b/pkgs/by-name/go/godevccu/package.nix
+index a4f50abcbe7eb..4fe158a46b75c 100644
+--- a/pkgs/by-name/go/godevccu/package.nix
++++ b/pkgs/by-name/go/godevccu/package.nix
+@@ -7,14 +7,14 @@
+ 
+ buildGo127Module (finalAttrs: {
+   pname = "godevccu";
+-  version = "0.9.0";
++  version = "0.10.1";
+   __structuredAttrs = true;
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "godevccu";
+     tag = "v${finalAttrs.version}";
+-    hash = "sha256-lf7xCnUIUTsh23S5LYvyD4QxZ3VmpJsCDlog5dhOuYs=";
++    hash = "sha256-S+hcvHnXoDRDUyLveSKbH/qaLs/+P7SradDextLcHZE=";
+   };
+ 
+   vendorHash = null;
+diff --git a/pkgs/development/python-modules/aiohomematic-config/default.nix b/pkgs/development/python-modules/aiohomematic-config/default.nix
+index 52d2be67fd4fa..15eb3f94558f1 100644
+--- a/pkgs/development/python-modules/aiohomematic-config/default.nix
++++ b/pkgs/development/python-modules/aiohomematic-config/default.nix
+@@ -13,14 +13,14 @@
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "aiohomematic-config";
+-  version = "2026.8.1";
++  version = "2026.10.1";
+   pyproject = true;
+ 
+   src = fetchFromGitHub {
+     owner = "sukramj";
+     repo = "aiohomematic-config";
+     tag = finalAttrs.version;
+-    hash = "sha256-Rype4Ojs74mvKwN1e/E+NuUxFknS8HTlyIxcW82x3KY=";
++    hash = "sha256-cZVq5IlVkKOaX+A5zEy1Cf78TmcUgzYIO2BzHDPJ0So=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/development/python-modules/aiohomematic/default.nix b/pkgs/development/python-modules/aiohomematic/default.nix
+index 579660be9bbde..4b342ee501896 100644
+--- a/pkgs/development/python-modules/aiohomematic/default.nix
++++ b/pkgs/development/python-modules/aiohomematic/default.nix
+@@ -4,10 +4,10 @@
+   buildPythonPackage,
+   fetchFromGitHub,
+   freezegun,
++  godevccu,
+   openccu-data,
+   orjson,
+   pydantic,
+-  pydevccu,
+   pytest-asyncio,
+   pytest-socket,
+   pytest-xdist,
+@@ -19,7 +19,7 @@
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "aiohomematic";
+-  version = "2026.9.2";
++  version = "2026.10.5";
+   pyproject = true;
+   __structuredAttrs = true;
+ 
+@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
+     owner = "SukramJ";
+     repo = "aiohomematic";
+     tag = finalAttrs.version;
+-    hash = "sha256-lcQcYYPvR4gbsBZNQBBjxWO1w8q8bdNIDENe5t2sz78=";
++    hash = "sha256-PLEht1xJkhJpGTWViiX9gX4GtGjhzcBYJMZZ7l0CGbY=";
+   };
+ 
+   build-system = [ setuptools ];
+@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
+ 
+   nativeCheckInputs = [
+     freezegun
+-    pydevccu
++    godevccu
+     pytest-asyncio
+     pytest-xdist
+     pytest-socket
+diff --git a/pkgs/development/python-modules/openccu-data/default.nix b/pkgs/development/python-modules/openccu-data/default.nix
+index 2a81cf9d31429..d404de57f5c46 100644
+--- a/pkgs/development/python-modules/openccu-data/default.nix
++++ b/pkgs/development/python-modules/openccu-data/default.nix
+@@ -8,14 +8,14 @@
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "openccu-data";
+-  version = "2026.9.0";
++  version = "2026.9.1";
+   pyproject = true;
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "openccu-data";
+     tag = finalAttrs.version;
+-    hash = "sha256-B4vnPcceT7XkRWFNmqV0QN1DI6+q64XNI5XYgWEV354=";
++    hash = "sha256-GfGsPib4uPS3i5sZXikFxSQ2BnBQsQwYCfy2PgIIQ1s=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/development/python-modules/openccu-loom-client/default.nix b/pkgs/development/python-modules/openccu-loom-client/default.nix
+index 3c85d36eb3583..54f21f8ee9e9a 100644
+--- a/pkgs/development/python-modules/openccu-loom-client/default.nix
++++ b/pkgs/development/python-modules/openccu-loom-client/default.nix
+@@ -15,7 +15,7 @@
+ 
+ buildPythonPackage (finalAttrs: {
+   pname = "openccu-loom-client";
+-  version = "2026.9.4";
++  version = "2026.10.9";
+   pyproject = true;
+   __structuredAttrs = true;
+ 
+@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
+     owner = "SukramJ";
+     repo = "openccu-loom-client";
+     tag = finalAttrs.version;
+-    hash = "sha256-tDFXRxAF0UvQV1QHShTYw3rx9h7Eye1+M2OkeN2zOCg=";
++    hash = "sha256-Y1zqO1ELIcyZaIhdiELBKUsbLEop4a8t/r87+U9F69E=";
+   };
+ 
+   build-system = [ setuptools ];
+diff --git a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+index 7767ef30154e9..32d54e69e50dc 100644
+--- a/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
++++ b/pkgs/servers/home-assistant/custom-components/homematicip_local/package.nix
+@@ -17,13 +17,13 @@
+ buildHomeAssistantComponent rec {
+   owner = "SukramJ";
+   domain = "homematicip_local";
+-  version = "2.11.1";
++  version = "2.12.0";
+ 
+   src = fetchFromGitHub {
+     owner = "SukramJ";
+     repo = "custom_homematic";
+     tag = version;
+-    hash = "sha256-sL8qBrhNPWvReeGClHpk4rhT7jAI7vkGbv5avPFEA/Q=";
++    hash = "sha256-5bdyeEmjy67osq3pjFbZ26pAJpy4OK8Mu8viZJpKjlU=";
+   };
+ 
+   postPatch = ''
