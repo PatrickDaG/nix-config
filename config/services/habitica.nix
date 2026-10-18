@@ -1,5 +1,4 @@
 {
-  pkgs,
   globals,
   config,
   ...

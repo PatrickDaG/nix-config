@@ -29,11 +29,60 @@
 
   perSystem =
     { pkgs, system, ... }:
+    let
+      inherit (pkgs) lib;
+    in
     {
       _module.args.pkgs = import config.node.nixpkgs {
         inherit system;
         config = {
-          allowUnfree = true;
+          #allowUnfree = true;
+          allowUnfreePredicate =
+            # Is this not kinda stupid? I can just name a package "spotify" and now it passes?
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              # Calibre plugin to remove drm from ebooks
+              "dedrm"
+              # Firefox plugin to remove shit from youtube
+              "youtube-recommended-videos"
+              # Watch things with drm(sometimes)
+              "amazon-prime-via-google-chrome"
+              "netflix-via-google-chrome"
+              "netflix-icon"
+              "disneyplus-via-google-chrome"
+              "disneyplus-logo"
+              "google-chrome"
+              # Firefox for zotero
+              "firefox-esr-140-bin-unwrapped"
+              # your_spotify needs mongodb
+              "mongodb-ce"
+
+              # Obvious
+              # keep-sorted start
+              "discord"
+              "discord-unwrapped"
+              "nvidia-settings"
+              "nvidia-x11"
+              "obsidian"
+              "slack"
+              "spotify"
+              "steam"
+              "steam-unwrapped"
+              "zoom"
+              # keep-sorted end
+
+              # firmware
+              # keep-sorted start
+              "b43-firmware"
+              "broadcom-bt-firmware"
+              "facetimehd-calibration"
+              "facetimehd-firmware"
+              "intel-ocl"
+              "xone-dongle-firmware"
+              # keep-sorted end
+            ];
+          allowListedLicences = with pkgs.lib.licenses; [
+          ];
           permittedInsecurePackages = [
             # for Zotero
             "firefox-esr-140-bin-unwrapped-140.17.0esr"

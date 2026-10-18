@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 
-  nodejs = nodejs;
+  inherit nodejs;
 
   nativeBuildInputs = [
     jq

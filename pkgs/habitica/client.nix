@@ -37,9 +37,9 @@ let
 in
 buildNpmPackage {
   pname = "habitica-client";
-  version = habitica.version;
+  inherit (habitica) version;
 
-  src = habitica.src;
+  inherit (habitica) src;
   sourceRoot = "${habitica.src.name}/website/client";
 
   patchFlags = [ "-p3" ];
@@ -52,7 +52,7 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-TsTF2VLQ+VkZrroJBuH6r8GBE9ZipUAWpe8gAer4tPI=";
 
-  nodejs = nodejs;
+  inherit nodejs;
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 

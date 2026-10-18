@@ -102,7 +102,7 @@ in
       };
 
       environment = builtins.mapAttrs (
-        name: value: if lib.isStringLike value then value else builtins.toJSON value
+        _name: value: if lib.isStringLike value then value else builtins.toJSON value
       ) resolvedSettings;
     };
 
@@ -133,6 +133,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [  ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

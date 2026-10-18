@@ -75,14 +75,14 @@ in
         gawkInteractive
         gh
         git
-        gzip
+        gnugrep
         gnused
+        gzip
         jq
         jujutsu
         lixPackageSets.latest.lix
         nixpkgs-review
         ps
-        gnugrep
         python3
         ripgrep
         tea

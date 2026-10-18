@@ -26,13 +26,13 @@
     ../../modules/deterministic-ids.nix
     ../../modules/distributed-config.nix
     ../../modules/ensure-pcr.nix
+    ../../modules/habitica.nix
     ../../modules/iwd.nix
     ../../modules/meta.nix
     ../../modules/nginx-monitor.nix
     ../../modules/secrets.nix
     ../../modules/smb-mounts.nix
     ../../modules/snapshots.nix
-    ../../modules/habitica.nix
     # keep-sorted end
 
     # keep-sorted start
