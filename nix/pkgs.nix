@@ -35,6 +35,8 @@
         config = {
           allowUnfree = true;
           permittedInsecurePackages = [
+            # for Zotero
+            "firefox-esr-140-bin-unwrapped-140.17.0esr"
           ];
         };
         overlays = (import ../pkgs inputs) ++ [
