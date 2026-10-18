@@ -1,6 +1,4 @@
-# Auto-generated using compose2nix v0.1.6.
 {
-  pkgs,
   nodes,
   config,
   globals,
@@ -8,16 +6,72 @@
   ...
 }:
 let
-  version = "v3.3.3";
   immichDomain = "immich.${globals.domains.web}";
+  mediaLocation = "/panzer/immich";
+in
+{
+  age.secrets.mailnix-passwd = {
+    generator.script = "alnum";
+    group = "root";
+  };
 
-  ipImmichMachineLearning = "10.89.0.10";
-  ipImmichPostgres = "10.89.0.12";
-  ipImmichRedis = "10.89.0.13";
-  ipImmichServer = "10.89.0.14";
+  age.secrets.mailnix-passwd-hash = {
+    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
+    generator.script = "argon2id";
+    mode = "440";
+    intermediary = true;
+  };
+  nodes.mailnix = {
+    age.secrets.idmail-immich-passwd-hash = {
+      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
+      group = "stalwart-mail";
+      mode = "440";
+    };
+    services.idmail.provision.mailboxes."immich@${globals.domains.mail_public}" = {
+      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-immich-passwd-hash.path}}%";
+      owner = "admin";
+    };
+  };
 
-  configFile = pkgs.writeText "immich.config.json" (
-    builtins.toJSON {
+  # Mirror the original oauth2 secret.
+  age.secrets.immich-oauth2-client-secret = {
+    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-immich) rekeyFile;
+    mode = "440";
+    group = "root";
+  };
+
+  environment.persistence = {
+    "/persist".directories = [
+      {
+        directory = "/var/lib/postgresql";
+        user = "postgres";
+        group = "postgres";
+        mode = "0750";
+      }
+    ];
+    "/state".directories = [
+      {
+        directory = "/var/cache/immich";
+        user = "immich";
+        group = "immich";
+        mode = "0700";
+      }
+    ];
+  };
+
+  backups.storageBoxes.main = {
+    subuser = "immich";
+    paths = [ mediaLocation ];
+    withPostgres = true;
+  };
+
+  services.immich = {
+    enable = true;
+    host = "";
+    port = 3000;
+    inherit mediaLocation;
+
+    settings = {
       ffmpeg = {
         accel = "disabled";
         bframes = -1;
@@ -64,12 +118,13 @@ let
           username = "immich@${globals.domains.mail_public}";
           host = "smtp.${globals.domains.mail_public}";
           port = 465;
+          password._secret = config.age.secrets.mailnix-passwd.path;
         };
       };
       machineLearning = {
         clip = {
           enabled = true;
-          modelName = "ViT-B-16-SigLIP-384__webli";
+          modelName = "ViT-SO400M-16-SigLIP2-384__webli";
         };
         enabled = true;
         facialRecognition = {
@@ -77,11 +132,11 @@ let
           maxDistance = 0.45;
           minFaces = 2;
           minScore = 0.65;
-          modelName = "buffalo_l";
+          modelName = "antelopev2";
         };
-        url = "http://${ipImmichMachineLearning}:3003";
+        url = "http://localhost:3003";
       };
-      # XXX: Immich's oauth cannot use PKCE and uses legacy crypto so we need to enable legacy crypto
+      # Immich cannot use PKCE, so Kanidm permits its legacy OAuth flow.
       oauth = rec {
         enabled = true;
         autoLaunch = false;
@@ -92,14 +147,12 @@ let
         mobileRedirectUri = "https://${immichDomain}/api/oauth/mobile-redirect";
 
         clientId = "immich";
-        # clientSecret will be dynamically added in activation script
+        clientSecret._secret = config.age.secrets.immich-oauth2-client-secret.path;
         issuerUrl = "https://auth.${globals.domains.web}/oauth2/openid/${clientId}";
         scope = "openid email profile";
         storageLabelClaim = "preferred_username";
       };
-      map = {
-        enabled = true;
-      };
+      map.enabled = true;
       newVersionCheck.enabled = true;
       passwordLogin.enabled = true;
       reverseGeocoding.enabled = true;
@@ -117,243 +170,19 @@ let
         days = 30;
         enabled = true;
       };
-    }
-  );
-
-  environment = {
-    DB_DATABASE_NAME = "immich";
-    DB_HOSTNAME = ipImmichPostgres;
-    DB_PASSWORD_FILE = config.age.secrets.postgrespasswd.path;
-    DB_USERNAME = "postgres";
-    IMMICH_VERSION = "${version}";
-    UPLOAD_LOCATION = upload_folder;
-    IMMICH_SERVER_URL = "http://${ipImmichServer}:2283/";
-    IMMICH_MACHINE_LEARNING_URL = "http://${ipImmichMachineLearning}:3003";
-    REDIS_HOSTNAME = ipImmichRedis;
-    IMMICH_CONFIG_FILE = "/immich.config.json";
-  };
-  upload_folder = "/panzer/immich";
-  pgdata_folder = "/persist/immich/pgdata";
-  model_folder = "/state/immich/modeldata";
-
-  serviceConfig = {
-    serviceConfig = {
-      Restart = lib.mkForce "always";
-    };
-    after = [ "podman-network-immich-default.service" ];
-    requires = [ "podman-network-immich-default.service" ];
-    partOf = [ "podman-compose-immich-root.target" ];
-    wantedBy = [ "podman-compose-immich-root.target" ];
-  };
-  processedConfigFile = "/run/agenix/immich.config.json";
-in
-{
-  age.secrets.mailnix-passwd = {
-    generator.script = "alnum";
-    group = "root";
-  };
-
-  age.secrets.mailnix-passwd-hash = {
-    generator.dependencies = [ config.age.secrets.mailnix-passwd ];
-    generator.script = "argon2id";
-    mode = "440";
-    intermediary = true;
-  };
-  nodes.mailnix = {
-    age.secrets.idmail-immich-passwd-hash = {
-      inherit (config.age.secrets.mailnix-passwd-hash) rekeyFile;
-      group = "stalwart-mail";
-      mode = "440";
-    };
-    services.idmail.provision.mailboxes."immich@${globals.domains.mail_public}" = {
-      password_hash = "%{file:${nodes.mailnix.config.age.secrets.idmail-immich-passwd-hash.path}}%";
-      owner = "admin";
     };
   };
 
-  environment.persistence."/state".directories = [
-    {
-      directory = "/var/lib/containers";
-      mode = "0755";
-    }
-  ];
-  backups.storageBoxes.main = {
-    subuser = "immich";
-    paths = [
-      "${upload_folder}/library"
-      "${upload_folder}/upload"
-      "${upload_folder}/profile"
-      "/run/immich_dump.sql"
-    ];
-  };
-  services.restic.backups.storage-box-main = {
-    backupPrepareCommand = ''
-      ${pkgs.podman}/bin/podman exec -t immich_postgres pg_dumpall -c -U postgres > /run/immich_dump.sql
-    '';
-  };
-
-  # Mirror the original oauth2 secret
-  age.secrets.immich-oauth2-client-secret = {
-    inherit (nodes.${globals.services.kanidm.host}.config.age.secrets.oauth2-immich) rekeyFile;
-    mode = "440";
-    group = "root";
-  };
-
-  system.activationScripts.agenixRooterDerivedSecrets = {
-    # Run after agenix has generated secrets
-    deps = [ "agenix" ];
-    text = ''
-      immichClientSecret=$(< ${config.age.secrets.immich-oauth2-client-secret.path})
-      immichEmailSecret=$(< ${config.age.secrets.mailnix-passwd.path})
-      ${pkgs.jq}/bin/jq \
-        --arg immichClientSecret "$immichClientSecret" \
-        --arg immichEmailSecret "$immichEmailSecret" \
-        '.oauth.clientSecret = $immichClientSecret | .notifications.smtp.transport.password = $immichEmailSecret' \
-        ${configFile} > ${processedConfigFile}
-      chmod 444 ${processedConfigFile}
-    '';
-  };
-
-  microvm = {
-    mem = 1024 * 8;
-    vcpu = 12;
-  };
+  # Migration guard: remove after restoring the exported database.
+  systemd.services.immich-server.wantedBy = lib.mkForce [ ];
 
   globals.wireguard.services.hosts.${config.node.name} = {
-    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.elisabeth-nginx.allowedTCPPorts = [ config.services.immich.port ];
   };
 
-  networking.nftables.chains.forward.into-immich-container = {
-    after = [ "conntrack" ];
-    rules = [
-      "iifname services ip saddr ${globals.wireguard.services.hosts.elisabeth-nginx.ipv4} tcp dport 2283 accept"
-      "iifname podman1 oifname lan-house accept"
-    ];
-  };
-  systemd.tmpfiles.settings = {
-    "10-immich" = {
-      ${upload_folder}.d = {
-        mode = "0770";
-      };
-      ${pgdata_folder}.d = {
-        mode = "0770";
-      };
-      ${model_folder}.d = {
-        mode = "0770";
-      };
-    };
-  };
-  age.secrets.postgrespasswd = {
-    generator.script = "alnum";
-  };
-  age.secrets.redispasswd = {
-    generator.script = "alnum";
-  };
-  # Runtime
-  virtualisation.podman = {
-    enable = true;
-    autoPrune.enable = true;
-    dockerCompat = true;
-  };
-  virtualisation.oci-containers.backend = "podman";
-
-  # Containers
-  virtualisation.oci-containers.containers."immich_machine_learning" = {
-    image = "ghcr.io/immich-app/immich-machine-learning:${version}";
-    inherit environment;
-    volumes = [
-      "${processedConfigFile}:${environment.IMMICH_CONFIG_FILE}:ro"
-      "${model_folder}:/cache:rw"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=immich-machine-learning"
-      "--network=immich-default"
-      "--ip=${ipImmichMachineLearning}"
-    ];
-  };
-  systemd.services."podman-immich_machine_learning" = serviceConfig;
-
-  virtualisation.oci-containers.containers."immich_postgres" = {
-    image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.1-pgvectors0.2.0";
-    environment = {
-      POSTGRES_DB = environment.DB_DATABASE_NAME;
-      POSTGRES_PASSWORD_FILE = environment.DB_PASSWORD_FILE;
-      POSTGRES_USER = environment.DB_USERNAME;
-      POSTGRES_INITDB_ARGS = "--data-checksums";
-    };
-    volumes = [
-      "${pgdata_folder}:/var/lib/postgresql/data:rw"
-      "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=immich_postgres"
-      "--network=immich-default"
-      "--ip=${ipImmichPostgres}"
-    ];
-  };
-  systemd.services."podman-immich_postgres" = serviceConfig;
-  virtualisation.oci-containers.containers."immich_redis" = {
-    image = "docker.io/valkey/valkey:8-bookworm@sha256:42cba146593a5ea9a622002c1b7cba5da7be248650cbb64ecb9c6c33d29794b1";
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=immich_redis"
-      "--network=immich-default"
-      "--ip=${ipImmichRedis}"
-    ];
-  };
-  systemd.services."podman-immich_redis" = serviceConfig;
-  virtualisation.oci-containers.containers."immich_server" = {
-    image = "ghcr.io/immich-app/immich-server:${version}";
-    inherit environment;
-    volumes = [
-      "${processedConfigFile}:${environment.IMMICH_CONFIG_FILE}:ro"
-      "/etc/localtime:/etc/localtime:ro"
-      "${upload_folder}:/usr/src/app/upload:rw"
-      "${environment.DB_PASSWORD_FILE}:${environment.DB_PASSWORD_FILE}:ro"
-    ];
-    ports = [ "3000:2283/tcp" ];
-    dependsOn = [
-      "immich_postgres"
-      "immich_redis"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=immich-server"
-      "--network=immich-default"
-      "--ip=${ipImmichServer}"
-    ];
-  };
-  systemd.services."podman-immich_server" = serviceConfig // {
-    unitConfig.UpheldBy = [
-      "podman-immich_postgres.service"
-      "podman-immich_redis.service"
-    ];
-  };
-
-  # Networks
-  systemd.services."podman-network-immich-default" = {
-    path = [ pkgs.podman ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStop = "${pkgs.podman}/bin/podman network rm -f immich-default";
-    };
-    script = ''
-      podman network inspect immich-default || podman network create immich-default --opt isolate=true --disable-dns --subnet=10.89.0.0/24
-    '';
-    partOf = [ "podman-compose-immich-root.target" ];
-    wantedBy = [ "podman-compose-immich-root.target" ];
-  };
-
-  # Root service
-  # When started, this will automatically create all resources and start
-  # the containers. When stopped, this will teardown all resources.
-  systemd.targets."podman-compose-immich-root" = {
-    unitConfig = {
-      Description = "Root target generated by compose2nix.";
-    };
-    wantedBy = [ "multi-user.target" ];
+  systemd.tmpfiles.settings."10-immich".${mediaLocation}.d = {
+    user = "immich";
+    group = "immich";
+    mode = "0770";
   };
 }

@@ -82,6 +82,8 @@
           ];
         };
 
+      # Kept for guests that require microVM isolation.
+      # deadnix: skip
       mkMicrovm = guestName: cfg: {
         ${guestName} = mkGuest guestName cfg // {
           backend = "microvm";
@@ -115,7 +117,7 @@
     // mkContainer "vaultwarden" { }
     // mkContainer "nextcloud" { enablePanzer = true; }
     // mkContainer "forgejo" { enablePanzer = true; }
-    // mkMicrovm "immich" { enablePanzer = true; }
+    // mkContainer "immich" { enablePanzer = true; }
     // mkContainer "paperless" {
       shared = [
         {

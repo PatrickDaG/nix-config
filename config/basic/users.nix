@@ -58,6 +58,8 @@
       firezone-client = uidGid 246;
       pcscd = uidGid 247;
       esphome = uidGid 248;
+      immich = uidGid 249;
+      redis-immich = uidGid 250;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;
