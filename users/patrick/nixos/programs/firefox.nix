@@ -77,6 +77,9 @@ in
           # Firefox builtin unbreak things
           BaselineExceptions = true;
         };
+        Preferences = {
+          "sidebar.revamp" = false;
+        };
       };
       profiles.patrick = {
         userChrome = ''

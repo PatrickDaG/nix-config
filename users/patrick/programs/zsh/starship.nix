@@ -8,7 +8,7 @@
         "$username"
         "$hostname"
         " $directory "
-        "(\${custom.jj} )"
+        "($vcs )"
         "$fill"
         "($nix_shell )"
         "($cmd_duration )"
@@ -40,17 +40,8 @@
         symbol = " ";
       };
 
-      custom.jj = {
-        command = "prompt";
-        format = "$output";
-        ignore_timeout = true;
-        shell = [
-          "${pkgs.starship-jj}/bin/starship-jj"
-          "--ignore-working-copy"
-          "starship"
-        ];
-        use_stdin = false;
-        "when" = true;
+      vcs = {
+        order = [ "jj" "git" "fossil" "hg" "pijul"];
       };
 
       git_branch = {
