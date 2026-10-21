@@ -184,14 +184,13 @@ in
       };
       ui = {
         default-command = "l";
-        # Why no paginate if longer than a page??
-        paginate = "never";
         diff-editor = ":builtin";
       };
       user = {
         email = "patrick@${globals.domains.mail_public}";
         name = "Patrick";
       };
+      git.colocate = true;
     };
   };
 

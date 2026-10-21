@@ -91,8 +91,6 @@ in
       cd ./agent
       export PRJ_ROOT="$PWD"
       export PRJ_DATA_DIR="$PRJ_ROOT/.data"
-      ${lib.getExe pkgs.git} init
-      ${lib.getExe pkgs.git} add .
       if [ -n "''${DEVSHELL_DIR:-}" ]; then
         ${entry}
       elif [ -f .envrc ]; then
