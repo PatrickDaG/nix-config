@@ -47,11 +47,6 @@
       mode = "750";
     }
   ];
-  age.secrets.ncpasswd = {
-    generator.script = "alnum";
-    mode = "440";
-    owner = "nextcloud";
-  };
   services.postgresql.package = pkgs.postgresql_16;
 
   services.nextcloud = {
@@ -59,8 +54,6 @@
     enable = true;
     package = pkgs.nextcloud35;
     configureRedis = true;
-    config.adminpassFile = config.age.secrets.ncpasswd.path; # Kinda ok just remember to instanly change after first setup
-    config.adminuser = "admin";
     extraApps = with config.services.nextcloud.package.packages.apps; {
       inherit
         contacts
