@@ -21,8 +21,18 @@ let
   );
 in
 {
-  home.persistence."/state".directories = [ ".config/gh-pi" ];
-  home.packages = [ jailed-pi ];
+  home.persistence."/state".directories = [
+    ".config/gh-pi"
+    ".config/herdr"
+  ];
+  home.packages = [
+    jailed-pi
+
+  ];
+  programs.herdr = {
+    enable = true;
+    package = pkgs.llm-agents.herdr;
+  };
   programs.omp = {
     enable = true;
     package = jailed-omp;

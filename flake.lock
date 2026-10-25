@@ -938,11 +938,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781030852,
-        "narHash": "sha256-wnRZl7gk7QNU9i/YdOLYIXIHoNjita/XFvXYgWyOjQU=",
+        "lastModified": 1792949471,
+        "narHash": "sha256-/qfBIH8HHuGBVAVmULDB3HGNjsLpn+J82Ws7fXJ1LQo=",
         "owner": "patrickdag",
         "repo": "home-manager",
-        "rev": "fee2c9adb0dc9a0a14a069b90836578a125e029b",
+        "rev": "e4f116c0ff8a8ebf2f3d95d6173df6de1ebf7967",
         "type": "github"
       },
       "original": {
