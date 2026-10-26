@@ -17,13 +17,22 @@ let
     base.baseCombinators
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.omp"))
+      (readwrite (noescape "~/.local/share/omp"))
+      (readwrite (noescape "~/.local/state/omp"))
+      (readwrite (noescape "~/.cache/omp"))
+      (set-env "XDG_DATA_HOME" (noescape "~/.local/share"))
+      (set-env "XDG_STATE_HOME" (noescape "~/.local/state"))
+      (set-env "XDG_CACHE_HOME" (noescape "~/.cache"))
     ])
   );
 in
 {
   home.persistence."/state".directories = [
     ".config/gh-pi"
+    ".cache/omp"
     ".config/herdr"
+    ".local/share/omp"
+    ".local/state/omp"
   ];
   home.packages = [
     jailed-pi
@@ -36,8 +45,6 @@ in
   programs.omp = {
     enable = true;
     package = jailed-omp;
-    settings = {
-    };
   };
 
   home.file = {
