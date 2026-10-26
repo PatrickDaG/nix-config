@@ -24,14 +24,18 @@
   # Also it isn't yet supported by cups so for printer finding we need avahi
   services.avahi = {
     enable = true;
-    ipv4 = true;
-    ipv6 = true;
     nssmdns4 = true;
     # FIXME: why this disabled?
     #nssmdns6 = true;
-    publish = {
-      enable = true;
-      addresses = true;
+    settings = {
+      server = {
+        use-ipv4 = true;
+        use-ipv6 = true;
+      };
+      publish = {
+        disable-publishing = false;
+        publish-addresses = true;
+      };
     };
   };
 

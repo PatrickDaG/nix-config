@@ -22,7 +22,6 @@ in
   environment.systemPackages = [ pkgs.libva-utils ];
   hm.home.persistence."/state".directories = [
     ".cache/mozilla"
-    ".mozilla"
     ".config/mozilla"
   ];
   hm.xdg.mimeApps.enable = true;
@@ -43,11 +42,12 @@ in
     in
     {
       enable = true;
+      configPath = ".config/mozilla/firefox";
       package =
         (pkgs.firefox.overrideAttrs (old: {
           buildCommand = old.buildCommand + ''
             substituteInPlace $out/bin/firefox \
-              --replace "exec -a" ${escapeShellArg envStr}" exec -a"
+              --replace-fail "exec -a" ${escapeShellArg envStr}" exec -a"
           '';
         })).override
           {

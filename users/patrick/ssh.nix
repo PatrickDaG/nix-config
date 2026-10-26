@@ -12,7 +12,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks =
+    settings =
       let
         identityFile = [
           "~/.ssh/1.pub"
@@ -21,21 +21,21 @@
       in
       {
         "mailnix" = {
-          hostname = globals.hosts.mailnix.ip;
-          user = "root";
+          HostName = globals.hosts.mailnix.ip;
+          User = "root";
         };
         "torweg" = {
-          hostname = globals.hosts.torweg.ip;
-          user = "root";
+          HostName = globals.hosts.torweg.ip;
+          User = "root";
         };
 
         "*" = {
-          user = "root";
-          identitiesOnly = true;
-          inherit identityFile;
-          controlMaster = "auto";
-          controlPersist = "5s";
-          controlPath = "~/.ssh/master-%r@%n:%p";
+          User = "root";
+          IdentitiesOnly = true;
+          IdentityFile = identityFile;
+          ControlMaster = "auto";
+          ControlPersist = "5s";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
         };
       };
   };

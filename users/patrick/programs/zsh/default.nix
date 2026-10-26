@@ -16,6 +16,7 @@
     enable = true;
     # copy terminal background
     colors.bg = lib.mkForce "#000000";
+    historyWidget.zsh.command = "";
   };
 
   programs.zoxide.enable = true;
