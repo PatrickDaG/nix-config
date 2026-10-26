@@ -119,7 +119,7 @@
             start = [
               "control-center"
               "active_window"
-              "workspaces"
+              "taskbar"
             ];
             center = [
               "media"
@@ -155,15 +155,13 @@
               title_scroll = "on_hover";
               show_empty_label = false;
             };
-            workspaces = {
-              style = "focus_hint";
-              show_labels = false;
-              show_icons = true;
-              max_label_chars = 2;
-              hide_when_empty = false;
+            taskbar = {
+              group_by_workspace = true;
+              workspace_group_content = "icons";
+              group_single_icon_per_app = false;
+              only_active_workspace = false;
+              hide_empty_workspaces = false;
               show_all_outputs = false;
-              focused_output_only = false;
-              labels_only_when_occupied = false;
             };
             media = {
               hide_album_art = true;
