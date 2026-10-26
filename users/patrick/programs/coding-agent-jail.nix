@@ -17,6 +17,9 @@ in
     # the daemon socket, and caches so nix builds work inside the sandbox.
     (readonly "/nix/store")
     (readwrite "/nix/var/nix/daemon-socket")
+    # Allow building my config from within the sandbox
+    (readonly "/var/tmp/agenix-rekey/")
+    (readonly "/var/tmp/nix-import-encrypted/")
     # noescape needed to expand ~
     (try-readwrite (noescape "~/.cache/nix"))
     (readonly "/etc/nix")

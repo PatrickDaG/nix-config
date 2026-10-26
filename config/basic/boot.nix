@@ -8,7 +8,6 @@
 {
   boot = lib.mkIf (!config.boot.isContainer) {
     initrd.systemd = {
-      enable = true;
       emergencyAccess = globals.users.root.hashedPassword;
       extraBin.ip = "${pkgs.iproute2}/bin/ip";
       extraBin.cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
