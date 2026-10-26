@@ -24,10 +24,14 @@ new_name="${new_name:0:32}-${basename//"/"/"%"}"
 
 # Derive the path where the decrypted file will be stored
 out="/var/tmp/nix-import-encrypted/$new_name"
-mkdir -p "$(dirname "$out")"
 
 # Decrypt only if necessary
 if [[ ! -e "$out" ]]; then
+  if [[ "${NIX_IMPORT_ENCRYPTED_CACHE_ONLY:-0}" == "1" ]]; then
+    printf 'Missing cached decrypted output for %s: %s\nPopulate the cache outside the coding-agent sandbox first.\n' "$file" "$out" >&2
+    exit 1
+  fi
+  mkdir -p "$(dirname "$out")"
   args=()
   for i in "${identities[@]}"; do
     args+=("-i" "$i")

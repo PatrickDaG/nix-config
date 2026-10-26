@@ -13,6 +13,9 @@ in
     time-zone
     no-new-session
 
+    # Support executable scripts with #!/usr/bin/env interpreters.
+    (ro-bind "${pkgs.coreutils}/bin/env" "/usr/bin/env")
+
     # Nix support: expose the full nix store (read-only),
     # the daemon socket, and caches so nix builds work inside the sandbox.
     (readonly "/nix/store")
@@ -20,12 +23,19 @@ in
     # Allow building my config from within the sandbox
     (readonly "/var/tmp/agenix-rekey/")
     (readonly "/var/tmp/nix-import-encrypted/")
+    (set-env "NIX_IMPORT_ENCRYPTED_CACHE_ONLY" "1")
+    (set-env "NIM_UNLOCK_BUILDERS" "no")
     # noescape needed to expand ~
     (try-readwrite (noescape "~/.cache/nix"))
     (readonly "/etc/nix")
     (readonly "/etc/static/nix")
     (try-fwd-env "NIX_PATH")
     (set-env "NIX_REMOTE" "daemon")
+
+    # Keep direnv approval state inside the jail, separate from host approvals.
+    (write-text (noescape "~/.config/direnv/direnvrc") ''
+      source ${pkgs.lixPackageSets.latest.nix-direnv}/share/nix-direnv/direnvrc
+    '')
 
     # Allow jujutsu usage
     (readonly (noescape "~/.config/jj"))
@@ -51,7 +61,12 @@ in
       cd ./agent
       ${lib.getExe pkgs.git} init
       ${lib.getExe pkgs.git} add .
-      ${entry}
+      if [ -f .envrc ]; then
+        direnv allow .
+        direnv exec . ${entry}
+      else
+        ${entry}
+      fi
       jj status
     ''))
     (add-cleanup ''
@@ -74,6 +89,7 @@ in
         bashInteractive
         curl
         diffutils
+        direnv
         findutils
         gawkInteractive
         gh
