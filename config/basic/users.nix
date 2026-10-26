@@ -60,6 +60,7 @@
       esphome = uidGid 248;
       immich = uidGid 249;
       redis-immich = uidGid 250;
+      greeter = uidGid 251;
 
       systemd-oom = uidGid 300;
       systemd-coredump = uidGid 301;

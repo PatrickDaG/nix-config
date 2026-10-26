@@ -37,8 +37,6 @@
       pkgs.xdg-desktop-portal-gnome
     ];
   };
-  services.displayManager.enable = true;
-
   imports = [
     # keep-sorted start
     #./awww.nix

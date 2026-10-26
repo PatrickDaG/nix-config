@@ -92,19 +92,22 @@
     '';
   };
   services.udev.packages = [ pkgs.qmk-udev-rules ];
-  environment.systemPackages = [
-    (pkgs.sddm-astronaut.override { embeddedTheme = "purple_leaves"; })
-  ];
   services.displayManager = {
-    defaultSession = "niri";
-    sddm = {
+    noctalia-greeter = {
       enable = true;
-      wayland.enable = true;
-      package = pkgs.kdePackages.sddm;
-      theme = "sddm-astronaut-theme";
-      extraPackages = [
-        pkgs.sddm-astronaut
-      ];
+      cursorTheme = {
+        inherit (config.stylix.cursor) package name;
+      };
+      settings = {
+        session.default = "niri";
+        cursor.size = config.stylix.cursor.size;
+        keyboard = {
+          # Match the Niri session, including the alternate Bone layout.
+          layout = "de,de";
+          variant = "nodeadkeys,bone";
+          options = "grp:win_space_toggle";
+        };
+      };
     };
   };
   boot.plymouth = {

@@ -1,420 +1,362 @@
 { pkgs, ... }:
-let
-  noctaliaLock = pkgs.writeShellScript "noctalia-lock" ''
-    set -u
-
-    uid="$(id -u)"
-    export XDG_RUNTIME_DIR="/run/user/$uid"
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-
-    /etc/profiles/per-user/patrick/bin/noctalia-shell ipc call lockScreen lock || true
-    sleep 0.7
-  '';
-in
 {
-  services.systemd-lock-handler.enable = true;
-
   hm =
-    { config, ... }:
+    { config, lib, ... }:
     {
       home.persistence."/state".directories = [
         ".cache/noctalia"
-        # So they are not downloaded on every reboot
-        ".config/noctalia/plugins"
-        ".config/noctalia/colorschemes"
+        ".local/state/noctalia"
+        ".local/share/noctalia/plugins"
       ];
-      stylix.targets.noctalia-shell.enable = true;
+
+      # The native target supplies the palette, fonts, and opacity, not the old shell integration.
+      stylix.targets.noctalia.enable = true;
+      # Downloaded plugins do not install their runtime dependencies:
+      # Pomodoro uses ffplay from FFmpeg; screen recording uses gpu-screen-recorder and slurp for region selection.
+      home.packages = [
+        pkgs.ffmpeg
+        pkgs.gpu-screen-recorder
+        pkgs.slurp
+      ];
+
+      systemd.user.services.noctalia.Service.Environment = lib.optional (
+        config.home.sessionVariables ? TERMINAL
+      ) "TERMINAL=${config.home.sessionVariables.TERMINAL}";
+
       programs.niri.settings = {
         layer-rules = [
           {
-            matches = [ { namespace = "^noctalia-wallpaper*"; } ];
+            matches = [ { namespace = "^noctalia-wallpaper$"; } ];
             place-within-backdrop = true;
           }
         ];
-        layout = {
-          background-color = "transparent";
-        };
-
-        overview = {
-          workspace-shadow.enable = false;
-        };
+        layout.background-color = "transparent";
+        overview.workspace-shadow.enable = false;
         debug.honor-xdg-activation-with-invalid-serial = [ ];
       };
-      systemd.user.services.noctalia-lock = {
-        Unit = {
-          Description = "Lock Noctalia on logind lock/sleep targets";
-          Before = [
-            "lock.target"
-            "sleep.target"
-          ];
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = noctaliaLock;
-        };
-        Install.WantedBy = [
-          "lock.target"
-          "sleep.target"
-        ];
-      };
 
-      programs.noctalia-shell = {
+      # Noctalia consumes logind Lock and PrepareForSleep itself, holding a sleep-delay
+      # inhibitor until secure lock frames are presented. No timed IPC lock helper is needed.
+      programs.noctalia = {
         enable = true;
         systemd.enable = true;
+        checkConfig = true;
 
         settings = {
-          audio = {
-            preferredPlayer = "spotify";
-            visualizerType = "wave";
-          };
-          desktopWidgets.enabled = false;
-          hooks.enabled = false;
-          idle.enabled = false;
-          nightLight = {
-            autoSchedule = true;
-            dayTemp = "6500";
-            enabled = false;
-            forced = false;
-            manualSunrise = "06:30";
-            manualSunset = "18:30";
-            nightTemp = "4000";
-          };
-          sessionMenu = {
-            enableCountdown = false;
-            powerOptions = [
+          accessibility.ui_scale = 1.0;
+          shell = {
+            corner_radius_scale = 0.0;
+            avatar_path = "/dev/null";
+            telemetry_enabled = false;
+            app_icon_colorize = false;
+            clipboard_enabled = false;
+            launch_apps_as_systemd_services = false;
+            animation.enabled = false;
+            panel = {
+              borders = false;
+              shadow = false;
+              control_center_placement = "attached";
+              open_near_click_control_center = true;
+              launcher_placement = "floating";
+              launcher_position = "center";
+            };
+            launcher = {
+              layout = "simple";
+              categories = false;
+              app_grid = false;
+              track_usage = true;
+              sort_by_usage = true;
+              pinned = [ ];
+            };
+            session.actions = [
               {
                 action = "lock";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "1";
+                shortcut = "1";
+                countdown_seconds = 0;
               }
               {
-                action = "suspend";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "2";
-              }
-              {
-                action = "hibernate";
-                command = "";
-                countdownEnabled = true;
-                enabled = false;
-                keybind = "";
+                # Plain native Suspend deliberately skips pre-sleep locking.
+                action = "lock_and_suspend";
+                shortcut = "2";
+                countdown_seconds = 0;
               }
               {
                 action = "reboot";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "3";
+                shortcut = "3";
+                countdown_seconds = 0;
               }
               {
                 action = "logout";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "4";
+                shortcut = "4";
+                countdown_seconds = 0;
               }
               {
                 action = "shutdown";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "5";
+                shortcut = "5";
+                countdown_seconds = 0;
               }
               {
-                action = "rebootToUefi";
-                command = "";
-                countdownEnabled = true;
-                enabled = true;
-                keybind = "6";
-              }
-              {
-                action = "userspaceReboot";
-                command = "";
-                countdownEnabled = true;
-                enabled = false;
-                keybind = "";
+                action = "reboot_uefi";
+                shortcut = "6";
+                countdown_seconds = 0;
               }
             ];
           };
-          systemMonitor.enableDgpuMonitoring = true;
-          bar = {
-            density = "mini";
+
+          bar.main = {
             position = "left";
-            showCapsule = false;
-            outerCorners = false;
-            "showOutline" = false;
-            enableExclusionZoneInset = false;
-            widgets = {
-              "left" = [
-                {
-                  "colorizeDistroLogo" = false;
-                  "colorizeSystemIcon" = "none";
-                  "customIconPath" = "";
-                  "enableColorization" = false;
-                  "icon" = "noctalia";
-                  "id" = "ControlCenter";
-                  "useDistroLogo" = true;
-                }
-                {
-                  "colorizeIcons" = false;
-                  "hideMode" = "visible";
-                  "id" = "ActiveWindow";
-                  "maxWidth" = 500;
-                  "scrollingMode" = "hover";
-                  "showIcon" = false;
-                  "useFixedWidth" = false;
-                }
-                {
-                  "characterCount" = 2;
-                  "colorizeIcons" = false;
-                  "enableScrollWheel" = true;
-                  "followFocusedScreen" = false;
-                  "hideUnoccupied" = false;
-                  "id" = "Workspace";
-                  "labelMode" = "none";
-                  "showApplications" = true;
-                  "showLabelsOnlyWhenOccupied" = false;
-                }
-              ];
-              "center" = [
-                {
-                  "hideMode" = "visible";
-                  "hideWhenIdle" = false;
-                  "id" = "MediaMini";
-                  "maxWidth" = 145;
-                  "scrollingMode" = "hover";
-                  "showAlbumArt" = false;
-                  "showArtistFirst" = false;
-                  "showProgressRing" = true;
-                  "showVisualizer" = true;
-                  "useFixedWidth" = false;
-                  "visualizerType" = "linear";
-                }
-                {
-                  "customFont" = "";
-                  "formatHorizontal" = "HH:mm ddd, MMM dd";
-                  "formatVertical" = "HH mm ss - dd MMM";
-                  "id" = "Clock";
-                  "useCustomFont" = false;
-                  "usePrimaryColor" = true;
-                }
-              ];
-              "right" = [
-                {
-                  "blacklist" = [
-                  ];
-                  "colorizeIcons" = false;
-                  "drawerEnabled" = false;
-                  "hidePassive" = false;
-                  "id" = "Tray";
-                  "pinned" = [
-                  ];
-                }
-                {
-                  id = "plugin:pomodoro";
-                }
-                {
-                  "diskPath" = "/state";
-                  "id" = "SystemMonitor";
-                  "showCpuTemp" = false;
-                  "showCpuUsage" = true;
-                  "showDiskUsage" = true;
-                  "showGpuTemp" = false;
-                  "showMemoryAsPercent" = true;
-                  "showMemoryUsage" = true;
-                  "showNetworkStats" = true;
-                  "usePrimaryColor" = false;
-                }
-                {
-                  "displayMode" = "alwaysShow";
-                  "id" = "Volume";
-                }
-                {
-                  "displayMode" = "alwaysShow";
-                  "id" = "Microphone";
-                }
-                {
-                  "id" = "plugin:privacy-indicator";
-                }
-                {
-                  "hideWhenZero" = true;
-                  "id" = "NotificationHistory";
-                  "showUnreadBadge" = true;
-                }
-                {
-                  id = "Battery";
-                  hideIfNotDetected = false;
-                }
-              ];
-            };
-          };
-          "controlCenter" = {
-            "position" = "close_to_bar_button";
-            "shortcuts" = {
-              "left" = [
-                {
-                  "id" = "ScreenRecorder";
-                }
-                {
-                  "id" = "WallpaperSelector";
-                }
-              ];
-              "right" = [
-                {
-                  "id" = "Notifications";
-                }
-                {
-                  "id" = "PowerProfile";
-                }
-                {
-                  "id" = "KeepAwake";
-                }
-                {
-                  "id" = "NightLight";
-                }
-              ];
-            };
-            "cards" = [
-              {
-                "enabled" = true;
-                "id" = "profile-card";
-              }
-              {
-                "enabled" = true;
-                "id" = "shortcuts-card";
-              }
-              {
-                "enabled" = true;
-                "id" = "audio-card";
-              }
-              {
-                "enabled" = false;
-                "id" = "brightness-card";
-              }
-              {
-                "enabled" = true;
-                "id" = "weather-card";
-              }
-              {
-                "enabled" = true;
-                "id" = "media-sysmon-card";
-              }
+            thickness = 28;
+            radius = 0;
+            margin_ends = 0;
+            margin_edge = 0;
+            padding = 2;
+            widget_spacing = 2;
+            shadow = false;
+            compositor_blur = false;
+            reserve_space = true;
+            capsule = false;
+            capsule_radius = 0.0;
+            start = [
+              "control-center"
+              "active_window"
+              "workspaces"
+            ];
+            center = [
+              "media"
+              "audio_visualizer"
+              "clock"
+            ];
+            end = [
+              "tray"
+              "pomodoro"
+              "cpu"
+              "memory"
+              "disk"
+              "network_rx"
+              "network_tx"
+              "volume"
+              "microphone"
+              "privacy"
+              "notifications"
+              "battery"
             ];
           };
-          general = {
-            radiusRatio = 0;
-            "avatarImage" = "/dev/null";
-            "allowPanelsOnScreenWithoutBar" = true;
-            "animationDisabled" = true;
-            "animationSpeed" = 2;
-            "boxRadiusRatio" = 1;
-            "compactLockScreen" = true;
-            "dimmerOpacity" = 0.2;
-            "enableShadows" = false;
-            "lockOnSuspend" = true;
-            "scaleRatio" = 1;
-            "screenRadiusRatio" = 1;
-            "shadowDirection" = "bottom_right";
-            "shadowOffsetX" = 2;
-            "shadowOffsetY" = 3;
-            "showHibernateOnLockScreen" = false;
-            "showScreenCorners" = false;
-            "showSessionButtonsOnLockScreen" = false;
-            telemetryEnabled = false;
-          };
-          wallpaper = {
-            enabled = true;
-            automationEnabled = true;
-            directory = "${config.xdg.dataHome}/wallpapers";
-            overviewEnabled = false;
-            # Otherwise same image on all monitors
-            "enableMultiMonitorDirectories" = true;
-            "transitionType" = [ "random" ];
-            wallpaperChangeMode = "random";
-            "randomIntervalSec" = 180;
-          };
-          notifications = {
-            enabled = true;
-            "criticalUrgencyDuration" = 15;
-            "enableKeyboardLayoutToast" = true;
-            "location" = "top_right";
-            "lowUrgencyDuration" = 3;
-            "monitors" = [
-              "DP-3"
-            ];
-            "normalUrgencyDuration" = 8;
-            "overlayLayer" = true;
-            "respectExpireTimeout" = false;
-            "sounds" = {
-              "criticalSoundFile" = "";
-              "enabled" = false;
-              "excludedApps" = "discord,firefox,chrome,chromium,edge";
-              "lowSoundFile" = "";
-              "normalSoundFile" = "";
-              "separateSounds" = false;
-              "volume" = 0.5;
+
+          widget = {
+            "control-center" = {
+              custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+              custom_image_colorize = false;
             };
+            # Native vertical active-window/media widgets render an icon/artwork only.
+            active_window = {
+              display = "text_only";
+              min_length = 0;
+              max_length = 500;
+              title_scroll = "on_hover";
+              show_empty_label = false;
+            };
+            workspaces = {
+              style = "focus_hint";
+              show_labels = false;
+              show_icons = true;
+              max_label_chars = 2;
+              hide_when_empty = false;
+              show_all_outputs = false;
+              focused_output_only = false;
+              labels_only_when_occupied = false;
+            };
+            media = {
+              hide_album_art = true;
+              artist_first = false;
+              hide_when_idle = false;
+              hide_when_no_media = false;
+              min_length = 0;
+              max_length = 145;
+              title_scroll = "on_hover";
+            };
+            audio_visualizer = {
+              width = 28;
+              show_wave = false;
+              show_when_idle = true;
+            };
+            clock = {
+              format = "{:%H:%M %a, %b %d}";
+              vertical_format = "{:%H\n%M\n%S}\n-\n{:%d\n%b}";
+              color = "primary";
+            };
+            tray = {
+              hidden = [ ];
+              pinned = [ ];
+              drawer = false;
+              hide_passive = false;
+            };
+            pomodoro.type = "thepunkoff/pomodoro:widget";
+            cpu = {
+              type = "sysmon";
+              stat = "cpu_usage";
+              font_scale = 0.8;
+            };
+            memory = {
+              type = "sysmon";
+              stat = "ram_pct";
+              font_scale = 0.8;
+            };
+            disk = {
+              type = "sysmon";
+              stat = "disk_used_pct";
+              path = "/state";
+              font_scale = 0.8;
+            };
+            network_rx = {
+              type = "sysmon";
+              stat = "net_rx";
+              font_scale = 0.8;
+              network_speed_compact = true;
+              network_speed_decimal_places = 0;
+            };
+            network_tx = {
+              type = "sysmon";
+              stat = "net_tx";
+              font_scale = 0.8;
+              network_speed_compact = true;
+              network_speed_decimal_places = 0;
+            };
+            volume.device = "output";
+            microphone = {
+              type = "volume";
+              device = "input";
+              hide_when_inactive = false;
+            };
+            notifications.hide_when_no_unread = true;
+            # Battery absence now always hides the widget; there is no force-show option.
+            battery = {
+              hide_when_plugged = false;
+              hide_when_full = false;
+            };
+          };
+
+          control_center = {
+            hidden_tabs = [
+              "monitor"
+              "network"
+            ];
+            shortcuts = map (type: { inherit type; }) [
+              "noctalia/screen_recorder:toggle"
+              "wallpaper"
+              "notification"
+              "power_profile"
+              "caffeine"
+              "nightlight"
+            ];
+            media.show_visualizer = true;
+          };
+
+          desktop_widgets.enabled = false;
+          dock.enabled = false;
+          backdrop.enabled = false;
+          system.monitor.enabled = true;
+          idle.behavior = {
+            lock.enabled = false;
+            screen-off.enabled = false;
+          };
+          nightlight = {
+            enabled = false;
+            force = false;
+            temperature_day = 6500;
+            temperature_night = 4000;
           };
           location = {
-            name = "Bochum, Germany";
-            firstDayOfWeek = 0;
+            auto_locate = false;
+            address = "Bochum, Germany";
+            custom_schedule = false;
+            sunrise = "06:30";
+            sunset = "18:30";
           };
-          dock.enabled = false;
-          # Only networkmanager supported
-          network.wifiEnabled = false;
-          "appLauncher" = {
-            "customLaunchPrefix" = "";
-            "customLaunchPrefixEnabled" = false;
-            "enableClipPreview" = false;
-            "enableClipboardHistory" = false;
-            "pinnedExecs" = [
+          weather = {
+            enabled = true;
+            unit = "celsius";
+            effects = false;
+          };
+
+          wallpaper = {
+            enabled = true;
+            directory = "${config.xdg.dataHome}/wallpapers";
+            per_monitor_directories = true;
+            transition = [ ];
+            # Keep Stylix's palette but never pin its image over the rotating collection.
+            default.path = lib.mkForce "";
+            automation = {
+              enabled = true;
+              interval_seconds = 180;
+              order = "random";
+              recursive = true;
+            };
+          };
+
+          notification = {
+            enable_daemon = true;
+            position = "top_right";
+            monitors = [ "DP-3" ];
+            follow_focused_output = false;
+            layer = "overlay";
+            # Native filters have no per-urgency duration. Retain the normal 8s
+            # timeout and ignore sender timeouts consistently, including permanent ones.
+            filter_order = [ "duration" ];
+            filter.duration = {
+              match_content = ".*";
+              override_duration = 8000;
+              allow_permanent = false;
+              play_sound = false;
+            };
+          };
+          osd.kinds.keyboard_layout = true;
+          audio = {
+            enable_sounds = false;
+            enable_notification_sounds = false;
+          };
+
+          lockscreen = {
+            enabled = true;
+            lock_before_suspend = true;
+            grace_period_seconds = 0;
+            transition = [ ];
+            tint_intensity = 0.2;
+          };
+          # Compact layout and hidden session buttons now require per-output login-box
+          # customization in the lockscreen editor; keep the secure native defaults.
+
+          plugins = {
+            enabled = [
+              "thepunkoff/pomodoro"
+              "noctalia/screen_recorder"
             ];
-            "position" = "center";
-            "showCategories" = false;
-            "sortByMostUsed" = true;
-            "terminalCommand" = "kitty -e";
-            "useApp2Unit" = false;
-            "viewMode" = "list";
+            source = [
+              {
+                name = "official";
+                kind = "git";
+                location = "https://github.com/noctalia-dev/official-plugins";
+                enabled = true;
+              }
+              {
+                name = "community";
+                kind = "git";
+                location = "https://github.com/noctalia-dev/community-plugins";
+                enabled = true;
+              }
+            ];
           };
-        };
-        pluginSettings = {
-          pomodoro = {
-            "workDuration" = 50;
-            "shortBreakDuration" = 10;
-            "longBreakDuration" = 30;
-            "sessionsBeforeLongBreak" = 3;
-            "autoStartBreaks" = false;
-            "autoStartWork" = false;
-            "compactMode" = true;
-            "playSound" = true;
+          plugin_settings."thepunkoff/pomodoro" = {
+            work-duration = 50;
+            short-break-duration = 10;
+            long-break-duration = 30;
+            sessions-before-long-break = 3;
+            auto-start-breaks = false;
+            auto-start-work = false;
+            enable-work-timer-sound = false;
+            use-bundled-alarm-sound = true;
+            bypass-noctalia-sound-globals = true;
           };
-        };
-        plugins = {
-          sources = [
-            {
-              enabled = true;
-              name = "Official Noctalia Plugins";
-              url = "https://github.com/noctalia-dev/noctalia-plugins";
-            }
-          ];
-          states = {
-            pomodoro = {
-              enabled = true;
-              sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-            };
-            "privacy-indicator" = {
-              enabled = true;
-              sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-            };
-          };
-          version = 2;
         };
       };
-      # FIXME: stylix writes this path I want my own backgrounds always
-      #home.file.".cache/noctalia/wallpapers.json"= lib.mkForce (builtins.toJSON { };
     };
 }
