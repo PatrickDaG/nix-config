@@ -206,13 +206,13 @@ in
     ignores = [ ".direnv" ];
     signing = {
       format = "ssh";
-      key = builtins.head sshSigningKeyFiles;
+      key = toString (builtins.head sshSigningKeyFiles);
       signByDefault = true;
     };
     settings = {
       gpg.ssh = {
         program = selectSshSigningKey;
-        allowedSignersFile = allowedSigners;
+        allowedSignersFile = toString allowedSigners;
       };
       core.pager = "${pkgs.delta}/bin/delta";
       user = {
