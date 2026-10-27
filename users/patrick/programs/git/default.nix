@@ -5,6 +5,83 @@
   ...
 }:
 let
+  sshSigningKeys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDZixkix0KfKuq7Q19whS5FQQg51/AJGB5BiNF/7h/LM cardno:15 489 049"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHxD4GOrwrBTG4/qQhm5hoSB2CP7W9g1LPWP11oLGOjQ cardno:23 010 997"
+  ];
+  sshSigningKeyFiles = lib.imap1 (
+    index: key: pkgs.writeText "patrick-yubikey-${toString index}.pub" "${key}\n"
+  ) sshSigningKeys;
+  allowedSigners = pkgs.writeText "patrick-allowed-signers" (
+    lib.concatMapStrings (key: "patrick@${globals.domains.mail_public} ${key}\n") sshSigningKeys
+  );
+  sshKeygen = lib.getExe' pkgs.openssh "ssh-keygen";
+  selectSshSigningKey = lib.getExe (
+    pkgs.writeShellApplication {
+      name = "ssh-keygen-select-yubikey";
+      runtimeInputs = [ pkgs.openssh ];
+      text = ''
+        args=("$@")
+        signing=false
+
+        for ((i = 0; i + 1 < ''${#args[@]}; i++)); do
+          if [[ ''${args[$i]} == "-Y" && ''${args[$((i + 1))]} == "sign" ]]; then
+            signing=true
+            break
+          fi
+        done
+
+        if ! $signing; then
+          exec ${sshKeygen} "''${args[@]}"
+        fi
+
+        if ! agent_keys=$(ssh-add -L); then
+          echo "Unable to list keys from SSH agent; is SSH_AUTH_SOCK available?" >&2
+          exit 1
+        fi
+
+        selected_key=""
+        matches=0
+        known_key_files=(${lib.escapeShellArgs (map toString sshSigningKeyFiles)})
+
+        for known_key_file in "''${known_key_files[@]}"; do
+          read -r known_type known_blob _ < "$known_key_file"
+          while IFS= read -r agent_key; do
+            read -r agent_type agent_blob _ <<< "$agent_key"
+            if [[ $known_type == "$agent_type" && $known_blob == "$agent_blob" ]]; then
+              selected_key=$known_key_file
+              matches=$((matches + 1))
+              break
+            fi
+          done <<< "$agent_keys"
+        done
+
+        if ((matches == 0)); then
+          echo "SSH agent does not contain a configured YubiKey signing key" >&2
+          exit 1
+        elif ((matches > 1)); then
+          echo "SSH agent contains multiple configured YubiKey signing keys; expose only the active key" >&2
+          exit 1
+        fi
+
+        found_key_argument=false
+        for ((i = 0; i + 1 < ''${#args[@]}; i++)); do
+          if [[ ''${args[$i]} == "-f" ]]; then
+            args[i + 1]=$selected_key
+            found_key_argument=true
+            break
+          fi
+        done
+
+        if ! $found_key_argument; then
+          echo "ssh-keygen signing invocation has no -f key argument" >&2
+          exit 1
+        fi
+
+        exec ${sshKeygen} "''${args[@]}"
+      '';
+    }
+  );
   gf = lib.getExe (
     pkgs.writeShellApplication {
       name = "git-fixup-fzf";
@@ -44,6 +121,16 @@ in
   programs.jujutsu = {
     enable = true;
     settings = {
+      signing = {
+        behavior = "drop";
+        backend = "ssh";
+        key = builtins.head sshSigningKeyFiles;
+        backends.ssh = {
+          program = selectSshSigningKey;
+          allowed-signers = allowedSigners;
+        };
+      };
+      git.sign-on-push = true;
       revset-aliases = {
         "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
         "closest_bookmark(to)" = "heads(::to & bookmarks())";
@@ -117,7 +204,16 @@ in
     enable = true;
     lfs.enable = true;
     ignores = [ ".direnv" ];
+    signing = {
+      format = "ssh";
+      key = builtins.head sshSigningKeyFiles;
+      signByDefault = true;
+    };
     settings = {
+      gpg.ssh = {
+        program = selectSshSigningKey;
+        allowedSignersFile = allowedSigners;
+      };
       core.pager = "${pkgs.delta}/bin/delta";
       user = {
         name = "Patrick";
@@ -154,13 +250,14 @@ in
       rebase.autoStash = true;
       rebase.updateRefs = true;
       alias = {
-        cs = "commit -v";
+        cs = "commit -v -S";
         s = "status";
         a = "add";
         p = "push";
-        fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f'';
+        rebase = "rebase --gpg-sign";
+        fixup = ''!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ''${@:2} && EDITOR=true git rebase -i --gpg-sign --autostash --autosquash $TARGET^; }; f'';
         f = "!${gf}";
-        crm = ''!git commit -v --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
+        crm = ''!git commit -v -S --edit --file "$(git rev-parse --git-dir)"/COMMIT_EDITMSG'';
       };
     };
   };

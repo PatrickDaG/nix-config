@@ -86,7 +86,6 @@ lib.optionalAttrs (!minimal) {
     ./wayland
 
     ./programs/firefox.nix
-    ./programs/git.nix
     ./programs/gpg.nix
     ./programs/kitty.nix
     ./programs/poe.nix
