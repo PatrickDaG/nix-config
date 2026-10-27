@@ -35,6 +35,7 @@
           feh
           gh
           gh-dash
+          glow
           hyperfine
           libreoffice
           magic-wormhole
