@@ -57,6 +57,7 @@ lib.optionalAttrs (!minimal) {
     ../alias.nix
     ../ssh.nix
     ../programs/claude.nix
+    ../programs/codex.nix
     ../programs/direnv.nix
     ../programs/gdb.nix
     ../programs/git

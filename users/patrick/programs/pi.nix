@@ -7,6 +7,7 @@
 let
   base = import ./coding-agent-jail.nix { inherit lib pkgs inputs; };
   inherit (base) jail;
+  herdrPackage = pkgs.llm-agents.herdr;
   jailed-pi = jail "jailed-pi" pkgs.llm-agents.pi (
     base.baseCombinators
     ++ (with jail.combinators; [
@@ -40,7 +41,7 @@ in
   ];
   programs.herdr = {
     enable = true;
-    package = pkgs.llm-agents.herdr;
+    package = herdrPackage;
   };
   programs.omp = {
     enable = true;
@@ -49,8 +50,12 @@ in
 
   home.file = {
     ".omp/agent/AGENTS.md".source = ./pi/AGENTS.md;
+    ".omp/agent/extensions/herdr-agent-state.ts".source =
+      "${herdrPackage}/share/herdr/integrations/omp/herdr-agent-state.ts";
     ".omp/agent/prompts/nixpkgs-review.md".source = ./pi/prompts/nixpkgs-review.md;
 
+    ".pi/agent/extensions/herdr-agent-state.ts".source =
+      "${herdrPackage}/share/herdr/integrations/pi/herdr-agent-state.ts";
     ".pi/agent/extensions/current-model.ts".text = ''
       import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
       import { Type } from "typebox";

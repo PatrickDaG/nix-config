@@ -48,6 +48,18 @@ in
     (readwrite (noescape "~/.config/gh-pi"))
     (set-env "GH_CONFIG_DIR" (noescape "~/.config/gh-pi"))
 
+    # Allow Herdr integrations to report agent state and session identity.
+    (try-fwd-env "HERDR_AGENT")
+    (try-fwd-env "HERDR_BIN_PATH")
+    (try-fwd-env "HERDR_ENV")
+    (try-fwd-env "HERDR_PANE_ID")
+    (try-fwd-env "HERDR_SOCKET_PATH")
+    (add-runtime ''
+      if [ -n "''${HERDR_SOCKET_PATH:-}" ]; then
+        RUNTIME_ARGS+=(--bind "$HERDR_SOCKET_PATH" "$HERDR_SOCKET_PATH")
+      fi
+    '')
+
     # Spawn agent in a new jj workspace
     # Just don't spawn 2 agent in the same second. Thx
     (add-runtime ''
