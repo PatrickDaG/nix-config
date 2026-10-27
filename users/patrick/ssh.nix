@@ -71,8 +71,12 @@
           header = ''Match final host "172.31.1.*" !host "172.31.1.12"'';
           User = "ubuntu";
           ProxyJump = "atlas11";
+          ForwardAgent = true;
         };
 
+        "*.local" = {
+          ForwardAgent = true;
+        };
         "mailnix" = {
           HostName = globals.hosts.mailnix.ip;
           User = "root";
