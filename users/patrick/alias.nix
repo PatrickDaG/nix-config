@@ -26,9 +26,9 @@
 
     zf = "zathura --fork";
     flop = "poweroff"; # ???
-    claudius = "jailed-claude";
-    pius = "jailed-pi";
-    codius = "jailed-codex";
+    claudius = "jclaude";
+    pius = "jpi";
+    codius = "jcodex";
 
     ltar = "tar --exclude=\"*/*/*\" -tvf";
     untar = "tar -xvf";

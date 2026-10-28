@@ -8,14 +8,14 @@ let
   base = import ./coding-agent-jail.nix { inherit lib pkgs inputs; };
   inherit (base) jail;
   herdrPackage = pkgs.llm-agents.herdr;
-  jailed-pi = jail "jailed-pi" pkgs.llm-agents.pi (
+  jpi = jail "jpi" pkgs.llm-agents.pi (
     base.baseCombinators
     ++ base.herdrCombinators "pi"
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.pi"))
     ])
   );
-  jailed-omp = jail "jailed-omp" inputs.omp.packages.x86_64-linux.omp (
+  jomp = jail "jomp" inputs.omp.packages.x86_64-linux.omp (
     base.baseCombinators
     ++ base.herdrCombinators "omp"
     ++ (with jail.combinators; [
@@ -28,6 +28,7 @@ let
       (set-env "XDG_CACHE_HOME" (noescape "~/.cache"))
     ])
   );
+  jzsh = jail "jzsh" pkgs.zsh base.baseCombinators;
 in
 {
   home.persistence."/state".directories = [
@@ -38,8 +39,8 @@ in
     ".local/state/omp"
   ];
   home.packages = [
-    jailed-pi
-
+    jpi
+    jzsh
   ];
   programs.herdr = {
     enable = true;
@@ -47,7 +48,7 @@ in
   };
   programs.omp = {
     enable = true;
-    package = jailed-omp;
+    package = jomp;
   };
 
   home.file = {

@@ -37,8 +37,18 @@ in
     (try-readwrite (noescape "~/.cache/nix"))
     (readonly "/etc/nix")
     (readonly "/etc/static/nix")
+    (try-fwd-env "DEVSHELL_DIR")
+    (try-fwd-env "IN_NIX_SHELL")
+    (try-fwd-env "NIX_CONFIG")
+    (try-fwd-env "NIX_SHELL_LEVEL")
     (try-fwd-env "NIX_PATH")
+    (try-fwd-env "NIXPKGS_PATH")
+    (try-fwd-env "PATH")
     (set-env "NIX_REMOTE" "daemon")
+
+    # Prevent shell hooks from replacing an inherited devshell after entering
+    # the jailed workspace. Explicit `direnv exec` calls still work.
+    (set-env "DIRENV_DISABLE" "1")
 
     # Keep direnv approval state inside the jail, separate from host approvals.
     (write-text (noescape "~/.config/direnv/direnvrc") ''
@@ -79,9 +89,13 @@ in
 
     (wrap-entry (entry: ''
       cd ./agent
+      export PRJ_ROOT="$PWD"
+      export PRJ_DATA_DIR="$PRJ_ROOT/.data"
       ${lib.getExe pkgs.git} init
       ${lib.getExe pkgs.git} add .
-      if [ -f .envrc ]; then
+      if [ -n "''${DEVSHELL_DIR:-}" ]; then
+        ${entry}
+      elif [ -f .envrc ]; then
         direnv allow .
         direnv exec . ${entry}
       else

@@ -10,7 +10,7 @@ let
   inherit (base) jail;
   herdrHook = "${config.home.homeDirectory}/.codex/herdr-agent-state.sh";
   herdrPackage = pkgs.llm-agents.herdr;
-  jailed-codex = jail "jailed-codex" pkgs.llm-agents.codex (
+  jcodex = jail "jcodex" pkgs.llm-agents.codex (
     base.baseCombinators
     ++ base.herdrCombinators "codex"
     ++ (with jail.combinators; [
@@ -28,7 +28,7 @@ in
 
   programs.codex = {
     enable = true;
-    package = jailed-codex;
+    package = jcodex;
     hooks.SessionStart = [
       {
         hooks = [

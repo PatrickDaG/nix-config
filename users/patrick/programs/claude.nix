@@ -10,7 +10,7 @@ let
   inherit (base) jail;
   herdrHook = "${config.home.homeDirectory}/.claude/hooks/herdr-agent-state.sh";
   herdrPackage = pkgs.llm-agents.herdr;
-  jailed-claude = jail "jailed-claude" pkgs.llm-agents.claude-code (
+  jclaude = jail "jclaude" pkgs.llm-agents.claude-code (
     base.baseCombinators
     ++ base.herdrCombinators "claude"
     ++ (with jail.combinators; [
@@ -30,7 +30,7 @@ in
 
   programs.claude-code = {
     enable = true;
-    package = jailed-claude;
+    package = jclaude;
     settings.hooks.SessionStart = [
       {
         matcher = "^(startup|resume|clear|compact|fork)$";
