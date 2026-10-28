@@ -45,7 +45,13 @@
       '')
       (builtins.readFile ./zshrc)
       # TODO: rename hex -> pty-proxy once on atuin 18.16
-      "eval \"$(atuin hex init zsh)\""
+      # Herdr detects agents via the pane's foreground process; the pty-proxy
+      # would hide everything behind its own PTY, so skip it inside herdr.
+      ''
+        if [[ -z ''${HERDR_ENV-} ]]; then
+          eval "$(atuin hex init zsh)"
+        fi
+      ''
     ];
     plugins = [
       {
