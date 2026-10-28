@@ -8,6 +8,14 @@ let
 in
 {
   inherit jail;
+  herdrCombinators =
+    agent: with jail.combinators; [
+      # Herdr sees bubblewrap as the foreground process, so label the host-visible
+      # wrapper and forward the same hint into the sandbox.
+      (add-runtime ''
+        export HERDR_AGENT=${lib.escapeShellArg agent}
+      '')
+    ];
   baseCombinators = with jail.combinators; [
     network
     time-zone

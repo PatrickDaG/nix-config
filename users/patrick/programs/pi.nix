@@ -10,12 +10,14 @@ let
   herdrPackage = pkgs.llm-agents.herdr;
   jailed-pi = jail "jailed-pi" pkgs.llm-agents.pi (
     base.baseCombinators
+    ++ base.herdrCombinators "pi"
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.pi"))
     ])
   );
   jailed-omp = jail "jailed-omp" inputs.omp.packages.x86_64-linux.omp (
     base.baseCombinators
+    ++ base.herdrCombinators "omp"
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.omp"))
       (readwrite (noescape "~/.local/share/omp"))
@@ -50,7 +52,7 @@ in
 
   home.file = {
     ".omp/agent/AGENTS.md".source = ./pi/AGENTS.md;
-    ".omp/agent/extensions/herdr-agent-state.ts".source =
+    ".omp/agent/extensions/herdr-omp-agent-state.ts".source =
       "${herdrPackage}/share/herdr/integrations/omp/herdr-agent-state.ts";
     ".omp/agent/prompts/nixpkgs-review.md".source = ./pi/prompts/nixpkgs-review.md;
 

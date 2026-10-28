@@ -12,6 +12,7 @@ let
   herdrPackage = pkgs.llm-agents.herdr;
   jailed-claude = jail "jailed-claude" pkgs.llm-agents.claude-code (
     base.baseCombinators
+    ++ base.herdrCombinators "claude"
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.claude"))
       (readwrite (noescape "~/.claude.json"))

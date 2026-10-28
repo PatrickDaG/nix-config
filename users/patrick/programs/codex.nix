@@ -12,6 +12,7 @@ let
   herdrPackage = pkgs.llm-agents.herdr;
   jailed-codex = jail "jailed-codex" pkgs.llm-agents.codex (
     base.baseCombinators
+    ++ base.herdrCombinators "codex"
     ++ (with jail.combinators; [
       (readwrite (noescape "~/.codex"))
       (set-argv [
