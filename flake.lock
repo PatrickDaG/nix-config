@@ -1550,11 +1550,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776610288,
-        "narHash": "sha256-npihpwo54Al2HkQuhRMnczTXZgwFFut+T2/+/9dXmIA=",
+        "lastModified": 1793202128,
+        "narHash": "sha256-1qze+7AADIjs8p0o9UBQNNKuIP+AthBCClckWzGC8wE=",
         "ref": "refs/heads/main",
-        "rev": "868557a69a90232090d81cac7741cc2ebbfd8bb3",
-        "revCount": 45,
+        "rev": "2dd929137169d15e98aebdb808430ed81a135134",
+        "revCount": 50,
         "type": "git",
         "url": "https://forge.lel.lol/patrick/nixp-meta.git"
       },
