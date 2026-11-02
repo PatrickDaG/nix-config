@@ -66,7 +66,7 @@ in
     (readwrite (noescape "~/.config/gh-pi"))
     (set-env "GH_CONFIG_DIR" (noescape "~/.config/gh-pi"))
 
-    # Allow Herdr integrations to report agent state and session identity.
+    # Allow old Herdr integrations to report agent state and session identity.
     (try-fwd-env "HERDR_AGENT")
     (try-fwd-env "HERDR_BIN_PATH")
     (try-fwd-env "HERDR_ENV")
@@ -75,6 +75,22 @@ in
     (add-runtime ''
       if [ -n "''${HERDR_SOCKET_PATH:-}" ]; then
         RUNTIME_ARGS+=(--bind "$HERDR_SOCKET_PATH" "$HERDR_SOCKET_PATH")
+      fi
+    '')
+
+    # Allow herdr-core coordination and Herdr GUI customization.
+    (try-fwd-env "HC_PARENT_ID")
+    (try-fwd-env "HC_SESSION")
+    (try-fwd-env "HC_SOCKET")
+    (try-fwd-env "HC_TERMINAL_ID")
+    (try-fwd-env "HERDR_APP_HOME")
+    (try-readwrite (noescape "~/.config/herdr-app"))
+    (try-readwrite (noescape "~/.config/herdr-core"))
+    (try-readwrite (noescape "~/.local/state/herdr-core"))
+    (add-runtime ''
+      herdr_core_runtime="''${XDG_RUNTIME_DIR:-/run/user/$(${pkgs.coreutils}/bin/id -u)}/herdr-core"
+      if [ -d "$herdr_core_runtime" ]; then
+        RUNTIME_ARGS+=(--bind "$herdr_core_runtime" "$herdr_core_runtime")
       fi
     '')
 
@@ -134,6 +150,7 @@ in
         jq
         jujutsu
         lixPackageSets.latest.lix
+        llm-agents.herdr-core
         nixpkgs-review
         ps
         python3

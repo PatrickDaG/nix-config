@@ -35,12 +35,17 @@ in
     ".config/gh-pi"
     ".cache/omp"
     ".config/herdr"
+    ".config/herdr-app"
+    ".config/herdr-core"
     ".local/share/omp"
+    ".local/state/herdr-core"
     ".local/state/omp"
   ];
   home.packages = [
     jpi
     jzsh
+    pkgs.llm-agents.herdr-app
+    pkgs.llm-agents.herdr-core
   ];
   programs.herdr = {
     enable = true;
