@@ -53,6 +53,7 @@
           streamlink
           #streamlink-twitch-gui-bin # Why this 500MB????
           timewarrior
+          whatsapp-electron
           zathura
           zoom-us # 2.5GB?
           zotero
