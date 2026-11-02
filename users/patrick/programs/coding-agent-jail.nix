@@ -27,16 +27,16 @@ in
     # Nix support: expose the full nix store (read-only),
     # the daemon socket, and caches so nix builds work inside the sandbox.
     (readonly "/nix/store")
-    (readwrite "/nix/var/nix/daemon-socket")
+    (try-readwrite "/nix/var/nix/daemon-socket")
     # Allow building my config from within the sandbox
-    (readonly "/var/tmp/agenix-rekey/")
-    (readonly "/var/tmp/nix-import-encrypted/")
+    (try-readonly "/var/tmp/agenix-rekey/")
+    (try-readonly "/var/tmp/nix-import-encrypted/")
     (set-env "NIX_IMPORT_ENCRYPTED_CACHE_ONLY" "1")
     (set-env "NIM_UNLOCK_BUILDERS" "no")
     # noescape needed to expand ~
     (try-readwrite (noescape "~/.cache/nix"))
-    (readonly "/etc/nix")
-    (readonly "/etc/static/nix")
+    (try-readonly "/etc/nix")
+    (try-readonly "/etc/static/nix")
     (try-fwd-env "DEVSHELL_DIR")
     (try-fwd-env "IN_NIX_SHELL")
     (try-fwd-env "NIX_CONFIG")
