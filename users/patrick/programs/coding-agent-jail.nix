@@ -99,7 +99,7 @@ in
     (add-runtime ''
       date=$(date +"%Y%m%dT%H%M%S")
       export AGENT_SESSION_NAME="agent-$date"
-      jj workspace add "./$AGENT_SESSION_NAME" --quiet -m "agent session $date"
+      jj workspace add "./$AGENT_SESSION_NAME" --colocate --quiet -m "agent session $date"
     '')
     (rw-bind (noescape "\"$PWD/$AGENT_SESSION_NAME\"") (noescape "\"$PWD/agent\""))
 
@@ -107,8 +107,6 @@ in
       cd ./agent
       export PRJ_ROOT="$PWD"
       export PRJ_DATA_DIR="$PRJ_ROOT/.data"
-      ${lib.getExe pkgs.git} init
-      ${lib.getExe pkgs.git} add .
       if [ -n "''${DEVSHELL_DIR:-}" ]; then
         ${entry}
       elif [ -f .envrc ]; then
@@ -129,6 +127,7 @@ in
           jj abandon "$change_id" --quiet
         fi
         rm -rf "$AGENT_SESSION_NAME"
+        ${lib.getExe pkgs.git} worktree prune
       fi
     '')
 
@@ -150,6 +149,7 @@ in
         jq
         jujutsu
         lixPackageSets.latest.lix
+        llm-agents.herdr-app
         llm-agents.herdr-core
         nixpkgs-review
         ps

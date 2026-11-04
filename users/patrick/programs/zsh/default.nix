@@ -46,9 +46,10 @@
       (builtins.readFile ./zshrc)
       # TODO: rename hex -> pty-proxy once on atuin 18.16
       # Herdr detects agents via the pane's foreground process; the pty-proxy
-      # would hide everything behind its own PTY, so skip it inside herdr.
+      # would hide everything behind its own PTY. HERDR_ENV supports the older
+      # TUI, while HC_TERMINAL_ID identifies current herdr-core terminals.
       ''
-        if [[ -z ''${HERDR_ENV-} ]]; then
+        if [[ -z ''${HERDR_ENV-} && -z ''${HC_TERMINAL_ID-} ]]; then
           eval "$(atuin hex init zsh)"
         fi
       ''
