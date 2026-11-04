@@ -34,15 +34,18 @@
         "10.100.1.27"
         "mpi-sp.org"
       ];
-      mtu = 1380;
+      mtu = 1280;
       autostart = false;
       privateKeyFile = config.age.secrets.wg-priv-key.path;
       peers = [
         {
           publicKey = "ZufCkzh6+NS2Fs2GnlAaG95U900oC+gUp77rZLcG4wU=";
           allowedIPs = [
-            "0.0.0.0/0"
-            "::/0"
+            # "0.0.0.0/0"
+            # "::/0"
+            "10.100.1.0/24"
+            "10.251.4.0/24"
+            "2a02:d480:a40:1::/64"
           ];
           endpoint = "141.5.46.36:51820";
           persistentKeepalive = 20;
