@@ -55,7 +55,8 @@
   boot.initrd.systemd.services."zfs-import-rpool".after = [ "cryptsetup.target" ];
 
   systemIdentity = {
-    enable = true;
+    # broken right now for some reason?
+    #enable = true;
     pcr15 = "dc9b7fa0d2a0ef5441bb8bfb7b2103b9f45f1143d87f69929c12cf7a3cc35ccf";
   };
 }
