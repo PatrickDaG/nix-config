@@ -10,6 +10,7 @@
   #hm.services.gnome-keyring.enable = true;
   hm.xdg.portal = {
     enable = true;
+    package = pkgs.niri-unstable;
     xdgOpenUsePortal = true;
     config.common = {
       default = [
@@ -29,7 +30,7 @@
       "org.freedesktop.impl.portal.Screenshot" = [ "xdg-desktop-portal-gnome" ];
     };
     configPackages = [
-      pkgs.niri-stable
+      pkgs.niri-unstable
     ];
     extraPortals = [
       pkgs.gnome-keyring
