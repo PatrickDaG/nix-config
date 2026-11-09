@@ -63,7 +63,7 @@ in
 
     # GitHub CLI auth for PR interactions (separate account from host)
     # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
-    (readwrite (noescape "~/.config/gh-pi"))
+    (try-readwrite (noescape "~/.config/gh-pi"))
     (set-env "GH_CONFIG_DIR" (noescape "~/.config/gh-pi"))
 
     # Allow old Herdr integrations to report agent state and session identity.
@@ -103,6 +103,7 @@ in
     '')
     (rw-bind (noescape "\"$PWD/$AGENT_SESSION_NAME\"") (noescape "\"$PWD/agent\""))
 
+    # TODO: detect jj repo and if none just spawn new empty folder
     (wrap-entry (entry: ''
       cd ./agent
       export PRJ_ROOT="$PWD"
