@@ -13,9 +13,11 @@ in
     { config, ... }:
     {
       stylix.targets.niri.enable = true;
+
+      programs.niri.package = pkgs.niri-unstable;
       programs.niri.settings = nconfig.lib.misc.mkPerHost {
         all = {
-          xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite-stable;
+          xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite-unstable;
 
           input = {
             keyboard = {

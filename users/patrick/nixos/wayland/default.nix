@@ -10,7 +10,6 @@
   #hm.services.gnome-keyring.enable = true;
   hm.xdg.portal = {
     enable = true;
-    package = pkgs.niri-unstable;
     xdgOpenUsePortal = true;
     config.common = {
       default = [
