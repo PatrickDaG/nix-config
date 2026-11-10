@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  globals,
   ...
 }:
 {
@@ -50,6 +51,28 @@
     };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "lan-house" ];
+  networking.nftables.firewall.rules = {
+    wireguard-services-flat = {
+      from = [ "untrusted" ];
+      to = [ "local" ];
+      allowedUDPPorts = [ globals.wireguard.services-flat.port ];
+    };
+    # Relay only between participants of this network, never other networks.
+    forward-services-flat-wireguard = {
+      from = [ "wg-services-flat" ];
+      to = [ "wg-services-flat" ];
+      verdict = "accept";
+    };
+  };
+  globals.wireguard.services-flat = {
+    host = lib.net.cidr.host 2 "192.168.178.0/24";
+    cidrv4 = "10.46.0.0/20";
+    cidrv6 = "fd00:1768::/112";
+    port = 51824;
+    idFile = ../../ids.json;
+    hosts.${config.node.name}.server = true;
+  };
+
   boot.initrd = {
 
     availableKernelModules = [

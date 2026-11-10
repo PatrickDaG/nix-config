@@ -9,7 +9,8 @@
   guests = lib.genAttrs [ "homeassistant" "esphome" "nginx" ] (guestName: {
     backend = "container";
     autostart = true;
-    container.macvlans = [ "lan-house:mv-house" ];
+    # Siblings of the host's lan-house macvlan can reach its WireGuard endpoint.
+    container.macvlans = [ "lan01:mv-house" ];
     zfs = {
       "/state" = {
         pool = "rpool";

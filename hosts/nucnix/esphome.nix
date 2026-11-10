@@ -18,7 +18,7 @@
     port = 3001;
   };
 
-  globals.wireguard.services.hosts.${config.node.name} = {
+  globals.wireguard.services-flat.hosts.${config.node.name} = {
     firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3001 ];
   };
   networking.nftables.firewall.rules.mdns = {

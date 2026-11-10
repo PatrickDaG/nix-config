@@ -6,7 +6,7 @@
 {
   globals.wireguard = {
     users.hosts.${config.node.name} = { };
-    services.hosts.${config.node.name} = { };
+    services-flat.hosts.${config.node.name} = { };
   };
   networking.nftables.firewall.zones.untrusted.interfaces = [ "users" ];
 
@@ -22,7 +22,7 @@
     upstreams = {
       homeassistant-nucnix = {
         servers."${
-          globals.wireguard.services.hosts.${globals.services.homeassistant-nucnix.host}.ipv4
+          globals.wireguard.services-flat.hosts.${globals.services.homeassistant-nucnix.host}.ipv4
         }:3000" =
           { };
         extraConfig = ''
@@ -31,7 +31,9 @@
         '';
       };
       esphome-nucnix = {
-        servers."${globals.wireguard.services.hosts.${globals.services.esphome-nucnix.host}.ipv4}:3001" =
+        servers."${
+          globals.wireguard.services-flat.hosts.${globals.services.esphome-nucnix.host}.ipv4
+        }:3001" =
           { };
         extraConfig = ''
           zone esphome-nucnix 64k;
