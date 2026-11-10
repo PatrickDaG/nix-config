@@ -108,6 +108,7 @@
       "whisper"
       "wyoming"
       "zha"
+      "tuya"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local

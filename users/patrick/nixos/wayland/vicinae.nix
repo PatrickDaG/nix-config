@@ -23,6 +23,7 @@
           # Why opt-out :(
           system_info = false;
         };
+        search_files_in_root = true;
         font = {
           normal = {
             size = 12;
@@ -49,7 +50,7 @@
           raycast-compat.enabled = false;
           "files" = {
             "preferences" = {
-              "excludedPaths" = "/home/patrick/smb";
+              "excludedIndexingPaths" = "/home/patrick/smb";
             };
           };
           "core" = {

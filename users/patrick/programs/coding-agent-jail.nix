@@ -27,16 +27,16 @@ in
     # Nix support: expose the full nix store (read-only),
     # the daemon socket, and caches so nix builds work inside the sandbox.
     (readonly "/nix/store")
-    (readwrite "/nix/var/nix/daemon-socket")
+    (try-readwrite "/nix/var/nix/daemon-socket")
     # Allow building my config from within the sandbox
-    (readonly "/var/tmp/agenix-rekey/")
-    (readonly "/var/tmp/nix-import-encrypted/")
+    (try-readonly "/var/tmp/agenix-rekey/")
+    (try-readonly "/var/tmp/nix-import-encrypted/")
     (set-env "NIX_IMPORT_ENCRYPTED_CACHE_ONLY" "1")
     (set-env "NIM_UNLOCK_BUILDERS" "no")
     # noescape needed to expand ~
     (try-readwrite (noescape "~/.cache/nix"))
-    (readonly "/etc/nix")
-    (readonly "/etc/static/nix")
+    (try-readonly "/etc/nix")
+    (try-readonly "/etc/static/nix")
     (try-fwd-env "DEVSHELL_DIR")
     (try-fwd-env "IN_NIX_SHELL")
     (try-fwd-env "NIX_CONFIG")
@@ -63,10 +63,10 @@ in
 
     # GitHub CLI auth for PR interactions (separate account from host)
     # Uses ~/.config/gh-pi so the sandbox gets its own gh identity.
-    (readwrite (noescape "~/.config/gh-pi"))
+    (try-readwrite (noescape "~/.config/gh-pi"))
     (set-env "GH_CONFIG_DIR" (noescape "~/.config/gh-pi"))
 
-    # Allow Herdr integrations to report agent state and session identity.
+    # Allow old Herdr integrations to report agent state and session identity.
     (try-fwd-env "HERDR_AGENT")
     (try-fwd-env "HERDR_BIN_PATH")
     (try-fwd-env "HERDR_ENV")
@@ -78,15 +78,32 @@ in
       fi
     '')
 
+    # Allow herdr-core coordination and Herdr GUI customization.
+    (try-fwd-env "HC_PARENT_ID")
+    (try-fwd-env "HC_SESSION")
+    (try-fwd-env "HC_SOCKET")
+    (try-fwd-env "HC_TERMINAL_ID")
+    (try-fwd-env "HERDR_APP_HOME")
+    (try-readwrite (noescape "~/.config/herdr-app"))
+    (try-readwrite (noescape "~/.config/herdr-core"))
+    (try-readwrite (noescape "~/.local/state/herdr-core"))
+    (add-runtime ''
+      herdr_core_runtime="''${XDG_RUNTIME_DIR:-/run/user/$(${pkgs.coreutils}/bin/id -u)}/herdr-core"
+      if [ -d "$herdr_core_runtime" ]; then
+        RUNTIME_ARGS+=(--bind "$herdr_core_runtime" "$herdr_core_runtime")
+      fi
+    '')
+
     # Spawn agent in a new jj workspace
     # Just don't spawn 2 agent in the same second. Thx
     (add-runtime ''
       date=$(date +"%Y%m%dT%H%M%S")
       export AGENT_SESSION_NAME="agent-$date"
-      jj workspace add "./$AGENT_SESSION_NAME" --quiet -m "agent session $date"
+      jj workspace add "./$AGENT_SESSION_NAME" --colocate --quiet -m "agent session $date"
     '')
     (rw-bind (noescape "\"$PWD/$AGENT_SESSION_NAME\"") (noescape "\"$PWD/agent\""))
 
+    # TODO: detect jj repo and if none just spawn new empty folder
     (wrap-entry (entry: ''
       cd ./agent
       export PRJ_ROOT="$PWD"
@@ -111,6 +128,7 @@ in
           jj abandon "$change_id" --quiet
         fi
         rm -rf "$AGENT_SESSION_NAME"
+        ${lib.getExe pkgs.git} worktree prune
       fi
     '')
 
@@ -132,6 +150,8 @@ in
         jq
         jujutsu
         lixPackageSets.latest.lix
+        llm-agents.herdr-app
+        llm-agents.herdr-core
         nixpkgs-review
         ps
         python3

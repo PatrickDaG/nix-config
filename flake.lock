@@ -661,11 +661,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790898470,
-        "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+        "lastModified": 1793576659,
+        "narHash": "sha256-V1h85lUaJBQoHFrB2vpXZOE0Ju1MYSnIpsehoVZYlDo=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+        "rev": "ea2630b7470978622c7689a1ff75d2b389175399",
         "type": "github"
       },
       "original": {
@@ -1105,11 +1105,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1793010890,
-        "narHash": "sha256-ey+//gYH5+xdurdQt3N/xYwTkbRsBni6LEFZuQo7pQk=",
+        "lastModified": 1793610633,
+        "narHash": "sha256-nHvr6I1PDcV6EBquDHE47cIPysnCyhPqQr+OAYse+QY=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "1bdd1bf023e9a0974f2b67c7ac1c144fd2702c29",
+        "rev": "10f2be38f8a46fdf7689697270dd14b27f723aae",
         "type": "github"
       },
       "original": {
@@ -1550,11 +1550,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776610288,
-        "narHash": "sha256-npihpwo54Al2HkQuhRMnczTXZgwFFut+T2/+/9dXmIA=",
+        "lastModified": 1794230286,
+        "narHash": "sha256-YI66rxP/wK4MXL6yb0EUYqpEv6zq6VAB8VWKRJCQFTM=",
         "ref": "refs/heads/main",
-        "rev": "868557a69a90232090d81cac7741cc2ebbfd8bb3",
-        "revCount": 45,
+        "rev": "686424d5a9889a50b3fe507f5152aa9745fd4b8d",
+        "revCount": 54,
         "type": "git",
         "url": "https://forge.lel.lol/patrick/nixp-meta.git"
       },

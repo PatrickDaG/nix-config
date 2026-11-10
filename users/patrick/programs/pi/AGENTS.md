@@ -37,6 +37,15 @@ Never go on a multi-file exploration spree trying to "figure it out". A 10-secon
 - These basic tools are always available: fd, rg, jq, gh, tea, diff, jj, nix
 - For further tools use 'nix run'
 
+# Herdr
+
+- `herdr` is the older TUI. Its socket-based agent-state extension only supports that TUI.
+- Pi and OMP report status natively through OSC 7501 for herdr-core and Herdr GUI; do not add a second status extension.
+- `hc` controls herdr-core and provides persistent terminals, remote machines, and agent coordination. Read `hc --skill` before coordinating agents.
+- `herdr-app` controls the GUI. Read `~/.config/herdr-app/AGENTS.md` before changing its layouts, mods, settings, or keys.
+- Agents launched through herdr-core inherit `HC_TERMINAL_ID`. Keep it available so child terminals and reports remain associated with their parent.
+- Never stop or restart the user's core unless asked. It affects every managed terminal.
+
 # Style guide
 
 - Markdown files should have a maximum line width of 170 characters

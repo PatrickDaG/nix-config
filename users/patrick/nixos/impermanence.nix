@@ -21,6 +21,7 @@
 
         ".local/state/wireplumber"
 
+        ".config/BambuStudio"
         ".config/OrcaSlicer"
 
         ".cache/typst"
