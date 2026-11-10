@@ -46,12 +46,8 @@ lib.optionalAttrs (!minimal) {
   };
   users.groups.patrick = { };
 
-  environment.systemPackages = with pkgs; [
-    # xournalpp needs this or else it will crash
-    adwaita-icon-theme
-  ];
-
   programs.dconf.enable = true;
+  programs.nix-ld.enable = true;
 
   home-manager.users.patrick.imports = [
     ../alias.nix
@@ -88,8 +84,6 @@ lib.optionalAttrs (!minimal) {
     ./programs/firefox.nix
     ./programs/gpg.nix
     ./programs/kitty.nix
-    ./programs/poe.nix
-    ./programs/spicetify.nix
     ./programs/steam.nix
     ./programs/thunderbird.nix
     # Currently unused and need a lot of space

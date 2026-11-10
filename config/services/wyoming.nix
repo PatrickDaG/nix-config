@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   environment.persistence."/persist".directories = [
     {
@@ -18,6 +19,15 @@
   };
 
   services.wyoming.piper = {
+    # German inference needs neither voice training nor Japanese dictionaries or HTTP/alignment extras.
+    package = pkgs.wyoming-piper.override {
+      piper-tts = pkgs.piper-tts.override {
+        withAlignment = false;
+        withHTTP = false;
+        withJapanese = false;
+        withTrain = false;
+      };
+    };
     servers.hass = {
       enable = true;
       # https://rhasspy.github.io/piper-samples/

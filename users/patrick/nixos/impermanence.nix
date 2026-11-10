@@ -41,6 +41,8 @@
         ".config/gh"
 
         ".local/share/osu"
+        ".config/awakened-poe-trade"
+        ".local/share/pobfrontend"
 
         ".local/share/monado"
 

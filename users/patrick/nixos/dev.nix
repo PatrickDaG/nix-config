@@ -38,22 +38,14 @@ lib.optionalAttrs (!minimal) {
   environment.systemPackages = with pkgs; [
     python3
     jq
-    nix-update
-    gnumake
     pciutils
-    gcc
     usbutils
-    man-pages
-    man-pages-posix
-    bingrep
-    hexyl
   ];
 
-  # Save space
-  #environment.enableDebugInfo = true;
+  # Keep user manuals without installing development outputs for every package.
   documentation = {
     enable = true;
-    dev.enable = true;
+    dev.enable = false;
     doc.enable = false;
     man.enable = true;
     info.enable = false;

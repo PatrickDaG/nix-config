@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }:
 {
@@ -19,16 +18,12 @@
               la
             ]
           ))
-          inputs.flint.packages.${pkgs.stdenv.hostPlatform.system}.flint
           #keep-sorted start
-          amazon
           bashInteractive
           btop-cuda
-          captive-browser
           #crosspipe
           dig
           discord
-          disneyplus
           dust
           element-desktop
           feh
@@ -38,7 +33,6 @@
           hyperfine
           magic-wormhole
           mpv
-          netflix
           #nextcloud-client # 2GB?
           nix-output-monitor
           nixpkgs-review
@@ -51,7 +45,6 @@
           streamlink
           #streamlink-twitch-gui-bin # Why this 500MB????
           timewarrior
-          whatsapp-electron
           zathura
           zotero
           #keep-sorted end

@@ -57,6 +57,7 @@
           );
           modules = [
             ../../config/basic
+            ../../config/support/headless.nix
             ../../config/services/${guestName}.nix
             inputs.microvm.nixosModules.microvm-options
             {

@@ -76,7 +76,6 @@
       ln -sv ${inputs.nixpkgs} $out/nixpkgs
     '';
   };
-  programs.nix-ld.enable = true;
   system.stateVersion = "24.05";
 
   systemd.services.nix-gc.serviceConfig = {

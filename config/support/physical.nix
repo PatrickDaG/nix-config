@@ -1,16 +1,18 @@
 # Configuration for actual physical machines
 {
   config,
+  lib,
   minimal,
   ...
 }:
 {
-  # Should be minima because it's quite large(~700 MB)
-  # Should not be minimal because then you have missing firmware on reboot
+  # Keep full hardware support unless a host explicitly selects a smaller firmware set.
   hardware = {
-    enableRedistributableFirmware = true;
-    enableAllFirmware = true;
+    enableRedistributableFirmware = lib.mkDefault true;
+    enableAllFirmware = lib.mkDefault true;
   };
+
+  security.tpm2.enable = true;
 
   services = {
     # Enable if you're feeling very fwupd that day

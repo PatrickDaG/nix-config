@@ -1,25 +1,5 @@
 {
-  environment = {
-    # Print the URL instead on servers
-    variables.BROWSER = "echo";
-    # Don't install the /lib/ld-linux.so.2 and /lib64/ld-linux-x86-64.so.2
-    # stubs. Server users should know what they are doing.
-    stub-ld.enable = false;
-  };
-
-  documentation.nixos.enable = false;
-
-  # No need for fonts on a server
-  fonts.fontconfig.enable = false;
-
-  programs.command-not-found.enable = false;
-
-  # freedesktop xdg files
-  xdg.autostart.enable = false;
-  xdg.icons.enable = false;
-  xdg.menus.enable = false;
-  xdg.mime.enable = false;
-  xdg.sounds.enable = false;
+  imports = [ ./headless.nix ];
 
   systemd = {
 

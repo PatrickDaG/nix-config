@@ -13,6 +13,7 @@
 
     ../../config/basic
 
+    ../../config/support/headless-firmware.nix
     ../../config/support/initrd-ssh.nix
     ../../config/support/physical.nix
     ../../config/support/secureboot.nix
@@ -23,6 +24,9 @@
     ./fs.nix
   ]
   ++ lib.lists.optionals (!minimal) [ ./guests.nix ];
+  # Selecting firmware explicitly must not disable CPU security updates.
+  hardware.cpu.amd.updateMicrocode = true;
+
   services.xserver = {
     xkb = {
       layout = "de";

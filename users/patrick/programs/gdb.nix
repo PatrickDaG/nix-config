@@ -1,6 +1,7 @@
 {
   #services.nixseparatedebuginfod.enable = true;
-  home.enableDebugInfo = true;
+  # Install debug outputs in a debugging shell rather than in every home generation.
+  home.enableDebugInfo = false;
   xdg.configFile.gdbinit = {
     target = "gdb/gdbinit";
     text = ''

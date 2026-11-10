@@ -31,10 +31,6 @@
     cacheDir = "/var/tmp/agenix-rekey/1000";
   };
   security.sudo.enable = false;
-  security.tpm2 = {
-    enable = true;
-    pkcs11.enable = true;
-  };
   # Just before switching, remove the agenix directory if it exists.
   # This can happen when a secret is used in the initrd because it will
   # then be copied to the initramfs under the same path. This materializes
@@ -65,8 +61,6 @@
     file
     killall
     kitty.terminfo
-    # fix pcscd
-    pcscliteWithPolkit.out
     rage
     ripgrep
     socat

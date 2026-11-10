@@ -24,5 +24,4 @@
       ../patrick/programs/zsh
     ]
   );
-  environment.systemPackages = [ pkgs.trace-cmd ];
 }

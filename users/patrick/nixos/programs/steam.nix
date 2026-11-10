@@ -10,11 +10,11 @@
   #   # Not possible inside steam
   #   #capSysNice = true;
   # };
-  boot.kernelModules = [ "nvidia_uvm" ]; # needed for cs2
-  services.ratbagd.enable = true;
-  hm.home.packages = [ pkgs.piper ];
+  boot.kernelModules = lib.optionals config.programs.steam.enable [ "nvidia_uvm" ]; # needed for cs2
+  services.ratbagd.enable = config.programs.steam.enable;
+  hm.home.packages = lib.optionals config.programs.steam.enable [ pkgs.piper ];
   programs.steam = {
-    enable = true;
+    enable = config.node.name == "desktopnix";
     # This takes 1.5 GB because it seems to pull in a full nixpkgs clone?
     # extraCompatPackages = [
     #   pkgs.proton-ge-bin
@@ -43,10 +43,10 @@
     ];
   };
   programs.gamemode = {
-    enable = true;
+    enable = config.programs.steam.enable;
     settings = {
       general.renice = 10;
     };
   };
-  users.users.patrick.extraGroups = [ "gamemode" ];
+  users.users.patrick.extraGroups = lib.optionals config.programs.gamemode.enable [ "gamemode" ];
 }

@@ -8,13 +8,16 @@ let
   nconfig = config;
 in
 {
-  programs.niri.enable = true;
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri-unstable;
+  };
   hm =
     { config, ... }:
     {
       stylix.targets.niri.enable = true;
 
-      programs.niri.package = pkgs.niri-unstable;
+      programs.niri.package = nconfig.programs.niri.package;
       programs.niri.settings = nconfig.lib.misc.mkPerHost {
         all = {
           xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite-unstable;
