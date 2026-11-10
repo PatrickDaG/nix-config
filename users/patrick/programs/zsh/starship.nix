@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   programs.starship = {
     enable = true;
@@ -41,7 +41,13 @@
       };
 
       vcs = {
-        order = [ "jj" "git" "fossil" "hg" "pijul"];
+        order = [
+          "jj"
+          "git"
+          "fossil"
+          "hg"
+          "pijul"
+        ];
       };
 
       git_branch = {

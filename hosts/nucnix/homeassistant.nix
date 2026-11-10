@@ -6,8 +6,10 @@
   ...
 }:
 {
-  imports = [ ../../config/services/homeassistant-common.nix 
-  ./mosquitto.nix];
+  imports = [
+    ../../config/services/homeassistant-common.nix
+    ./mosquitto.nix
+  ];
 
   globals.services.homeassistant-nucnix.host = config.node.name;
 
