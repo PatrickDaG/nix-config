@@ -7,7 +7,7 @@
     ../../config/basic
     ../../config/support/initrd-ssh.nix
     ../../config/support/physical.nix
-    #../../config/support/secureboot.nix
+    ../../config/support/secureboot.nix
     ../../config/support/server.nix
     ../../config/support/zfs.nix
 

@@ -8,6 +8,12 @@
       "radio_browser"
       "wled"
       "zha"
+      "mqtt"
+      "spotify"
+    ];
+    customComponents = with pkgs.home-assistant-custom-components; [
+      waste_collection_schedule
+      dwd
     ];
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
       bubble-card

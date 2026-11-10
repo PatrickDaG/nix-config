@@ -95,9 +95,7 @@
       "fritzbox"
       "homematic"
       "soundtouch"
-      "spotify"
       "matter"
-      "mqtt"
       "solaredge"
       "wake_word"
       "whisper"
@@ -106,8 +104,6 @@
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
       homematicip_local
-      waste_collection_schedule
-      dwd
       another_mvg
       solaredge-modbus
     ];
