@@ -34,6 +34,7 @@
       "radio_browser"
       "wake_on_lan"
       "wled"
+      "zha"
     ];
     customComponents = [ pkgs.home-assistant-custom-components.bambu-lab ];
     config = {

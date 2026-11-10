@@ -46,4 +46,25 @@
       }
     ];
   });
+
+  # Match this dongle by serial so other USB serial devices cannot replace it.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{serial}=="d86f998a81f3ef119046bf1b6d9880ab", SYMLINK+="zigbee", GROUP="dialout", MODE="0660", TAG+="systemd", ENV{SYSTEMD_ALIAS}+="/dev/zigbee"
+  '';
+
+  containers.homeassistant = {
+    extraFlags = [ "--bind=/dev/zigbee:/dev/zigbee" ];
+    allowedDevices = [
+      {
+        modifier = "rw";
+        node = "/dev/zigbee";
+      }
+    ];
+  };
+
+  # Wait for udev before nspawn resolves the device bind mount and allowlist.
+  systemd.services."container@homeassistant" = {
+    requires = [ "dev-zigbee.device" ];
+    after = [ "dev-zigbee.device" ];
+  };
 }
