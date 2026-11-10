@@ -18,7 +18,7 @@
   ];
 
   globals.wireguard.services-flat.hosts.${config.node.name} = {
-    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 3000 ];
+    firewallRuleForNode.nucnix-nginx.allowedTCPPorts = [ 8123 ];
   };
   networking.nftables.firewall.rules.mdns = {
     from = [ "untrusted" ];
@@ -38,12 +38,6 @@
     ];
     customComponents = [ pkgs.home-assistant-custom-components.bambu-lab ];
     config = {
-      http = {
-        server_host = globals.wireguard.services-flat.hosts.${config.node.name}.ipv4;
-        server_port = 3000;
-        use_x_forwarded_for = true;
-        trusted_proxies = [ globals.wireguard.services-flat.hosts.nucnix-nginx.ipv4 ];
-      };
       wake_on_lan = { };
       homeassistant = {
         name = "nucnix";

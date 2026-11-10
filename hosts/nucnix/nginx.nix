@@ -23,7 +23,7 @@
       homeassistant-nucnix = {
         servers."${
           globals.wireguard.services-flat.hosts.${globals.services.homeassistant-nucnix.host}.ipv4
-        }:3000" =
+        }:8123" =
           { };
         extraConfig = ''
           zone homeassistant-nucnix 64k;
