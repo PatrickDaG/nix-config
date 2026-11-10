@@ -287,6 +287,8 @@ in
     defaults = {
       email = globals.accounts.email."1".address;
       dnsProvider = "cloudflare";
+      # Bypass system DNS caches when checking short-lived ACME challenge records.
+      dnsResolver = "1.1.1.1:53";
       dnsPropagationCheck = true;
       reloadServices = [ "nginx" ];
       credentialFiles = {

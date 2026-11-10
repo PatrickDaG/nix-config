@@ -31,7 +31,8 @@
         '';
       };
       esphome-nucnix = {
-        servers."${globals.wireguard.services.hosts.${globals.services.esphome-nucnix.host}.ipv4}:3001" = { };
+        servers."${globals.wireguard.services.hosts.${globals.services.esphome-nucnix.host}.ipv4}:3001" =
+          { };
         extraConfig = ''
           zone esphome-nucnix 64k;
           keepalive 5;
@@ -78,6 +79,8 @@
     defaults = {
       email = globals.accounts.email."1".address;
       dnsProvider = "cloudflare";
+      # Bypass system DNS caches when checking short-lived ACME challenge records.
+      dnsResolver = "1.1.1.1:53";
       dnsPropagationCheck = true;
       reloadServices = [ "nginx" ];
       credentialFiles = {
