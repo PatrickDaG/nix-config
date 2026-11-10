@@ -8,6 +8,7 @@
 }:
 {
   imports = [
+    ./homeassistant-common.nix
     ./wyoming.nix
   ];
   environment.persistence."/persist".directories = [
@@ -90,24 +91,17 @@
   };
 
   services.home-assistant = {
-    enable = true;
     extraComponents = [
-      "radio_browser"
-      "met"
-      "esphome"
       "fritzbox"
       "homematic"
       "soundtouch"
       "spotify"
       "matter"
-      "esphome"
       "mqtt"
       "solaredge"
-      "wled"
       "wake_word"
       "whisper"
       "wyoming"
-      "zha"
       "tuya"
     ];
     customComponents = with pkgs.home-assistant-custom-components; [
@@ -119,44 +113,27 @@
     ];
 
     customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
-      bubble-card
-      weather-card
-      mini-graph-card
-      card-mod
-      mushroom
-      multiple-entity-row
-      button-card
-      weather-chart-card
-      hourly-weather
-      bar-card
       another_mvg_1
       another_mvg_2
       another_mvg_3
     ];
     config = {
-      lovelace.resource_mode = "yaml";
-
       homeassistant = {
         name = "!secret ha_name";
         latitude = "!secret ha_latitude";
         longitude = "!secret ha_longitude";
         elevation = "!secret ha_elevation";
-        currency = "EUR";
-        time_zone = "Europe/Berlin";
-        unit_system = "metric";
         #external_url = "https://";
         packages = {
           manual = "!include manual.yaml";
         };
       };
 
-      default_config = { };
       ### Components not from default_config
 
       frontend = {
         themes = "!include_dir_merge_named themes";
       };
-      "automation ui" = "!include automations.yaml";
 
       influxdb = {
         api_version = 2;
@@ -515,21 +492,8 @@
     };
     extraPackages =
       python3Packages: with python3Packages; [
-        psycopg2
-        gtts
-        fritzconnection
         aiosolaredge
-        zlib-ng
-        stringcase
-        aiohomematic
         pymodbus
-        hatasmota
-        pyipp
-        devolo-plc-api
-        dwdwfsapi
-        wled
-        forecast-solar
-        aioelectricitymaps
       ];
   };
   age.secrets."home-assistant-secrets.yaml" = {

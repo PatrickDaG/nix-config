@@ -6,6 +6,8 @@
   ...
 }:
 {
+  imports = [ ../../config/services/homeassistant-common.nix ];
+
   globals.services.homeassistant-nucnix.host = config.node.name;
 
   environment.persistence."/persist".directories = [
@@ -27,15 +29,7 @@
   };
 
   services.home-assistant = {
-    enable = true;
-    extraComponents = [
-      "esphome"
-      "met"
-      "radio_browser"
-      "wake_on_lan"
-      "wled"
-      "zha"
-    ];
+    extraComponents = [ "wake_on_lan" ];
     customComponents = [ pkgs.home-assistant-custom-components.bambu-lab ];
     config = {
       wake_on_lan = { };
@@ -43,12 +37,7 @@
         name = "nucnix";
         external_url = "https://${globals.services.homeassistant-nucnix.domain}";
         # Set the home location during onboarding, independently of the old instance.
-        unit_system = "metric";
-        currency = "EUR";
-        time_zone = "Europe/Berlin";
       };
-      default_config = { };
-      "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
       "script ui" = "!include scripts.yaml";
     };
