@@ -24,6 +24,10 @@
     cookie.expire = "900m";
 
     reverseProxy = true;
+    trustedProxyIP = [
+      globals.wireguard.services-extern.hosts.torweg.ipv4
+      globals.wireguard.services-extern.hosts.elisabeth-nginx.ipv4
+    ];
     httpAddress = "0.0.0.0:3001";
     redirectURL = "https://oauth2.${globals.domains.web}/oauth2/callback";
     setXauthrequest = true;
