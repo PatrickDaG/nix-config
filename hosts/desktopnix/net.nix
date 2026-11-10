@@ -8,6 +8,7 @@
     wireless.iwd = {
       enable = true;
     };
+    interfaces.lan01.wakeOnLan.enable = true;
   };
   systemd.network.networks = {
     "01-lan1" = {

@@ -6,7 +6,7 @@
   ...
 }:
 {
-  guests = lib.genAttrs [ "homeassistant" "esphome" "nginx" ] (guestName: {
+  guests = lib.genAttrs [ "homeassistant" "esphome" "nginx"] (guestName: {
     backend = "container";
     autostart = true;
     # Siblings of the host's lan-house macvlan can reach its WireGuard endpoint.
