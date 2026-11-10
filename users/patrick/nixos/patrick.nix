@@ -25,7 +25,6 @@
           bashInteractive
           btop-cuda
           captive-browser
-          chromium
           #crosspipe
           dig
           discord
@@ -37,7 +36,6 @@
           gh-dash
           glow
           hyperfine
-          libreoffice
           magic-wormhole
           mpv
           netflix
@@ -55,7 +53,6 @@
           timewarrior
           whatsapp-electron
           zathura
-          zoom-us # 2.5GB?
           zotero
           #keep-sorted end
         ];
@@ -64,12 +61,6 @@
           zulip
           galaxy-buds-client
           #pdfpc
-        ];
-        desktopnix = [
-          bs-manager
-        ];
-        patricknix = [
-          xournalpp
         ];
       };
   };
@@ -80,6 +71,14 @@
   # needed for gnome pinentry
   services.dbus.packages = [ pkgs.gcr_3 ];
   hm = {
+    # The profile-installed Zoom package supplies this desktop file.
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "x-scheme-handler/zoommtg" = [ "Zoom.desktop" ];
+        "x-scheme-handler/zoomus" = [ "Zoom.desktop" ];
+      };
+    };
     xdg.configFile."streamlink/config".text = ''
       player=mpv
     '';
