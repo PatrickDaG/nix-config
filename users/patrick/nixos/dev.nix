@@ -78,7 +78,7 @@ lib.optionalAttrs (!minimal) {
           }
           {
             name = "thinknix";
-            hostName = "thinknix.local";
+            hostName = "thinknix.users";
             protocol = "ssh-ng";
             sshUser = "build";
             system = "x86_64-linux";
@@ -95,7 +95,7 @@ lib.optionalAttrs (!minimal) {
           }
           {
             name = "desktopnix";
-            hostName = "desktopnix.local";
+            hostName = "desktopnix.users";
             protocol = "ssh-ng";
             sshUser = "build";
             system = "x86_64-linux";
