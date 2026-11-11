@@ -1,8 +1,13 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 {
   nix = {
     enable = true;
-    package = pkgs.lixPackageSets.latest.lix;
+    package = lib.mkDefault pkgs.lixPackageSets.latest.lix;
     registry = {
       nixpkgs.flake = inputs.nixpkgs;
       p.flake = inputs.nixpkgs;

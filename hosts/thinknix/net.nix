@@ -20,6 +20,7 @@
   ];
   networking = {
     inherit (config.secrets.secrets.local.networking) hostId;
+    interfaces.lan01.wakeOnLan.enable = true;
     wireless.iwd = {
       enable = true;
     };

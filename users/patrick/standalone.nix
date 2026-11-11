@@ -17,6 +17,7 @@
     ./programs/direnv.nix
     ./programs/gdb.nix
     ./programs/git
+    ./programs/nix.nix
     ./programs/htop.nix
     ./programs/nvim
     ./programs/pager.nix
