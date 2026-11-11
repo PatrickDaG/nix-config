@@ -19,6 +19,7 @@
         ".config/xournalpp"
         ".cache/xournalpp"
 
+        ".local/state/nix"
         ".local/state/wireplumber"
 
         ".config/BambuStudio"

@@ -59,6 +59,7 @@ lib.optionalAttrs (!minimal) {
     ../programs/git
     ../programs/gpg
     ../programs/htop.nix
+    ../programs/nix.nix
     ../programs/nvim
     ../programs/pager.nix
     ../programs/pi.nix

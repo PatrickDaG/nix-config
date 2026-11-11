@@ -16,7 +16,7 @@
     ];
     inherit (globals.users.root) hashedPassword;
   };
-  home-manager.users.root.imports = lib.optionals (!minimal) (
+  home-manager.users.root.imports = [ ../patrick/programs/nix.nix ] ++ lib.optionals (!minimal) (
     [ ../patrick/alias.nix ]
     ++ lib.optional config.stylix.enable ../patrick/theme.nix
     ++ [

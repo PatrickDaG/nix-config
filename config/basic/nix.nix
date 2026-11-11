@@ -51,7 +51,7 @@
     extraOptions = ''
       builders-use-substitutes = true
       experimental-features = nix-command flakes
-      flake-registry = /etc/nix/registry.json
+      flake-registry =
     '';
     nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];
     optimise.automatic = true;
@@ -61,14 +61,6 @@
       dates = "weekly";
       # 2 Monate hoffentlich genug für roleback
       options = "--delete-older-than 60d";
-    };
-
-    registry = {
-      nixpkgs.flake = inputs.nixpkgs;
-      p.flake = inputs.nixpkgs;
-      pkgs.flake = inputs.nixpkgs;
-      templates.flake = inputs.templates;
-      t.flake = inputs.templates;
     };
   };
   system = {
